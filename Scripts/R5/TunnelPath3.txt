@@ -1,0 +1,444 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Tunnel Path 3 Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 70 : TYPE_TUNNELPATH3
+
+
+
+event ObjectUpdate
+	if object.state == 1
+		if object[0].state == 26
+			object.state = 0
+		end if
+		temp0 = object.value0
+		object.value0++
+		object[0].speed = object[0].xpos
+		object[0].animation = ANI_JUMPING
+		object[0].animationSpeed = 240
+		switch temp0
+		case 0
+			object[0].xpos = 51200
+			object[0].ypos = 60928
+			break
+		case 1
+			object[0].xpos = 51200
+			object[0].ypos = 716288
+			break
+		case 2
+			object[0].xpos = 51200
+			object[0].ypos = 1371648
+			break
+		case 3
+			object[0].xpos = 51200
+			object[0].ypos = 2027008
+			break
+		case 4
+			object[0].xpos = 51200
+			object[0].ypos = 2158080
+			break
+		case 5
+			object[0].xpos = 706560
+			object[0].ypos = 2376448
+			break
+		case 6
+			object[0].xpos = 1361920
+			object[0].ypos = 2594816
+			break
+		case 7
+			object[0].xpos = 2017280
+			object[0].ypos = 2813184
+			break
+		case 8
+			object[0].xpos = 2672640
+			object[0].ypos = 3031552
+			break
+		case 9
+			object[0].xpos = 3328000
+			object[0].ypos = 3249920
+			break
+		case 10
+			object[0].xpos = 3983360
+			object[0].ypos = 3468288
+			break
+		case 11
+			object[0].xpos = 4638720
+			object[0].ypos = 3686656
+			break
+		case 12
+			object[0].xpos = 5294080
+			object[0].ypos = 3905024
+			break
+		case 13
+			object[0].xpos = 5949440
+			object[0].ypos = 4123392
+			break
+		case 14
+			object[0].xpos = 6342656
+			object[0].ypos = 4254464
+			break
+		case 15
+			object[0].xpos = 5687296
+			object[0].ypos = 4418304
+			break
+		case 16
+			object[0].xpos = 5031936
+			object[0].ypos = 4582144
+			break
+		case 17
+			object[0].xpos = 4376576
+			object[0].ypos = 4745984
+			break
+		case 18
+			object[0].xpos = 3721216
+			object[0].ypos = 4909824
+			break
+		case 19
+			object[0].xpos = 3065856
+			object[0].ypos = 5073664
+			break
+		case 20
+			object[0].xpos = 2410496
+			object[0].ypos = 5237504
+			break
+		case 21
+			object[0].xpos = 1755136
+			object[0].ypos = 5401344
+			break
+		case 22
+			object[0].xpos = 1099776
+			object[0].ypos = 5565184
+			break
+		case 23
+			object[0].xpos = 444416
+			object[0].ypos = 5729024
+			break
+		case 24
+			object[0].xpos = -210944
+			object[0].ypos = 5892864
+			break
+		case 25
+			object[0].xpos = -866304
+			object[0].ypos = 6056704
+			break
+		case 26
+			object[0].xpos = -1521664
+			object[0].ypos = 6220544
+			break
+		case 27
+			object[0].xpos = -2045952
+			object[0].ypos = 6351616
+			break
+		case 28
+			object[0].xpos = -1390592
+			object[0].ypos = 6515456
+			break
+		case 29
+			object[0].xpos = -735232
+			object[0].ypos = 6679296
+			break
+		case 30
+			object[0].xpos = -79872
+			object[0].ypos = 6843136
+			break
+		case 31
+			object[0].xpos = 575488
+			object[0].ypos = 7006976
+			break
+		case 32
+			object[0].xpos = 1230848
+			object[0].ypos = 7170816
+			break
+		case 33
+			object[0].xpos = 1886208
+			object[0].ypos = 7334656
+			break
+		case 34
+			object[0].xpos = 2541568
+			object[0].ypos = 7498496
+			break
+		case 35
+			object[0].xpos = 3196928
+			object[0].ypos = 7662336
+			break
+		case 36
+			object[0].xpos = 3852288
+			object[0].ypos = 7826176
+			break
+		case 37
+			object[0].xpos = 4507648
+			object[0].ypos = 7990016
+			break
+		case 38
+			object[0].xpos = 5163008
+			object[0].ypos = 8153856
+			break
+		case 39
+			object[0].xpos = 5818368
+			object[0].ypos = 8317696
+			break
+		case 40
+			object[0].xpos = 6342656
+			object[0].ypos = 8448768
+			break
+		case 41
+			object[0].xpos = 5687296
+			object[0].ypos = 8612608
+			break
+		case 42
+			object[0].xpos = 5031936
+			object[0].ypos = 8776448
+			break
+		case 43
+			object[0].xpos = 4376576
+			object[0].ypos = 8940288
+			break
+		case 44
+			object[0].xpos = 3721216
+			object[0].ypos = 9104128
+			break
+		case 45
+			object[0].xpos = 3065856
+			object[0].ypos = 9267968
+			break
+		case 46
+			object[0].xpos = 2410496
+			object[0].ypos = 9431808
+			break
+		case 47
+			object[0].xpos = 1755136
+			object[0].ypos = 9595648
+			break
+		case 48
+			object[0].xpos = 1099776
+			object[0].ypos = 9759488
+			break
+		case 49
+			object[0].xpos = 444416
+			object[0].ypos = 9923328
+			break
+		case 50
+			object[0].xpos = -210944
+			object[0].ypos = 10087168
+			break
+		case 51
+			object[0].xpos = -866304
+			object[0].ypos = 10251008
+			break
+		case 52
+			object[0].xpos = -1521664
+			object[0].ypos = 10414848
+			break
+		case 53
+			object[0].xpos = -2045952
+			object[0].ypos = 10545920
+			break
+		case 54
+			object[0].xpos = -1390592
+			object[0].ypos = 10709760
+			break
+		case 55
+			object[0].xpos = -735232
+			object[0].ypos = 10873600
+			break
+		case 56
+			object[0].xpos = -79872
+			object[0].ypos = 11037440
+			break
+		case 57
+			object[0].xpos = 575488
+			object[0].ypos = 11201280
+			break
+		case 58
+			object[0].xpos = 1230848
+			object[0].ypos = 11365120
+			break
+		case 59
+			object[0].xpos = 1886208
+			object[0].ypos = 11528960
+			break
+		case 60
+			object[0].xpos = 2541568
+			object[0].ypos = 11692800
+			break
+		case 61
+			object[0].xpos = 3196928
+			object[0].ypos = 11856640
+			break
+		case 62
+			object[0].xpos = 3852288
+			object[0].ypos = 12020480
+			break
+		case 63
+			object[0].xpos = 4507648
+			object[0].ypos = 12184320
+			break
+		case 64
+			object[0].xpos = 5163008
+			object[0].ypos = 12348160
+			break
+		case 65
+			object[0].xpos = 5818368
+			object[0].ypos = 12512000
+			break
+		case 66
+			object[0].xpos = 6342656
+			object[0].ypos = 12643072
+			break
+		case 67
+			object[0].xpos = 5687296
+			object[0].ypos = 12806912
+			break
+		case 68
+			object[0].xpos = 5031936
+			object[0].ypos = 12970752
+			break
+		case 69
+			object[0].xpos = 4376576
+			object[0].ypos = 13134592
+			break
+		case 70
+			object[0].xpos = 3721216
+			object[0].ypos = 13298432
+			break
+		case 71
+			object[0].xpos = 3065856
+			object[0].ypos = 13462272
+			break
+		case 72
+			object[0].xpos = 2410496
+			object[0].ypos = 13626112
+			break
+		case 73
+			object[0].xpos = 1755136
+			object[0].ypos = 13789952
+			break
+		case 74
+			object[0].xpos = 1099776
+			object[0].ypos = 13953792
+			break
+		case 75
+			object[0].xpos = 444416
+			object[0].ypos = 14117632
+			break
+		case 76
+			object[0].xpos = -210944
+			object[0].ypos = 14281472
+			break
+		case 77
+			object[0].xpos = -866304
+			object[0].ypos = 14445312
+			break
+		case 78
+			object[0].xpos = -1521664
+			object[0].ypos = 14609152
+			break
+		case 79
+			object[0].xpos = -2045952
+			object[0].ypos = 14740224
+			break
+		case 80
+			object[0].xpos = -1390592
+			object[0].ypos = 14904064
+			break
+		case 81
+			object[0].xpos = -735232
+			object[0].ypos = 15067904
+			break
+		case 82
+			object[0].xpos = -79872
+			object[0].ypos = 15231744
+			break
+		case 83
+			object[0].xpos = 575488
+			object[0].ypos = 15395584
+			break
+		case 84
+			object[0].xpos = 1230848
+			object[0].ypos = 15559424
+			break
+		case 85
+			object[0].xpos = 1886208
+			object[0].ypos = 15723264
+			break
+		case 86
+			object[0].xpos = 2541568
+			object[0].ypos = 15887104
+			break
+		case 87
+			object[0].xpos = 3196928
+			object[0].ypos = 16050944
+			break
+		case 88
+			object[0].xpos = 3852288
+			object[0].ypos = 16214784
+			break
+		case 89
+			object[0].xpos = 4507648
+			object[0].ypos = 16378624
+			break
+		case 90
+			object[0].xpos = 5163008
+			object[0].ypos = 16542464
+			break
+		case 91
+			object[0].xpos = 5818368
+			object[0].ypos = 16706304
+			break
+		case 92
+			object[0].xpos = 6342656
+			object[0].ypos = 16837376
+			break
+		case 93
+			object[0].xpos = 6998016
+			object[0].ypos = 17263360
+			break
+		case 94
+			object[0].xpos = 7653376
+			object[0].ypos = 17900288
+			object.state = 0
+			object.priority = 0
+			object[0].xvel = 655360
+			object[0].speed = 655360
+			object[0].yvel = 393216
+			object[0].state = 13
+			object[0].interaction = 1
+			break
+		end switch
+		object[0].xpos += object.xpos
+		object[0].ypos += object.ypos
+		if object.state > 0
+			object[0].speed -= object[0].xpos
+			FlipSign(object[0].speed)
+		end if
+	end if
+	if object.propertyValue == 0
+		foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+			if object[currentPlayer].state != Player_State_Static
+				BoxCollisionTest(C_TOUCH, object.entityPos, -8, -16, 8, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+				if checkResult == 1
+					object[currentPlayer].state = Player_State_Static
+					object[currentPlayer].interaction = 0
+					object.state = 1
+					object.value0 = 0
+					object.priority = 1
+					PlaySfx(SfxName[Release], 0)
+				end if
+			end if
+		next
+	end if
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

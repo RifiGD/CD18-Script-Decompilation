@@ -1,0 +1,107 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Path Swap Object
+// Script Author: Christian Whitehead
+// Unpacked by RifiGD's UnScriptR
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 43 : TYPE_PATHSWAP
+
+public value PathSwap_value13 = 0
+public value PathSwap_value14 = 0
+
+event ObjectUpdate
+	if object.state == 1
+		if object.value0 < 39
+			object.value0++
+		else
+			object.state = 0
+			object.value0 = 0
+			object.priority = 0
+		end if
+		PathSwap_value14 = object.value0
+		PathSwap_value14 /= 5
+	end if
+	if PathSwap_value13 == 0
+		temp0 = object.value5
+	else
+		temp0 = object.value6
+	end if
+	if object.propertyValue != 1
+		SetTileLayerEntry(temp0, 0, object.value1, object.value2)
+		temp0++
+		SetTileLayerEntry(temp0, 0, object.value3, object.value2)
+		temp0++
+		SetTileLayerEntry(temp0, 0, object.value1, object.value4)
+		temp0++
+		SetTileLayerEntry(temp0, 0, object.value3, object.value4)
+	end if
+	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+		if object.propertyValue < 2
+			if object.state == 0
+				if PathSwap_value14 == 0
+					BoxCollisionTest(C_TOUCH, object.entityPos, -16, -16, 16, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+					if checkResult == 1
+						if object.value7 == 0
+							object.state = 1
+							object.priority = 1
+							object.value7 = 1
+							PathSwap_value13++
+							PathSwap_value13 &= 1
+						end if
+					else
+						object.value7 = 0
+					end if
+				end if
+			end if
+		end if
+	next
+end event
+
+
+event ObjectDraw
+	if object.propertyValue < 2
+		DrawSprite(PathSwap_value14)
+	end if
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R7/Objects.gif")
+	SpriteFrame(-24, -15, 48, 40, 109, 18)
+	SpriteFrame(-24, -11, 48, 36, 158, 22)
+	SpriteFrame(-24, -7, 48, 32, 207, 26)
+	SpriteFrame(-24, -11, 48, 36, 158, 63)
+	SpriteFrame(-24, -15, 48, 40, 109, 59)
+	SpriteFrame(-24, -11, 48, 36, 158, 63)
+	SpriteFrame(-24, -7, 48, 32, 207, 26)
+	SpriteFrame(-24, -11, 48, 36, 158, 22)
+	PathSwap_value13 = 0
+	PathSwap_value14 = 0
+	foreach (TypeName[Path Swap], arrayPos0, ALL_ENTITIES)
+		object[arrayPos0].value1 = object[arrayPos0].ixpos
+		object[arrayPos0].value1 >>= 8
+		object[arrayPos0].value1 <<= 1
+		object[arrayPos0].value3 = object[arrayPos0].value1
+		object[arrayPos0].value3++
+		object[arrayPos0].value2 = object[arrayPos0].iypos
+		object[arrayPos0].value2 >>= 8
+		object[arrayPos0].value2 <<= 1
+		object[arrayPos0].value4 = object[arrayPos0].value2
+		object[arrayPos0].value4++
+		GetTileLayerEntry(object[arrayPos0].value5, 0, object[arrayPos0].value1, object[arrayPos0].value2)
+		object[arrayPos0].value6 = object[arrayPos0].value5
+		object[arrayPos0].value6 += 4
+	next
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

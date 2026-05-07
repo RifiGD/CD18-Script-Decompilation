@@ -1,0 +1,219 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Generator Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 35 : TYPE_GENERATOR
+
+// Function declarations
+reserve function Generator_DebugDraw
+reserve function Generator_DebugSpawn
+reserve function Generator_Function79
+
+
+public function Generator_DebugDraw
+	temp0 = object.direction
+	object.direction = 2
+	DrawSprite(0)
+	DrawSprite(4)
+	DrawSprite(8)
+	DrawSprite(12)
+	DrawSpriteFX(0, FX_FLIP, object.xpos, object.ypos)
+	object.direction = temp0
+end function
+
+
+public function Generator_DebugSpawn
+	CreateTempObject(TypeName[Generator], 0, object.xpos, object.ypos)
+	object[tempObjectPos].direction = 2
+	object[tempObjectPos].value1 = object[tempObjectPos].ypos
+	object[tempObjectPos].value3 = -8192
+end function
+
+
+public function Generator_Function79
+	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+		if object[currentPlayer].animation == ANI_JUMPING
+			BoxCollisionTest(C_TOUCH, object.entityPos, -38, -32, 38, 32, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			if checkResult == 1
+				object.state = 2
+				object.ypos = object.value1
+				generator.destroyed = 1
+				goodFuture.enabled = 1
+				object.priority = 1
+				player.score += 1500
+				if stage.actNum < 3
+					temp0 = stage.listPos
+					temp0 /= 10
+					temp0 <<= 1
+					temp0 += stage.actNum
+					temp0--
+					SetBit(goodFuture.list, temp0, 1)
+				end if
+				if stage.playerListPos == 0
+					if stage.debugMode == 0
+						if goodFuture.list > 16382
+							if metalSonic.list > 11
+							end if
+						end if
+					end if
+				end if
+			end if
+		else
+			BoxCollisionTest(C_SOLID, object.entityPos, -38, -33, 38, 36, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			if checkResult == 1
+				object[currentPlayer].ypos += 65536
+			end if
+		end if
+	next
+end function
+
+
+event ObjectUpdate
+	if object.propertyValue == 0
+		switch object.state
+		case 0
+			object.value2++
+			if object.value2 == 32
+				object.value3 = 8192
+				object.value2 = 0
+				object.state = 1
+			end if
+			object.ypos += object.value3
+			CallFunction(Generator_Function79)
+			break
+		case 1
+			object.value2++
+			if object.value2 == 32
+				object.value3 = -8192
+				object.value2 = 0
+				object.state = 0
+			end if
+			object.ypos += object.value3
+			CallFunction(Generator_Function79)
+			break
+		case 2
+			Rand(temp0, 80)
+			temp0 -= 40
+			temp0 <<= 16
+			temp0 += object.xpos
+			Rand(temp1, 64)
+			temp1 -= 32
+			temp1 <<= 16
+			temp1 += object.ypos
+			CreateTempObject(TypeName[Explosion], 0, temp0, temp1)
+			temp0 = object.value2
+			temp0 &= 3
+			if temp0 == 0
+				PlaySfx(SfxName[Explosion], 0)
+			end if
+			object.value2++
+			if object.value2 == 60
+				object.priority = 0
+				object.value2 = 0
+				object.state = 0
+				object.propertyValue = 2
+				object.iypos += 16
+				PlaySfx(SfxName[Achievement], 0)
+			end if
+			break
+		end switch
+	end if
+end event
+
+
+event ObjectDraw
+	switch object.propertyValue
+	case 0
+		if object.state < 2
+			DrawSprite(object.frame)
+			DrawSpriteFX(object.frame, FX_FLIP, object.xpos, object.ypos)
+			temp0 = object.frame
+			temp0 += 4
+			DrawSprite(temp0)
+			temp0 += 4
+			DrawSprite(temp0)
+			temp0 += 4
+			DrawSprite(temp0)
+			object.value0++
+			if object.value0 > 3
+				object.value0 = 0
+				object.frame++
+				if object.frame > 3
+					object.frame = 0
+				end if
+			end if
+		end if
+		break
+	case 1
+		DrawSprite(17)
+		DrawSpriteFX(17, FX_FLIP, object.xpos, object.ypos)
+		break
+	case 2
+		DrawSprite(16)
+		break
+	case 3
+		DrawSprite(18)
+		break
+	end switch
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("Global/Items3.gif")
+	foreach (TypeName[Generator], arrayPos0, ALL_ENTITIES)
+		object[arrayPos0].direction = 2
+		if generator.destroyed == 1
+			switch object[arrayPos0].propertyValue
+			case 0
+				object[arrayPos0].propertyValue = 2
+				break
+			case 1
+				object[arrayPos0].propertyValue = 3
+				break
+			end switch
+		else
+			if object[arrayPos0].propertyValue == 0
+				object[arrayPos0].iypos -= 16
+			end if
+			object[arrayPos0].value1 = object[arrayPos0].ypos
+			object[arrayPos0].value3 = -8192
+		end if
+	next
+	SpriteFrame(-40, -32, 80, 24, 175, 61)
+	SpriteFrame(-40, -32, 80, 24, 175, 86)
+	SpriteFrame(-40, -32, 80, 24, 175, 111)
+	SpriteFrame(-40, -32, 80, 24, 175, 86)
+	SpriteFrame(-6, -8, 12, 16, 149, 1)
+	SpriteFrame(-6, -8, 12, 16, 162, 1)
+	SpriteFrame(-6, -8, 12, 16, 149, 18)
+	SpriteFrame(-6, -8, 12, 16, 162, 18)
+	SpriteFrame(-22, -8, 12, 16, 149, 1)
+	SpriteFrame(-22, -8, 12, 16, 162, 1)
+	SpriteFrame(-22, -8, 12, 16, 149, 18)
+	SpriteFrame(-22, -8, 12, 16, 162, 18)
+	SpriteFrame(10, -8, 12, 16, 149, 1)
+	SpriteFrame(10, -8, 12, 16, 162, 1)
+	SpriteFrame(10, -8, 12, 16, 149, 18)
+	SpriteFrame(10, -8, 12, 16, 162, 18)
+	SpriteFrame(-40, 16, 80, 16, 175, 44)
+	SpriteFrame(-40, -32, 80, 25, 175, 18)
+	SpriteFrame(-40, 16, 80, 16, 175, 1)
+	SetTableValue(TypeName[Generator], DebugMode_ObjCount, DebugMode_TypesTable)
+	SetTableValue(Generator_DebugDraw, DebugMode_ObjCount, DebugMode_DrawTable)
+	SetTableValue(Generator_DebugSpawn, DebugMode_ObjCount, DebugMode_SpawnTable)
+	DebugMode_ObjCount++
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

@@ -1,0 +1,65 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Shooting Star Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 11 : TYPE_SHOOTINGSTAR
+
+
+
+event ObjectUpdate
+	switch object.state
+	case 0
+		object.xvel = -81920
+		object.yvel = 131072
+		object.state++
+		break
+	case 1
+		object.xpos += object.xvel
+		object.ypos += object.yvel
+		break
+	end switch
+	if object.outOfBounds == 1
+		object.type = TypeName[Blank Object]
+	end if
+end event
+
+
+event ObjectDraw
+	temp0 = object.animationSpeed
+	temp0 >>= 2
+	temp0 += object.propertyValue
+	DrawSpriteFX(temp0, FX_FLIP, object.xpos, object.ypos)
+	object.animationSpeed++
+	object.animationSpeed %= 24
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("DAGarden/Objects.gif")
+	SpriteFrame(-4, -12, 9, 24, 387, 854)
+	SpriteFrame(-9, -12, 19, 24, 397, 854)
+	SpriteFrame(-12, -12, 24, 24, 417, 854)
+	SpriteFrame(-12, -12, 24, 24, 442, 854)
+	SpriteFrame(-12, -12, 24, 24, 467, 854)
+	SpriteFrame(-10, -12, 19, 24, 492, 854)
+	SpriteFrame(-4, -12, 9, 24, 387, 879)
+	SpriteFrame(-9, -12, 19, 24, 397, 879)
+	SpriteFrame(-12, -12, 24, 24, 417, 879)
+	SpriteFrame(-12, -12, 24, 24, 442, 879)
+	SpriteFrame(-12, -12, 24, 24, 467, 879)
+	SpriteFrame(-10, -12, 19, 24, 492, 879)
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

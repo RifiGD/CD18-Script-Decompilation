@@ -1,0 +1,61 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Boss Spark Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 78 : TYPE_BOSSSPARK
+
+
+
+event ObjectUpdate
+	object.value1 -= 8192
+	if object.value1 < -196608
+		object.value1 = -196608
+	end if
+	object.xpos += object.value1
+	if object.propertyValue == 1
+		object.value2 += 8192
+		object.ypos += object.value2
+		if object.outOfBounds == 1
+			object.type = TypeName[Blank Object]
+		end if
+	else
+		if object.value0 < 36
+			object.value0++
+		else
+			object.type = TypeName[Blank Object]
+		end if
+	end if
+end event
+
+
+event ObjectDraw
+	temp0 = object.frame
+	temp0 >>= 2
+	DrawSprite(temp0)
+	object.frame++
+	object.frame %= 20
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R5/Objects2.gif")
+	SpriteFrame(-2, -4, 16, 8, 131, 155)
+	SpriteFrame(-2, -4, 16, 8, 131, 164)
+	SpriteFrame(-2, -4, 16, 8, 131, 173)
+	SpriteFrame(-2, -4, 16, 8, 131, 182)
+	SpriteFrame(-2, -4, 16, 8, 148, 182)
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

@@ -1,0 +1,65 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Water Stream R2 Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 80 : TYPE_WATERSTREAMR2
+
+
+
+event ObjectUpdate
+	if object[-1].propertyValue == 1
+		object.propertyValue = 1
+		foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+			BoxCollisionTest(C_TOUCH, object.entityPos, object.value1, -32, object.value2, 32, currentPlayer, 0, 0, 0, 0)
+			if checkResult == 1
+				if object[currentPlayer].state != Player_State_Hurt
+					if object[currentPlayer].state != Player_State_Death
+						if object[currentPlayer].state != Player_State_Drown
+							if object[currentPlayer].state != Player_State_Static
+								player.waterStream = 1
+								object[currentPlayer].state = Player_State_WaterCurrent
+								object[currentPlayer].animation = ANI_FANROTATE
+								object[currentPlayer].xvel = 262144
+								object[currentPlayer].speed = 262144
+								object[currentPlayer].yvel = 0
+							end if
+						end if
+					end if
+				end if
+			else
+				if object[currentPlayer].state == Player_State_WaterCurrent
+					if player.waterStream == 0
+						object[currentPlayer].state = Player_State_Air
+						object[currentPlayer].controlMode = currentPlayer
+						object[currentPlayer].animation = ANI_WALKING
+					end if
+				end if
+			end if
+		next
+	end if
+end event
+
+
+event ObjectStartup
+	foreach (TypeName[Water Stream R2], arrayPos0, ALL_ENTITIES)
+		object[arrayPos0].value1 = object[arrayPos0].propertyValue
+		object[arrayPos0].value1 <<= 3
+		object[arrayPos0].value2 = object[arrayPos0].value1
+		FlipSign(object[arrayPos0].value1)
+		object[arrayPos0].propertyValue = 0
+	next
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

@@ -1,0 +1,54 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Tails Barrier Object
+// Script Author: Christian Whitehead
+// Unpacked by RifiGD's UnScriptR
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 60 : TYPE_TAILSBARRIER
+
+
+
+event ObjectUpdate
+	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+		if PathSwap_value13 == 0
+			BoxCollisionTest(C_TOUCH, object.entityPos, -16, -14, 16, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			if checkResult == 1
+				if object[currentPlayer].xpos < object.xpos
+					object[currentPlayer].xpos = object[currentPlayer].collisionLeft
+					object[currentPlayer].xpos <<= 16
+					object[currentPlayer].xpos += object.xpos
+					object[currentPlayer].xpos -= 1048576
+				else
+					object[currentPlayer].xpos = object[currentPlayer].collisionRight
+					object[currentPlayer].xpos <<= 16
+					object[currentPlayer].xpos += object.xpos
+					object[currentPlayer].xpos += 1048576
+				end if
+				object[currentPlayer].speed = 0
+				object[currentPlayer].xvel = 0
+			end if
+		end if
+	next
+end event
+
+
+event ObjectStartup
+	if stage.playerListPos == 0
+		arrayPos0 = 32
+		while arrayPos0 < 1056
+			arrayPos0++
+		loop
+	end if
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

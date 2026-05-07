@@ -1,0 +1,193 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Inv Platform Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 48 : TYPE_INVPLATFORM
+
+// Function declarations
+reserve function InvPlatform_Function83
+
+
+public function InvPlatform_Function83
+	switch temp0
+	case 0
+		temp1 = 60
+		break
+	case 1
+	case 3
+	case 5
+	case 7
+	case 9
+	case 11
+	case 14
+	case 16
+	case 18
+	case 20
+	case 22
+	case 24
+		temp1 = 5
+		break
+	case 2
+	case 4
+	case 6
+	case 8
+	case 10
+	case 12
+	case 15
+	case 17
+	case 19
+	case 21
+	case 23
+	case 25
+		temp1 = 3
+		break
+	case 13
+		temp1 = 160
+		break
+	end switch
+end function
+
+
+event ObjectUpdate
+	if object.value0 < object.value1
+		object.value0++
+	else
+		object.value0 = 0
+		object.value2++
+		object.value2 %= 26
+		temp0 = object.value2
+		CallFunction(InvPlatform_Function83)
+		object.value1 = temp1
+	end if
+	if object.propertyValue == 2
+		if object.value3 < object.value4
+			object.value3++
+		else
+			object.value3 = 0
+			object.value5++
+			object.value5 %= 26
+			temp0 = object.value5
+			CallFunction(InvPlatform_Function83)
+			object.value4 = temp1
+		end if
+		if object.value6 < object.value7
+			object.value6++
+		else
+			object.value6 = 0
+			object.value8++
+			object.value8 %= 26
+			temp0 = object.value8
+			CallFunction(InvPlatform_Function83)
+			object.value7 = temp1
+		end if
+	end if
+	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+		switch object.propertyValue
+		case 0
+			if object.value2 == 13
+				BoxCollisionTest(C_PLATFORM, object.entityPos, -16, -16, 16, 0, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			end if
+			break
+		case 1
+			if object.value2 == 13
+				BoxCollisionTest(C_PLATFORM, object.entityPos, -16, -16, 48, 0, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			end if
+			break
+		case 2
+			if object.value2 == 13
+				BoxCollisionTest(C_PLATFORM, object.entityPos, -16, -16, 16, 0, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			end if
+			if object.value5 == 13
+				BoxCollisionTest(C_PLATFORM, object.entityPos, 16, 0, 48, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			end if
+			if object.value8 == 13
+				BoxCollisionTest(C_PLATFORM, object.entityPos, 48, 16, 80, 32, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			end if
+			break
+		end switch
+	next
+end event
+
+
+event ObjectDraw
+	switch object.propertyValue
+	case 0
+		DrawSprite(object.value2)
+		break
+	case 1
+		temp0 = object.xpos
+		DrawSpriteXY(object.value2, temp0, object.ypos)
+		temp0 += 2097152
+		DrawSpriteXY(object.value2, temp0, object.ypos)
+		break
+	case 2
+		temp0 = object.xpos
+		temp1 = object.ypos
+		DrawSpriteXY(object.value2, temp0, temp1)
+		temp0 += 2097152
+		temp1 += 1048576
+		DrawSpriteXY(object.value5, temp0, temp1)
+		temp0 += 2097152
+		temp1 += 1048576
+		DrawSpriteXY(object.value8, temp0, temp1)
+		break
+	end switch
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R8/Objects2.gif")
+	SpriteFrame(-4, -16, 0, 0, 190, 223)
+	SpriteFrame(-4, -16, 8, 32, 190, 223)
+	SpriteFrame(-4, -16, 8, 32, 223, 223)
+	SpriteFrame(-4, -16, 8, 32, 190, 223)
+	SpriteFrame(-4, -16, 8, 32, 223, 223)
+	SpriteFrame(-8, -16, 16, 32, 190, 223)
+	SpriteFrame(-8, -16, 16, 32, 223, 223)
+	SpriteFrame(-8, -16, 16, 32, 190, 223)
+	SpriteFrame(-8, -16, 16, 32, 223, 223)
+	SpriteFrame(-16, -16, 32, 32, 190, 223)
+	SpriteFrame(-16, -16, 32, 32, 223, 223)
+	SpriteFrame(-16, -16, 32, 32, 190, 223)
+	SpriteFrame(-16, -16, 32, 32, 223, 223)
+	SpriteFrame(-16, -16, 32, 32, 223, 223)
+	SpriteFrame(-16, -16, 32, 32, 190, 223)
+	SpriteFrame(-16, -16, 32, 32, 223, 223)
+	SpriteFrame(-16, -16, 32, 32, 190, 223)
+	SpriteFrame(-16, -16, 32, 32, 223, 223)
+	SpriteFrame(-8, -16, 16, 32, 190, 223)
+	SpriteFrame(-8, -16, 16, 32, 223, 223)
+	SpriteFrame(-8, -16, 16, 32, 190, 223)
+	SpriteFrame(-8, -16, 16, 32, 223, 223)
+	SpriteFrame(-4, -16, 8, 32, 190, 223)
+	SpriteFrame(-4, -16, 8, 32, 223, 223)
+	SpriteFrame(-4, -16, 8, 32, 190, 223)
+	SpriteFrame(-4, -16, 8, 32, 223, 223)
+	foreach (TypeName[Inv Platform], arrayPos0, ALL_ENTITIES)
+		switch object[arrayPos0].propertyValue
+		case 0
+		case 1
+			object[arrayPos0].value1 = 60
+			break
+		case 2
+			object[arrayPos0].value1 = 60
+			object[arrayPos0].value4 = 108
+			object[arrayPos0].value7 = 156
+			break
+		end switch
+	next
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

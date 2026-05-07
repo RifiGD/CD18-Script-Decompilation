@@ -1,0 +1,293 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Scarab Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 55 : TYPE_SCARAB
+
+// Function declarations
+reserve function Scarab_DebugDraw
+reserve function Scarab_DebugSpawn
+
+// Static Values
+public value Scarab_value15 = 0;
+
+
+public function Scarab_DebugDraw
+	temp0 = object[0].value16
+	temp0 -= Scarab_value15
+	if temp0 == 0
+		DrawSprite(0)
+	else
+		DrawSprite(2)
+	end if
+end function
+
+
+public function Scarab_DebugSpawn
+	temp0 = object[0].value16
+	temp0 -= Scarab_value15
+	CreateTempObject(TypeName[Scarab], temp0, object.xpos, object.ypos)
+	object[tempObjectPos].value2 = object.xpos
+	object[tempObjectPos].value3 = object.ypos
+end function
+
+
+event ObjectUpdate
+	switch object.state
+	case 0
+		object.priority = 1
+		if object.value0 < 60
+			object.value0++
+			object.xpos += object.xvel
+		else
+			object.value0 = 0
+			object.state = 1
+		end if
+		ObjectTileGrip(0, 0, 12, 0)
+		if object.xvel > 0
+			temp0 = object.xpos
+			temp0 -= object.value2
+			if temp0 > 4194304
+				FlipSign(object.xvel)
+			end if
+		else
+			temp0 = object.value2
+			temp0 -= object.xpos
+			if temp0 > 4194304
+				FlipSign(object.xvel)
+			end if
+		end if
+		object.animationTimer += object.animationSpeed
+		object.animationTimer %= 40
+		break
+	case 1
+		if object.value0 < 30
+			object.value0++
+		else
+			object.value0 = 0
+			object.state = 0
+		end if
+		break
+	end switch
+	if object.value4 > 0
+		if object[0].state == 26
+			object.value4 = 0
+		else
+			if object.direction == 0
+				object[0].xpos = object.xpos
+				object[0].xpos -= 1572864
+				object[0].ypos = object.ypos
+				object[0].ypos -= 196608
+			else
+				object[0].xpos = object.xpos
+				object[0].xpos += 1572864
+				object[0].ypos = object.ypos
+				object[0].ypos -= 196608
+			end if
+			object.value4--
+			if object.value4 == 0
+				object[0].state = 15
+				object[0].speed = object.value5
+				object[0].xvel = object[0].speed
+			end if
+		end if
+	end if
+	if object.value7 == 1
+		if object[+1].type == TypeName[Monitor]
+			object[+1].xpos = object.xpos
+			object[+1].xpos -= 1572864
+			object[+1].ypos = object.ypos
+			object[+1].ypos -= 262144
+		else
+			object[+1].type = TypeName[Blank Object]
+			object.value7 = 0
+		end if
+	end if
+	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+		if object.state < 2
+			if object.value4 == 0
+				if object.direction == 0
+					BoxCollisionTest(C_TOUCH, object.entityPos, -32, -12, -12, 12, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+					if checkResult == 1
+						if object.value6 == 0
+							object.value4 = 120
+							object[currentPlayer].animation = ANI_JUMPING
+							object[currentPlayer].state = Player_State_Static
+							object[currentPlayer].speed = 0
+							object[currentPlayer].xvel = 0
+							object[currentPlayer].yvel = 0
+							object[currentPlayer].xpos = object.xpos
+							object[currentPlayer].xpos -= 1572864
+							object[currentPlayer].ypos = object.ypos
+							object[currentPlayer].ypos -= 196608
+							object[currentPlayer].direction = 0
+							if warp.destination > 0
+								if warp.timer > 99
+									if warp.timer < 220
+										warp.destination = 0
+									end if
+								end if
+								warp.timer = 0
+							end if
+							object.value6 = 1
+						end if
+					else
+						object.value6 = 0
+						BoxCollisionTest(C_TOUCH, object.entityPos, -12, -12, 20, 12, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+						if checkResult == 1
+							CallFunction(Player_BadnikBreak)
+						end if
+					end if
+				else
+					BoxCollisionTest(C_TOUCH, object.entityPos, 12, -12, 32, 12, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+					if checkResult == 1
+						if object.value6 == 0
+							object.value4 = 120
+							object[currentPlayer].animation = ANI_JUMPING
+							object[currentPlayer].state = Player_State_Static
+							object[currentPlayer].speed = 0
+							object[currentPlayer].xvel = 0
+							object[currentPlayer].yvel = 0
+							object[currentPlayer].xpos = object.xpos
+							object[currentPlayer].xpos += 1572864
+							object[currentPlayer].ypos = object.ypos
+							object[currentPlayer].ypos -= 196608
+							object[currentPlayer].direction = 1
+							if warp.destination > 0
+								if warp.timer > 99
+									if warp.timer < 220
+										warp.destination = 0
+									end if
+								end if
+								warp.timer = 0
+							end if
+							object.value6 = 1
+						end if
+					else
+						object.value6 = 0
+						BoxCollisionTest(C_TOUCH, object.entityPos, -20, -12, 12, 12, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+						if checkResult == 1
+							CallFunction(Player_BadnikBreak)
+						end if
+					end if
+				end if
+			end if
+		end if
+	next
+	CallFunction(StageSetup_CheckGoodFuture)
+	if object.outOfBounds == 1
+		temp0 = object.xpos
+		temp1 = object.ypos
+		object.xpos = object.value2
+		object.ypos = object.value3
+		if object.outOfBounds == 1
+			object.priority = 0
+			object.state = 0
+			object.value0 = 0
+			object.animationTimer = 0
+			if object.xvel < 0
+				FlipSign(object.xvel)
+			end if
+		else
+			object.xpos = temp0
+			object.ypos = temp1
+		end if
+	end if
+end event
+
+
+event ObjectDraw
+	if object.state < 2
+		if object.drawOrder == 3
+			object.frame = object.animationTimer
+			object.frame /= 20
+			object.frame += object[arrayPos0].propertyValue
+			DrawSpriteFX(object.frame, FX_FLIP, object.xpos, object.ypos)
+			object.frame += 2
+			SetDrawListEntityRef(object.entityPos, 4, screen[4].drawListSize)
+			screen[4].drawListSize++
+			object.drawOrder = 4
+		else
+			DrawSpriteFX(object.frame, FX_FLIP, object.xpos, object.ypos)
+			object.drawOrder = 3
+		end if
+	end if
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R8/Objects.gif")
+	SpriteFrame(-24, -12, 24, 24, 107, 206)
+	SpriteFrame(-32, -12, 32, 24, 132, 206)
+	SpriteFrame(-32, -12, 56, 24, 165, 206)
+	SpriteFrame(-32, -12, 56, 24, 165, 231)
+	SpriteFrame(-24, -12, 24, 24, 107, 206)
+	SpriteFrame(-32, -12, 32, 16, 67, 240)
+	SpriteFrame(-32, -12, 56, 24, 165, 206)
+	SpriteFrame(-40, -12, 64, 24, 100, 231)
+	foreach (TypeName[Scarab], arrayPos0, ALL_ENTITIES)
+		object[arrayPos0].value2 = object[arrayPos0].xpos
+		object[arrayPos0].value3 = object[arrayPos0].ypos
+		switch object[arrayPos0].propertyValue
+		case 0
+			object[arrayPos0].propertyValue = 0
+			object[arrayPos0].xvel = 24576
+			object[arrayPos0].animationSpeed = 2
+			object[arrayPos0].direction = 0
+			object[arrayPos0].value5 = -655360
+			break
+		case 1
+			object[arrayPos0].propertyValue = 0
+			object[arrayPos0].xvel = 24576
+			object[arrayPos0].animationSpeed = 2
+			object[arrayPos0].direction = 1
+			object[arrayPos0].value5 = 655360
+			break
+		case 2
+			object[arrayPos0].propertyValue = 4
+			object[arrayPos0].xvel = 12288
+			object[arrayPos0].animationSpeed = 1
+			object[arrayPos0].direction = 0
+			object[arrayPos0].value5 = -327680
+			break
+		case 3
+			object[arrayPos0].propertyValue = 4
+			object[arrayPos0].xvel = 12288
+			object[arrayPos0].animationSpeed = 1
+			object[arrayPos0].direction = 1
+			object[arrayPos0].value5 = 327680
+			break
+		case 4
+			object[arrayPos0].propertyValue = 0
+			object[arrayPos0].xvel = 24576
+			object[arrayPos0].animationSpeed = 2
+			object[arrayPos0].direction = 0
+			object[arrayPos0].value5 = -655360
+			object[arrayPos0].value7 = 1
+			break
+		end switch
+	next
+	temp0 = 0
+	Scarab_value15 = DebugMode_ObjCount
+	while temp0 < 2
+		SetTableValue(TypeName[Scarab], DebugMode_ObjCount, DebugMode_TypesTable)
+		SetTableValue(Scarab_DebugDraw, DebugMode_ObjCount, DebugMode_DrawTable)
+		SetTableValue(Scarab_DebugSpawn, DebugMode_ObjCount, DebugMode_SpawnTable)
+		DebugMode_ObjCount++
+		temp0++
+	loop
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

@@ -1,0 +1,61 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Goal Post Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 19 : TYPE_GOALPOST
+
+
+event ObjectUpdate
+	if object.state == 0
+		temp0 = object.ypos
+		temp0 += 6291456
+		if object[0].ypos < temp0
+			if object[0].xpos > object.xpos
+				stage.newXBoundary1 = object.xpos
+				stage.newXBoundary1 >>= 16
+				stage.newXBoundary1 -= 160
+				warp.destination = 0
+				warp.timer = 0
+				object.state = 1
+				if object.propertyValue == 1
+					BoxCollisionTest(C_TOUCH, object.entityPos, -32, -256, 32, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+					if checkResult == 1
+						if stage.playerListPos == 0
+							if stage.debugMode == 0
+							end if
+						end if
+					end if
+				end if
+			end if
+		end if
+	end if
+end event
+
+
+event ObjectDraw
+	DrawSprite(0)
+end event
+
+
+event ObjectStartup
+	if stage.playerListPos == 0
+		LoadSpriteSheet("Global/Items2.gif")
+	else
+		LoadSpriteSheet("Global/Items2_t.gif")
+	end if
+	SpriteFrame(-20, -44, 40, 56, 34, 165)
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

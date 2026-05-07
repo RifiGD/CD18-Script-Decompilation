@@ -1,0 +1,247 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Tube Path Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 59 : TYPE_TUBEPATH
+
+
+
+event ObjectUpdate
+	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+		BoxCollisionTest(C_TOUCH, object.entityPos, -4, -4, 4, 4, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+		if checkResult == 1
+			switch object.propertyValue
+			case 0
+				if object.value0 == 0
+					object[currentPlayer].xpos = object.xpos
+					object[currentPlayer].ypos = object.ypos
+					object[currentPlayer].xvel = 0
+					object[currentPlayer].yvel = 0
+				end if
+				if object[currentPlayer].xvel == 0
+					if object[currentPlayer].yvel == 0
+						if object[currentPlayer].up == 1
+							object[currentPlayer].xvel = 0
+							object[currentPlayer].yvel = -1048576
+							PlaySfx(SfxName[Release], 0)
+						end if
+						if object[currentPlayer].down == 1
+							object[currentPlayer].xvel = 0
+							object[currentPlayer].yvel = 1048576
+							PlaySfx(SfxName[Release], 0)
+						end if
+						if object[currentPlayer].left == 1
+							object[currentPlayer].xvel = -1048576
+							object[currentPlayer].yvel = 0
+							PlaySfx(SfxName[Release], 0)
+						end if
+						if object[currentPlayer].right == 1
+							object[currentPlayer].xvel = 1048576
+							object[currentPlayer].yvel = 0
+							PlaySfx(SfxName[Release], 0)
+						end if
+					end if
+				end if
+				break
+			case 1
+				if object.value0 == 0
+					object[currentPlayer].animationSpeed = 240
+					if object[currentPlayer].yvel > 0
+						object[currentPlayer].xpos = object.xpos
+						object[currentPlayer].ypos = object.ypos
+						object[currentPlayer].value1 = 0
+						object[currentPlayer].state = Player_State_Static
+						object[currentPlayer].animation = ANI_JUMPING
+						object[currentPlayer].speed = 0
+						object[currentPlayer].tileCollisions = 0
+						object[currentPlayer].collisionPlane = 1
+						object[currentPlayer].xvel = 0
+						object[currentPlayer].yvel = 1048576
+						PlaySfx(SfxName[Release], 0)
+					else
+						object[currentPlayer].state = Player_State_Air
+						object[currentPlayer].tileCollisions = 1
+						object[currentPlayer].collisionPlane = 0
+						object[currentPlayer].yvel = -524288
+					end if
+				end if
+				break
+			case 2
+				if object.value0 == 0
+					object[currentPlayer].animationSpeed = 240
+					object[currentPlayer].xpos = object.xpos
+					object[currentPlayer].ypos = object.ypos
+					if object[currentPlayer].yvel > 0
+						object[currentPlayer].xvel = 1048576
+						object[currentPlayer].yvel = 0
+					else
+						object[currentPlayer].xvel = 0
+						object[currentPlayer].yvel = -1048576
+					end if
+				end if
+				break
+			case 3
+				if object.value0 == 0
+					object[currentPlayer].animationSpeed = 240
+					object[currentPlayer].xpos = object.xpos
+					object[currentPlayer].ypos = object.ypos
+					if object[currentPlayer].yvel < 0
+						object[currentPlayer].xvel = -1048576
+						object[currentPlayer].yvel = 0
+					else
+						object[currentPlayer].xvel = 0
+						object[currentPlayer].yvel = 1048576
+					end if
+				end if
+				break
+			case 4
+				if object.value0 == 0
+					object[currentPlayer].animationSpeed = 240
+					object[currentPlayer].xpos = object.xpos
+					object[currentPlayer].ypos = object.ypos
+					if object[currentPlayer].yvel > 0
+						object[currentPlayer].xvel = -1048576
+						object[currentPlayer].yvel = 0
+					else
+						object[currentPlayer].xvel = 0
+						object[currentPlayer].yvel = -1048576
+					end if
+				end if
+				break
+			case 5
+				if object.value0 == 0
+					object[currentPlayer].animationSpeed = 240
+					object[currentPlayer].xpos = object.xpos
+					object[currentPlayer].ypos = object.ypos
+					if object[currentPlayer].yvel < 0
+						object[currentPlayer].xvel = 1048576
+						object[currentPlayer].yvel = 0
+					else
+						object[currentPlayer].xvel = 0
+						object[currentPlayer].yvel = 1048576
+					end if
+				end if
+				break
+			case 6
+				if object.value0 == 0
+					if object[currentPlayer].state == Player_State_Static
+						object[currentPlayer].animationSpeed = 240
+						object[currentPlayer].xpos = object.xpos
+						object[currentPlayer].ypos = object.ypos
+						if object[currentPlayer].xvel > 0
+							object[currentPlayer].xvel = 786432
+							object[currentPlayer].yvel = 786432
+						else
+							object[currentPlayer].xvel = -1048576
+							object[currentPlayer].yvel = 0
+						end if
+					end if
+				end if
+				break
+			case 7
+				if object.value0 == 0
+					if object[currentPlayer].state == Player_State_Static
+						object[currentPlayer].animationSpeed = 240
+						object[currentPlayer].xpos = object.xpos
+						object[currentPlayer].ypos = object.ypos
+						if object[currentPlayer].xvel > 0
+							object[currentPlayer].xvel = 1048576
+							object[currentPlayer].yvel = 0
+						else
+							object[currentPlayer].xvel = -786432
+							object[currentPlayer].yvel = -786432
+						end if
+					end if
+				end if
+				break
+			case 8
+				if object.value0 == 0
+					if object[currentPlayer].state == Player_State_Static
+						object[currentPlayer].animationSpeed = 240
+						object[currentPlayer].xpos = object.xpos
+						object[currentPlayer].ypos = object.ypos
+						if object[currentPlayer].xvel > 0
+							object[currentPlayer].xvel = 786432
+							object[currentPlayer].yvel = -786432
+						else
+							object[currentPlayer].xvel = -1048576
+							object[currentPlayer].yvel = 0
+						end if
+					end if
+				end if
+				break
+			case 9
+				if object.value0 == 0
+					if object[currentPlayer].state == Player_State_Static
+						object[currentPlayer].animationSpeed = 240
+						object[currentPlayer].xpos = object.xpos
+						object[currentPlayer].ypos = object.ypos
+						if object[currentPlayer].xvel > 0
+							object[currentPlayer].xvel = 1048576
+							object[currentPlayer].yvel = 0
+						else
+							object[currentPlayer].xvel = -786432
+							object[currentPlayer].yvel = 786432
+						end if
+					end if
+				end if
+				break
+			case 10
+				if object[currentPlayer].gravity == 0
+					object[currentPlayer].gravity = 1
+					object[currentPlayer].animation = ANI_JUMPING
+				end if
+				break
+			case 11
+				if object.value0 == 0
+					if object[currentPlayer].state == Player_State_Static
+						object[currentPlayer].animationSpeed = 240
+						object[currentPlayer].xpos = object.xpos
+						object[currentPlayer].ypos = object.ypos
+						if object[currentPlayer].xvel > 0
+							object[currentPlayer].xvel = 786432
+							object[currentPlayer].yvel = -786432
+						else
+							object[currentPlayer].xvel = -786432
+							object[currentPlayer].yvel = -786432
+						end if
+					end if
+				end if
+				break
+			case 12
+				if object.value0 == 0
+					if object[currentPlayer].state == Player_State_Static
+						object[currentPlayer].animationSpeed = 240
+						object[currentPlayer].xpos = object.xpos
+						object[currentPlayer].ypos = object.ypos
+						if object[currentPlayer].xvel > 0
+							object[currentPlayer].xvel = 786432
+							object[currentPlayer].yvel = 786432
+						else
+							object[currentPlayer].xvel = -786432
+							object[currentPlayer].yvel = 786432
+						end if
+					end if
+				end if
+				break
+			end switch
+			object.value0 = 1
+		else
+			object.value0 = 0
+		end if
+	next
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

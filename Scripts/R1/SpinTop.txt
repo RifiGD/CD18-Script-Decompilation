@@ -1,0 +1,211 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Spinning Top Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 55 : TYPE_SPINNINGTOP
+
+// Function declarations
+reserve function SpinningTop_DebugDraw
+reserve function SpinningTop_DebugSpawn
+reserve function SpinningTop_Function111
+
+//Unknown Variables
+// private value value50872 = 16;
+// private value value50873 = 0; 1
+// private value value50874 = 0; 2
+// private value value50875 = 0; 3
+// private value value50876 = 1; 4
+// private value value50877 = 1; 5
+// private value value50878 = 2; 6
+// private value value50879 = 2; 7
+// private value value50880 = 2; 8
+// private value value50881 = 3; 9 
+// private value value50882 = 3; 10
+// private value value50883 = 3; 11
+// private value value50884 = 4; 12
+// private value value50885 = 4; 13
+// private value value50886 = 5; 14
+// private value value50887 = 5; 15
+// private value value50888 = 5; 16
+// private value value50889 = 4;
+// private value value50890 = 0; 1
+// private value value50891 = 0; 2
+// private value value50892 = 0; 3
+// private value value50893 = 0; 4
+
+public table SpinningTop_table11
+	0, 0, 0, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 5, 5, 5
+end table
+
+public table SpinningTop_table10
+	0, 0, 0, 0
+end table
+
+
+public function SpinningTop_DebugDraw
+	DrawSprite(0)
+end function
+
+
+public function SpinningTop_DebugSpawn
+	CreateTempObject(TypeName[Spinning Top], 0, object.xpos, object.ypos)
+end function
+
+
+public function SpinningTop_Function111
+	temp1 = 0
+	if temp1 == 0
+		object[currentPlayer].controlLock = 0
+		object[currentPlayer].gravity = 1
+		temp1 = object[currentPlayer].value26
+		temp1 += object[currentPlayer].value24
+		object[currentPlayer].yvel = object[currentPlayer].value26
+		FlipSign(object[currentPlayer].yvel)
+		GetTableValue(object[currentPlayer].speed, temp7, SpinningTop_table10)
+		object[currentPlayer].scrollTracking = 1
+		object[currentPlayer].animation = ANI_JUMPING
+		object[currentPlayer].angle = 0
+		object[currentPlayer].collisionMode = 0
+		object[currentPlayer].value1 = 1
+		object[currentPlayer].state = Player_State_Air
+		object[currentPlayer].value33 = 1
+		object[currentPlayer].value34 = 1
+	end if
+end function
+
+
+event ObjectUpdate
+	temp7 = 0
+	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+		GetBit(temp6, object.value0, temp7)
+		SetBit(object.value0, temp7, 0)
+		temp3 = temp7
+		temp3 <<= 3
+		temp2 = 255
+		temp2 <<= temp3
+		temp2 ^= -1
+		temp4 = object.value1
+		temp4 >>= temp3
+		temp4 &= 255
+		object.value1 &= temp2
+		temp5 = object.value2
+		temp5 >>= temp3
+		temp5 &= 255
+		object.value2 &= temp2
+		BoxCollisionTest(C_SOLID, object.entityPos, -16, -8, 16, 24, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+		if checkResult == 1
+			SetBit(object.value0, temp7, 1)
+			if object[currentPlayer].state != Player_State_SpinningTop
+				object[currentPlayer].state = Player_State_SpinningTop
+				temp0 = object[currentPlayer].xpos
+				temp0 -= object.xpos
+				temp0 >>= 16
+				if temp0 < 0
+					FlipSign(temp0)
+					temp5 = 128
+				else
+					temp5 = 0
+				end if
+				temp4 = temp0
+				SetTableValue(object[currentPlayer].speed, temp7, SpinningTop_table10)
+				object[currentPlayer].animation = ANI_SPINNING_TOP
+			end if
+			object[currentPlayer].xvel = 0
+			object[currentPlayer].speed = 0
+			temp5 += 8
+			Cos256(temp0, temp5)
+			temp0 *= temp4
+			temp0 <<= 8
+			temp0 += object.xpos
+			object[currentPlayer].xpos = temp0
+			temp0 = temp5
+			temp0 >>= 4
+			GetTableValue(object[0].frame, temp0, SpinningTop_table11)
+			temp0 = temp5
+			temp0 &= 63
+			if temp0 == 0
+				temp4++
+			end if
+			if object[currentPlayer].xpos < object.xpos
+				if object[currentPlayer].left == 1
+					temp4++
+				end if
+				if object[currentPlayer].right == 1
+					temp4--
+					if object.value1 == -1
+						temp4 = 0
+					end if
+				end if
+			else
+				if object[currentPlayer].left == 1
+					temp4--
+					if temp4 == -1
+						temp4 = 0
+					end if
+				end if
+				if object[currentPlayer].right == 1
+					temp4++
+				end if
+			end if
+			if object[currentPlayer].jumpPress == true
+				CallFunction(SpinningTop_Function111)
+				if object[currentPlayer].state == Player_State_Air
+					PlaySfx(SfxName[Shot], 0)
+					SetBit(object.value0, temp7, 0)
+				end if
+			end if
+		else
+			if temp6 == 1
+				object[currentPlayer].state = Player_State_Air
+				object[currentPlayer].animation = ANI_WALKING
+				GetTableValue(object[currentPlayer].speed, temp7, SpinningTop_table10)
+			end if
+		end if
+		temp4 &= 255
+		temp4 <<= temp3
+		object.value1 += temp4
+		temp5 &= 255
+		temp5 <<= temp3
+		object.value2 += temp5
+		temp7++
+	next
+	temp0 = oscillation
+	temp0 &= 1
+	if temp0 == 0
+		object.frame++
+		if object.frame > 2
+			object.frame = 0
+		end if
+	end if
+end event
+
+
+event ObjectDraw
+	DrawSprite(object.frame)
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R1/Objects.gif")
+	SpriteFrame(-16, -8, 32, 16, 101, 76)
+	SpriteFrame(-16, -8, 32, 16, 101, 76)
+	SpriteFrame(-16, -8, 32, 16, 134, 76)
+	SetTableValue(TypeName[Spinning Top], DebugMode_ObjCount, DebugMode_TypesTable)
+	SetTableValue(SpinningTop_DebugDraw, DebugMode_ObjCount, DebugMode_DrawTable)
+	SetTableValue(SpinningTop_DebugSpawn, DebugMode_ObjCount, DebugMode_SpawnTable)
+	DebugMode_ObjCount++
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

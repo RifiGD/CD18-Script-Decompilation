@@ -1,0 +1,109 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Pole Trigger Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 66 : TYPE_POLETRIGGER
+
+
+
+event ObjectUpdate
+	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+		if object.state == 0
+			BoxCollisionTest(C_TOUCH, object.entityPos, -4, object.value0, 4, object.value1, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			if checkResult == 1
+				if object[currentPlayer].state != Player_State_Hurt
+					object.state = 1
+					object.value3 = 0
+					object[currentPlayer].state = Player_State_Static
+					object[currentPlayer].animation = ANI_JUMPING
+					object[currentPlayer].xpos = object.xpos
+					object[currentPlayer].xvel = 0
+					object[currentPlayer].speed = 0
+					object[currentPlayer].drawOrder = 5
+					if object[currentPlayer].yvel > 0
+						object[currentPlayer].yvel = 131072
+					else
+						object[currentPlayer].yvel = -131072
+					end if
+				end if
+			end if
+		else
+			if object[currentPlayer].state == Player_State_Static
+				if object[currentPlayer].jumpPress == 1
+					object.value3 = 1
+				end if
+				object.angle += 16
+				object.angle &= 511
+				Sin(object[currentPlayer].xpos, object.angle)
+				object[currentPlayer].xpos *= -3072
+				object[currentPlayer].xpos += object.xpos
+				object[currentPlayer].drawOrder = 4
+				if object.angle < 129
+					object[currentPlayer].drawOrder = 5
+				end if
+				if object.angle > 383
+					object[currentPlayer].drawOrder = 5
+				end if
+				temp0 = object[currentPlayer].ypos
+				temp0 -= object.ypos
+				temp0 >>= 16
+				if temp0 < 0
+					if temp0 < object.value0
+						object[currentPlayer].yvel = 131072
+					end if
+				else
+					if temp0 > object.value1
+						object[currentPlayer].yvel = -131072
+					end if
+				end if
+				if object.value3 == 1
+					if object.angle == 128
+						object[currentPlayer].drawOrder = 4
+						object[currentPlayer].state = Player_State_Air
+						object[currentPlayer].speed = -786432
+						object[currentPlayer].xvel = -786432
+						object.state = 0
+					end if
+					if object.angle == 384
+						object[currentPlayer].drawOrder = 4
+						object[currentPlayer].state = Player_State_Air
+						object[currentPlayer].speed = 786432
+						object[currentPlayer].xvel = 786432
+						object.state = 0
+					end if
+				end if
+			else
+				if object[currentPlayer].drawOrder == 5
+					object[currentPlayer].drawOrder = 4
+				end if
+				object.state = 0
+			end if
+		end if
+	next
+end event
+
+
+event ObjectStartup
+	foreach (TypeName[Pole Trigger], arrayPos0, ALL_ENTITIES)
+		object[arrayPos0].value0 = object[arrayPos0].propertyValue
+		object[arrayPos0].value0 <<= 3
+		object[arrayPos0].value1 = object[arrayPos0].value0
+		FlipSign(object[arrayPos0].value0)
+		object[arrayPos0].value0 -= 8
+		object[arrayPos0].value1 += 8
+	next
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

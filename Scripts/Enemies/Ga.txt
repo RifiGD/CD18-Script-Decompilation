@@ -1,0 +1,171 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Ga Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 59 : TYPE_GA
+
+// Function declarations
+reserve function Ga_DebugDraw
+reserve function Ga_DebugSpawn
+
+// Static Values
+public value Ga_value16 = 0;
+
+
+public function Ga_DebugDraw
+	temp0 = object[0].value16
+	temp0 -= Ga_value16
+	if temp0 == 0
+		DrawSprite(3)
+	else
+		DrawSprite(7)
+	end if
+end function
+
+
+public function Ga_DebugSpawn
+	temp0 = object[0].value16
+	temp0 -= Ga_value16
+	CreateTempObject(TypeName[Ga], temp0, object.xpos, object.ypos)
+end function
+
+
+event ObjectUpdate
+	switch object.state
+	case 0
+		BoxCollisionTest(C_TOUCH, object.entityPos, -96, -256, 96, 256, 0, C_BOX, C_BOX, C_BOX, C_BOX)
+		if checkResult == 1
+			object.drawOrder = 5
+			object.state = 2
+			object.animationTimer = 0
+			object.frame = 0
+			object.priority = 1
+			object.value1 = object.xpos
+			object.value2 = object.ypos
+		end if
+		break
+	case 1
+		if object.outOfBounds == 1
+			object.state = 0
+			if object.priority != 4
+				object.priority = 0
+			end if
+		end if
+		break
+	case 2
+		if object.value0 < 110
+			object.value0++
+			if object.value0 == 30
+				object.frame++
+			end if
+			if object.value0 == 60
+				object.frame++
+			end if
+		else
+			if object.xpos > object.xpos
+				object.xvel = -32768
+				object.direction = 0
+			else
+				object.xvel = 32768
+				object.direction = 1
+			end if
+			object.state = 3
+			object.value0 = 0
+			if object.propertyValue > 0
+				object.xvel >>= 1
+			end if
+			object.yvel = 32768
+		end if
+		if object.outOfBounds == 1
+			object.state = 1
+			object.value0 = 0
+			object.xpos = object.value1
+			object.ypos = object.value2
+		end if
+		break
+	case 3
+		object.xpos += object.xvel
+		object.ypos += object.yvel
+		if object.value0 < 65
+			object.value0++
+		else
+			object.value0 = 0
+			FlipSign(object.yvel)
+			if object.propertyValue == 0
+				CreateTempObject(TypeName[Ga Sparkle], 0, object.xpos, object.ypos)
+				object[tempObjectPos].drawOrder = 5
+			end if
+		end if
+		object.animationTimer++
+		object.animationTimer %= 20
+		object.frame = object.animationTimer
+		object.frame /= 5
+		if object.propertyValue == 0
+			object.frame += 3
+		else
+			object.frame += 7
+		end if
+		if object.outOfBounds == 1
+			object.state = 1
+			object.value0 = 0
+			object.xpos = object.value1
+			object.ypos = object.value2
+		end if
+		break
+	end switch
+	if object.state > 2
+		foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+			BoxCollisionTest(C_TOUCH, object.entityPos, -16, -8, 16, 8, currentPlayer, object[currentPlayer].value41, object[currentPlayer].value39, object[currentPlayer].value42, object[currentPlayer].value40)
+			if checkResult == 1
+				CallFunction(Player_BadnikBreak)
+			end if
+		next
+	end if
+	CallFunction(StageSetup_CheckGoodFuture)
+end event
+
+
+event ObjectDraw
+	if object.state > 1
+		DrawSpriteFX(object.frame, FX_FLIP, object.xpos, object.ypos)
+	end if
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R3/Objects.gif")
+	SpriteFrame(-12, -16, 24, 16, 1, 216)
+	SpriteFrame(-12, -16, 24, 24, 26, 216)
+	SpriteFrame(-12, -20, 24, 32, 231, 170)
+	SpriteFrame(-12, -12, 32, 24, 34, 191)
+	SpriteFrame(-12, -8, 32, 16, 165, 183)
+	SpriteFrame(-12, -8, 32, 16, 166, 233)
+	SpriteFrame(-12, -8, 32, 16, 165, 183)
+	SpriteFrame(-12, -12, 32, 24, 1, 157)
+	SpriteFrame(-12, -8, 32, 16, 1, 182)
+	SpriteFrame(-12, -8, 32, 16, 1, 199)
+	SpriteFrame(-12, -8, 32, 16, 1, 182)
+	temp0 = 0
+	Ga_value16 = DebugMode_ObjCount
+	while temp0 < 2
+		SetTableValue(TypeName[Ga], DebugMode_ObjCount, DebugMode_TypesTable)
+		SetTableValue(Ga_DebugDraw, DebugMode_ObjCount, DebugMode_DrawTable)
+		SetTableValue(Ga_DebugSpawn, DebugMode_ObjCount, DebugMode_SpawnTable)
+		DebugMode_ObjCount++
+		temp0++
+	loop
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

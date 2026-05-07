@@ -1,0 +1,215 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Title Card Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 39 : TYPE_TITLECARD
+
+
+
+event ObjectDraw
+	object[0].value1 = 0
+	switch object.state
+	case 0
+		object[0].controlMode = -1
+		object[0].up = 0
+		object[0].down = 0
+		object[0].left = 0
+		object[0].right = 0
+		object[0].jumpPress = 0
+		object[0].jumpHold = 0
+		if warp.xpos < 1
+			object[0].speed = 0
+		end if
+		if object.value3 > 0
+			if object.value3 == 256
+				PlayMusic(0)
+				if warp.xpos > 0
+					object[0].xpos = warp.xpos
+					object[0].ypos = warp.ypos
+					object[0].xvel = warp.xvel
+					object[0].yvel = warp.yvel
+					object[0].speed = warp.xvel
+					object[0].state = warp.state
+					stage.milliSeconds = recMilliSeconds
+					stage.seconds = recSeconds
+					stage.minutes = recMinutes
+				end if
+				warp.timer = 0
+				warp.frame = 0
+			end if
+			SetScreenFade(object.value4, object.value5, object.value6, object.value3)
+			object.value3 -= 8
+		else
+			fadeColor = 0
+			CheckEqual(warp.xpos, 0)
+			temp0 = checkResult
+			CheckLower(lampPostID, 32)
+			temp0 &= checkResult
+			if temp0 == 1
+				object.state = 1
+				object.value3 = 0
+			else
+				object[0].controlMode = 0
+				stage.timeEnabled = 1
+				ResetObjectEntity(20, TypeName[Blank Object], 0, 0, 0)
+				warp.xpos = 0
+			end if
+		end if
+		break
+	case 1
+		temp0 = 144
+		temp0 += object.value7
+		if object.value1 > temp0
+			object.value1 -= 8
+		else
+			if object.value0 == 0
+				object.state = 2
+			end if
+		end if
+		if object.value0 < 0
+			object.value0 += 8
+		end if
+		break
+	case 2
+		if object.value3 == 90
+			object.state = 3
+		else
+			object.value3++
+		end if
+		break
+	case 3
+		if object.value1 < 408
+			object.value1 += 16
+			object.value0 -= 16
+		else
+			object[0].controlMode = 0
+			stage.timeEnabled = 1
+			ResetObjectEntity(20, TypeName[Blank Object], 0, 0, 0)
+			warp.xpos = 0
+		end if
+		break
+	end switch
+	if object.type > 0
+		temp0 = 136
+		temp0 += object.value7
+		DrawSpriteScreenXY(0, temp0, object.value0)
+		DrawSpriteScreenXY(stage.actNum, object.value1, 80)
+		DrawSpriteScreenXY(4, object.value1, 80)
+		DrawSpriteScreenXY(5, object.value1, 80)
+		DrawSpriteScreenXY(6, object.value1, 80)
+		DrawSpriteScreenXY(7, object.value1, 80)
+		temp0 = 8
+		while temp0 < object.value2
+			DrawSpriteScreenXY(temp0, object.value1, 80)
+			temp0++
+		loop
+	end if
+end event
+
+
+event ObjectStartup
+	if stage.playerListPos == 0
+		LoadSpriteSheet("Global/Display.gif")
+	else
+		LoadSpriteSheet("Global/Display_t.gif")
+	end if
+	if options.soundtrack == 0
+		switch object[9].propertyValue
+		case 0
+			SetMusicTrack("JP/R8A.ogg", 0, 146030)
+			break
+		case 1
+			SetMusicTrack("R8B.ogg", 0, 145748)
+			break
+		case 2
+			SetMusicTrack("JP/R8C.ogg", 0, 1)
+			break
+		case 3
+			SetMusicTrack("JP/R8D.ogg", 0, 1)
+			break
+		end switch
+	else
+		switch object[9].propertyValue
+		case 0
+			SetMusicTrack("US/R8A.ogg", 0, 1)
+			break
+		case 1
+			SetMusicTrack("R8B.ogg", 0, 145748)
+			break
+		case 2
+			SetMusicTrack("US/R8C.ogg", 0, 1)
+			break
+		case 3
+			SetMusicTrack("US/R8D.ogg", 0, 563962)
+			break
+		end switch
+	end if
+	flowerType = TypeName[Flower]
+	object[20].type = TypeName[Title Card]
+	if warp.xpos > 0
+		object[20].value3 = 256
+	else
+		object[20].value3 = 384
+	end if
+	if stage.actNum == 3
+		player.roofBarrier = 1
+	end if
+	object[20].priority = 1
+	object[20].drawOrder = 6
+	object[20].value0 = -216
+	object[20].value1 = 336
+	object[20].value7 = screen.xcenter
+	object[20].value7 -= 160
+	if object[20].value7 > 3
+		object[20].value7 -= 4
+	end if
+	object[20].value7 &= 248
+	object[20].value1 += object[20].value7
+	object[20].value1 += object[20].value7
+	object[20].value2 = 15
+	object[20].value2 += 8
+	object[20].value4 = fadeColor
+	object[20].value4 >>= 16
+	object[20].value5 = fadeColor
+	object[20].value5 &= 65280
+	object[20].value5 >>= 8
+	object[20].value6 = fadeColor
+	object[20].value6 &= 255
+	SpriteFrame(0, 0, 32, 200, 223, 1)
+	SpriteFrame(96, 96, 48, 48, 41, 1)
+	SpriteFrame(96, 96, 48, 48, 90, 1)
+	SpriteFrame(96, 96, 48, 48, 139, 1)
+	SpriteFrame(64, 97, 48, 16, 41, 67)
+	SpriteFrame(72, 81, 160, 16, 49, 50)
+	SpriteFrame(20, 81, 160, 16, 41, 50)
+	SpriteFrame(100, 32, 24, 48, 188, 1)
+	SpriteFrame(0, 0, 20, 55, 159, 133)
+	SpriteFrame(20, 32, 9, 23, 88, 84)
+	SpriteFrame(29, 32, 10, 23, 81, 108)
+	SpriteFrame(39, 32, 11, 23, 43, 84)
+	SpriteFrame(51, 32, 9, 23, 159, 84)
+	SpriteFrame(60, 32, 9, 23, 159, 84)
+	SpriteFrame(69, 32, 6, 23, 169, 108)
+	SpriteFrame(76, 32, 9, 23, 176, 108)
+	SpriteFrame(0, 56, 20, 55, 159, 133)
+	SpriteFrame(20, 56, 11, 23, 43, 84)
+	SpriteFrame(32, 56, 11, 23, 76, 84)
+	SpriteFrame(43, 56, 11, 23, 187, 84)
+	SpriteFrame(55, 56, 9, 23, 88, 84)
+	SpriteFrame(64, 56, 10, 23, 70, 108)
+	SpriteFrame(74, 56, 10, 23, 70, 108)
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

@@ -1,0 +1,96 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Grab Pole Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 74 : TYPE_GRABPOLE
+
+
+
+event ObjectUpdate
+	switch object.state
+	case 0
+		foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+			BoxCollisionTest(C_TOUCH, object.entityPos, 16, -28, 32, 28, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			if checkResult == 1
+				object.state = 1
+				object[currentPlayer].state = Player_State_Static
+				object[currentPlayer].animation = ANI_CLINGING
+				object[currentPlayer].direction = 0
+				object[currentPlayer].speed = 0
+				object[currentPlayer].xvel = 0
+				object[currentPlayer].yvel = 0
+			end if
+		next
+		break
+	case 1
+		foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+			if object[currentPlayer].state == Player_State_Death
+				object.state = 0
+			end if
+			if object[currentPlayer].state == Player_State_Drown
+				object.state = 0
+			end if
+			if object.state > 0
+				if object.value0 < 180
+					object.value0++
+					object[currentPlayer].xpos = object.xpos
+					object[currentPlayer].direction = 0
+					if stage.playerListPos == 0
+						object[currentPlayer].xpos += 1310720
+					else
+						object[currentPlayer].xpos += 1048576
+					end if
+				else
+					object.frame = 1
+					object.state = 2
+					object[currentPlayer].state = Player_State_Air
+				end if
+			end if
+			if object[currentPlayer].up == 1
+				object[currentPlayer].ypos -= 65536
+			end if
+			if object[currentPlayer].down == 1
+				object[currentPlayer].ypos += 65536
+			end if
+			if object[currentPlayer].jumpPress == 1
+				object.frame = 1
+				object.state = 2
+				object[currentPlayer].state = Player_State_Air
+			end if
+			BoxCollisionTest(C_SOLID, object.entityPos, 0, -64, 32, -46, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			BoxCollisionTest(C_SOLID, object.entityPos, 0, 46, 32, 64, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+		next
+		break
+	end switch
+end event
+
+
+event ObjectDraw
+	DrawSprite(object.frame)
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R4/Objects3.gif")
+	if object[9].propertyValue < 3
+		SpriteFrame(-4, -46, 8, 92, 134, 46)
+		SpriteFrame(-4, -46, 16, 92, 117, 46)
+	else
+		SpriteFrame(-4, -46, 8, 92, 51, 163)
+		SpriteFrame(-4, -46, 16, 92, 34, 163)
+	end if
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

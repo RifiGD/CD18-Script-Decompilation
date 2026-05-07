@@ -1,0 +1,176 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: R4 Setup Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 40 : TYPE_R4SETUP
+
+// Function declarations
+reserve function R4Setup_Function83
+reserve function R4Setup_Function84
+
+// Static Values
+public value R4Setup_value13 = 0;
+
+
+public function R4Setup_Function83
+	stage[arrayPos0].deformationData1 = 1
+	arrayPos0++
+	stage[arrayPos0].deformationData1 = 1
+	arrayPos0++
+	stage[arrayPos0].deformationData1 = 2
+	arrayPos0++
+	stage[arrayPos0].deformationData1 = 2
+	arrayPos0++
+	stage[arrayPos0].deformationData1 = 3
+	arrayPos0++
+	stage[arrayPos0].deformationData1 = 3
+	arrayPos0++
+	stage[arrayPos0].deformationData1 = 3
+	arrayPos0++
+	stage[arrayPos0].deformationData1 = 3
+	arrayPos0++
+	stage[arrayPos0].deformationData1 = 2
+	arrayPos0++
+	stage[arrayPos0].deformationData1 = 2
+	arrayPos0++
+	stage[arrayPos0].deformationData1 = 1
+	arrayPos0++
+	stage[arrayPos0].deformationData1 = 1
+	arrayPos0++
+end function
+
+
+public function R4Setup_Function84
+	stage[arrayPos0].deformationData1 = -1
+	arrayPos0++
+	stage[arrayPos0].deformationData1 = -1
+	arrayPos0++
+	stage[arrayPos0].deformationData1 = -2
+	arrayPos0++
+	stage[arrayPos0].deformationData1 = -2
+	arrayPos0++
+	stage[arrayPos0].deformationData1 = -3
+	arrayPos0++
+	stage[arrayPos0].deformationData1 = -3
+	arrayPos0++
+	stage[arrayPos0].deformationData1 = -3
+	arrayPos0++
+	stage[arrayPos0].deformationData1 = -3
+	arrayPos0++
+	stage[arrayPos0].deformationData1 = -2
+	arrayPos0++
+	stage[arrayPos0].deformationData1 = -2
+	arrayPos0++
+	stage[arrayPos0].deformationData1 = -1
+	arrayPos0++
+	stage[arrayPos0].deformationData1 = -1
+	arrayPos0++
+end function
+
+
+event ObjectUpdate
+	object.value0++
+	if object.value0 > 1
+		tileLayer[0].deformationOffsetW++
+		tileLayer[1].deformationOffsetW++
+		object.value0 = 0
+	end if
+	if object.value4 == 1
+		object.value1++
+		if object.value1 == 3
+			object.value1 = 0
+			CopyPalette(3, object.value2, 0, 176, 16)
+			object.value2 += 16
+			object.value2 %= object.value3
+		end if
+	end if
+	if R4Setup_value13 > 0
+		R4Setup_value13--
+	end if
+end event
+
+
+event ObjectDraw
+	temp0 = stage.waterLevel
+	temp0 -= screen.yoffset
+	if temp0 < 0
+		temp0 = 0
+	end if
+	if temp0 > screen.ysize
+		temp0 = screen.ysize
+	end if
+	SetActivePalette(0, 0, temp0)
+	if R4Setup_value13 > 0
+		SetActivePalette(2, temp0, screen.ysize)
+	else
+		SetActivePalette(1, temp0, screen.ysize)
+	end if
+	player.waterStream = 0
+end event
+
+
+event ObjectStartup
+	object[21].type = TypeName[R4 Setup]
+	object[21].priority = 1
+	object[21].drawOrder = 0
+	arrayPos0 = 0
+	CallFunction(R4Setup_Function83)
+	arrayPos0 = 128
+	CallFunction(R4Setup_Function83)
+	arrayPos0 = 160
+	CallFunction(R4Setup_Function84)
+	arrayPos0 = 256
+	while arrayPos0 < 576
+		arrayPos1 = arrayPos0
+		arrayPos1 -= 256
+		stage[arrayPos0].deformationData1 = stage[arrayPos1].deformationData1
+		arrayPos0++
+	loop
+	SetLayerDeformation(3, 128, 4, 0, 0, 0)
+	switch object[9].propertyValue
+	case 0
+		LoadPalette("R4A_WaterPal.act", 1, 0, 0, 256)
+		if stage.actNum == 2
+			LoadPalette("R4A_PalCycle.act", 3, 0, 0, 64)
+			object[21].value4 = 1
+			object[21].value3 = 64
+		end if
+		break
+	case 1
+		LoadPalette("R4B_WaterPal.act", 1, 0, 0, 256)
+		if stage.actNum == 2
+			LoadPalette("R4B_PalCycle.act", 3, 0, 0, 48)
+			object[21].value4 = 1
+			object[21].value3 = 48
+		end if
+		break
+	case 2
+		LoadPalette("R4C_WaterPal.act", 1, 0, 0, 256)
+		LoadPalette("R4C_PalCycle.act", 3, 0, 0, 64)
+		object[21].value4 = 1
+		object[21].value3 = 64
+		break
+	case 3
+		LoadPalette("R4D_WaterPal.act", 1, 0, 0, 256)
+		LoadPalette("R4D_PalCycle.act", 3, 0, 0, 48)
+		object[21].value4 = 1
+		object[21].value3 = 48
+		break
+	end switch
+	LoadPalette("ElectricFlash.act", 2, 0, 0, 256)
+	R4Setup_value13 = 0
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

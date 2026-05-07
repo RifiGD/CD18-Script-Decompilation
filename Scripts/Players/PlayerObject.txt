@@ -1,0 +1,2814 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Player Object Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 1 : TYPE_PLAYEROBJECT
+
+public alias 256 : GROUP_PLAYERS
+public alias arrayPos6 : currentPlayer
+public alias arrayPos7 : playerCount
+
+private alias 0 : WARPDEST_NONE
+
+// Ink Effect Aliases
+private alias 0 : INK_NONE   // Disables transparency
+private alias 1 : INK_BLEND  // Uses half transparency
+private alias 2 : INK_ALPHA  // Uses transparency value of Object.Alpha
+private alias 3 : INK_ADD    // Uses transparency value of Object.Alpha, and a bright tint
+private alias 4 : INK_SUB    // Uses transparency value of Object.Alpha, and a dark tint
+
+// Shield Aliases
+private alias 0 : SHIELD_NONE
+private alias 1 : SHIELD_NORMAL
+private alias 2 : SHIELD_BUBBLE
+private alias 3 : SHIELD_FIRE
+private alias 4 : SHIELD_LIGHTNING
+
+// Gravity
+public alias 0 : GRAVITY_GROUND
+public alias 1 : GRAVITY_AIR
+
+// Priority Aliases
+private alias 0 : PRIORITY_BOUNDS         // Object updates within 128 pixels of the screen border left/right and 256 pixels up/down
+private alias 1 : PRIORITY_ACTIVE         // Object will always update, unless paused/frozen
+private alias 2 : PRIORITY_ALWAYS         // Object will always update
+private alias 3 : PRIORITY_XBOUNDS        // Object updates within 128 pixels of the screen border left/right
+private alias 4 : PRIORITY_BOUNDS_DESTROY // Object updates within 128 pixels of the screen border left/right, object will be set to Blank Object if the check fails
+private alias 5 : PRIORITY_INACTIVE       // Object never updates
+private alias 6 : PRIORITY_BOUNDS_SMALL   // Object updates within 32 pixels of the screen border left/right and 128 pixels up/down
+private alias 7 : PRIORITY_ACTIVE_SMALL   // Object will always update, unless paused/frozen. The bounds ofobject.outOfBounds are much smaller
+
+// Player List Pos Aliases
+public alias 0 : PLAYER_SONIC
+public alias 1 : PLAYER_TAILS
+public alias 2 : PLAYER_KNUCKLES
+public alias 3 : PLAYER_SONIC_TAILS
+
+//Variables
+private alias object.type : player.type
+private alias object.entityPos : player.entityPos
+private alias object.state : player.state
+private alias object.xpos : player.xpos
+private alias object.ypos : player.ypos
+private alias object.ixpos : player.ixpos
+private alias object.iypos : player.iypos
+private alias object.propertyValue : player.character
+private alias object.priority : player.priority
+private alias object.lookPosX : player.lookPosX
+private alias object.lookPosY : player.lookPosY
+private alias object.xvel : player.xvel
+private alias object.yvel : player.yvel
+private alias object.speed : player.speed
+private alias object.direction : player.direction
+private alias object.rotation : player.rotation
+private alias object.gravity : player.gravity
+private alias object.frame : player.frame
+private alias object.visible : player.visible
+private alias object.angle : player.angle
+private alias object.interaction : player.interaction
+private alias object.controlLock : player.controlLock
+private alias object.controlMode : player.controlMode
+private alias object.collisionMode : player.collisionMode
+private alias object.collisionTop : player.collisionTop
+private alias object.animation : player.animation
+private alias object.prevAnimation : player.prevAnimation
+private alias object.animationSpeed : player.animationSpeed
+private alias object.animationTimer : player.animationTimer
+private alias object.drawOrder : player.drawOrder
+private alias object.scrollTracking : player.scrollTracking
+private alias object.floorSensorC	 : player.floorSensorC
+private alias object.floorSensorL	 : player.floorSensorL
+private alias object.floorSensorR	 : player.floorSensorR
+private alias object.floorSensorLC	 : player.floorSensorLC
+private alias object.floorSensorRC	 : player.floorSensorRC
+private alias object.tileCollisions	 : player.tileCollisions
+private alias object.collisionPlane : player.collisionPlane
+
+// *Object-wise* input, not to be confused with keyPress and keyDown
+private alias object.jumpPress 	: player.jumpPress
+private alias object.jumpHold 	: player.jumpHold
+private alias object.up		 	: player.up
+private alias object.down	 	: player.down
+private alias object.left	 	: player.left
+private alias object.right	 	: player.right
+
+// Object Values
+private alias object.value0  : player.rings
+private alias object.value1  : player.timer
+private alias object.value2  : player.abilityTimer
+private alias object.value5  : player.rollAnimationSpeed
+private alias object.value6  : player.speedShoesTimer
+private alias object.value7  : player.invincibleTimer
+private alias object.value8  : player.blinkTimer
+private alias object.value9  : player.animationReserve
+private alias object.value13 : player.skidding
+private alias object.value15 : player.isSidekick
+private alias object.value16 : debugMode.currentSelection
+private alias object.value18 : player.badnikBonus
+private alias object.value19 : player.topSpeed
+private alias object.value20 : player.acceleration
+private alias object.value21 : player.deceleration
+private alias object.value22 : player.airAcceleration
+private alias object.value23 : player.airDeceleration
+private alias object.value24 : player.gravityStrength
+private alias object.value26 : player.jumpStrength
+private alias object.value27 : player.jumpCap
+private alias object.value28 : player.rollingFriction
+private alias object.value29 : player.jumpOffset
+private alias object.value30 : player.jumpAbility
+private alias object.value31 : player.actionPeelout 	// which Peelout is active
+private alias object.value32 : player.actionSpindash 	// which Spindash is active
+private alias object.value33 : player.collisionDisabled
+private alias object.value34 : player.jumpAbilityState
+private alias object.value36 : player.skidSpeed
+private alias object.value37 : player.rollingDeceleration
+private alias object.value38 : player.shield
+private alias object.value43 : player.prevGravity
+
+// Function declarations
+reserve function Player_ProcessUpdate // Function0
+reserve function Player_State_Static // Function1
+reserve function Player_HandleGroundMovement // Function2
+reserve function Player_HandleAirFriction // Function3
+reserve function Player_HandleAirMovement // Function4
+reserve function Player_HandleOnGround // Function5
+reserve function Player_Action_Jump // Function6
+reserve function Player_Action_Spindash_S2 // Function7
+reserve function Player_Action_Spindash_CD // Function8
+reserve function Player_Action_Peelout_S2 // Function9
+reserve function Player_Action_Peelout_CD // Function10
+reserve function Player_Action_DblJumpTails // Function11
+reserve function Player_State_Ground // Function12
+reserve function Player_State_Air // Function13
+reserve function Player_State_TubeAirRoll_2013 // Function14
+reserve function Player_State_Roll // Function15
+reserve function Player_State_RollJump // Function16
+reserve function Player_State_Lookup // Function17
+reserve function Player_State_Crouch // Function18
+reserve function Player_State_Spindash_S2 // Function19
+reserve function Player_State_Spindash_CD // Function20
+reserve function Player_State_Peelout_S2 // Function21
+reserve function Player_State_Peelout_CD // Function22
+reserve function Player_State_Fly // Function23
+reserve function Player_State_GotHit // Function24
+reserve function Player_State_Hurt // Function25
+reserve function Player_State_Death // Function26
+reserve function Player_State_Drown // Function27
+reserve function Player_State_HangBar // Function28
+reserve function Player_State_TubeRoll // Function35
+reserve function Player_State_SpinningTop // Function36
+reserve function Player_State_WaterCurrent // Function39
+reserve function Player_State_Ramp3D // Transplanted
+reserve function Player_State_Hugged // Transplanted
+reserve function Player_State_SizeChange // Function40
+reserve function Player_SetupAttractDemo // Function41
+reserve function Player_ApplyShield // Function42
+reserve function Player_UpdatePhysicsState // Function43
+reserve function Player_BadnikBreak // Function44
+reserve function Player_Hit // Function45
+reserve function Player_FireHit // Function46
+reserve function Player_LightningHit // Function47
+reserve function Player_ProjectileHit // Function48
+reserve function Player_Kill // Function49
+reserve function Player_HandleRollAnimSpeed // Function50
+reserve function Player_HandleWalkAnimSpeed // Function51
+reserve function Player_HandleRunAnimSpeed // Function52
+reserve function Player_HandleRollDeceleration // T_Function49
+reserve function Player_State_BubbleBounce // T_Function50
+reserve function Player_Action_DblJumpSonic // T_Function51
+reserve function Player_State_TubeAirRoll // // T_Function52
+
+// Static Values
+public value Mini_PlayerFlag = 0;
+public value Player_attractTable = 0;
+public value Player_attractTablePos = 0;
+public value Player_attractFrameCount = 0;
+
+// Thanks Kotas for the Tables below <3
+
+// Each line of these physics tables store the values in this order:
+// Top Speed, Ground Acceleration, Air Acceleration, Air Deleceration, Skid Speed, Rolling Friction, Jump Strength, Jump Cap
+// Note that Ground Deceleration is not defined here, rather it's set based on Ground Acceleration
+
+// Same as S1/S2
+private table Player_SonicPhysicsTable
+	0x60000, 0x0C00, 0x1800, 0x0600, 0x08000, 0x0600, 0x68000, -0x40000 // Normal
+	0x30000, 0x0600, 0x0C00, 0x0300, 0x04000, 0x0300, 0x38000, -0x20000 // Underwater
+	0xA0000, 0x3000, 0x6000, 0x1800, 0x10000, 0x0600, 0x80000, -0x40000 // Super
+	0x50000, 0x1800, 0x3000, 0x0C00, 0x08000, 0x0300, 0x38000, -0x20000 // Super + Underwater
+	0xC0000, 0x1800, 0x3000, 0x0C00, 0x08000, 0x0600, 0x68000, -0x40000 // Speed Shoes
+	0x60000, 0x0C00, 0x1800, 0x0600, 0x04000, 0x0300, 0x38000, -0x20000 // Speed Shoes + Underwater
+	0xC0000, 0x1800, 0x3000, 0x0C00, 0x08000, 0x0600, 0x80000, -0x40000 // Speed Shoes + Super
+	0x60000, 0x0C00, 0x1800, 0x0600, 0x04000, 0x0300, 0x38000, -0x20000 // Speed Shoes + Super + Underwater
+end table
+
+// A few noted entries are different
+// Otherwise, its the same as S1/S2
+private table Player_TailsPhysicsTable
+	0x60000, 0x0C00, 0x1800, 0x0600, 0x08000, 0x0600, 0x68000, -0x40000 // Normal
+	0x30000, 0x0600, 0x0C00, 0x0300, 0x04000, 0x0300, 0x38000, -0x20000 // Underwater
+	0xA0000, 0x3000, 0x6000, 0x1800, 0x10000, 0x0600, 0x80000, -0x40000 // Super
+	0x50000, 0x1800, 0x3000, 0x0600, 0x08000, 0x0300, 0x38000, -0x20000 // Super + Underwater	(Column 4 is different)
+	0xC0000, 0x1800, 0x3000, 0x0600, 0x08000, 0x0600, 0x68000, -0x40000 // Speed Shoes			(Column 4 is different)
+	0x60000, 0x0C00, 0x1800, 0x0600, 0x04000, 0x0300, 0x38000, -0x20000 // Speed Shoes + Underwater
+	0xC0000, 0x1800, 0x3000, 0x0600, 0x08000, 0x0600, 0x80000, -0x40000 // Speed Shoes + Super	(Column 4 is different)
+	0x60000, 0x0C00, 0x1800, 0x0600, 0x04000, 0x0300, 0x38000, -0x20000 // Speed Shoes + Super + Underwater
+end table
+
+// While unused, there is a 3rd physics table, which is assumed to be Knuckles
+// It's the exact same as Sonic's physics table however
+// It might have instead been an accidental copy-paste
+private table Player_KnucklesPhysicsTable
+	0x60000, 0x0C00, 0x1800, 0x0600, 0x08000, 0x0600, 0x68000, -0x40000 // Normal
+	0x30000, 0x0600, 0x0C00, 0x0300, 0x04000, 0x0300, 0x38000, -0x20000 // Underwater
+	0xA0000, 0x3000, 0x6000, 0x1800, 0x10000, 0x0600, 0x80000, -0x40000 // Super
+	0x50000, 0x1800, 0x3000, 0x0C00, 0x08000, 0x0300, 0x38000, -0x20000 // Super + Underwater
+	0xC0000, 0x1800, 0x3000, 0x0C00, 0x08000, 0x0600, 0x68000, -0x40000 // Speed Shoes
+	0x60000, 0x0C00, 0x1800, 0x0600, 0x04000, 0x0300, 0x38000, -0x20000 // Speed Shoes + Underwater
+	0xC0000, 0x1800, 0x3000, 0x0C00, 0x08000, 0x0600, 0x80000, -0x40000 // Speed Shoes + Super
+	0x60000, 0x0C00, 0x1800, 0x0600, 0x04000, 0x0300, 0x38000, -0x20000 // Speed Shoes + Super + Underwater
+end table
+
+
+// Initialize the character object for replay playback
+public function Player_SetupAttractDemo
+	Player_attractTablePos = 2
+	Player_attractFrameCount = 1
+
+	currentPlayer = 0
+	while currentPlayer < playerCount
+		GetTableValue(player[currentPlayer].xpos, 0, Player_attractTable)
+		GetTableValue(player[currentPlayer].ypos, 1, Player_attractTable)
+		player[currentPlayer].controlMode 	= -1 // none
+		player[currentPlayer].up 			= false
+		player[currentPlayer].down 			= false
+		player[currentPlayer].left 			= false
+		player[currentPlayer].right 		= false
+		player[currentPlayer].jumpPress 	= false
+		player[currentPlayer].jumpHold 		= false
+		player[currentPlayer].timer 		= 0
+		currentPlayer++
+	loop
+	screen[0].cameraX = object[0].ixpos
+	screen[0].cameraY = object[0].iypos
+end function
+
+
+public function Player_ApplyShield
+	switch player[currentPlayer].shield
+	case SHIELD_NONE
+		ResetObjectEntity(arrayPos0, TypeName[Blank Object], 0, 0, 0)
+		break
+	case SHIELD_NORMAL
+		ResetObjectEntity(arrayPos0, blueShieldType, 0, 0, 0)
+		object[arrayPos0].priority = PRIORITY_ACTIVE
+		object[arrayPos0].inkEffect = INK_ALPHA
+		object[arrayPos0].alpha = 160
+		break
+	case SHIELD_BUBBLE
+		ResetObjectEntity(arrayPos0, TypeName[Bubble Shield], 0, 0, 0)
+		object[arrayPos0].priority = PRIORITY_ACTIVE
+		break
+	case SHIELD_FIRE
+		ResetObjectEntity(arrayPos0, TypeName[Fire Shield], 0, 0, 0)
+		object[arrayPos0].priority = PRIORITY_ACTIVE
+		break
+	case SHIELD_LIGHTNING
+		ResetObjectEntity(arrayPos0, TypeName[Lightning Shield], 0, 0, 0)
+		object[arrayPos0].priority = PRIORITY_ACTIVE
+		break
+	// Unfortunately, SHIELD_GOGGLES doesn't exist here :(
+	end switch
+end function
+
+
+public function Player_UpdatePhysicsState
+	switch stage.playerListPos
+	case PLAYER_SONIC
+	case PLAYER_SONIC_TAILS // Omg, Sonic and Tails!!!
+		temp0 = Player_SonicPhysicsTable
+		break
+	case PLAYER_TAILS
+		temp0 = Player_TailsPhysicsTable
+		break
+	end switch
+
+	temp1 = 0
+	temp2 = 0
+
+	if stage.state != STAGE_FROZEN
+		// Is the player underwater?
+		temp3 = player[currentPlayer].ypos
+		temp3 >>= 16
+
+		// Pairing the water & Debug Mode checks together
+		CheckGreater(temp3, stage.waterLevel)
+		temp4 = checkResult
+		CheckNotEqual(player[currentPlayer].type, TypeName[Debug Mode])
+		temp4 &= checkResult
+		if temp4 == true
+			SetBit(temp1, 0, true)
+			player[currentPlayer].gravityStrength = 0x1000
+		else
+			player[currentPlayer].gravityStrength = 0x3800
+		end if
+		if player[currentPlayer].speedShoesTimer > 0
+			SetBit(temp1, 2, true)
+			temp2 = 1
+		end if
+
+		temp1 <<= 3
+	end if
+
+	GetTableValue(player[currentPlayer].topSpeed, temp1, temp0)
+	temp1++
+	GetTableValue(player[currentPlayer].acceleration, temp1, temp0)
+	player[currentPlayer].deceleration = player[currentPlayer].acceleration
+	player[currentPlayer].deceleration >>= temp2
+	temp1++
+	GetTableValue(player[currentPlayer].airAcceleration, temp1, temp0)
+	temp1++
+	GetTableValue(player[currentPlayer].airDeceleration, temp1, temp0)
+	temp1++
+	GetTableValue(player[currentPlayer].skidSpeed, temp1, temp0)
+	temp1++
+	GetTableValue(player[currentPlayer].rollingFriction, temp1, temp0)
+	temp1++
+	GetTableValue(player[currentPlayer].jumpStrength, temp1, temp0)
+	temp1++
+	GetTableValue(player[currentPlayer].jumpCap, temp1, temp0)
+	
+end function
+
+// Used by badniks to check if the badnik should be destroyed
+// -> Not to be confused with Player_CheckHit
+public function Player_BadnikBreak
+	CheckEqual(player[currentPlayer].animation, ANI_JUMPING)
+	temp0 = checkResult
+	CheckEqual(player[currentPlayer].animation, ANI_SPINDASH)
+	temp0 |= checkResult
+	CheckNotEqual(player[currentPlayer].invincibleTimer, 0)
+	temp0 |= checkResult
+	if warp.timer > 0
+		temp0 |= 1
+	end if
+	CheckEqual(player[currentPlayer].animation, ANI_FLYING)
+	temp1 = checkResult
+	CheckEqual(player[currentPlayer].animation, ANI_FLYINGTIRED)
+	temp1 |= checkResult
+	if temp1 == true
+		CheckGreater(player[currentPlayer].ypos, player.ypos)
+		temp0 |= checkResult
+	end if
+	if temp0 == true
+		ResetObjectEntity(player.entityPos, flowerType, 0, player.xpos, player.ypos)
+		player.drawOrder = 4
+		CreateTempObject(TypeName[Smoke Puff], 0, player.xpos, player.ypos)
+		object[tempObjectPos].drawOrder = 4
+		CreateTempObject(TypeName[Object Score], player[currentPlayer].badnikBonus, player.xpos, player.ypos)
+		object[tempObjectPos].drawOrder = 4
+		PlaySfx(SfxName[Destroy], 0)
+		
+		if player[currentPlayer].yvel > 0
+			if player[currentPlayer].ypos >= player.ypos
+				player[currentPlayer].yvel -= 65536
+			else
+				player[currentPlayer].yvel += player[currentPlayer].gravityStrength
+				player[currentPlayer].yvel += player[currentPlayer].gravityStrength
+				FlipSign(object[currentPlayer].yvel)
+			end if
+		else
+			player[currentPlayer].yvel += 65536
+		end if
+		temp0 = currentPlayer
+		currentPlayer = 0
+		switch player[currentPlayer].badnikBonus
+		case 0
+			player.score += 100
+			break
+		case 1
+			player.score += 200
+			break
+		case 2
+			player.score += 500
+			break
+		case 3
+		case 4
+		case 5
+		case 6
+		case 7
+		case 8
+		case 9
+		case 10
+		case 11
+		case 12
+		case 13
+		case 14
+			player.score += 1000
+			break
+		case 15
+			player.score += 10000
+			break
+		end switch
+		if player[currentPlayer].badnikBonus < 15
+			player[currentPlayer].badnikBonus++
+		end if
+		currentPlayer = temp0
+	else
+		if object[currentPlayer].state != Player_State_Death
+			if object[currentPlayer].value7 == 0
+				if object[currentPlayer].value8 == 0
+					object[currentPlayer].state = Player_State_GotHit
+					if object[currentPlayer].xpos > player.xpos
+						object[currentPlayer].speed = 0x20000
+					else
+						object[currentPlayer].speed = -0x20000
+					end if
+				end if
+			end if
+		end if
+	end if
+end function
+
+// This function is called in order to hurt currentPlayer, not to be confused with the actual Player State functions
+public function Player_Hit
+	if player[currentPlayer].state != Player_State_Death
+		arrayPos0 = player[currentPlayer].entityPos
+		arrayPos0 += playerCount
+		if player[currentPlayer].invincibleTimer == 0
+			if player[currentPlayer].blinkTimer == 0
+				player[currentPlayer].state = Player_State_GotHit
+				if player[currentPlayer].xpos > player.xpos
+					player[currentPlayer].speed = 0x20000
+				else
+					player[currentPlayer].speed = -0x20000
+				end if
+			end if
+		end if
+	end if
+end function
+
+// Only used by R3's Fireball.
+public function Player_FireHit
+	if player[currentPlayer].shield != SHIELD_FIRE
+		if player[currentPlayer].state != Player_State_Death
+
+			arrayPos0 = object[currentPlayer].entityPos
+			arrayPos0 += playerCount
+
+			if player[currentPlayer].invincibleTimer == 0
+				if player[currentPlayer].blinkTimer == 0
+					player[currentPlayer].state = Player_State_GotHit
+					if player[currentPlayer].xpos > player.xpos
+						player[currentPlayer].speed = 0x20000
+					else
+						player[currentPlayer].speed = -0x20000
+					end if
+				end if
+			end if
+		end if
+	end if
+end function
+
+
+// Unused in CD18...
+public function Player_LightningHit
+	if player[currentPlayer].shield != SHIELD_LIGHTNING
+		if player[currentPlayer].state != Player_State_Death
+			arrayPos0 = object[currentPlayer].entityPos
+			arrayPos0 += playerCount
+			if player[currentPlayer].invincibleTimer == 0
+				if player[currentPlayer].blinkTimer == 0
+					player[currentPlayer].state = Player_State_GotHit
+					if player[currentPlayer].xpos > player.xpos
+						player[currentPlayer].speed = 0x20000
+					else
+						player[currentPlayer].speed = -0x20000
+					end if
+				end if
+			end if
+		end if
+	end if
+end function
+
+
+// Used by badnik projectiles when on player collision
+// Well, its only used by Kamemusi's shot...
+public function Player_ProjectileHit
+	if player[currentPlayer].shield > SHIELD_NORMAL
+		temp0 = player[currentPlayer].xpos
+		temp0 -= player.xpos
+		temp1 = player[currentPlayer].ypos
+		temp1 -= player.ypos
+		ATan2(temp2, temp0, temp1)
+		Sin256(temp0, temp2)
+		Cos256(temp1, temp2)
+		player.xvel = temp1
+		player.xvel *= -2048
+		player.yvel = temp0
+		player.yvel *= -2048
+	else
+		if object[currentPlayer].state != Player_State_Death
+			arrayPos0 = object[currentPlayer].entityPos
+			arrayPos0 += playerCount
+			if player[currentPlayer].invincibleTimer == 0
+				if player[currentPlayer].blinkTimer == 0
+					player[currentPlayer].state = Player_State_GotHit
+					if object[currentPlayer].xpos > player.xpos
+						object[currentPlayer].speed = 0x20000
+					else
+						object[currentPlayer].speed = -0x20000
+					end if
+				end if
+			end if
+		end if
+	end if
+end function
+
+
+public function Player_Kill
+	PlaySfx(SfxName[Hurt], 0)
+
+	player[currentPlayer].speed 			= 0
+	player[currentPlayer].xvel 				= 0
+	player[currentPlayer].yvel 				= -425984
+	player[currentPlayer].state 			= Player_State_Death
+	player[currentPlayer].animation 		= ANI_DYING
+	player[currentPlayer].tileCollisions 	= false
+	player[currentPlayer].interaction 		= false
+	player[currentPlayer].blinkTimer 		= 0
+	player[currentPlayer].visible 			= true
+	player[currentPlayer].drawOrder 		= 6
+
+	if currentPlayer == 0
+		object[currentPlayer].priority = PRIORITY_ALWAYS
+		if object[1].type == TypeName[Blank Object] // 0
+			object[1].priority = PRIORITY_ALWAYS
+		end if
+
+		// Stop the game flow
+		screen[0].cameraEnabled = 0
+		stage.state = STAGE_FROZEN
+	end if
+
+	arrayPos0 = currentPlayer
+	arrayPos0 += playerCount
+
+	if object[arrayPos0].type == invincibilityType
+		object[arrayPos0].propertyValue = 3
+	end if
+	
+	object[arrayPos0].type = TypeName[Blank Object]
+	player[currentPlayer].shield = SHIELD_NONE
+end function
+
+
+public function Player_ProcessUpdate
+	if options.attractMode == false
+		ProcessObjectControl()
+	end if
+
+	if player.speedShoesTimer > 0
+		player.speedShoesTimer--
+		if player.speedShoesTimer < 1
+			if music.currentTrack == 3
+				PlayMusic(0)
+			end if
+			currentPlayer = player.entityPos
+			CallFunction(Player_UpdatePhysicsState)
+			player.speedShoesTimer = 0
+		end if
+	end if
+	if player.state != Player_State_Hurt
+		if player.blinkTimer > 0
+			player.blinkTimer--
+			GetBit(temp0, player.blinkTimer, 2)
+			if temp0 == 1
+				player.visible = 0
+			else
+				player.visible = 1
+			end if
+		end if
+	end if
+	if player.invincibleTimer > 0
+		player.invincibleTimer--
+		if player.invincibleTimer == 0
+			if music.currentTrack == 2
+				PlayMusic(0)
+			end if
+			if object[+playerCount].type == invincibilityType
+				currentPlayer = player.entityPos
+				arrayPos0 = currentPlayer
+				arrayPos0 += playerCount
+				CallFunction(Player_ApplyShield)
+			end if
+		end if
+	end if
+	if player.state != Player_State_Lookup
+		if player.state != 18
+			if player.lookPosY > 0
+				player.lookPosY -= 2
+			end if
+			if player.lookPosY < 0
+				player.lookPosY += 2
+			end if
+		end if
+	end if
+	if object.value10 > 0
+		object.value10--
+		if object.value10 == 0
+			screen[0].cameraStyle = 0
+		end if
+	end if
+	if player.state != 23
+		if object.value25 != 0
+			StopSfx(SfxName[Flying])
+			StopSfx(SfxName[Tired])
+			object.value25 = 0
+		end if
+	end if
+	if warp.timer > 0
+		warp.timer++
+		if warp.timer == 204
+			screen[0].cameraEnabled = 0
+			CreateTempObject(TypeName[Time Warp], 0, 0, 0)
+			object[tempObjectPos].drawOrder = 6
+		end if
+	end if
+end function
+
+
+public function Player_State_Static
+	checkResult = 0
+end function
+
+// Amy Rose's favorite function
+// NOTE: This state was transplanted from the v3 scripts due to it not existing when decompiling this script
+public function Player_State_Hugged
+	if Player.Gravity == GRAVITY_AIR	// No hugs if you're in the air
+
+		Player.State = Player_State_Air
+
+		Player.Animation = ANI_WALKING
+		Player.Timer	 = 0
+		CallFunction(Player_HandleAirMovement)
+	else
+		CallFunction(Player_HandleOnGround)
+		// Yes, the only thing the function does is make you wait
+		if Player.Timer < 240
+			Player.Animation = ANI_STOPPED
+			Player.Timer++
+		else
+			Player.Animation = ANI_WAITING
+		end if
+
+		// Warp cancel check
+		if Warp.Destination > WARPDEST_NONE
+			if Warp.Timer > 99
+				if Warp.Timer < 204
+					Warp.Destination = WARPDEST_NONE
+				end if
+			end if
+			Warp.Timer = 0
+		end if
+
+		// Get free from Amy
+		if Player.JumpPress == true
+			CallFunction(Player_Action_Jump)
+		end if
+	end if
+end function
+
+// Palmtree Panic Ramp
+// NOTE: This state was transplanted from the v3 scripts due to it not existing when decompiling this script.
+public function Player_State_Ramp3D
+	CallFunction(Player_HandleGroundMovement)
+	if player.gravity == GRAVITY_AIR
+
+		player.state = Player_State_Air
+
+		player.timer = 0
+		CallFunction(Player_HandleAirMovement)
+		// Set the equivalent animation for looking to the left
+		if player.direction == FACING_LEFT
+
+			if player.animation == ANI_RAMP_RUNNING3
+				player.animation = ANI_RAMP_RUNNING5
+			end if
+
+			if player.animation == ANI_RAMP_RUNNING2
+				player.animation = ANI_RAMP_RUNNING6
+			end if
+
+		end if
+	else
+		CallFunction(Player_HandleOnGround)
+		if player.speed == 0
+			// Warp Star erase check
+			if warp.destination > WARPDEST_NONE
+				if warp.timer > 99
+					if warp.timer < 204
+						warp.destination = WARPDEST_NONE
+					end if
+				end if
+				warp.timer = 0
+			end if
+			// Waiting timer while in the ramp
+			if player.timer < 240
+				player.animation = ANI_STOPPED
+				player.timer++
+			else
+				player.animation = ANI_WAITING
+			end if
+		else
+			// Set animation based on angle
+			if player.angle == 0
+				player.animation = ANI_RAMP_RUNNING1
+			end if
+
+			if player.angle > 200
+				if player.direction == FACING_RIGHT
+					player.animation = ANI_RAMP_RUNNING3
+				else
+					player.animation = ANI_RAMP_RUNNING5
+				end if
+			end if
+
+			if player.angle > 216
+				if player.direction == FACING_RIGHT
+					player.animation = ANI_RAMP_RUNNING2
+				else
+					player.animation = ANI_RAMP_RUNNING6
+				end if
+			end if
+
+			if player.angle > 232
+				player.animation = ANI_RAMP_RUNNING1
+			end if
+
+			if player.angle == 192
+				player.animation = ANI_RAMP_RUNNING4
+			end if
+		end if
+
+		if player.jumpPress == true
+			CallFunction(Player_Action_Jump)
+		else
+			if player.up == true
+				if player.speed == 0
+					player.state	 = Player_State_LookUp
+					player.animation = ANI_LOOKINGUP
+					player.timer	 = 0
+				end if
+			end if
+			if player.down == true
+				if player.speed == 0
+					player.state	 = Player_State_Crouch
+					player.animation = ANI_LOOKINGDOWN
+					player.timer	 = 0
+				else
+					if player.speed >  0x199A
+						player.controlLock	= 0
+						player.state		= Player_State_Roll
+						player.animation	= ANI_JUMPING
+					end if
+
+					if player.speed < -0x199A
+						player.controlLock	= 0
+						player.state		= Player_State_Roll
+						player.animation	= ANI_JUMPING
+					end if
+				end if
+			end if
+		end if
+	end if
+
+	if player.animation != ANI_STOPPED
+		player.animationSpeed = player.speed
+		if player.animationSpeed < 0
+			FlipSign(player.animationSpeed)
+		end if
+		player.animationSpeed *= 60
+		player.animationSpeed /= 0x60000
+		player.animationSpeed += 20
+	else
+		player.animationSpeed = 0
+	end if
+end function
+
+
+public function Player_HandleRollAnimSpeed
+	if player.character == PLAYER_TAILS
+		player.rollAnimationSpeed = 120
+	else
+		player.rollAnimationSpeed = player.speed
+		if player.rollAnimationSpeed < 0
+			FlipSign(player.rollAnimationSpeed)
+		end if
+		player.rollAnimationSpeed *= 240
+		player.rollAnimationSpeed /= 0x60000
+		player.rollAnimationSpeed += 48
+	end if
+end function
+
+
+public function Player_HandleWalkAnimSpeed
+	player.animationSpeed = player.speed
+	if player.animationSpeed < 0
+		FlipSign(player.animationSpeed)
+	end if
+	player.animationSpeed *= 60
+	player.animationSpeed /= 0x60000
+	player.animationSpeed += 20
+end function
+
+
+public function Player_HandleRunAnimSpeed
+	player.animationSpeed = player.speed
+	if player.animationSpeed < 0
+		FlipSign(player.animationSpeed)
+	end if
+	player.animationSpeed *= 80
+	player.animationSpeed /= 0x60000
+end function
+
+
+public function Player_HandleGroundMovement
+	if player.controlLock > 0
+		player.controlLock--
+		Sin256(temp0, player.angle)
+		temp0 *= 0x2000
+		temp0 >>= 8
+		player.speed += temp0
+	else
+		if player.left == true
+			temp0 = player.topSpeed
+			FlipSign(temp0)
+			if player.speed > temp0
+				if player.speed > 0
+					if player.collisionMode == 0
+						if player.speed > 0x40000
+							player.skidding = 16
+						end if
+					end if
+					if player.speed < player.skidSpeed
+						player.speed = player.skidSpeed
+						FlipSign(player.speed)
+						player.skidding = 0
+					else
+						player.speed -= player.skidSpeed
+					end if
+				else
+					player.speed -= player.acceleration
+					player.skidding = 0
+				end if
+			end if
+			if player.speed <= 0
+				player.direction = FACING_LEFT
+			end if
+		end if
+		if player.right == true
+			if player.speed < player.topSpeed
+				if player.speed < 0
+					if player.collisionMode == 0
+						if player.speed < -0x40000
+							player.skidding = 16
+						end if
+					end if
+					temp0 = player.skidSpeed
+					FlipSign(temp0)
+					if player.speed > temp0
+						player.speed = player.skidSpeed
+						player.skidding = 0
+					else
+						player.speed += player.skidSpeed
+					end if
+				else
+					player.speed += player.acceleration
+					player.skidding = 0
+				end if
+			end if
+			if player.speed >= 0
+				player.direction = FACING_RIGHT
+			end if
+		end if
+		temp0 = player.left
+		temp0 |= player.right
+		if temp0 == 0
+			if player.speed > 0
+				player.speed -= player.deceleration
+				if player.speed < 0
+					player.speed = 0
+				end if
+			else
+				player.speed += player.deceleration
+				if player.speed > 0
+					player.speed = 0
+				end if
+			end if
+			if player.speed > 0x2000
+				Sin256(temp0, player.angle)
+				temp0 *= 0x2000
+				temp0 >>= 8
+				player.speed += temp0
+			end if
+			if player.speed < -0x2000
+				Sin256(temp0, player.angle)
+				temp0 *= 0x2000
+				temp0 >>= 8
+				player.speed += temp0
+			end if
+			if player.angle > 192
+				if player.angle < 228
+					if player.speed > -65536
+						if player.speed < 65536
+							player.controlLock = 30
+						end if
+					end if
+				end if
+			end if
+			if player.angle > 28
+				if player.angle < 64
+					if player.speed > -65536
+						if player.speed < 65536
+							player.controlLock = 30
+						end if
+					end if
+				end if
+			end if
+		else
+			Sin256(temp0, player.angle)
+			temp0 *= 0x2000
+			temp0 >>= 8
+			player.speed += temp0
+			if player.right == 1
+				if player.left == 0
+					if player.angle > 192
+						if player.angle < 228
+							if player.speed < 163840
+								if player.speed > -0x20000
+									player.controlLock = 30
+								end if
+							end if
+						end if
+					end if
+				end if
+			else
+				if player.left == 1
+					if player.angle > 28
+						if player.angle < 64
+							if player.speed > -163840
+								if player.speed < 0x20000
+									player.controlLock = 30
+								end if
+							end if
+						end if
+					end if
+				end if
+			end if
+		end if
+	end if
+	switch player.collisionMode
+	case 1
+		if player.angle <= 192
+			if player.speed > -0x20000
+				if player.speed < 0x20000
+					player.gravity = GRAVITY_AIR
+					player.angle = 0
+					player.collisionMode = 0
+					player.speed = player.xvel
+				end if
+			end if
+		end if
+		break
+	case 2
+		if player.speed > -0x20000
+			if player.speed < 0x20000
+				player.gravity = GRAVITY_AIR
+				player.angle = 0
+				player.collisionMode = 0
+				player.speed = player.xvel
+			end if
+		end if
+		break
+	case 3
+		if player.angle >= 64
+			if player.speed > -0x20000
+				if player.speed < 0x20000
+					player.gravity = GRAVITY_AIR
+					player.angle = 0
+					player.collisionMode = 0
+					player.speed = player.xvel
+				end if
+			end if
+		end if
+		break
+	end switch
+end function
+
+
+public function Player_HandleAirFriction
+	if player.yvel > -262144
+		if player.yvel < 0
+			temp0 = player.speed
+			temp0 >>= 5
+			player.speed -= temp0
+		end if
+	end if
+	temp0 = player.topSpeed
+	FlipSign(temp0)
+	if player.speed > temp0
+		if player.left == 1
+			player.speed -= player.airAcceleration
+			player.direction = FACING_LEFT
+		end if
+	else
+		if player.left == 1
+			player.direction = FACING_LEFT
+		end if
+	end if
+	if player.speed < player.topSpeed
+		if player.right == 1
+			player.speed += player.airAcceleration
+			player.direction = FACING_RIGHT
+		end if
+	else
+		if player.right == 1
+			player.direction = FACING_RIGHT
+		end if
+	end if
+	if options.originalControls == 1
+		if player.left == 1
+			temp0 = player.topSpeed
+			FlipSign(temp0)
+			if player.speed < temp0
+				player.speed = temp0
+			end if
+		end if
+		if player.right == 1
+			if player.speed > player.topSpeed
+				player.speed = player.topSpeed
+			end if
+		end if
+	end if
+end function
+
+
+public function Player_HandleRollDeceleration
+	if player.right == 1
+		if player.speed < 0
+			player.speed += player.rollingDeceleration
+		end if
+	end if
+	if player.left == 1
+		if player.speed > 0
+			player.speed -= player.rollingDeceleration
+		end if
+	end if
+	temp1 = player.speed
+	if player.speed > 0
+		player.speed -= player.rollingFriction
+		Sin256(temp0, player.angle)
+		if temp0 > 0
+			Sin256(temp0, player.angle)
+			temp0 *= 20480
+		else
+			Sin256(temp0, player.angle)
+			temp0 *= 5120
+		end if
+		temp0 >>= 8
+		player.speed += temp0
+		if player.speed > 1179648
+			player.speed = 1179648
+		end if
+	else
+		player.speed += player.rollingFriction
+		Sin256(temp0, player.angle)
+		if temp0 < 0
+			Sin256(temp0, player.angle)
+			temp0 *= 20480
+		else
+			Sin256(temp0, player.angle)
+			temp0 *= 5120
+		end if
+		temp0 >>= 8
+		player.speed += temp0
+		if player.speed < -1179648
+			player.speed = -1179648
+		end if
+	end if
+	switch player.collisionMode
+	case 0
+	case 2
+		if temp1 > 0
+			if player.speed < 0
+				player.speed = 0
+				player.state = Player_State_Ground
+			end if
+		else
+			if player.speed > 0
+				player.speed = 0
+				player.state = Player_State_Ground
+			end if
+		end if
+		break
+	case 1
+		if player.angle < 193
+			if temp1 > 0
+				if player.speed < 0x20000
+					player.gravity = GRAVITY_AIR
+					player.xvel = 0
+					player.speed = 0
+				end if
+			end if
+		end if
+		break
+	case 3
+		if player.angle > 63
+			if temp1 < 0
+				if player.speed > -0x20000
+					player.gravity = GRAVITY_AIR
+					player.xvel = 0
+					player.speed = 0
+				end if
+			end if
+		end if
+		break
+	end switch
+end function
+
+
+public function Player_HandleAirMovement
+	player.scrollTracking = true
+	player.yvel += player.gravityStrength
+	if player.yvel > 1048576
+		player.yvel = 1048576
+	end if
+	if player.yvel < player.jumpCap
+		if player.jumpHold == 0
+			if player.timer > 0
+				player.yvel = player.jumpCap
+				temp0 = player.speed
+				temp0 >>= 5
+				player.speed -= temp0
+			end if
+		end if
+	end if
+	player.xvel = player.speed
+	if player.rotation < 256
+		if player.rotation > 0
+			player.rotation -= 4
+		else
+			player.rotation = 0
+		end if
+	else
+		if player.rotation < 512
+			player.rotation += 4
+		else
+			player.rotation = 0
+		end if
+	end if
+	player.collisionMode = 0
+	if player.animation == ANI_JUMPING
+		player.animationSpeed = player.rollAnimationSpeed
+	end if
+end function
+
+
+public function Player_HandleOnGround
+	player.scrollTracking = 0
+	Cos256(temp0, player.angle)
+	temp0 *= player.speed
+	temp0 >>= 8
+	player.xvel = temp0
+	Sin256(temp0, player.angle)
+	temp0 *= player.speed
+	temp0 >>= 8
+	player.yvel = temp0
+end function
+
+
+public function Player_Action_Jump
+	temp1 = false
+
+	if player.collisionMode == 0
+		// Check if there's a roof right above the player
+		temp6 = player.xpos
+		temp7 = player.ypos
+		temp0 = player.collisionTop
+		temp0 -= 2
+
+		ObjectTileCollision(3, 0, temp0, player.collisionPlane)
+		temp1 = checkResult
+		player.xpos = temp6
+		player.ypos = temp7
+		temp0 = object.collisionBottom
+		if player.animation != ANI_JUMPING
+			player.iypos -= player.jumpOffset
+			temp0 += player.jumpOffset
+		end if
+		ObjectTileCollision(0, 0, temp0, player.collisionPlane)
+	end if
+	if temp1 == false
+		// No roof - start jumping
+		player.controlLock = 0
+		player.gravity = GRAVITY_AIR
+		temp1 = player.jumpStrength
+		temp1 += player.gravityStrength
+		Sin256(player.xvel, player.angle)
+		player.xvel *= temp1
+		Cos256(temp0, player.angle)
+		temp0 *= player.speed
+		player.xvel += temp0
+		player.xvel >>= 8
+		Sin256(player.yvel, player.angle)
+		player.yvel *= player.speed
+		Cos256(temp0, player.angle)
+		temp0 *= temp1
+		player.yvel -= temp0
+		player.yvel >>= 8
+		player.speed = player.xvel
+		player.scrollTracking = 1
+		player.animation = ANI_JUMPING
+		player.angle = 0
+		player.collisionMode = 0
+		player.timer = 1
+		CallFunction(Player_HandleRollAnimSpeed)
+		player.state = Player_State_Air
+		PlaySfx(SfxName[Jump], 0)
+		player.collisionDisabled = true
+		player.jumpAbilityState = 1
+	end if
+end function
+
+
+public function Player_Action_Spindash_S2
+	player.state = Player_State_Spindash_S2
+	player.animation = ANI_SPINDASH
+	player.abilityTimer = 0
+	PlaySfx(SfxName[Charge], 0)
+	CreateTempObject(TypeName[Dust Puff], player.entityPos, player.xpos, player.ypos)
+	object[tempObjectPos].iypos = object.collisionBottom
+	object[tempObjectPos].ypos += player.ypos
+	object[tempObjectPos].frame = 4
+	object[tempObjectPos].drawOrder = 4
+	object[tempObjectPos].direction = player.direction
+end function
+
+
+public function Player_Action_Spindash_CD
+	player.state = Player_State_Spindash_CD
+	player.animation = ANI_JUMPING
+	player.ypos += 327680
+	player.abilityTimer = 0
+	PlaySfx(SfxName[Charge], 0)
+end function
+
+
+public function Player_Action_Peelout_S2
+	player.state = Player_State_Peelout_S2
+	player.abilityTimer = 0
+	PlaySfx(SfxName[Charge], 0)
+end function
+
+
+public function Player_Action_Peelout_CD
+	player.state = Player_State_Peelout_CD
+	player.abilityTimer = 0
+	PlaySfx(SfxName[Charge], 0)
+end function
+
+
+public function Player_State_BubbleBounce
+	CallFunction(Player_HandleAirFriction)
+	CheckNotEqual(player.shield, SHIELD_BUBBLE)
+	temp0 = checkResult
+	CheckNotEqual(player.invincibleTimer, 0)
+	temp0 |= checkResult
+	if temp0 == true
+		player.state = Player_State_Air
+	else
+		if player.gravity == GRAVITY_AIR
+			CallFunction(Player_HandleAirMovement)
+		else
+			player.jumpAbilityState = 1
+			player.gravity = GRAVITY_AIR
+			if player.jumpStrength == 229376
+				temp1 = -262144
+			else
+				temp1 = -491520
+			end if
+			temp1 += player.gravityStrength
+			Sin256(player.xvel, player.angle)
+			player.xvel *= temp1
+			Cos256(temp0, player.angle)
+			temp0 *= player.speed
+			player.xvel += temp0
+			player.xvel >>= 8
+			Sin256(player.yvel, player.angle)
+			player.yvel *= player.speed
+			Cos256(temp0, player.angle)
+			temp0 *= temp1
+			player.yvel = temp0
+			player.yvel >>= 8
+			player.speed = player.xvel
+			player.scrollTracking = 1
+			player.animation = ANI_JUMPING
+			player.angle = 0
+			player.collisionMode = 0
+			player.timer = 1
+			CallFunction(Player_HandleRollAnimSpeed)
+			player.state = Player_State_Air
+			PlaySfx(SfxName[Bubble Bounce], 0)
+			object[+playerCount].state = 4
+		end if
+	end if
+end function
+
+
+public function Player_Action_DblJumpSonic
+	if player.jumpPress == true
+		CheckEqual(player.invincibleTimer, 0)
+		temp0 = checkResult
+		if temp0 == true
+			switch player.shield
+			case SHIELD_NONE
+				if options.shieldType > 1
+					PlaySfx(SfxName[Jump], 0)
+					if object[+playerCount].type == TypeName[Blank Object]
+						currentPlayer = player.entityPos
+						arrayPos0 = currentPlayer
+						arrayPos0 += playerCount
+						ResetObjectEntity(arrayPos0, TypeName[Insta Shield], 0, 0, 0)
+						object[arrayPos0].priority = 1
+					end if
+					player.jumpAbilityState = 2
+					object[+playerCount].state = 1
+					if player.state == 16
+						player.state = Player_State_Air
+					end if
+				end if
+				break
+			case SHIELD_NORMAL
+				break
+			case SHIELD_BUBBLE
+				PlaySfx(SfxName[Bubble Bounce], 0)
+				player.yvel = 524288
+				player.xvel = 0
+				player.speed = player.xvel
+				player.jumpAbilityState = 2
+				player.state = Player_State_BubbleBounce
+				object[+playerCount].state = 2
+				break
+			case SHIELD_FIRE
+				PlaySfx(SfxName[Fire Dash], 0)
+				GetBit(temp0, player.direction, 0)
+				if temp0 == 0
+					player.xvel = 524288
+				else
+					player.xvel = -524288
+				end if
+				player.speed = player.xvel
+				player.yvel = 0
+				player.jumpAbilityState = 2
+				object.value10 = 15
+				screen[0].cameraStyle = 4
+				if player.state == 16
+					player.state = Player_State_Air
+				end if
+				object[+playerCount].state = 2
+				object[+playerCount].direction = player.direction
+				break
+			case SHIELD_LIGHTNING
+				PlaySfx(SfxName[Lightning Jump], 0)
+				player.yvel = -360448
+				player.jumpAbilityState = 2
+				CreateTempObject(TypeName[Lightning Spark], 0, player.xpos, player.ypos)
+				object[tempObjectPos].xvel = -0x20000
+				object[tempObjectPos].yvel = -0x20000
+				CreateTempObject(TypeName[Lightning Spark], 0, player.xpos, player.ypos)
+				object[tempObjectPos].xvel = 0x20000
+				object[tempObjectPos].yvel = -0x20000
+				CreateTempObject(TypeName[Lightning Spark], 0, player.xpos, player.ypos)
+				object[tempObjectPos].xvel = -0x20000
+				object[tempObjectPos].yvel = 0x20000
+				CreateTempObject(TypeName[Lightning Spark], 0, player.xpos, player.ypos)
+				object[tempObjectPos].xvel = 0x20000
+				object[tempObjectPos].yvel = 0x20000
+				if player.state == 16
+					player.state = Player_State_Air
+				end if
+				break
+			end switch
+		end if
+	end if
+end function
+
+
+public function Player_Action_DblJumpTails
+	if player.jumpPress == true
+		player.timer = 0
+		player.state = Player_State_Fly
+		object.value25 = 2048
+		if player.gravityStrength == 14336
+			PlaySfx(SfxName[Flying], 1)
+			player.animation = ANI_FLYING
+		else
+			player.animation = ANI_SWIMMING
+		end if
+	end if
+end function
+
+
+public function Player_State_Ground
+	if player.animation != ANI_SKIDDING
+		temp7 = true
+	else
+		temp7 = false
+	end if
+
+	CallFunction(Player_HandleGroundMovement)
+	if player.gravity == GRAVITY_AIR
+		player.state = Player_State_Air
+		CallFunction(Player_HandleAirMovement)
+	else
+		CallFunction(Player_HandleOnGround)
+		if player.speed == 0
+			if warp.destination > 0
+				if warp.timer > 99
+					if warp.timer < 220
+						warp.destination = 0
+					end if
+				end if
+				warp.timer = 0
+			end if
+			if player.collisionMode == 0
+				if player.timer < 240
+					player.animation = ANI_STOPPED
+					player.timer++
+				else
+					player.animation = ANI_WAITING
+					if stage.playerListPos == PLAYER_KNUCKLES // omg its knuckles guys!!!
+						player.timer++
+						if player.timer == 834
+							player.timer = 0
+							player.animation = ANI_STOPPED
+						end if
+					end if
+				end if
+				if player.floorSensorC == 0
+					if player.floorSensorR == 0
+						player.timer = 0
+						if player.direction == 1
+							player.animation = ANI_FLAILING1
+						else
+							player.animation = ANI_FLAILING2
+						end if
+					end if
+					if player.floorSensorL == 0
+						player.timer = 0
+						if player.direction == 0
+							player.animation = ANI_FLAILING1
+						else
+							player.animation = ANI_FLAILING2
+						end if
+					end if
+				end if
+			end if
+		else
+			player.timer = 0
+			if player.speed > 0
+				if player.speed < 390594
+					player.animation = ANI_WALKING
+					CallFunction(Player_HandleWalkAnimSpeed)
+					if warp.destination > 0
+						if warp.timer > 99
+							if warp.timer < 204
+								warp.destination = 0
+							end if
+						end if
+						warp.timer = 0
+						object[3].type = TypeName[Blank Object]
+					end if
+				else
+					if warp.destination > 0
+						if warp.timer == 0
+							warp.timer = 1
+							ResetObjectEntity(3, TypeName[Warp Star], 0, player.xpos, player.ypos)
+							object[3].value0 = 7
+							object[3].drawOrder = 4
+						end if
+					end if
+					if player.speed > 655359
+						player.animation = ANI_PEELOUT
+					else
+						player.animation = ANI_RUNNING
+					end if
+					CallFunction(Player_HandleRunAnimSpeed)
+				end if
+			else
+				if player.speed > -390594
+					player.animation = ANI_WALKING
+					CallFunction(Player_HandleWalkAnimSpeed)
+					if warp.destination > 0
+						if warp.timer > 99
+							if warp.timer < 204
+								warp.destination = 0
+							end if
+						end if
+						warp.timer = 0
+						object[3].type = TypeName[Blank Object]
+					end if
+				else
+					if warp.destination > 0
+						if warp.timer == 0
+							warp.timer = 1
+							ResetObjectEntity(3, TypeName[Warp Star], 0, player.xpos, player.ypos)
+							object[3].value0 = 7
+							object[3].drawOrder = 4
+						end if
+					end if
+					if player.speed < -655359
+						player.animation = ANI_PEELOUT
+					else
+						player.animation = ANI_RUNNING
+					end if
+					CallFunction(Player_HandleRunAnimSpeed)
+				end if
+			end if
+		end if
+		if player.skidding > 0
+			if temp7 == 1
+				PlaySfx(SfxName[Skidding], 0)
+			end if
+			player.animation = ANI_SKIDDING
+			player.animationSpeed = 0
+			player.skidding--
+			if ringTimer == 0
+				CreateTempObject(TypeName[Dust Puff], 0, player.xpos, player.ypos)
+				object[tempObjectPos].iypos += object.collisionBottom
+				object[tempObjectPos].drawOrder = player.drawOrder
+			end if
+			if player.speed > 0
+				player.direction = FACING_RIGHT
+			else
+				player.direction = FACING_LEFT
+			end if
+		end if
+		if player.collisionMode == 0
+			if object.pushing == 2
+				player.animation = ANI_PUSHING
+				player.animationSpeed = 0
+			end if
+		end if
+		if player.jumpPress == 1
+			CallFunction(Player_Action_Jump)
+		else
+			if player.up == 1
+				if player.speed == 0
+					if player.animation != ANI_FLAILING1
+						if player.animation != ANI_FLAILING2
+							player.state = 17
+							player.timer = 0
+						else
+							player.up = 0
+							player.down = 0
+						end if
+					else
+						player.up = 0
+						player.down = 0
+					end if
+				end if
+			end if
+			if player.down == 1
+				if player.speed == 0
+					if player.animation != ANI_FLAILING1
+						if player.animation != ANI_FLAILING2
+							player.state = 18
+							player.timer = 0
+						else
+							player.up = 0
+							player.down = 0
+						end if
+					else
+						player.up = 0
+						player.down = 0
+					end if
+				else
+					if player.left == 0
+						if player.right == 0
+							if player.speed > 0
+								if player.speed > 34816
+									player.state = Player_State_Roll
+									player.animation = ANI_JUMPING
+									if player.prevAnimation != ANI_JUMPING
+										player.iypos -= player.jumpOffset
+									end if
+									player.abilityTimer = 1024
+								end if
+							else
+								if player.speed < -34816
+									player.state = Player_State_Roll
+									player.animation = ANI_JUMPING
+									if player.prevAnimation != ANI_JUMPING
+										player.iypos -= player.jumpOffset
+									end if
+									player.abilityTimer = 1024
+								end if
+							end if
+						end if
+					end if
+				end if
+			end if
+		end if
+	end if
+end function
+
+
+public function Player_State_Air
+	CallFunction(Player_HandleAirFriction)
+
+	if player.gravity == GRAVITY_AIR
+		CallFunction(Player_HandleAirMovement)
+
+		if warp.destination > 0
+			temp0 = player.yvel
+			Abs(temp0)
+			if temp0 < 0x60000
+				temp0 = player.xvel
+				Abs(temp0)
+				if temp0 < 0x60000
+					temp0 = player.xvel
+					temp0 -= warp.speedCompare
+					Abs(temp0)
+					if temp0 > 0x40000
+						if warp.timer > 99
+							if warp.timer < 204
+								warp.destination = 0
+							end if
+						end if
+						warp.timer = 0
+					end if
+				end if
+			end if
+			warp.speedCompare = player.xvel
+		end if
+
+		if player.yvel > 0x20000
+			if player.animation == ANI_FLAILING1
+				player.animation = ANI_WALKING
+			end if
+
+			if player.animation == ANI_FLAILING2
+				player.animation = ANI_WALKING
+			end if
+		end if
+
+		if player.animation == ANI_BOUNCING
+			if player.yvel >= 0
+				if player.animationReserve == ANI_STOPPED
+					player.animationReserve = ANI_WALKING
+				end if
+				player.animation = player.animationReserve
+			end if
+		end if
+
+		if player.animation == ANI_HURT
+			if player.yvel >= 0
+				if player.animationReserve == ANI_STOPPED
+					player.animationReserve = ANI_WALKING
+				end if
+				player.animation = player.animationReserve
+			end if
+		end if
+
+		if player.animation == ANI_JUMPING
+			if player.jumpAbilityState == 1
+				if player.yvel >= player.jumpCap
+					CallFunction(player.jumpAbility)
+				end if
+			end if
+		end if
+
+		if player.animation == ANI_SKIDDING
+			if player.skidding > 0
+				player.skidding--
+			else
+				player.animation = ANI_WALKING
+				player.prevAnimation = ANI_WALKING
+				player.frame = 0
+				player.animationSpeed = 40
+			end if
+		end if
+	else
+		player.state = Player_State_Ground
+		CallFunction(Player_HandleOnGround)
+		player.skidding = 0
+	end if
+end function
+
+// Unused State, leftover from S1/S2
+public function Player_State_TubeAirRoll_2013
+	CallFunction(Player_HandleAirFriction)
+	if player.gravity == GRAVITY_AIR
+		CallFunction(Player_HandleAirMovement)
+	else
+		player.state = Player_State_TubeRoll
+		CallFunction(Player_HandleOnGround)
+		player.skidding = 0
+	end if
+	player.animation = ANI_JUMPING
+end function
+
+
+public function Player_State_Roll
+	CallFunction(Player_HandleRollDeceleration)
+	if player.gravity == GRAVITY_AIR
+		player.state = Player_State_Air
+		player.timer = 0
+		CallFunction(Player_HandleAirMovement)
+	else
+		CallFunction(Player_HandleRollAnimSpeed)
+		player.animationSpeed = player.rollAnimationSpeed
+		temp0 = player.speed
+		Abs(temp0)
+		if temp0 < 390594
+			if warp.destination > 0
+				if warp.timer > 99
+					if warp.timer < 204
+						warp.destination = 0
+					end if
+				end if
+				warp.timer = 0
+			end if
+		else
+			if warp.destination > 0
+				if warp.timer == 0
+					warp.timer = 1
+					ResetObjectEntity(3, TypeName[Warp Star], 0, player.xpos, player.ypos)
+					object[3].value0 = 7
+					object[3].drawOrder = 4
+				end if
+			end if
+		end if
+		CallFunction(Player_HandleOnGround)
+		if player.jumpPress == true
+			CallFunction(Player_Action_Jump)
+		end if
+	end if
+end function
+
+
+public function Player_State_RollJump
+	player.left  = false
+	player.right = false
+	CallFunction(Player_HandleAirFriction)
+	if player.gravity == GRAVITY_AIR
+		if player.animation == ANI_JUMPING
+			if player.jumpAbilityState == 1
+				if player.yvel >= player.jumpCap
+					CallFunction(player.jumpAbility)
+				end if
+			end if
+		end if
+		CallFunction(Player_HandleAirMovement)
+	else
+		player.state = Player_State_Ground
+		CallFunction(Player_HandleOnGround)
+		player.skidding = 0
+	end if
+end function
+
+
+public function Player_State_Lookup
+	if player.up == false
+		player.state = Player_State_Ground
+		player.timer = 0
+	else
+		if player.timer < 60
+			player.timer++
+		else
+			temp0 = player.ypos
+			temp0 >>= 16
+			temp0 -= screen[0].cameraY
+			temp0 -= 112
+			if player.lookPosY > temp0
+				player.lookPosY -= 2
+			end if
+		end if
+		player.animation = ANI_LOOKINGUP
+		if player.gravity == GRAVITY_AIR
+			player.state = Player_State_Air
+			player.timer = 0
+		else
+			if player.jumpPress == 1
+				CallFunction(player.actionPeelout)
+			end if
+		end if
+	end if
+end function
+
+
+public function Player_State_Crouch
+	if player.down == 0
+		player.state = Player_State_Ground
+		player.timer = 0
+	else
+		if player.timer < 60
+			player.timer++
+		else
+			temp0 = player.ypos
+			temp0 >>= 16
+			temp0 -= screen[0].cameraY
+			temp0 += 96
+			if player.lookPosY < temp0
+				player.lookPosY += 2
+			end if
+		end if
+		player.animation = ANI_LOOKINGDOWN
+		if player.gravity == GRAVITY_AIR
+			player.state = Player_State_Air
+			player.timer = 0
+		else
+			if player.jumpPress == 1
+				CallFunction(player.actionSpindash )
+			end if
+		end if
+	end if
+end function
+
+
+public function Player_State_Spindash_S2
+	if player.gravity == GRAVITY_AIR
+		player.state = Player_State_Air
+		player.speed = 0
+	end if
+	if player.jumpPress == true
+		if player.abilityTimer < 589824
+			player.abilityTimer += 0x20000
+		else
+			player.abilityTimer = 524288
+		end if
+		player.frame = 0
+		PlaySfx(SfxName[Charge], 0)
+	else
+		temp0 = player.abilityTimer
+		temp0 >>= 5
+		player.abilityTimer -= temp0
+	end if
+	if player.down == 0
+		player.timer = 0
+		player.state = Player_State_Roll
+		player.animation = ANI_JUMPING
+		player.iypos -= player.jumpOffset
+		if player.entityPos == 0
+			object.value10 = 16
+			screen[0].cameraStyle = 4
+		end if
+		temp0 = player.abilityTimer
+		temp0 >>= 17
+		temp0 <<= 16
+		temp0 += 524288
+		if player.direction == 0
+			player.speed = temp0
+		else
+			player.speed = temp0
+			FlipSign(player.speed)
+		end if
+		StopSfx(SfxName[Charge])
+		PlaySfx(SfxName[Release], 0)
+		CallFunction(Player_HandleOnGround)
+	end if
+end function
+
+
+public function Player_State_Spindash_CD
+	if player.direction == 0
+		screen[0].cameraStyle = 2
+	else
+		screen[0].cameraStyle = 3
+	end if
+	if player.gravity == GRAVITY_AIR
+		player.state = Player_State_Air
+		player.speed = 0
+		screen[0].cameraStyle = 1
+	end if
+	if player.gravityStrength == 4096
+		if player.abilityTimer < 524288
+			player.abilityTimer += 24576
+		end if
+	else
+		if player.abilityTimer < 786432
+			player.abilityTimer += 24576
+		end if
+	end if
+	if player.down == 0
+		screen[0].cameraStyle = 1
+		player.timer = 0
+		if player.abilityTimer < 195297
+			player.speed = 0
+			player.state = Player_State_Ground
+		else
+			player.state = Player_State_Roll
+			player.animation = ANI_JUMPING
+			player.speed = player.abilityTimer
+			if player.direction == 1
+				FlipSign(player.speed)
+			end if
+			PlaySfx(SfxName[Release], 0)
+		end if
+		CallFunction(Player_HandleOnGround)
+	end if
+end function
+
+
+public function Player_State_Peelout_S2
+	if player.gravity == GRAVITY_AIR
+		player.state = Player_State_Air
+		player.speed = 0
+	end if
+	if player.gravityStrength == 4096
+		if player.abilityTimer < 393216
+			player.abilityTimer += 24576
+		end if
+	else
+		if player.abilityTimer < 786432
+			player.abilityTimer += 24576
+		end if
+	end if
+	if player.abilityTimer < 390594
+		player.animation = ANI_WALKING
+		temp0 = player.abilityTimer
+		temp0 >>= 16
+		temp0 *= 80
+		temp0 /= 6
+		temp0 += 20
+	else
+		temp0 = player.abilityTimer
+		temp0 >>= 16
+		temp0 *= 80
+		temp0 /= 6
+		if player.abilityTimer > 655359
+			player.animation = ANI_PEELOUT
+		else
+			player.animation = ANI_RUNNING
+		end if
+	end if
+	if player.up == 0
+		object.value10 = 15
+		screen[0].cameraStyle = 4
+		player.state = Player_State_Ground
+		if player.abilityTimer < 390594
+			player.speed = 0
+		else
+			player.speed = player.abilityTimer
+			if player.direction == 1
+				FlipSign(player.speed)
+			end if
+			PlaySfx(SfxName[Release], 0)
+		end if
+		CallFunction(Player_HandleOnGround)
+	end if
+	player.animationSpeed = temp0
+end function
+
+
+public function Player_State_Peelout_CD
+	if player.direction == 0
+		screen[0].cameraStyle = 2
+	else
+		screen[0].cameraStyle = 3
+	end if
+	if player.gravity == GRAVITY_AIR
+		player.state = Player_State_Air
+		player.speed = 0
+		screen[0].cameraStyle = 1
+	end if
+	if player.gravityStrength == 4096
+		if player.abilityTimer < 393216
+			player.abilityTimer += 24576
+		end if
+	else
+		if player.abilityTimer < 786432
+			player.abilityTimer += 24576
+		end if
+	end if
+	if player.abilityTimer < 390594
+		player.animation = ANI_WALKING
+		temp0 = player.abilityTimer
+		temp0 >>= 16
+		temp0 *= 80
+		temp0 /= 6
+		temp0 += 20
+	else
+		temp0 = player.abilityTimer
+		temp0 >>= 16
+		temp0 *= 80
+		temp0 /= 6
+		if player.abilityTimer > 655359
+			player.animation = ANI_PEELOUT
+		else
+			player.animation = ANI_RUNNING
+		end if
+	end if
+	if player.up == 0
+		screen[0].cameraStyle = 1
+		player.state = Player_State_Ground
+		if player.abilityTimer < 390594
+			player.speed = 0
+		else
+			player.speed = player.abilityTimer
+			if player.direction == 1
+				FlipSign(player.speed)
+			end if
+			PlaySfx(SfxName[Release], 0)
+		end if
+		CallFunction(Player_HandleOnGround)
+	end if
+	player.animationSpeed = temp0
+end function
+
+
+public function Player_State_Fly
+	CallFunction(Player_HandleAirFriction)
+	if player.gravity == GRAVITY_AIR
+		player.xvel = player.speed
+		if player.yvel < -65536
+			object.value25 = 2048
+		else
+			if player.yvel < 1
+				if player.abilityTimer < 60
+					player.abilityTimer++
+				else
+					object.value25 = 2048
+				end if
+			end if
+		end if
+		player.yvel += object.value25
+		if player.ypos < 1048576
+			if player.yvel < 0
+				player.yvel = 0
+			end if
+		end if
+		if player.timer < 480
+			if player.gravityStrength == 14336
+				player.animation = ANI_FLYING
+				if player.yvel < 0
+					player.animationSpeed = 240
+				else
+					player.animationSpeed = 120
+				end if
+			else
+				player.animation = ANI_SWIMMING
+				if player.yvel < 0
+					player.animationSpeed = 60
+				else
+					player.animationSpeed = 30
+				end if
+			end if
+			player.timer++
+			if player.timer == 480
+				if player.gravityStrength == 14336
+					player.animation = ANI_FLYINGTIRED
+					player.animationSpeed = 120
+					StopSfx(SfxName[Flying])
+					PlaySfx(SfxName[Tired], 1)
+				else
+					player.animation = ANI_SWIMMINGTIRED
+				end if
+			else
+				if player.jumpPress == 1
+					if player.gravityStrength == 14336
+						object.value25 = -0x2000
+						player.abilityTimer = 0
+					end if
+				end if
+			end if
+		else
+			if player.gravityStrength == 14336
+				player.animation = ANI_FLYINGTIRED
+			else
+				player.animation = ANI_SWIMMINGTIRED
+			end if
+		end if
+	else
+		player.animation = ANI_WALKING
+		player.state = Player_State_Ground
+		CallFunction(Player_HandleOnGround)
+	end if
+end function
+
+
+public function Player_State_GotHit
+	if player.isSidekick == false
+		arrayPos0 = player.entityPos
+		arrayPos0 += playerCount
+		if player.shield != SHIELD_NONE
+			temp0 = 1
+			ResetObjectEntity(arrayPos0, TypeName[Blank Object], 0, 0, 0)
+			player.shield = 0
+			PlaySfx(SfxName[Hurt], 0)
+		else
+			if player[0].rings == 0
+				if player.blinkTimer != 0
+					PlaySfx(SfxName[Jump], 0)
+				else
+					PlaySfx(SfxName[Hurt], 0)
+				end if
+				temp0 = 3
+			else
+				PlaySfx(SfxName[Lose Rings], 0)
+				temp0 = 2
+			end if
+		end if
+	else
+		temp0 = 1
+		if player.blinkTimer != 0
+			PlaySfx(SfxName[Jump], 0)
+		else
+			PlaySfx(SfxName[Hurt], 0)
+		end if
+	end if
+	player.visible = 1
+	switch temp0
+	case 1
+		player.state = 25
+		player.animation = ANI_HURT
+		player.yvel = -262144
+		player.gravity = GRAVITY_AIR
+		player.scrollTracking = 1
+		player.tileCollisions = 1
+		player.blinkTimer = 120
+		if player.gravityStrength == 4096
+			player.speed >>= 1
+			player.yvel >>= 1
+		end if
+		break
+	case 2
+		player.state = 25
+		player.animation = ANI_HURT
+		player.yvel = -262144
+		player.gravity = GRAVITY_AIR
+		player.scrollTracking = 1
+		player.tileCollisions = 1
+		player.blinkTimer = 120
+		if player.gravityStrength == 4096
+			player.speed >>= 1
+			player.yvel >>= 1
+		end if
+		temp0 = object[0].value0
+		if temp0 > 16
+			temp1 = temp0
+			temp1 -= 16
+			temp0 = 16
+		else
+			temp1 = 0
+		end if
+		if temp1 > 16
+			temp1 = 16
+		end if
+		temp3 = temp1
+		temp3 >>= 1
+		temp3 <<= 5
+		temp2 = 384
+		temp2 -= temp3
+		temp3 >>= 4
+		if temp3 == temp1
+			temp2 += 16
+		else
+			temp2 -= 16
+		end if
+		temp3 = 0
+		while temp3 < temp1
+			CreateTempObject(TypeName[Lose Ring], player.collisionPlane, player.xpos, player.ypos)
+			Cos(object[tempObjectPos].xvel, temp2)
+			Sin(object[tempObjectPos].yvel, temp2)
+			object[tempObjectPos].xvel <<= 8
+			object[tempObjectPos].yvel <<= 8
+			object[tempObjectPos].animationSpeed = 256
+			object[tempObjectPos].inkEffect = 2
+			object[tempObjectPos].alpha = 256
+			temp3++
+			temp2 += 32
+		loop
+		temp3 = temp0
+		temp3 >>= 1
+		temp3 <<= 5
+		temp2 = 384
+		temp2 -= temp3
+		temp3 >>= 4
+		if temp3 == temp0
+			temp2 += 16
+		else
+			temp2 -= 16
+		end if
+		temp3 = 0
+		while temp3 < temp0
+			CreateTempObject(TypeName[Lose Ring], player.collisionPlane, player.xpos, player.ypos)
+			Cos(object[tempObjectPos].xvel, temp2)
+			Sin(object[tempObjectPos].yvel, temp2)
+			object[tempObjectPos].xvel <<= 9
+			object[tempObjectPos].yvel <<= 9
+			object[tempObjectPos].animationSpeed = 256
+			object[tempObjectPos].inkEffect = 2
+			object[tempObjectPos].alpha = 256
+			temp3++
+			temp2 += 32
+		loop
+		object[0].value0 = 0
+		ringExtraLife = 100
+		break
+	case 3
+		player.drawOrder = 6
+		player.speed = 0
+		player.yvel = -458752
+		player.xvel = 0
+		player.state = Player_State_Death
+		player.animation = ANI_DYING
+		player.tileCollisions = 0
+		player.interaction = 0
+		if player.entityPos == 0
+			player.priority = 2
+			if object[1].type == TypeName[Blank Object]
+				object[1].priority = 2
+			end if
+			screen[0].cameraEnabled = 0
+			stage.state = STAGE_FROZEN
+		end if
+		if object[+playerCount].type == invincibilityType
+			object[+playerCount].propertyValue = 3
+		end if
+		object[+playerCount].type = TypeName[Blank Object]
+		break
+	end switch
+end function
+
+
+public function Player_State_Hurt
+	if player.gravity == GRAVITY_AIR
+		player.scrollTracking = 1
+		if player.gravityStrength == 14336
+			player.yvel += 12288
+		else
+			player.yvel += 3840
+		end if
+		player.xvel = player.speed
+	else
+		player.state = Player_State_Ground
+		player.speed = 0
+		player.xvel = 0
+		CallFunction(Player_HandleOnGround)
+	end if
+end function
+
+
+public function Player_State_Death
+	if player.controlMode != -1
+		player.yvel = -458752
+		player.controlMode = -1
+	end if
+	if player.blinkTimer != 0
+		player.blinkTimer = 0
+		player.visible = 1
+	end if
+	player.yvel += 14336
+	if player.animation != ANI_BORED
+		player.animation = ANI_DYING
+	end if
+	if player.yvel > 1048576
+		if player.isSidekick == 0
+			player.lives--
+			stage.timeEnabled = 0
+			player.type = TypeName[Death Event]
+			player.drawOrder = 6
+			player.timer = screen.xcenter
+			player.timer -= 264
+			player.abilityTimer = screen.xcenter
+			player.abilityTimer += 200
+			if options.gameMode == 2
+				object.value3 = 0
+				player.state = 3
+			else
+				if player.lives == 0
+					object.value3 = -2880
+					player.state = 0
+					PlayMusic(5)
+					stage.pauseEnabled = 0
+				else
+					object.value3 = 0
+					player.state = 2
+					if stage.minutes == 9
+						if stage.seconds == 59
+							if stage.milliSeconds == 99
+								object.value3 = -2880
+								player.state = 1
+								PlayMusic(5)
+								stage.pauseEnabled = 0
+							end if
+						end if
+					end if
+				end if
+			end if
+		end if
+	end if
+end function
+
+
+public function Player_State_Drown
+	player.controlMode = -1
+	player.yvel += player.gravityStrength
+	player.animation = ANI_DROWNING
+	if player.yvel > 524288
+		if player.isSidekick == 0
+			if player.lives > 0
+				player.lives--
+			end if
+			stage.timeEnabled = 0
+			player.type = TypeName[Death Event]
+			player.drawOrder = 6
+			player.timer = screen.xcenter
+			player.timer -= 264
+			player.abilityTimer = screen.xcenter
+			player.abilityTimer += 200
+			if options.gameMode == 2
+				object.value3 = 0
+				player.state = 3
+			else
+				if player.lives == 0
+					object.value3 = -2880
+					player.state = 0
+					PlayMusic(5)
+					stage.pauseEnabled = 0
+				else
+					object.value3 = 0
+					player.state = 2
+				end if
+			end if
+		end if
+	end if
+end function
+
+// Wacky Workbench hanging bar gimmick
+public function Player_State_HangBar
+	if player.left == true
+		player.direction = FACING_LEFT
+		player.speed = -0x20000
+		player.animationSpeed = 30
+	else
+		if player.right == true
+			player.direction = FACING_RIGHT
+			player.speed = 0x20000
+			player.animationSpeed = 30
+		else
+			player.speed = 0
+			player.animationSpeed = 0
+		end if
+	end if
+	temp1 = player.xpos
+	temp1 >>= 16
+	temp2 = player.ypos
+	temp2 >>= 16
+	temp2 += player.collisionTop
+	Get16x16TileInfo(temp0, temp1, temp2, 8)
+	if temp0 != 3
+		player.state = Player_State_Air
+		player.speed = 0
+		player.animationSpeed = 0
+		player.yvel = 0
+	end if
+	if player.jumpPress == true
+		player.state = Player_State_Air
+		player.yvel = 0
+		player.speed = 0
+		player.animationSpeed = 0
+		player.ypos += 0x40000
+	end if
+	player.xvel = player.speed
+end function
+
+
+public function Player_State_TubeRoll
+	if player.gravity == GRAVITY_AIR
+		player.state = Player_State_Air
+		player.timer = 0
+		CallFunction(Player_HandleAirMovement)
+	else
+		if player.speed > 0
+			if player.speed < object.value17
+				player.speed = object.value17
+			end if
+			if player.speed > 1048576
+				player.speed = 1048576
+			end if
+		else
+			temp0 = object.value17
+			FlipSign(temp0)
+			if player.speed > temp0
+				player.speed = temp0
+				CallFunction(Player_HandleOnGround)
+			end if
+			if player.speed < -1048576
+				player.speed = -1048576
+			end if
+		end if
+		temp0 = player.speed
+		Abs(temp0)
+		if temp0 < 390594
+			if warp.destination > 0
+				if warp.timer > 99
+					if warp.timer < 204
+						warp.destination = 0
+					end if
+				end if
+				warp.timer = 0
+			end if
+		else
+			if warp.destination > 0
+				if warp.timer == 0
+					warp.timer = 1
+					CreateTempObject(TypeName[Warp Star], 0, player.xpos, player.ypos)
+					object[tempObjectPos].value0 = 7
+					object[tempObjectPos].drawOrder = 4
+				end if
+			end if
+		end if
+		CallFunction(Player_HandleRollDeceleration)
+		CallFunction(Player_HandleRollAnimSpeed)
+		player.animationSpeed = player.rollAnimationSpeed
+		CallFunction(Player_HandleOnGround)
+	end if
+end function
+
+
+public function Player_State_TubeAirRoll
+	player.right = 0
+	player.left = 0
+	if player.gravity == GRAVITY_AIR
+		player.state = Player_State_Air
+		player.timer = 0
+		CallFunction(Player_HandleAirMovement)
+	else
+		if player.speed > 0
+			player.speed = object.value17
+		else
+			temp0 = object.value17
+			FlipSign(temp0)
+			player.speed = temp0
+		end if
+		temp0 = player.speed
+		Abs(temp0)
+		if temp0 < 390594
+			if warp.destination > 0
+				if warp.timer > 99
+					if warp.timer < 204
+						warp.destination = 0
+					end if
+				end if
+				warp.timer = 0
+			end if
+		else
+			if warp.destination > 0
+				if warp.timer == 0
+					warp.timer = 1
+					CreateTempObject(TypeName[Warp Star], 0, player.xpos, player.ypos)
+					object[tempObjectPos].value0 = 7
+					object[tempObjectPos].drawOrder = 4
+				end if
+			end if
+		end if
+		CallFunction(Player_HandleRollDeceleration)
+		CallFunction(Player_HandleRollAnimSpeed)
+		player.animationSpeed = player.rollAnimationSpeed
+		CallFunction(Player_HandleOnGround)
+	end if
+end function
+
+// Palmtree Panic and Wacky Workbench Spinning Platforms
+public function Player_State_SpinningTop
+	player.timer += object.value35
+	if player.gravity == GRAVITY_AIR
+#platform: USE_DECOMP
+		player.state 	 = Player_State_Air
+		player.animation = ANI_WALKING
+		player.timer	 = 0
+#endplatform
+		CallFunction(Player_HandleAirMovement)
+	else
+		CallFunction(Player_HandleOnGround)
+	end if
+end function
+
+
+public function Player_State_WaterCurrent
+	player.gravity = GRAVITY_AIR
+	if player.up == true
+		player.ypos -= 0x20000
+	end if
+	if player.down == true
+		player.ypos += 0x20000
+	end if
+	if player.left == true
+		player.xpos -= 0x20000
+	end if
+	if player.right == true
+		player.xpos += 0x20000
+	end if
+end function
+
+
+public function Player_State_SizeChange
+	if player.gravity == GRAVITY_AIR
+		player.scrollTracking = 1
+		player.yvel += 12288
+		player.xvel = player.speed
+	else
+		player.state = Player_State_Ground
+		player.invincibleTimer = 120
+		player.blinkTimer = 3
+		player.speed = 0
+		player.xvel = 0
+		CallFunction(Player_HandleOnGround)
+		if Mini_PlayerFlag == false
+			Mini_PlayerFlag = true
+			player.jumpOffset = -1
+			switch stage.playerListPos
+			case PLAYER_SONIC
+				LoadAnimation("MiniSonic.Ani")
+				break
+			case PLAYER_TAILS
+				LoadAnimation("MiniTails.Ani")
+				player.type = TypeName[Player Object]
+				break
+			end switch
+		else
+			Mini_PlayerFlag = false
+			switch stage.playerListPos
+			case PLAYER_SONIC
+				LoadAnimation("Sonic.Ani")
+				player.jumpOffset = -5
+				break
+			case PLAYER_TAILS
+				LoadAnimation("Tails.Ani")
+				player.jumpOffset = -1
+				player.type = TypeName[Tails Object]
+				break
+			end switch
+		end if
+	end if
+end function
+
+
+event ObjectUpdate
+	if stage.debugMode == true
+		CallFunction(Player_ProcessUpdate)
+		CheckEqual(options.attractMode, false)
+		temp0 = checkResult
+		CheckEqual(keyPress[0].buttonB, true)
+		temp0 &= checkResult
+		if temp0 == true
+			player.type = TypeName[Debug Mode]
+			player.yvel = 0
+			player.state = Player_State_Static
+			player.frame = 0
+			player.rotation = 0
+			player.interaction = false
+			player.drawOrder = 4
+			player.priority = 1
+			player.blinkTimer = 0
+			player.visible = 1
+			player.abilityTimer = 0
+			object.value3 = 0
+			object.value4 = 0
+			player.frame = debugMode.currentSelection
+			screen[0].cameraEnabled = 1
+			screen[0].cameraStyle = options.originalControls
+			object.value39 = C_BOX
+			object.value40 = C_BOX
+			object.value41 = C_BOX
+			object.value42 = C_BOX
+			if stage.state == STAGE_FROZEN
+				stage.state = STAGE_RUNNING
+			end if
+			if player[1].type == TypeName[Blank Object]
+				player[1].priority = 1
+			end if
+			if object[+playerCount].propertyValue == 3
+				object[+playerCount].type = invincibilityType
+				object[+playerCount].propertyValue = 0
+			end if
+		else
+			if player.gravity == GRAVITY_GROUND
+				player.jumpAbilityState = 0
+			end if
+			CallFunction(player.state)
+			ProcessAnimation()
+			if player.entityPos == screen[0].cameraTarget
+				if player.animation == ANI_JUMPING
+					screen[0].adjustCameraY = player.jumpOffset
+				else
+					if screen[0].adjustCameraY == player.jumpOffset
+						screen[0].adjustCameraY = 0
+						player.iypos += player.jumpOffset
+					end if
+				end if
+			end if
+			if player.collisionDisabled == 0
+				temp0 = player.prevGravity
+				player.prevGravity = player.gravity
+				ProcessObjectMovement()
+				player.prevGravity ^= GRAVITY_AIR
+				CheckEqual(player.gravity, 0)
+				player.prevGravity |= checkResult
+				player.prevGravity ^= GRAVITY_AIR
+
+				if temp0 == GRAVITY_AIR
+					if player.prevGravity == GRAVITY_GROUND
+					// in Sonic 1, achieveRingCount would also go here
+						player.badnikBonus = 0
+						if player.animation == ANI_JUMPING
+							if player.down == false
+								if player.state != Player_State_BubbleBounce
+									if player.state != Player_State_Air
+										if player.state != Player_State_TubeRoll
+											player.animation = ANI_WALKING
+											if player.entityPos == screen[0].cameraTarget
+												screen[0].adjustCameraY = 0
+											end if
+											player.iypos += player.jumpOffset
+										end if
+									end if
+								end if
+							end if
+						end if
+					end if
+				end if
+			else
+				player.collisionDisabled = false
+			end if
+		end if
+	else
+		CallFunction(Player_ProcessUpdate)
+		if player.gravity == GRAVITY_GROUND
+			player.jumpAbilityState = 0
+		end if
+
+		CallFunction(player.state)
+
+		ProcessAnimation()
+		if player.entityPos == screen[0].cameraTarget
+			if player.animation == ANI_JUMPING
+				screen[0].adjustCameraY = player.jumpOffset
+			else
+				if screen[0].adjustCameraY == player.jumpOffset
+					screen[0].adjustCameraY = 0
+					player.iypos += player.jumpOffset
+				end if
+			end if
+		end if
+
+		if player.collisionDisabled == false
+			temp0 = player.prevGravity
+			player.prevGravity = player.gravity
+			ProcessObjectMovement()
+			player.prevGravity ^= GRAVITY_AIR
+			CheckEqual(player.gravity, 0)
+			player.prevGravity |= checkResult
+			player.prevGravity ^= GRAVITY_AIR
+
+			if temp0 == GRAVITY_AIR
+				if player.prevGravity == GRAVITY_GROUND
+				// in Sonic 1, achieveRingCount would also go here
+					player.badnikBonus = 0
+					if player.animation == ANI_JUMPING
+						if player.down == false
+							if player.state != Player_State_BubbleBounce
+								if player.state != Player_State_Roll
+									if player.state != Player_State_TubeRoll
+										player.animation = ANI_WALKING
+										if player.entityPos == screen[0].cameraTarget
+											screen[0].adjustCameraY = 0
+										end if
+										player.iypos += player.jumpOffset
+									end if
+								end if
+							end if
+						end if
+					end if
+				end if
+			end if
+		else
+			player.collisionDisabled = false
+		end if
+	end if
+end event
+
+
+event ObjectDraw
+	if player.animation != player.prevAnimation
+		player.prevAnimation = player.animation
+		player.frame = 0
+		player.animationTimer = 0
+		player.animationSpeed = 0
+	end if
+	DrawObjectAnimation()
+end event
+
+
+event ObjectStartup
+	playerCount = 0
+	foreach (TypeName[Player Object], arrayPos0, ALL_ENTITIES)
+		screen[0].cameraEnabled = true
+		screen[0].cameraStyle = options.originalControls
+		screen[0].cameraTarget = 0
+		currentPlayer = 0
+		
+		ResetObjectEntity(0, TypeName[Player Object], 0, object[arrayPos0].xpos, object[arrayPos0].ypos)
+		screen[0].cameraX = object[0].ixpos
+		screen[0].cameraY = object[0].iypos
+		object[0].groupID = GROUP_PLAYERS
+		player[0].state = Player_State_Air
+		player[0].priority = 1
+		player[0].drawOrder = 4
+		player[0].rollingDeceleration = 0x2000
+
+		// Hitbox values
+		object[0].value39 = C_BOX
+		object[0].value40 = C_BOX
+		object[0].value41 = C_BOX
+		object[0].value42 = C_BOX
+
+
+		switch stage.playerListPos
+		case PLAYER_SONIC
+			LoadAnimation("Sonic.ani")
+			player[0].character = PLAYER_SONIC
+			player[0].jumpOffset = -5
+			player[0].jumpAbility = Player_Action_DblJumpSonic
+
+			// Default Sonic's peelout to the S2 version
+			player[0].actionPeelout = Player_Action_Peelout_S2
+
+			// Then, set the correct peelout and spindash accordingly
+			if options.originalControls == false
+				player[0].actionPeelout = Player_Action_Peelout_S2
+				player[0].actionSpindash = Player_Action_Spindash_S2
+			else
+				player[0].actionPeelout = Player_Action_Peelout_CD
+				player[0].actionSpindash = Player_Action_Spindash_CD
+			end if
+			break
+		case PLAYER_TAILS
+			object[0].type = TypeName[Tails Object]
+			player[0].character = PLAYER_TAILS
+			LoadAnimation("Tails.ani")
+			player[0].jumpOffset = -1
+			player[0].jumpAbility = Player_Action_DblJumpTails
+
+			// Default Tails' peelout to the Jump action
+			player[0].actionPeelout = Player_Action_Jump
+
+			// Then, set the correct spindash accordingly
+			if options.originalControls == false
+				player[0].actionSpindash = Player_Action_Spindash_S2
+			else
+				player[0].actionSpindash = Player_State_Spindash_CD
+			end if
+			break
+		end switch
+		
+		playerCount = 1
+		currentPlayer = 0
+		CallFunction(Player_UpdatePhysicsState)
+		ResetObjectEntity(arrayPos0, TypeName[Blank Object], 0, 0, 0)
+	next
+
+	Mini_PlayerFlag = false
+	
+	GetAnimationByName(ANI_SPINNING_TOP, "Spinning Top")
+	GetAnimationByName(ANI_RAMP_RUNNING1, "3D Ramp 1")
+	GetAnimationByName(ANI_RAMP_RUNNING2, "3D Ramp 2")
+	GetAnimationByName(ANI_RAMP_RUNNING3, "3D Ramp 3")
+	GetAnimationByName(ANI_RAMP_RUNNING4, "3D Ramp 4")
+	GetAnimationByName(ANI_RAMP_RUNNING5, "3D Ramp 5")
+	GetAnimationByName(ANI_RAMP_RUNNING6, "3D Ramp 6")
+	GetAnimationByName(ANI_ROLL3D, "3D Ramp 7")
+	GetAnimationByName(ANI_SIZE_CHANGE, "Size Change")
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+
+event RSDKLoad
+	LoadSpriteSheet("Players/Sonic1.gif")
+	SpriteFrame(-16, -19, 28, 39, 1, 1)
+	
+	// Used in-game, but not to be set from the editor
+	SetVariableAlias(ALIAS_VAR_PROPVAL, "unused")
+end event

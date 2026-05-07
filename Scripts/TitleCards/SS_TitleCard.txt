@@ -1,0 +1,136 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Title Card Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 3 : TYPE_TITLECARD
+
+
+
+event ObjectDraw
+	object[4].value1 = 100
+	object[4].value2 = 0
+	switch object.state
+	case 0
+		if object.value3 > 0
+			if object.value3 == 256
+				PlayMusic(0)
+				object[2].controlMode = 0
+			end if
+			SetScreenFade(object.value4, object.value5, object.value6, object.value3)
+			object.value3 -= 8
+		else
+			object.state = 1
+			object.value3 = 0
+		end if
+		object[2].controlMode = -1
+		break
+	case 1
+		temp0 = 144
+		temp0 += object.value7
+		if object.value1 > temp0
+			object.value1 -= 8
+		else
+			if object.value0 == 0
+				object.state = 2
+			end if
+		end if
+		if object.value0 < 0
+			object.value0 += 8
+		end if
+		break
+	case 2
+		if object.value3 == 160
+			object.state = 3
+		else
+			object.value3++
+		end if
+		break
+	case 3
+		if object.value1 < 408
+			object.value1 += 16
+			object.value0 -= 16
+		else
+			ResetObjectEntity(20, TypeName[Blank Object], 0, 0, 0)
+			object[2].controlMode = 0
+			if options.gameMode == 2
+				stage.timeEnabled = 1
+			end if
+		end if
+		break
+	end switch
+	if object.type > TypeName[Blank Object]
+		temp0 = 136
+		temp0 += object.value7
+		DrawSpriteScreenXY(0, temp0, object.value0)
+		DrawSpriteScreenXY(5, object.value1, 64)
+		DrawSpriteScreenXY(6, object.value1, 64)
+		DrawSpriteScreenXY(7, object.value1, 64)
+		temp0 = 8
+		while temp0 < object.value2
+			DrawSpriteScreenXY(temp0, object.value1, 64)
+			temp0++
+		loop
+	end if
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("Special/Scorescreen.gif")
+	object[20].type = TypeName[Title Card]
+	object[20].value3 = 384
+	object[20].priority = 1
+	object[20].drawOrder = 6
+	object[20].value0 = -216
+	object[20].value1 = 336
+	object[20].value7 = screen.xcenter
+	object[20].value7 -= 160
+	if object[20].value7 > 3
+		object[20].value7 -= 4
+	end if
+	object[20].value7 &= 248
+	object[20].value1 += object[20].value7
+	object[20].value1 += object[20].value7
+	object[20].value2 = 12
+	object[20].value2 += 8
+	object[20].value4 = fadeColor
+	object[20].value4 >>= 16
+	object[20].value5 = fadeColor
+	object[20].value5 &= 65280
+	object[20].value5 >>= 8
+	object[20].value6 = fadeColor
+	object[20].value6 &= 255
+	SpriteFrame(0, 0, 32, 184, 224, 37)
+	SpriteFrame(96, 96, 48, 48, 41, 1)
+	SpriteFrame(96, 96, 48, 48, 90, 1)
+	SpriteFrame(96, 96, 48, 48, 139, 1)
+	SpriteFrame(64, 97, 48, 16, 41, 67)
+	SpriteFrame(72, 81, 160, 16, 60, 227)
+	SpriteFrame(16, 81, 160, 16, 52, 227)
+	SpriteFrame(100, 32, 24, 48, 182, 124)
+	SpriteFrame(0, 0, 16, 55, 207, 124)
+	SpriteFrame(17, 32, 10, 23, 176, 180)
+	SpriteFrame(28, 32, 9, 23, 187, 180)
+	SpriteFrame(38, 32, 8, 23, 197, 180)
+	SpriteFrame(47, 32, 6, 23, 206, 180)
+	SpriteFrame(54, 32, 11, 23, 212, 180)
+	SpriteFrame(66, 32, 9, 23, 176, 203)
+	SpriteFrame(0, 56, 16, 55, 207, 124)
+	SpriteFrame(17, 56, 10, 23, 186, 203)
+	SpriteFrame(28, 56, 11, 23, 212, 180)
+	SpriteFrame(40, 56, 10, 23, 197, 203)
+	SpriteFrame(51, 56, 9, 23, 187, 180)
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

@@ -1,0 +1,138 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: R Platform Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 66 : TYPE_RPLATFORM
+
+// Function declarations
+reserve function RPlatform_DebugDraw
+reserve function RPlatform_DebugSpawn
+
+
+public function RPlatform_DebugDraw
+	DrawSprite(0)
+end function
+
+
+public function RPlatform_DebugSpawn
+	CreateTempObject(TypeName[R Platform], 5, object.xpos, object.ypos)
+	object[tempObjectPos].state = 1
+end function
+
+
+event ObjectUpdate
+	switch object.state
+	case 1
+		object.angle -= 2
+		if object.angle < 0
+			object.angle += 512
+		end if
+		break
+	case 2
+		object.value0 += 2
+		object.value0 &= 511
+		Sin(object.angle, object.value0)
+		object.angle >>= 2
+		object.angle += 128
+		break
+	case 3
+		object.value0 += 2
+		object.value0 &= 511
+		Sin(object.angle, object.value0)
+		FlipSign(object.angle)
+		object.angle >>= 2
+		object.angle += 384
+		object.angle &= 511
+		break
+	end switch
+	temp1 = object.propertyValue
+	temp1++
+	temp1 <<= 4
+	Cos(object.value3, object.angle)
+	object.value3 *= temp1
+	object.value3 <<= 7
+	object.value3 += object.xpos
+	object.value3 &= -65536
+	object.value3 -= object.value1
+	Sin(object.value4, object.angle)
+	object.value4 *= temp1
+	object.value4 <<= 7
+	object.value4 += object.ypos
+	object.value4 &= -65536
+	object.value4 -= object.value2
+	temp0 = object.xpos
+	temp1 = object.ypos
+	object.xpos = object.value1
+	object.ypos = object.value2
+	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+		BoxCollisionTest(C_PLATFORM, object.entityPos, -32, -8, 32, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+		if checkResult == 1
+			object[currentPlayer].xpos += object.value3
+			object[currentPlayer].ypos += object.value4
+			if R5Setup_value14 == 0
+				object[currentPlayer].xpos += R5Setup_value16
+			else
+				object[currentPlayer].xpos -= R5Setup_value16
+			end if
+		end if
+	next
+	object.xpos = temp0
+	object.ypos = temp1
+end event
+
+
+event ObjectDraw
+	DrawSprite(0)
+	temp0 = 0
+	temp1 = 16
+	while temp0 < object.propertyValue
+		Cos(temp2, object.angle)
+		temp2 *= temp1
+		temp2 <<= 7
+		temp2 += object.xpos
+		Sin(temp3, object.angle)
+		temp3 *= temp1
+		temp3 <<= 7
+		temp3 += object.ypos
+		DrawSpriteXY(1, temp2, temp3)
+		temp0++
+		temp1 += 16
+	loop
+	Cos(object.value1, object.angle)
+	object.value1 *= temp1
+	object.value1 <<= 7
+	object.value1 += object.xpos
+	object.value1 &= -65536
+	Sin(object.value2, object.angle)
+	object.value2 *= temp1
+	object.value2 <<= 7
+	object.value2 += object.ypos
+	object.value2 &= -65536
+	DrawSpriteXY(2, object.value1, object.value2)
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R5/Objects.gif")
+	SpriteFrame(-8, -8, 16, 16, 1, 1)
+	SpriteFrame(-8, -8, 16, 16, 18, 1)
+	SpriteFrame(-32, -8, 64, 16, 1, 208)
+	SetTableValue(TypeName[R Platform], DebugMode_ObjCount, DebugMode_TypesTable)
+	SetTableValue(RPlatform_DebugDraw, DebugMode_ObjCount, DebugMode_DrawTable)
+	SetTableValue(RPlatform_DebugSpawn, DebugMode_ObjCount, DebugMode_SpawnTable)
+	DebugMode_ObjCount++
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

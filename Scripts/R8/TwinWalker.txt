@@ -1,0 +1,167 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Twin Walker Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 61 : TYPE_TWINWALKER
+
+
+
+event ObjectUpdate
+	if object.outOfBounds == 1
+		object.state = 2
+		object.xpos = object.value6
+		object.ypos = object.value7
+		object.value1 = object.value6
+		object.value1 -= 4194304
+		object.value2 = object.value7
+		object.angle = 256
+	end if
+	switch object.state
+	case 0
+		Cos(object.value3, object.angle)
+		object.value3 *= 8192
+		object.value3 += object.xpos
+		object.value3 &= -65536
+		object.value3 -= object.value1
+		Sin(object.value4, object.angle)
+		object.value4 *= 8192
+		object.value4 += object.ypos
+		object.value4 &= -65536
+		object.value4 -= object.value2
+		break
+	case 1
+		object.angle += 4
+		object.angle &= 511
+		Cos(object.value3, object.angle)
+		object.value3 *= 8192
+		object.value3 += object.xpos
+		object.value3 &= -65536
+		Sin(object.value4, object.angle)
+		object.value4 *= 8192
+		object.value4 += object.ypos
+		object.value4 &= -65536
+		temp0 = object.xpos
+		temp1 = object.ypos
+		object.xpos = object.value3
+		object.ypos = object.value4
+		ObjectTileCollision(0, 0, 40, 0)
+		if checkResult == 1
+			object.value1 = temp0
+			object.value2 = temp1
+			object.value3 = 0
+			object.value4 = 0
+			object.angle += 252
+			object.angle &= 511
+			Cos(temp0, object.angle)
+			temp0 *= 8192
+			temp0 += object.xpos
+			temp0 &= -65536
+			temp0 -= object.value1
+			object.xpos -= temp0
+			object.state = 0
+		else
+			object.xpos = temp0
+			object.ypos = temp1
+			object.value3 -= object.value1
+			object.value4 -= object.value2
+		end if
+		break
+	case 2
+		if object.outOfBounds == 1
+			object.state = 0
+			object.priority = 0
+		end if
+		break
+	end switch
+	if object.state < 2
+		foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+			BoxCollisionTest(C_PLATFORM, object.entityPos, -24, -40, 24, -24, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			temp0 = object.xpos
+			temp1 = object.ypos
+			object.xpos = object.value1
+			object.ypos = object.value2
+			BoxCollisionTest(C_PLATFORM, object.entityPos, -24, -40, 24, -24, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			if checkResult == 1
+				object[currentPlayer].xpos += object.value3
+				object[currentPlayer].ypos += object.value4
+				temp2 = object.value1
+				temp2 -= object.value6
+				if temp2 < 41943040
+					if object.state == 0
+						object.state = 1
+						object.priority = 1
+					end if
+				end if
+			end if
+			object.xpos = temp0
+			object.ypos = temp1
+		next
+	end if
+end event
+
+
+event ObjectDraw
+	if object.state < 2
+		temp1 = 64
+		Cos(object.value1, object.angle)
+		object.value1 *= temp1
+		object.value1 <<= 7
+		object.value1 += object.xpos
+		object.value1 &= -65536
+		Sin(object.value2, object.angle)
+		object.value2 *= temp1
+		object.value2 <<= 7
+		object.value2 += object.ypos
+		object.value2 &= -65536
+		DrawSpriteXY(0, object.value1, object.value2)
+		DrawSpriteXY(1, object.value1, object.value2)
+		DrawSprite(0)
+		DrawSprite(1)
+		temp0 = 0
+		temp1 = 8
+		while temp0 < 7
+			Cos(temp2, object.angle)
+			temp2 *= temp1
+			temp2 <<= 7
+			temp2 += object.xpos
+			temp2 &= -65536
+			Sin(temp3, object.angle)
+			temp3 *= temp1
+			temp3 <<= 7
+			temp3 += object.ypos
+			temp3 &= -65536
+			DrawSpriteXY(1, temp2, temp3)
+			temp0++
+			temp1 += 8
+		loop
+	end if
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R8/Objects2.gif")
+	SpriteFrame(-24, -40, 48, 80, 51, 1)
+	SpriteFrame(-4, -4, 8, 8, 19, 67)
+	foreach (TypeName[Twin Walker], arrayPos0, ALL_ENTITIES)
+		object[arrayPos0].value1 = object[arrayPos0].xpos
+		object[arrayPos0].xpos += 4194304
+		object[arrayPos0].value2 = object[arrayPos0].ypos
+		object[arrayPos0].angle = 256
+		object[arrayPos0].value6 = object[arrayPos0].xpos
+		object[arrayPos0].value7 = object[arrayPos0].ypos
+	next
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

@@ -1,0 +1,129 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Fade Screen Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 67 : TYPE_FADESCREEN
+
+
+
+event ObjectUpdate
+	switch object.state
+	case 0
+		if object.value0 < 480
+			object.value0 += 4
+			music.volume--
+		else
+			object.value0 = 224
+			if object.propertyValue == 0
+				object.state++
+			else
+				object.state += 2
+			end if
+		end if
+		if object.propertyValue == 1
+			SetScreenFade(0, 0, 0, object.value0)
+		else
+			SetScreenFade(224, 224, 224, object.value0)
+		end if
+		break
+	case 1
+		if object.value0 > 0
+			music.volume--
+			object.value0 -= 16
+		else
+			StopMusic()
+			if options.gameMode == 2
+				timeAttack.result = stage.seconds
+				timeAttack.result *= 100
+				temp0 = stage.minutes
+				temp0 *= 6000
+				timeAttack.result += temp0
+				timeAttack.result += stage.milliSeconds
+				temp0 = stage.listPos
+				temp0 %= 10
+				temp0 >>= 2
+				temp1 = stage.listPos
+				temp1 /= 10
+				temp1 *= 3
+				temp0 += temp1
+				temp0++
+				temp1 = stage.seconds
+				temp1 *= 100
+				temp2 = stage.minutes
+				temp2 *= 6000
+				temp1 += temp2
+				temp1 += stage.milliSeconds
+				stage.activeList = PRESENTATION_STAGE
+				stage.listPos = 2
+				LoadStage()
+			else
+				if stage.playerListPos == 0
+					if player.score > 0
+						if options.gameMode == 1
+							if stage.debugMode == 0
+							end if
+						end if
+					end if
+					if specialStage.timeStones > 126
+						if options.soundtrack == 0
+							CallNativeFunction2(PlayVideo, "GoodEnding", 0)
+						else
+							CallNativeFunction2(PlayVideo, "GoodEndingUS", 0)
+						end if
+					else
+						if goodFuture.list > 16382
+							if options.soundtrack == 0
+								CallNativeFunction2(PlayVideo, "GoodEnding", 0)
+							else
+								CallNativeFunction2(PlayVideo, "GoodEndingUS", 0)
+							end if
+						else
+							if options.soundtrack == 0
+								CallNativeFunction2(PlayVideo, "BadEnding", 0)
+							else
+								CallNativeFunction2(PlayVideo, "BadEndingUS", 0)
+							end if
+						end if
+					end if
+					if saveRAM[36] == false
+						saveRAM[36] = true
+						WriteSaveRAM()
+						stage.activeList = PRESENTATION_STAGE
+						stage.listPos = 8
+						LoadStage()
+					else
+						engine.state = 8
+					end if
+				else
+					engine.state = 8
+				end if
+			end if
+		end if
+		SetScreenFade(object.value0, object.value0, object.value0, 255)
+		break
+	case 2
+		if object.value0 > 0
+			music.volume--
+			object.value0 -= 16
+		else
+			StopMusic()
+			stage.listPos += 2
+			LoadStage()
+		end if
+		break
+	end switch
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

@@ -1,0 +1,96 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Boss Bubble 2 Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 56 : TYPE_BOSSBUBBLE2
+
+
+
+event ObjectUpdate
+	switch object.state
+	case 0
+		if object.value0 < 20
+			object.value0++
+		else
+			object.state++
+		end if
+		break
+	case 1
+		object.state++
+		break
+	case 3
+		if object.value0 < 22
+			object.value0++
+		else
+			object.state++
+		end if
+		break
+	case 4
+		if object.value0 < 42
+			object.value0++
+		else
+			object.type = TypeName[Blank Object]
+		end if
+		break
+	end switch
+	if object.state == 2
+		foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+			if object[currentPlayer].animation == ANI_JUMPING
+				BoxCollisionTest(C_TOUCH, object.entityPos, -2, -2, 2, 2, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+				if checkResult == 1
+					object.state = 3
+					FlipSign(object[currentPlayer].speed)
+					FlipSign(object[currentPlayer].xvel)
+					object[currentPlayer].yvel = 262144
+					object[currentPlayer].animation = ANI_BREATHING
+					object[currentPlayer].value3 = 0
+					object[currentPlayer].value4 = 0
+					PlaySfx(SfxName[Breathing], 0)
+				end if
+			end if
+			if object[currentPlayer].animation == ANI_FLYING
+				BoxCollisionTest(C_TOUCH, object.entityPos, -2, -2, 2, 2, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+				if checkResult == 1
+					object.state = 3
+					FlipSign(object[currentPlayer].speed)
+					FlipSign(object[currentPlayer].xvel)
+					object[currentPlayer].yvel = 262144
+					object[currentPlayer].animation = ANI_BREATHING
+					object[currentPlayer].state = Player_State_Air
+					object[currentPlayer].value3 = 0
+					object[currentPlayer].value4 = 0
+					PlaySfx(SfxName[Breathing], 0)
+				end if
+			end if
+		next
+	end if
+end event
+
+
+event ObjectDraw
+	DrawSprite(object.state)
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R4/Objects2.gif")
+	SpriteFrame(-8, -8, 16, 16, 99, 118)
+	SpriteFrame(-12, -12, 24, 24, 116, 126)
+	SpriteFrame(-16, -16, 32, 32, 222, 115)
+	SpriteFrame(-16, -16, 32, 32, 189, 115)
+	SpriteFrame(-16, -16, 32, 32, 156, 126)
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

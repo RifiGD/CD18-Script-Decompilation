@@ -1,0 +1,148 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Electric Arc Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 76 : TYPE_ELECTRICARC
+
+
+
+event ObjectUpdate
+	switch object.state
+	case 0
+		object.value0++
+		if object.value0 == 30
+			object.value0 = 0
+			object.state++
+		end if
+		break
+	case 1
+	case 2
+	case 3
+		object.value0++
+		if object.value0 == 3
+			object.value0 = 0
+			object.state++
+		end if
+		break
+	case 4
+		object.value0++
+		if object.value0 == 3
+			object.value0 = 0
+			object.type = TypeName[Blank Object]
+			temp1 = object.xpos
+			temp1 >>= 23
+			temp1--
+			temp2 = object.ypos
+			temp2 >>= 23
+			GetTileLayerEntry(temp0, 0, temp1, temp2)
+			temp0 += 3
+			SetTileLayerEntry(temp0, 0, temp1, temp2)
+			temp1++
+			GetTileLayerEntry(temp0, 0, temp1, temp2)
+			temp0 += 3
+			SetTileLayerEntry(temp0, 0, temp1, temp2)
+			temp1++
+			GetTileLayerEntry(temp0, 0, temp1, temp2)
+			temp0 += 3
+			SetTileLayerEntry(temp0, 0, temp1, temp2)
+		end if
+		break
+	end switch
+	object.frame++
+	object.frame %= 15
+end event
+
+
+event ObjectDraw
+	switch object.state
+	case 0
+		temp0 = object.frame
+		temp0 /= 5
+		DrawSprite(temp0)
+		DrawSpriteFX(temp0, FX_FLIP, object.xpos, object.ypos)
+		break
+	case 1
+		temp0 = object.frame
+		temp0 /= 5
+		temp0 += 3
+		DrawSprite(temp0)
+		DrawSpriteFX(temp0, FX_FLIP, object.xpos, object.ypos)
+		break
+	case 2
+		temp0 = object.frame
+		temp0 /= 5
+		temp0 += 6
+		DrawSprite(temp0)
+		DrawSpriteFX(temp0, FX_FLIP, object.xpos, object.ypos)
+		break
+	case 3
+		temp0 = object.frame
+		temp0 /= 5
+		temp0 += 9
+		DrawSprite(temp0)
+		DrawSpriteFX(temp0, FX_FLIP, object.xpos, object.ypos)
+		break
+	case 4
+		temp0 = object.frame
+		temp0 /= 5
+		temp0 += 9
+		DrawSprite(temp0)
+		DrawSpriteFX(temp0, FX_FLIP, object.xpos, object.ypos)
+		temp0 += 3
+		DrawSprite(temp0)
+		DrawSpriteFX(temp0, FX_FLIP, object.xpos, object.ypos)
+		break
+	end switch
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R6/Objects3.gif")
+	if object[9].propertyValue == 2
+		SpriteFrame(-176, -8, 16, 16, 1, 1)
+		SpriteFrame(-176, -8, 16, 16, 1, 18)
+		SpriteFrame(-176, -8, 16, 16, 1, 35)
+		SpriteFrame(-176, -8, 32, 16, 1, 1)
+		SpriteFrame(-176, -8, 32, 16, 1, 18)
+		SpriteFrame(-176, -8, 32, 16, 1, 35)
+		SpriteFrame(-176, -8, 48, 16, 1, 1)
+		SpriteFrame(-176, -8, 48, 16, 1, 18)
+		SpriteFrame(-176, -8, 48, 16, 1, 35)
+		SpriteFrame(-176, -8, 64, 16, 1, 1)
+		SpriteFrame(-176, -8, 64, 16, 1, 18)
+		SpriteFrame(-176, -8, 64, 16, 1, 35)
+		SpriteFrame(-112, -8, 16, 16, 1, 1)
+		SpriteFrame(-112, -8, 16, 16, 1, 18)
+		SpriteFrame(-112, -8, 16, 16, 1, 35)
+	else
+		SpriteFrame(-176, -8, 16, 16, 1, 150)
+		SpriteFrame(-176, -8, 16, 16, 1, 167)
+		SpriteFrame(-176, -8, 16, 16, 1, 184)
+		SpriteFrame(-176, -8, 32, 16, 1, 150)
+		SpriteFrame(-176, -8, 32, 16, 1, 167)
+		SpriteFrame(-176, -8, 32, 16, 1, 184)
+		SpriteFrame(-176, -8, 48, 16, 1, 150)
+		SpriteFrame(-176, -8, 48, 16, 1, 167)
+		SpriteFrame(-176, -8, 48, 16, 1, 184)
+		SpriteFrame(-176, -8, 64, 16, 1, 150)
+		SpriteFrame(-176, -8, 64, 16, 1, 167)
+		SpriteFrame(-176, -8, 64, 16, 1, 184)
+		SpriteFrame(-112, -8, 16, 16, 1, 150)
+		SpriteFrame(-112, -8, 16, 16, 1, 167)
+		SpriteFrame(-112, -8, 16, 16, 1, 184)
+	end if
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

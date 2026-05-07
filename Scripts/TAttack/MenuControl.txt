@@ -1,0 +1,904 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Menu Control Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 3 : TYPE_MENUCONTROL
+
+// Function declarations
+reserve function MenuControl_Function0
+reserve function MenuControl_Function1
+reserve function MenuControl_Function2
+reserve function MenuControl_Function3
+reserve function MenuControl_Function4
+
+
+public function MenuControl_Function0
+	arrayPos0 = 32
+	temp2 = screen.xcenter
+	temp2 <<= 16
+	temp0 = -210
+	temp1 = -46
+	while arrayPos0 < 36
+		object[arrayPos0].xpos = temp0
+		object[arrayPos0].xpos *= object.scale
+		object[arrayPos0].xpos >>= 1
+		object[arrayPos0].xpos += temp2
+		object[arrayPos0].ypos = temp1
+		object[arrayPos0].ypos *= object.scale
+		object[arrayPos0].ypos += 6553600
+		temp0 += 140
+		arrayPos0++
+	loop
+	temp0 = -210
+	temp1 = 46
+	while arrayPos0 < 40
+		object[arrayPos0].xpos = temp0
+		object[arrayPos0].xpos *= object.scale
+		object[arrayPos0].xpos >>= 1
+		object[arrayPos0].xpos += temp2
+		object[arrayPos0].ypos = temp1
+		object[arrayPos0].ypos *= object.scale
+		object[arrayPos0].ypos += 6553600
+		temp0 += 140
+		arrayPos0++
+	loop
+end function
+
+
+public function MenuControl_Function1
+	arrayPos0 = 48
+	temp0 = 0
+	temp1 = 0
+	while temp0 < 21
+		temp1 += saveRAM[arrayPos0]
+		arrayPos0 += 6
+		temp0++
+	loop
+	if temp1 == 0
+		arrayPos0 = 48
+		temp0 = 0
+		while temp0 < 21
+			saveRAM[arrayPos0] = 30000
+			arrayPos0++
+			saveRAM[arrayPos0] = 30000
+			arrayPos0++
+			saveRAM[arrayPos0] = 30000
+			arrayPos0++
+			saveRAM[arrayPos0] = 30000
+			arrayPos0++
+			saveRAM[arrayPos0] = 30000
+			arrayPos0++
+			saveRAM[arrayPos0] = 30000
+			arrayPos0++
+			temp0++
+		loop
+	end if
+end function
+
+
+public function MenuControl_Function2
+	temp0 = -1
+	arrayPos0 = 3
+	while arrayPos0 < 40
+		temp1 = saveRAM[arrayPos0]
+		if temp1 > 10
+			if temp1 > 67
+				if temp1 < 80
+					temp1 = 7
+				else
+					temp1 -= 80
+					temp1 /= 10
+				end if
+			else
+				temp1 /= 10
+			end if
+		else
+			temp1 = 0
+		end if
+		if temp1 > temp0
+			temp0 = temp1
+		end if
+		arrayPos0 += 8
+	loop
+	if temp0 > saveRAM[39]
+		saveRAM[39] = temp0
+	else
+		temp0 = saveRAM[39]
+	end if
+	arrayPos0 = 32
+	while temp0 > 0
+		object[arrayPos0].value4 = 0
+		arrayPos0++
+		temp0--
+	loop
+	while arrayPos0 < 39
+		object[arrayPos0].value4 = 1
+		arrayPos0++
+	loop
+end function
+
+
+public function MenuControl_Function3
+	arrayPos0 = 32
+	arrayPos1 = 48
+	temp1 = 0
+	while arrayPos0 < 39
+		temp0 = saveRAM[arrayPos1]
+		arrayPos1 += 6
+		temp0 += saveRAM[arrayPos1]
+		arrayPos1 += 6
+		temp0 += saveRAM[arrayPos1]
+		arrayPos1 += 6
+		temp1 += temp0
+		object[arrayPos0].value1 = temp0
+		object[arrayPos0].value1 /= 6000
+		object[arrayPos0].value2 = temp0
+		object[arrayPos0].value2 /= 100
+		object[arrayPos0].value2 %= 60
+		object[arrayPos0].value3 = temp0
+		object[arrayPos0].value3 %= 100
+		arrayPos0++
+	loop
+	object[arrayPos0].value1 = temp1
+	object[arrayPos0].value1 /= 6000
+	if object[arrayPos0].value1 < 25
+	end if
+	object[arrayPos0].value2 = temp1
+	object[arrayPos0].value2 /= 100
+	object[arrayPos0].value2 %= 60
+	object[arrayPos0].value3 = temp1
+	object[arrayPos0].value3 %= 100
+	if temp1 < 182105
+		object.value7 = 1
+	end if
+end function
+
+
+public function MenuControl_Function4
+	arrayPos0 = 32
+	arrayPos1 = 49
+	temp1 = 0
+	while arrayPos0 < 39
+		temp0 = saveRAM[arrayPos1]
+		arrayPos1 += 18
+		temp1 += temp0
+		object[arrayPos0].value1 = temp0
+		object[arrayPos0].value1 /= 6000
+		object[arrayPos0].value2 = temp0
+		object[arrayPos0].value2 /= 100
+		object[arrayPos0].value2 %= 60
+		object[arrayPos0].value3 = temp0
+		object[arrayPos0].value3 %= 100
+		arrayPos0++
+	loop
+	object[arrayPos0].value1 = temp1
+	object[arrayPos0].value1 /= 6000
+	object[arrayPos0].value2 = temp1
+	object[arrayPos0].value2 /= 100
+	object[arrayPos0].value2 %= 60
+	object[arrayPos0].value3 = temp1
+	object[arrayPos0].value3 %= 100
+	object.value7 = 1
+end function
+
+
+event ObjectUpdate
+	switch object.state
+	case 0
+		stage.debugMode = 0
+		stage.playerListPos = 0
+		lampPostID = 0
+		goodFuture.enabled = 0
+		goodFuture.count = 0
+		goodFuture.list = 0
+		specialStage.timeStones = 0
+		ReadSaveRAM()
+		object.state = 1
+		object.value0 = 384
+		object.scale = 262144
+		SetScreenFade(0, 0, 0, 255)
+		if engine.deviceType == MOBILE
+			object.value3 = -1
+			object.value2 = -1
+			object.value5 = -1
+		end if
+		CallFunction(MenuControl_Function2)
+		if timeAttack.round > -1
+			object.state = 12
+			object[40].propertyValue = timeAttack.round
+			object.value3 = timeAttack.round
+			object[40].xpos = screen.xcenter
+			object[40].xpos -= 72
+			object[40].xpos <<= 16
+			object.value4 = timeAttack.zone
+			object.value4 *= 192
+			object.value4 += 192
+			if timeAttack.result > 0
+				arrayPos0 = timeAttack.round
+				arrayPos0 *= 18
+				temp0 = timeAttack.zone
+				temp0 *= 6
+				arrayPos0 += temp0
+				arrayPos0 += 48
+				arrayPos0 += timeAttack.menuSection
+				if timeAttack.result < saveRAM[arrayPos0]
+					arrayPos1 = arrayPos0
+					arrayPos1 += 4
+					arrayPos0 += 2
+					saveRAM[arrayPos1] = saveRAM[arrayPos0]
+					arrayPos1 -= 2
+					arrayPos0 -= 2
+					saveRAM[arrayPos1] = saveRAM[arrayPos0]
+					saveRAM[arrayPos0] = timeAttack.result
+					object.value6 = 1
+				else
+					arrayPos0 += 2
+					if timeAttack.result < saveRAM[arrayPos0]
+						arrayPos1 = arrayPos0
+						arrayPos1 += 2
+						saveRAM[arrayPos1] = saveRAM[arrayPos0]
+						saveRAM[arrayPos0] = timeAttack.result
+						object.value6 = 2
+					else
+						arrayPos0 += 2
+						if timeAttack.result < saveRAM[arrayPos0]
+							saveRAM[arrayPos0] = timeAttack.result
+							object.value6 = 3
+						end if
+					end if
+				end if
+			end if
+			object.scale = 327680
+		else
+			timeAttack.menuSection = 0
+		end if
+		CallFunction(MenuControl_Function1)
+		if timeAttack.menuSection == 0
+			CallFunction(MenuControl_Function3)
+		else
+			CallFunction(MenuControl_Function4)
+			object[40].type = TypeName[S Large Icon]
+			object[41].type = TypeName[S Records]
+			arrayPos0 = 32
+			while arrayPos0 < 40
+				object[arrayPos0].type = TypeName[Special Icon]
+				arrayPos0++
+			loop
+		end if
+		WriteSaveRAM()
+		CallFunction(MenuControl_Function0)
+		PlayMusic(0)
+		break
+	case 1
+		if object.value0 > 0
+			object.value0 -= 8
+			object.scale -= 4096
+		else
+			object.state = 2
+		end if
+		SetScreenFade(0, 0, 0, object.value0)
+		CallFunction(MenuControl_Function0)
+		break
+	case 2
+		if options.physicalControls == 1
+			arrayPos0 = 32
+			arrayPos0 += object.value3
+			checkResult = 0
+			if object[arrayPos0].state != 1
+				if keyPress[0].left == 1
+					object.value3--
+					if object.value3 < 0
+						object.value3 = 7
+					end if
+					PlaySfx(SfxName[Menu Button], 0)
+				end if
+				if keyPress[0].right == 1
+					object.value3++
+					if object.value3 > 7
+						object.value3 = 0
+					end if
+					PlaySfx(SfxName[Menu Button], 0)
+				end if
+				if keyPress[0].up == 1
+					object.value3 -= 4
+					if object.value3 < 0
+						object.value3 += 8
+						if object.value7 == 1
+							object.state = 18
+						end if
+					end if
+					PlaySfx(SfxName[Menu Button], 0)
+				end if
+				if keyPress[0].down == 1
+					object.value3 += 4
+					if object.value3 > 7
+						object.value3 -= 8
+						if object.value7 == 1
+							object.state = 16
+						end if
+					end if
+					PlaySfx(SfxName[Menu Button], 0)
+				end if
+				if keyPress[0].start == 1
+					checkResult = 1
+				end if
+				if keyPress[0].buttonA == 1
+					checkResult = 1
+				end if
+			end if
+			if checkResult == 1
+				arrayPos0 = 32
+				arrayPos0 += object.value3
+				if object[arrayPos0].value4 == 0
+					object[arrayPos0].state = 1
+					object.value5 = 0
+					switch object.value3
+					case 0
+						PlaySfx(SfxName[Select], 0)
+						break
+					case 1
+						PlaySfx(SfxName[Select], 0)
+						break
+					case 2
+						PlaySfx(SfxName[Select], 0)
+						break
+					case 3
+						PlaySfx(SfxName[Select], 0)
+						break
+					case 4
+						PlaySfx(SfxName[Select], 0)
+						break
+					case 5
+						PlaySfx(SfxName[Select], 0)
+						break
+					case 6
+						PlaySfx(SfxName[Select], 0)
+						break
+					case 7
+						PlaySfx(SfxName[Select], 0)
+						object.state++
+						StopMusic()
+						break
+					end switch
+				end if
+			end if
+		else
+			if object.value7 == 1
+				temp0 = screen.xsize
+				temp0 -= 72
+				CheckTouchRect(temp0, 192, screen.xsize, screen.ysize)
+				if checkResult > -1
+					object.value2 = 8
+				else
+					CheckTouchRect(0, 0, screen.xsize, screen.ysize)
+					if checkResult < 0
+						if object.value2 == 8
+							PlaySfx(SfxName[Menu Button], 0)
+							object.state = 16
+							object.value2 = -1
+						end if
+					else
+						if object.value2 == 8
+							object.value2 = -1
+						end if
+					end if
+				end if
+			end if
+			if object.value2 > -1
+				object.value3 = object.value2
+			else
+				object.value3 = -1
+			end if
+			if keyPress[0].left == 1
+				object.value3 = 7
+				object.value2 = -1
+				options.physicalControls = 1
+			end if
+			if keyPress[0].right == 1
+				object.value3 = 0
+				object.value2 = -1
+				options.physicalControls = 1
+			end if
+			if keyPress[0].up == 1
+				object.value3 = 7
+				object.value2 = -1
+				options.physicalControls = 1
+			end if
+			if keyPress[0].down == 1
+				object.value3 = 0
+				object.value2 = -1
+				options.physicalControls = 1
+			end if
+		end if
+		if keyPress[0].buttonB == 1
+			object.value3 = 7
+			arrayPos0 = 32
+			arrayPos0 += object.value3
+			object[arrayPos0].state = 1
+			object.state++
+			StopMusic()
+			PlaySfx(SfxName[Select], 0)
+		end if
+		break
+	case 3
+		break
+	case 4
+		if object.value0 < 384
+			object.value0 += 8
+			object.scale += 4096
+		else
+			engine.state = 8
+		end if
+		SetScreenFade(0, 0, 0, object.value0)
+		CallFunction(MenuControl_Function0)
+		break
+	case 5
+		if object.value0 < 256
+			object.value0 += 8
+			object.scale += 8192
+		else
+			if timeAttack.menuSection == 0
+				object[40].type = TypeName[Large Icon]
+				object[41].type = TypeName[Records]
+			else
+				object[40].type = TypeName[S Large Icon]
+				object[41].type = TypeName[S Records]
+			end if
+			object[40].propertyValue = object.value3
+			object[40].state = 1
+			object[41].drawOrder = 2
+			object[42].drawOrder = 2
+			object[43].drawOrder = 2
+			object.value0 = 0
+			object.value4 = 0
+			object.state++
+		end if
+		CallFunction(MenuControl_Function0)
+		break
+	case 6
+		if object.value4 < 192
+			object.value4 += 8
+		else
+			object.state++
+		end if
+		if options.physicalControls == 1
+			object.value5 = 0
+		else
+			object.value5 = -1
+		end if
+		break
+	case 7
+		if options.physicalControls == 1
+			if timeAttack.menuSection == 0
+				if keyPress[0].up == 1
+					object.state = 9
+				end if
+				if keyPress[0].down == 1
+					object.state = 8
+				end if
+				if keyPress[0].left == 1
+					object.value5--
+					if object.value5 < 0
+						object.value5 = 2
+					end if
+				end if
+				if keyPress[0].right == 1
+					object.value5++
+					if object.value5 > 2
+						object.value5 = 0
+					end if
+				end if
+			else
+				if keyPress[0].left == 1
+					object.value5 -= 2
+					if object.value5 < 0
+						object.value5 = 2
+					end if
+				end if
+				if keyPress[0].right == 1
+					object.value5 += 2
+					if object.value5 > 2
+						object.value5 = 0
+					end if
+				end if
+			end if
+			checkResult = 0
+			if keyPress[0].start == 1
+				checkResult = 1
+			end if
+			if keyPress[0].buttonA == 1
+				checkResult = 1
+			end if
+			if keyPress[0].buttonB == 1
+				PlaySfx(SfxName[Back Button], 0)
+				object[40].state = 2
+				object.state = 13
+				object[41].drawOrder = 8
+				object[42].drawOrder = 8
+				object[43].drawOrder = 8
+				arrayPos0 = object.value4
+				arrayPos0 /= 192
+				arrayPos0 += 40
+				object[arrayPos0].drawOrder = 2
+			end if
+			if checkResult == 1
+				switch object.value5
+				case 0
+					PlaySfx(SfxName[Back Button], 0)
+					object[40].state = 2
+					object.state = 13
+					object[41].drawOrder = 8
+					object[42].drawOrder = 8
+					object[43].drawOrder = 8
+					arrayPos0 = object.value4
+					arrayPos0 /= 192
+					arrayPos0 += 40
+					object[arrayPos0].drawOrder = 2
+					break
+				case 1
+					PlaySfx(SfxName[Menu Button], 0)
+					object.state = 8
+					break
+				case 2
+					PlaySfx(SfxName[Select], 0)
+					object.state = 10
+					StopMusic()
+					break
+				end switch
+			end if
+			CheckTouchRect(0, 0, screen.xsize, screen.ysize)
+			if checkResult > -1
+				options.physicalControls = 0
+				object.value5 = -1
+			end if
+		else
+			temp0 = screen.xcenter
+			temp0 -= 140
+			temp1 = temp0
+			temp1 += 66
+			CheckTouchRect(temp0, 0, temp1, 40)
+			if checkResult > -1
+				object.value5 = 0
+			else
+				CheckTouchRect(0, 0, screen.xsize, screen.ysize)
+				if checkResult < 0
+					if object.value5 == 0
+						PlaySfx(SfxName[Back Button], 0)
+						object[40].state = 2
+						object.state = 13
+						object[41].drawOrder = 8
+						object[42].drawOrder = 8
+						object[43].drawOrder = 8
+						arrayPos0 = object.value4
+						arrayPos0 /= 192
+						arrayPos0 += 40
+						object[arrayPos0].drawOrder = 2
+					end if
+				else
+					if object.value5 == 0
+						object.value5 = -1
+					end if
+				end if
+			end if
+			if keyPress[0].buttonB == 1
+				PlaySfx(SfxName[Back Button], 0)
+				object[40].state = 2
+				object.state = 13
+				object[41].drawOrder = 8
+				object[42].drawOrder = 8
+				object[43].drawOrder = 8
+				arrayPos0 = object.value4
+				arrayPos0 /= 192
+				arrayPos0 += 40
+				object[arrayPos0].drawOrder = 2
+			end if
+			temp0 += 159
+			temp1 += 159
+			if timeAttack.menuSection == 0
+				CheckTouchRect(temp0, 0, temp1, 40)
+				if checkResult > -1
+					object.value5 = 1
+				else
+					CheckTouchRect(0, 0, screen.xsize, screen.ysize)
+					if checkResult < 0
+						if object.value5 == 1
+							PlaySfx(SfxName[Menu Button], 0)
+							object.state = 8
+						end if
+					else
+						if object.value5 == 1
+							object.value5 = -1
+						end if
+					end if
+				end if
+			end if
+			temp0 += 68
+			temp1 += 68
+			CheckTouchRect(temp0, 0, temp1, 40)
+			if checkResult > -1
+				object.value5 = 2
+			else
+				CheckTouchRect(0, 0, screen.xsize, screen.ysize)
+				if checkResult < 0
+					if object.value5 == 2
+						PlaySfx(SfxName[Select], 0)
+						object.state = 10
+						StopMusic()
+					end if
+				else
+					if object.value5 == 2
+						object.value5 = -1
+					end if
+				end if
+			end if
+			if keyPress[0].left == 1
+				object.value5 = 2
+				options.physicalControls = 1
+			end if
+			if keyPress[0].right == 1
+				object.value5 = 0
+				options.physicalControls = 1
+			end if
+		end if
+		break
+	case 8
+		if object.value0 < 192
+			object.value0 += 8
+			object.value4 += 8
+			if object.value4 > 767
+				object.value4 -= 576
+			end if
+		else
+			object.value0 = 0
+			object.state = 7
+			if options.physicalControls == 0
+				object.value5 = -1
+			end if
+		end if
+		break
+	case 9
+		if object.value0 < 192
+			object.value0 += 8
+			object.value4 -= 8
+			if object.value4 < 192
+				object.value4 += 576
+			end if
+		else
+			object.value0 = 0
+			object.state = 7
+			if options.physicalControls == 0
+				object.value5 = -1
+			end if
+		end if
+		break
+	case 10
+		if object.value0 < 30
+			object.value0++
+		else
+			object.value0 = 0
+			object.state++
+		end if
+		break
+	case 11
+		if object.value0 < 320
+			object.value0 += 8
+		else
+			if timeAttack.menuSection == 0
+				stage.activeList = REGULAR_STAGE
+				stage.listPos = object[40].propertyValue
+				timeAttack.round = object[40].propertyValue
+				stage.listPos *= 10
+				temp0 = object.value4
+				temp0 -= 192
+				temp0 /= 192
+				timeAttack.zone = temp0
+				temp0 <<= 2
+				stage.listPos += temp0
+				if temp0 == 8
+					stage.listPos++
+				end if
+			else
+				stage.activeList = SPECIAL_STAGE
+				stage.listPos = object[40].propertyValue
+				timeAttack.round = object[40].propertyValue
+				timeAttack.zone = 0
+			end if
+			player.lives = 1
+			player.score = 0
+			options.gameMode = 2
+			LoadStage()
+		end if
+		SetScreenFade(0, 0, 0, object.value0)
+		break
+	case 12
+		if object.value0 > 0
+			object.value0 -= 8
+		else
+			timeAttack.round = -1
+			if object.value6 > 0
+				PlaySfx(SfxName[Achievement], 0)
+				object.state = 15
+				object[0].drawOrder = 4
+			else
+				object.state = 7
+			end if
+		end if
+		SetScreenFade(0, 0, 0, object.value0)
+		break
+	case 13
+		if object.value0 < 30
+			object.value0++
+		else
+			object.scale = 327680
+			object.value0 = 0
+			object.state++
+		end if
+		if object.value4 > 0
+			object.value4 -= 8
+		end if
+		break
+	case 14
+		if object.value0 < 256
+			object.value0 += 8
+			object.scale -= 8192
+		else
+			object.value0 = 0
+			object.state = 2
+		end if
+		CallFunction(MenuControl_Function0)
+		break
+	case 15
+		if object.value0 < 120
+			object.value0++
+		else
+			object.value0 = 0
+			object.state = 7
+			object.value6 = 0
+			object[0].drawOrder = 1
+		end if
+		break
+	case 16
+		if object.value0 < 20
+			object.value0++
+			arrayPos0 = 32
+			while arrayPos0 < 40
+				object[arrayPos0].ypos -= 786432
+				arrayPos0++
+			loop
+		else
+			object.value0 = 0
+			arrayPos0 = 32
+			if timeAttack.menuSection == 0
+				while arrayPos0 < 40
+					object[arrayPos0].ypos += 31457280
+					object[arrayPos0].type = TypeName[Special Icon]
+					arrayPos0++
+				loop
+				timeAttack.menuSection = 1
+				CallFunction(MenuControl_Function4)
+			else
+				while arrayPos0 < 40
+					object[arrayPos0].ypos += 31457280
+					object[arrayPos0].type = TypeName[Round Icon]
+					arrayPos0++
+				loop
+				timeAttack.menuSection = 0
+				CallFunction(MenuControl_Function3)
+			end if
+			object.state++
+		end if
+		break
+	case 17
+		if object.value0 < 20
+			object.value0++
+			arrayPos0 = 32
+			while arrayPos0 < 40
+				object[arrayPos0].ypos -= 786432
+				arrayPos0++
+			loop
+		else
+			object.value0 = 0
+			object.state = 2
+		end if
+		break
+	case 18
+		if object.value0 < 20
+			object.value0++
+			arrayPos0 = 32
+			while arrayPos0 < 40
+				object[arrayPos0].ypos += 786432
+				arrayPos0++
+			loop
+		else
+			object.value0 = 0
+			arrayPos0 = 32
+			if timeAttack.menuSection == 0
+				while arrayPos0 < 40
+					object[arrayPos0].ypos -= 31457280
+					object[arrayPos0].type = TypeName[Special Icon]
+					arrayPos0++
+				loop
+				timeAttack.menuSection = 1
+				CallFunction(MenuControl_Function4)
+			else
+				while arrayPos0 < 40
+					object[arrayPos0].ypos -= 31457280
+					object[arrayPos0].type = TypeName[Round Icon]
+					arrayPos0++
+				loop
+				timeAttack.menuSection = 0
+				CallFunction(MenuControl_Function3)
+			end if
+			object.state++
+		end if
+		break
+	case 19
+		if object.value0 < 20
+			object.value0++
+			arrayPos0 = 32
+			while arrayPos0 < 40
+				object[arrayPos0].ypos += 786432
+				arrayPos0++
+			loop
+		else
+			object.value0 = 0
+			object.state = 2
+		end if
+		break
+	end switch
+end event
+
+
+event ObjectDraw
+	switch object.state
+	case 13
+		temp0 = screen.xcenter
+		temp0 += 16
+		DrawRect(temp0, 31, screen.xcenter, 9, 0, 0, 0, 255)
+		DrawRect(temp0, 40, screen.xcenter, 135, 224, 0, 0, 255)
+		DrawRect(temp0, 175, screen.xcenter, 38, 0, 0, 96, 255)
+		break
+	case 15
+		temp0 = object.value0
+		temp0 >>= 2
+		temp0 &= 1
+		if temp0 == 0
+			temp0 = screen.xcenter
+			temp0 += 16
+			temp1 = object.value6
+			temp1 *= 24
+			temp1 += 105
+			DrawRect(temp0, temp1, 34, 24, 8, 0, 104, 255)
+		end if
+		break
+	end switch
+end event
+
+
+event ObjectStartup
+	if options.soundtrack == 0
+		SetMusicTrack("JP/timeAttack.ogg", 0, 100512)
+	else
+		SetMusicTrack("US/DAGarden.ogg", 0, 117382)
+	end if
+	object[0].type = TypeName[Menu Control]
+	object[0].drawOrder = 1
+	options.physicalControls = 1
+	if engine.deviceType == MOBILE
+		options.physicalControls = 1
+	end if
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

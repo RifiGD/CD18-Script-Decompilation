@@ -1,0 +1,159 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Crush Platform Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 42 : TYPE_CRUSHPLATFORM
+
+
+
+event ObjectUpdate
+	if object.value5 == 0
+		object.angle += object.value6
+		object.angle &= 511
+		if object.propertyValue == 1
+			object.angle += 256
+		end if
+		Sin(object.value2, object.angle)
+		object.value2 *= object.value4
+		object.value2 += object.ypos
+		object.value2 &= -65536
+		object.value2 -= object.value1
+	else
+		switch object.state
+		case 0
+			object.angle += 4
+			object.angle &= 511
+			if object.angle == 128
+				object.state++
+			end if
+			break
+		case 1
+			if object.value0 < 64
+				object.value0++
+			else
+				object.value0 = 0
+				object.state++
+			end if
+			break
+		case 2
+			object.angle += 4
+			object.angle &= 511
+			if object.angle == 384
+				object.state++
+			end if
+			break
+		case 3
+			if object.value0 < 64
+				object.value0++
+			else
+				object.value0 = 0
+				object.state = 0
+			end if
+			break
+		end switch
+		Sin(object.value2, object.angle)
+		object.value2 *= object.value4
+		object.value2 += object.ypos
+		object.value2 &= -65536
+		object.value2 -= object.value1
+	end if
+	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+		temp0 = object.ypos
+		temp1 = object[currentPlayer].ypos
+		object.ypos = object.value1
+		if object.value5 == 0
+			BoxCollisionTest(C_SOLID, object.entityPos, -32, -32, 32, 32, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			if checkResult == 1
+				object[currentPlayer].ypos += object.value2
+			else
+				if checkResult == 4
+					if object[currentPlayer].gravity == 0
+						if object.value2 > 0
+							CallFunction(Player_Kill)
+						else
+							object[currentPlayer].ypos = temp1
+						end if
+					end if
+				end if
+			end if
+		else
+			BoxCollisionTest(C_SOLID, object.entityPos, -32, -96, 32, 96, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			if checkResult == 1
+				object[currentPlayer].ypos += object.value2
+				if object.angle == 320
+					object[currentPlayer].state = Player_State_Air
+					object[currentPlayer].value1 = 0
+					object[currentPlayer].yvel = -1048576
+					object[currentPlayer].animation = ANI_BOUNCING
+					object[currentPlayer].gravity = 1
+					object[currentPlayer].value9 = ANI_WALKING
+				end if
+			else
+				if checkResult == 4
+					if object[currentPlayer].gravity == 0
+						if object.value2 > 0
+							CallFunction(Player_Kill)
+						else
+							object[currentPlayer].ypos = temp1
+						end if
+					end if
+				end if
+			end if
+		end if
+		object.ypos = temp0
+	next
+end event
+
+
+event ObjectDraw
+	Sin(object.value1, object.angle)
+	object.value1 *= object.value4
+	object.value1 += object.ypos
+	object.value1 &= -65536
+	DrawSpriteXY(0, object.xpos, object.value1)
+	if object.value5 == 1
+		DrawSpriteXY(1, object.xpos, object.value1)
+		DrawSpriteXY(2, object.xpos, object.value1)
+	end if
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R8/Objects.gif")
+	SpriteFrame(-32, -32, 64, 64, 1, 1)
+	SpriteFrame(-32, -96, 64, 64, 1, 1)
+	SpriteFrame(-32, 32, 64, 64, 1, 1)
+	foreach (TypeName[Crush Platform], arrayPos0, ALL_ENTITIES)
+		object[arrayPos0].value6 = 2
+		if object[arrayPos0].propertyValue == 0
+			object[arrayPos0].value4 = 4096
+		else
+			object[arrayPos0].value4 = 6144
+		end if
+		if object[arrayPos0].propertyValue == 5
+			object[arrayPos0].value5 = 1
+			object[arrayPos0].value4 = 4096
+		end if
+		if object[arrayPos0].propertyValue == 69
+			object[arrayPos0].value5 = 1
+			object[arrayPos0].value4 = 6144
+		end if
+		if object[arrayPos0].propertyValue == 72
+			object[arrayPos0].value6 = 6
+		end if
+	next
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

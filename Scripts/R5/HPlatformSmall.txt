@@ -1,0 +1,255 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: HPlatform Small Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 50 : TYPE_HPLATFORMSMALL
+
+// Function declarations
+reserve function HPlatformSmall_DebugDraw
+reserve function HPlatformSmall_DebugSpawn
+
+// Static Values
+public value HPlatformSmall_value22 = 0;
+
+
+public function HPlatformSmall_DebugDraw
+	temp0 = object[0].value16
+	temp0 -= HPlatformSmall_value22
+	switch temp0
+	case 0
+		DrawSprite(0)
+		break
+	case 1
+		DrawSprite(0)
+		DrawSprite(1)
+		break
+	end switch
+end function
+
+
+public function HPlatformSmall_DebugSpawn
+	temp0 = object[0].value16
+	temp0 -= HPlatformSmall_value22
+	switch temp0
+	case 0
+		temp1 = 0
+		break
+	case 1
+		temp1 = 2
+		break
+	end switch
+	CreateTempObject(TypeName[HPlatform Small], temp1, object.xpos, object.ypos)
+	object[tempObjectPos].xpos &= -65536
+	object[tempObjectPos].ypos &= -65536
+end function
+
+
+event ObjectUpdate
+	object.value0++
+	if object.value0 == 312
+		object.value0 = 0
+	end if
+	object.angle = object.value0
+	object.angle <<= 6
+	object.angle /= 39
+	Sin(object.value5, object.angle)
+	switch object.propertyValue
+	case 0
+	case 2
+		object.value5 *= 6144
+		object.value5 += 3145728
+		object.value5 += object.xpos
+		object.value5 &= -65536
+		object.value5 -= object.value4
+		break
+	case 3
+	case 5
+		object.value5 *= -6144
+		object.value5 -= 3145728
+		object.value5 += object.xpos
+		object.value5 &= -65536
+		object.value5 -= object.value4
+		break
+	case 1
+		object.value5 *= 6144
+		object.value5 += 3145728
+		object.value5 += object.xpos
+		object.value5 &= -65536
+		object[+1].xpos = object.value5
+		object[+1].ypos = object.ypos
+		object[+1].ypos -= 1572864
+		object.value5 -= object.value4
+		break
+	case 4
+		object.value5 *= -6144
+		object.value5 -= 3145728
+		object.value5 += object.xpos
+		object.value5 &= -65536
+		object[+1].xpos = object.value5
+		object[+1].ypos = object.ypos
+		object[+1].ypos -= 1572864
+		object.value5 -= object.value4
+		break
+	end switch
+	if object.value1 == 1
+		if object.value2 < 16
+			object.value2++
+			temp0 = object.value2
+			temp0 &= 3
+			if temp0 == 3
+				object.value3 = 65536
+			else
+				object.value3 = 0
+			end if
+		else
+			object.value3 = 0
+		end if
+	else
+		if object.value2 > 0
+			object.value2--
+			temp0 = object.value2
+			temp0 &= 3
+			if temp0 == 3
+				object.value3 = -65536
+			else
+				object.value3 = 0
+			end if
+		else
+			object.value3 = 0
+		end if
+	end if
+	object.value1 = 0
+	temp0 = object.xpos
+	object.xpos = object.value4
+	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+		switch object.propertyValue
+		case 0
+		case 3
+			BoxCollisionTest(C_PLATFORM, object.entityPos, -16, -16, 16, 12, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			if checkResult == 1
+				object.value1 = 1
+				object[currentPlayer].xpos += object.value5
+				object[currentPlayer].ypos += object.value3
+			end if
+			break
+		case 2
+		case 5
+			if object.value6 == 0
+				BoxCollisionTest(C_PLATFORM, object.entityPos, -16, -16, 16, 12, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+				if checkResult == 1
+					object.value1 = 1
+					object[currentPlayer].xpos += object.value5
+					object[currentPlayer].ypos += object.value3
+					if R5Setup_value14 == 0
+						object[currentPlayer].xpos += R5Setup_value16
+					else
+						object[currentPlayer].xpos -= R5Setup_value16
+					end if
+					if object[currentPlayer].animation == ANI_FLAILING1
+						object.value6 = 30
+					end if
+					if object[currentPlayer].animation == ANI_FLAILING2
+						object.value6 = 30
+					end if
+				end if
+			else
+				object.value6--
+			end if
+			break
+		end switch
+	next
+	object.xpos = temp0
+end event
+
+
+event ObjectDraw
+	object.ypos += object.value3
+	switch object.propertyValue
+	case 0
+	case 1
+		Sin(object.value4, object.angle)
+		object.value4 *= 6144
+		object.value4 += 3145728
+		object.value4 += object.xpos
+		object.value4 &= -65536
+		DrawSpriteXY(0, object.value4, object.ypos)
+		break
+	case 2
+		Sin(object.value4, object.angle)
+		object.value4 *= 6144
+		object.value4 += 3145728
+		object.value4 += object.xpos
+		object.value4 &= -65536
+		DrawSpriteXY(0, object.value4, object.ypos)
+		DrawSpriteXY(1, object.value4, object.ypos)
+		break
+	case 3
+	case 4
+		Sin(object.value4, object.angle)
+		object.value4 *= -6144
+		object.value4 -= 3145728
+		object.value4 += object.xpos
+		object.value4 &= -65536
+		DrawSpriteXY(0, object.value4, object.ypos)
+		break
+	case 5
+		Sin(object.value4, object.angle)
+		object.value4 *= -6144
+		object.value4 -= 3145728
+		object.value4 += object.xpos
+		object.value4 &= -65536
+		DrawSpriteXY(0, object.value4, object.ypos)
+		DrawSpriteXY(1, object.value4, object.ypos)
+		break
+	end switch
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R5/Objects.gif")
+	switch object[9].propertyValue
+	case 0
+		LoadSpriteSheet("R5/Objects.gif")
+		SpriteFrame(-16, -16, 32, 32, 1, 51)
+		SpriteFrame(-16, -16, 32, 16, 65, 208)
+		break
+	case 1
+		LoadSpriteSheet("R5/Objects3.gif")
+		SpriteFrame(-16, -16, 32, 32, 1, 170)
+		SpriteFrame(-16, -16, 32, 16, 223, 148)
+		break
+	case 2
+		LoadSpriteSheet("R5/Objects3.gif")
+		SpriteFrame(-16, -16, 32, 32, 1, 170)
+		SpriteFrame(-16, -16, 32, 16, 223, 182)
+		break
+	case 3
+		LoadSpriteSheet("R5/Objects3.gif")
+		SpriteFrame(-16, -16, 32, 32, 1, 170)
+		SpriteFrame(-16, -16, 32, 16, 223, 216)
+		break
+	end switch
+	temp0 = 0
+	HPlatformSmall_value22 = DebugMode_ObjCount
+	while temp0 < 2
+		SetTableValue(TypeName[HPlatform Small], DebugMode_ObjCount, DebugMode_TypesTable)
+		SetTableValue(HPlatformSmall_DebugDraw, DebugMode_ObjCount, DebugMode_DrawTable)
+		SetTableValue(HPlatformSmall_DebugSpawn, DebugMode_ObjCount, DebugMode_SpawnTable)
+		DebugMode_ObjCount++
+		temp0++
+	loop
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

@@ -1,0 +1,120 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Button Blocks 1 Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 68 : TYPE_BUTTONBLOCKS1
+
+
+
+event ObjectUpdate
+	if object[+1].propertyValue == 1
+		if object.yvel > -65536
+			object.yvel -= 512
+		end if
+		object.ypos += object.yvel
+		if object.ypos < object.value2
+			object.ypos = object.value2
+			object.yvel = 0
+		end if
+	else
+		if object.yvel < 65536
+			object.yvel += 512
+		end if
+		object.ypos += object.yvel
+		if object.ypos > object.value1
+			object.ypos = object.value1
+			object.yvel = 0
+		end if
+	end if
+	object[+1].xpos = object.xpos
+	object[+1].xpos += 1048576
+	object[+1].ypos = object.ypos
+	object[+1].ypos -= 4718592
+	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+		BoxCollisionTest(C_SOLID, object.entityPos, -32, -1, 0, 64, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+		switch checkResult
+		case 1
+			object[currentPlayer].ypos += 65536
+			break
+		case 4
+			if object[currentPlayer].gravity == 0
+				CallFunction(Player_Kill)
+			end if
+		end switch
+		BoxCollisionTest(C_SOLID, object.entityPos, 0, -73, 32, 64, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+		switch checkResult
+		case 1
+			object[currentPlayer].ypos += 65536
+			break
+		case 4
+			if object[currentPlayer].gravity == 0
+				CallFunction(Player_Kill)
+			end if
+		end switch
+	next
+end event
+
+
+event ObjectDraw
+	DrawSprite(0)
+	DrawSprite(1)
+	DrawSprite(2)
+	DrawSprite(3)
+	DrawSprite(4)
+	DrawSprite(5)
+end event
+
+
+event ObjectStartup
+	switch object[24].propertyValue
+	case 0
+		LoadSpriteSheet("R4/Objects.gif")
+		temp0 = 163
+		temp1 = 1
+		temp2 = 196
+		break
+	case 1
+		LoadSpriteSheet("R4/Objects2.gif")
+		temp0 = 1
+		temp1 = 157
+		temp2 = 34
+		break
+	case 2
+		LoadSpriteSheet("R4/Objects2.gif")
+		temp0 = 1
+		temp1 = 190
+		temp2 = 34
+		break
+	case 3
+		LoadSpriteSheet("R4/Objects2.gif")
+		temp0 = 1
+		temp1 = 223
+		temp2 = 34
+		break
+	end switch
+	SpriteFrame(0, -64, 32, 32, temp0, temp1)
+	SpriteFrame(0, -32, 32, 32, temp0, temp1)
+	SpriteFrame(-32, 0, 32, 32, temp0, temp1)
+	SpriteFrame(0, 0, 32, 32, temp0, temp1)
+	SpriteFrame(-32, 32, 32, 32, temp0, temp1)
+	SpriteFrame(0, 32, 32, 32, temp0, temp1)
+	foreach (TypeName[Button Blocks 1], arrayPos0, ALL_ENTITIES)
+		object[arrayPos0].value1 = object[arrayPos0].ypos
+		object[arrayPos0].value2 = object[arrayPos0].ypos
+		object[arrayPos0].value2 -= 8388608
+	next
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

@@ -1,0 +1,85 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Floor Rubble Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 75 : TYPE_FLOORRUBBLE
+
+
+
+event ObjectUpdate
+	object.xpos += object.xvel
+	object.yvel += object.value2
+	object.ypos += object.yvel
+	if object.propertyValue == 0
+		ObjectTileCollision(0, 0, 8, 0)
+		if checkResult == 1
+			object.type = TypeName[Blank Object]
+			CreateTempObject(TypeName[Floor Rubble], 2, object.xpos, object.ypos)
+			object[tempObjectPos].xpos -= 262144
+			object[tempObjectPos].ypos -= 262144
+			object[tempObjectPos].xvel = -65536
+			object[tempObjectPos].yvel = -163840
+			object[tempObjectPos].value2 = 12288
+			CreateTempObject(TypeName[Floor Rubble], 3, object.xpos, object.ypos)
+			object[tempObjectPos].xpos += 262144
+			object[tempObjectPos].ypos -= 262144
+			object[tempObjectPos].xvel = 65536
+			object[tempObjectPos].yvel = -163840
+			object[tempObjectPos].value2 = 12288
+			CreateTempObject(TypeName[Floor Rubble], 4, object.xpos, object.ypos)
+			object[tempObjectPos].xpos -= 262144
+			object[tempObjectPos].ypos += 262144
+			object[tempObjectPos].xvel = -131072
+			object[tempObjectPos].yvel = -114688
+			object[tempObjectPos].value2 = 12288
+			CreateTempObject(TypeName[Floor Rubble], 5, object.xpos, object.ypos)
+			object[tempObjectPos].xpos += 262144
+			object[tempObjectPos].ypos += 262144
+			object[tempObjectPos].xvel = 131072
+			object[tempObjectPos].yvel = -114688
+			object[tempObjectPos].value2 = 12288
+		end if
+	else
+		if object.outOfBounds == 1
+			object.type = TypeName[Blank Object]
+		end if
+	end if
+end event
+
+
+event ObjectDraw
+	if object.propertyValue == 0
+		temp0 = object.value0
+		temp0 /= 10
+		DrawSprite(temp0)
+		object.value0++
+		object.value0 %= 20
+	else
+		DrawSprite(object.propertyValue)
+	end if
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R6/Objects2.gif")
+	SpriteFrame(-8, -8, 16, 16, 165, 191)
+	SpriteFrame(-8, -8, 16, 16, 181, 191)
+	SpriteFrame(-4, -4, 8, 8, 165, 191)
+	SpriteFrame(-4, -4, 8, 8, 173, 191)
+	SpriteFrame(-4, -4, 8, 8, 165, 199)
+	SpriteFrame(-4, -4, 8, 8, 173, 199)
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

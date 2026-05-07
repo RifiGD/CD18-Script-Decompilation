@@ -1,0 +1,237 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Tunnel Path 4 Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 68 : TYPE_TUNNELPATH4
+
+
+
+event ObjectUpdate
+	if object.state == 0
+		if object.propertyValue == 0
+			foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+				if object[currentPlayer].state != Player_State_Static
+					BoxCollisionTest(C_TOUCH, object.entityPos, -16, -16, 16, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+					if checkResult == 1
+						object[currentPlayer].state = Player_State_Static
+						object[currentPlayer].interaction = 0
+						if object[currentPlayer].value8 > 0
+							object[currentPlayer].value7 = 0
+							object[currentPlayer].value8 = 0
+						end if
+						object[currentPlayer].visible = 0
+						object.state = 1
+						object.value0 = -1
+						object.priority = 1
+						object.value1 = currentPlayer
+						PlaySfx(SfxName[Release], 0)
+					end if
+				end if
+			next
+		end if
+	else
+		currentPlayer = object.value1
+		if object[currentPlayer].state == Player_State_Death
+			object.state = 0
+		end if
+		object.value0++
+		object[currentPlayer].speed = object[currentPlayer].xpos
+		object[currentPlayer].animation = ANI_JUMPING
+		object[currentPlayer].animationSpeed = 240
+		switch object.value0
+		case 0
+			object[currentPlayer].xpos = 35584
+			object[currentPlayer].ypos = 33280
+			break
+		case 1
+			object[currentPlayer].xpos = 559872
+			object[currentPlayer].ypos = 33280
+			break
+		case 2
+			object[currentPlayer].xpos = 559872
+			object[currentPlayer].ypos = 557568
+			break
+		case 3
+			object[currentPlayer].xpos = 559872
+			object[currentPlayer].ypos = 1081856
+			break
+		case 4
+			object[currentPlayer].xpos = 559872
+			object[currentPlayer].ypos = 1606144
+			break
+		case 5
+			object[currentPlayer].xpos = 559872
+			object[currentPlayer].ypos = 2130432
+			break
+		case 6
+			object[currentPlayer].xpos = 559872
+			object[currentPlayer].ypos = 2654720
+			break
+		case 7
+			object[currentPlayer].xpos = 559872
+			object[currentPlayer].ypos = 3179008
+			break
+		case 8
+			object[currentPlayer].xpos = 559872
+			object[currentPlayer].ypos = 3703296
+			break
+		case 9
+			object[currentPlayer].xpos = 559872
+			object[currentPlayer].ypos = 4227584
+			break
+		case 10
+			object[currentPlayer].xpos = 559872
+			object[currentPlayer].ypos = 4751872
+			break
+		case 11
+			object[currentPlayer].xpos = 559872
+			object[currentPlayer].ypos = 5276160
+			break
+		case 12
+			object[currentPlayer].xpos = 559872
+			object[currentPlayer].ypos = 5800448
+			break
+		case 13
+			object[currentPlayer].xpos = 559872
+			object[currentPlayer].ypos = 6324736
+			break
+		case 14
+			object[currentPlayer].xpos = 559872
+			object[currentPlayer].ypos = 6849024
+			break
+		case 15
+			object[currentPlayer].xpos = 559872
+			object[currentPlayer].ypos = 7373312
+			break
+		case 16
+			object[currentPlayer].xpos = 559872
+			object[currentPlayer].ypos = 7897600
+			break
+		case 17
+			object[currentPlayer].xpos = 559872
+			object[currentPlayer].ypos = 8421888
+			break
+		case 18
+			object[currentPlayer].xpos = 559872
+			object[currentPlayer].ypos = 8946176
+			break
+		case 19
+			object[currentPlayer].xpos = 559872
+			object[currentPlayer].ypos = 9470464
+			break
+		case 20
+			object[currentPlayer].xpos = 559872
+			object[currentPlayer].ypos = 9994752
+			break
+		case 21
+			object[currentPlayer].xpos = 559872
+			object[currentPlayer].ypos = 10519040
+			break
+		case 22
+			object[currentPlayer].xpos = 559872
+			object[currentPlayer].ypos = 11043328
+			break
+		case 23
+			object[currentPlayer].xpos = 559872
+			object[currentPlayer].ypos = 11567616
+			break
+		case 24
+			object[currentPlayer].xpos = 559872
+			object[currentPlayer].ypos = 12091904
+			break
+		case 25
+			object[currentPlayer].xpos = 559872
+			object[currentPlayer].ypos = 12616192
+			break
+		case 26
+			object[currentPlayer].xpos = 559872
+			object[currentPlayer].ypos = 13140480
+			break
+		case 27
+			object[currentPlayer].xpos = 559872
+			object[currentPlayer].ypos = 13664768
+			break
+		case 28
+			object[currentPlayer].xpos = 559872
+			object[currentPlayer].ypos = 14189056
+			break
+		case 29
+			object[currentPlayer].xpos = 559872
+			object[currentPlayer].ypos = 14713344
+			break
+		case 30
+			object[currentPlayer].xpos = 559872
+			object[currentPlayer].ypos = 15237632
+			break
+		case 31
+			object[currentPlayer].xpos = 559872
+			object[currentPlayer].ypos = 15761920
+			break
+		case 32
+			object[currentPlayer].xpos = 559872
+			object[currentPlayer].ypos = 16286208
+			break
+		case 33
+			object[currentPlayer].xpos = 559872
+			object[currentPlayer].ypos = 16810496
+			break
+		case 34
+			object[currentPlayer].xpos = 1084160
+			object[currentPlayer].ypos = 16810496
+			break
+		case 35
+			object[currentPlayer].xpos = 1608448
+			object[currentPlayer].ypos = 16810496
+			break
+		case 36
+			object[currentPlayer].interaction = 1
+			object[currentPlayer].xpos = 2132736
+			object[currentPlayer].ypos = 16810496
+			break
+		case 37
+			object[currentPlayer].xpos = 2657024
+			object[currentPlayer].ypos = 16810496
+			break
+		case 38
+			object[currentPlayer].xpos = 3181312
+			object[currentPlayer].ypos = 16810496
+			break
+		case 39
+			object[currentPlayer].xpos = 3705600
+			object[currentPlayer].ypos = 16810496
+			break
+		case 40
+			object[currentPlayer].xpos = 4229888
+			object[currentPlayer].ypos = 16810496
+			object[currentPlayer].direction = 0
+			object.state = 0
+			object.priority = 0
+			object[currentPlayer].xvel = 524288
+			object[currentPlayer].speed = 524288
+			object[currentPlayer].yvel = 0
+			object[currentPlayer].state = Player_State_Air
+			object[currentPlayer].visible = 1
+			break
+		end switch
+		object[currentPlayer].xpos += object.xpos
+		object[currentPlayer].ypos += object.ypos
+		if object.state > 0
+			object[currentPlayer].speed -= object[currentPlayer].xpos
+			FlipSign(object[currentPlayer].speed)
+		end if
+	end if
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

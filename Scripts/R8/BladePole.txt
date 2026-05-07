@@ -1,0 +1,163 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Blade Pole Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 51 : TYPE_BLADEPOLE
+
+
+
+event ObjectUpdate
+	switch object.state
+	case 0
+		ObjectTileGrip(0, 0, 48, 0)
+		if checkResult == 1
+			object.state = 1
+			object.value0 = -64
+		else
+			object.ypos += 65536
+		end if
+		break
+	case 1
+		if object.value0 < 96
+			object.value0++
+			object.xpos += 65536
+			ObjectTileGrip(0, 0, 48, 0)
+			if checkResult == 0
+				object.state = 2
+				object.value0 = -64
+			end if
+		else
+			object.state = 2
+			object.value0 = -64
+		end if
+		break
+	case 2
+		if object.value0 < 96
+			object.value0++
+			object.xpos -= 65536
+			ObjectTileGrip(0, 0, 48, 0)
+			if checkResult == 0
+				object.state = 1
+				object.value0 = -64
+			end if
+		else
+			object.state = 1
+			object.value0 = -64
+		end if
+		break
+	end switch
+	switch object.frame
+	case 0
+	case 2
+		if object.animationTimer < 4
+			object.animationTimer++
+		else
+			object.animationTimer = 0
+			object.frame++
+		end if
+		break
+	case 1
+		if object.animationTimer < 72
+			object.animationTimer++
+		else
+			object.animationTimer = 0
+			object.frame++
+		end if
+		break
+	case 3
+		if object.animationTimer < 72
+			object.animationTimer++
+		else
+			object.animationTimer = 0
+			object.frame = 0
+		end if
+		break
+	end switch
+	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+		switch object.frame
+		case 1
+			BoxCollisionTest(C_TOUCH, object.entityPos, -28, -48, 28, -40, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			if checkResult == 1
+				CallFunction(Player_Hit)
+			end if
+			break
+		case 3
+			BoxCollisionTest(C_TOUCH, object.entityPos, -28, 16, 28, 24, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			if checkResult == 1
+				CallFunction(Player_Hit)
+			end if
+			break
+		end switch
+	next
+end event
+
+
+event ObjectDraw
+	temp0 = object.value0
+	temp0 += 64
+	temp0 %= 18
+	temp0 /= 9
+	temp0 += 16
+	DrawSprite(temp0)
+	switch object.frame
+	case 0
+	case 2
+		DrawSprite(0)
+		object.direction = 2
+		DrawSpriteFX(2, FX_FLIP, object.xpos, object.ypos)
+		break
+	case 1
+		temp0 = object.animationTimer
+		temp0 /= 3
+		temp0 %= 6
+		temp0 += 4
+		DrawSprite(temp0)
+		DrawSpriteFX(3, FX_FLIP, object.xpos, object.ypos)
+		break
+	case 3
+		temp0 = object.animationTimer
+		temp0 /= 3
+		temp0 %= 6
+		temp0 += 10
+		DrawSprite(1)
+		DrawSpriteFX(temp0, FX_FLIP, object.xpos, object.ypos)
+		break
+	end switch
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R8/Objects.gif")
+	SpriteFrame(-16, -48, 32, 24, 67, 216)
+	SpriteFrame(-12, -48, 24, 32, 34, 213)
+	SpriteFrame(-16, -24, 32, 24, 67, 216)
+	SpriteFrame(-12, -24, 24, 32, 34, 213)
+	SpriteFrame(-32, -48, 64, 8, 50, 182)
+	SpriteFrame(-24, -48, 48, 8, 50, 191)
+	SpriteFrame(-16, -48, 32, 8, 99, 191)
+	SpriteFrame(-4, -48, 8, 8, 115, 182)
+	SpriteFrame(-16, -48, 32, 8, 222, 245)
+	SpriteFrame(-24, -48, 48, 8, 1, 246)
+	SpriteFrame(-32, -24, 64, 8, 50, 182)
+	SpriteFrame(-24, -24, 48, 8, 50, 191)
+	SpriteFrame(-16, -24, 32, 8, 99, 191)
+	SpriteFrame(-4, -24, 8, 8, 115, 182)
+	SpriteFrame(-16, -24, 32, 8, 222, 245)
+	SpriteFrame(-24, -24, 48, 8, 1, 246)
+	SpriteFrame(-8, -40, 16, 88, 222, 123)
+	SpriteFrame(-8, -40, 16, 88, 239, 123)
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

@@ -1,0 +1,217 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Button Prize Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+// Property Values
+private alias 0	:	BUTTONPRIZE_SPIKES
+private alias 1	:	BUTTONPRIZE_SCORE
+private alias 2	:	BUTTONPRIZE_BUBBLES
+private alias 3	:	BUTTONPRIZE_BUBBLES_2	// No real difference to the normal one, just uses some different objects
+private alias 4	:	BUTTONPRIZE_RINGS
+private alias 5	:	BUTTONPRIZE_RINGS_2		// No real difference to the normal one, just uses some different objects
+
+private alias 75 : TYPE_BUTTONPRIZE
+
+
+
+event ObjectUpdate
+	switch object.state
+	case 0
+		if object[-1].propertyValue == 1
+			switch object.propertyValue
+			case BUTTONPRIZE_SPIKES
+			// Bug Details:
+			// -> When porting CD to v4, Moving Spikes was moved to a Property Value of Spikes
+			// Since it doesn't exist as a separate object, it defaulted to Blank Object
+				object[-1].type = TypeName[Blank Object]
+				object[+1].type = TypeName[Blank Object]
+				object[+3].type = TypeName[Blank Object]
+				object[+5].type = TypeName[Blank Object]
+				object[+7].type = TypeName[Blank Object]
+				object[+9].type = TypeName[Blank Object]
+				CreateTempObject(TypeName[Explosion], 0, object[-1].xpos, object[-1].ypos)
+				CreateTempObject(TypeName[Explosion], 0, object[+1].xpos, object[+1].ypos)
+				CreateTempObject(TypeName[Explosion], 0, object[+3].xpos, object[+3].ypos)
+				CreateTempObject(TypeName[Explosion], 0, object[+5].xpos, object[+5].ypos)
+				CreateTempObject(TypeName[Explosion], 0, object[+7].xpos, object[+7].ypos)
+				CreateTempObject(TypeName[Explosion], 0, object[+9].xpos, object[+9].ypos)
+				break
+			case BUTTONPRIZE_SCORE
+				object[-3].type = TypeName[Object Score]
+				object[-3].propertyValue = 3
+				object[-1].type = TypeName[Blank Object]
+				object[+1].type = TypeName[Object Score]
+				object[+1].propertyValue = 3
+				object[+3].type = TypeName[Object Score]
+				object[+3].propertyValue = 3
+				object[+5].type = TypeName[Object Score]
+				object[+5].propertyValue = 3
+				object[+7].type = TypeName[Object Score]
+				object[+7].propertyValue = 3
+				CreateTempObject(TypeName[Explosion], 0, object[-3].xpos, object[-3].ypos)
+				CreateTempObject(TypeName[Explosion], 0, object[-1].xpos, object[-1].ypos)
+				CreateTempObject(TypeName[Explosion], 0, object[+1].xpos, object[+1].ypos)
+				CreateTempObject(TypeName[Explosion], 0, object[+3].xpos, object[+3].ypos)
+				CreateTempObject(TypeName[Explosion], 0, object[+5].xpos, object[+5].ypos)
+				CreateTempObject(TypeName[Explosion], 0, object[+7].xpos, object[+7].ypos)
+				player.score += 5000
+				break
+			case BUTTONPRIZE_BUBBLES
+			// Crash Details:
+			// -> This case and BUBBLES_2 crash the game, don't ask me why
+#platform: USE_ORIGINAL_CODE
+				object[-5].type = TypeName[Button Prize]
+				object[-3].type = TypeName[Button Prize]
+				object[-1].type = TypeName[Button Prize]
+				object[+1].type = TypeName[Button Prize]
+				object[+3].type = TypeName[Button Prize]
+				object[+5].type = TypeName[Button Prize]
+				object[-5].state = 1
+				object[-3].state = 1
+				object[-1].state = 1
+				object[+1].state = 1
+				object[+3].state = 1
+				object[+5].state = 1
+				CreateTempObject(TypeName[Explosion], 0, object[-5].xpos, object[-5].ypos)
+				CreateTempObject(TypeName[Explosion], 0, object[-3].xpos, object[-3].ypos)
+				CreateTempObject(TypeName[Explosion], 0, object[-1].xpos, object[-1].ypos)
+				CreateTempObject(TypeName[Explosion], 0, object[+1].xpos, object[+1].ypos)
+				CreateTempObject(TypeName[Explosion], 0, object[+3].xpos, object[+3].ypos)
+				CreateTempObject(TypeName[Explosion], 0, object[+5].xpos, object[+5].ypos)
+#endplatform
+				break
+			case BUTTONPRIZE_BUBBLES_2
+			// Crash Details:
+			// -> This case and BUBBLES crash the game, don't ask me why
+#platform: USE_ORIGINAL_CODE
+				object[-7].type = TypeName[Button Prize]
+				object[-5].type = TypeName[Button Prize]
+				object[-3].type = TypeName[Button Prize]
+				object[-1].type = TypeName[Button Prize]
+				object[+1].type = TypeName[Button Prize]
+				object[+3].type = TypeName[Button Prize]
+				object[-7].state = 1
+				object[-5].state = 1
+				object[-3].state = 1
+				object[-1].state = 1
+				object[+1].state = 1
+				object[+3].state = 1
+				CreateTempObject(TypeName[Explosion], 0, object[-7].xpos, object[-7].ypos)
+				CreateTempObject(TypeName[Explosion], 0, object[-5].xpos, object[-5].ypos)
+				CreateTempObject(TypeName[Explosion], 0, object[-3].xpos, object[-3].ypos)
+				CreateTempObject(TypeName[Explosion], 0, object[-1].xpos, object[-1].ypos)
+				CreateTempObject(TypeName[Explosion], 0, object[+1].xpos, object[+1].ypos)
+				CreateTempObject(TypeName[Explosion], 0, object[+3].xpos, object[+3].ypos)
+#endplatform
+				break
+			case BUTTONPRIZE_RINGS
+				object[-9].type = TypeName[Blank Object]
+				object[-7].type = TypeName[Blank Object]
+				object[-5].type = TypeName[Blank Object]
+				object[-3].type = TypeName[Blank Object]
+				object[-1].type = TypeName[Button Prize]
+				object[-1].xpos += 2097152
+				object[-1].state = 2
+				object[+1].type = TypeName[Blank Object]
+				CreateTempObject(TypeName[Explosion], 0, object[-9].xpos, object[-9].ypos)
+				CreateTempObject(TypeName[Explosion], 0, object[-7].xpos, object[-7].ypos)
+				CreateTempObject(TypeName[Explosion], 0, object[-5].xpos, object[-5].ypos)
+				CreateTempObject(TypeName[Explosion], 0, object[-3].xpos, object[-3].ypos)
+				CreateTempObject(TypeName[Explosion], 0, object[-1].xpos, object[-1].ypos)
+				CreateTempObject(TypeName[Explosion], 0, object[+1].xpos, object[+1].ypos)
+				break
+			case BUTTONPRIZE_RINGS_2
+				object[-11].type = TypeName[Blank Object]
+				object[-9].type = TypeName[Blank Object]
+				object[-7].type = TypeName[Blank Object]
+				object[-5].type = TypeName[Blank Object]
+				object[-3].type = TypeName[Blank Object]
+				object[-1].type = TypeName[Button Prize]
+				object[-1].state = 2
+				CreateTempObject(TypeName[Explosion], 0, object[-11].xpos, object[-11].ypos)
+				CreateTempObject(TypeName[Explosion], 0, object[-9].xpos, object[-9].ypos)
+				CreateTempObject(TypeName[Explosion], 0, object[-7].xpos, object[-7].ypos)
+				CreateTempObject(TypeName[Explosion], 0, object[-5].xpos, object[-5].ypos)
+				CreateTempObject(TypeName[Explosion], 0, object[-3].xpos, object[-3].ypos)
+				CreateTempObject(TypeName[Explosion], 0, object[-1].xpos, object[-1].ypos)
+				break
+			end switch
+			object.type = TypeName[Blank Object]
+		end if
+		break
+	case 1
+		object.value0++
+		if object.value0 == 60
+			CreateTempObject(TypeName[Air Bubble], 5, object.xpos, object.ypos)
+			object[tempObjectPos].value2 = object[tempObjectPos].xpos
+			Rand(object[tempObjectPos].value1, 256)
+			object[tempObjectPos].value1 <<= 1
+			object[tempObjectPos].drawOrder = 4
+			object[tempObjectPos].value3 = -34816
+		end if
+		if object.value0 == 120
+			CreateTempObject(TypeName[Air Bubble], 5, object.xpos, object.ypos)
+			object[tempObjectPos].value2 = object[tempObjectPos].xpos
+			Rand(object[tempObjectPos].value1, 256)
+			object[tempObjectPos].value1 <<= 1
+			object[tempObjectPos].drawOrder = 4
+			object[tempObjectPos].value3 = -34816
+			object.type = TypeName[Blank Object]
+		end if
+		break
+	case 2
+		object.value0++
+		if object.value0 == 360
+			object.type = TypeName[Blank Object]
+			object.priority = 0
+		end if
+		temp0 = object.value0
+		temp0 &= 15
+		if temp0 == 0
+			CreateTempObject(TypeName[Lose Ring], 0, object.xpos, object.ypos)
+			object[tempObjectPos].ypos -= 12058624
+			object[tempObjectPos].animationSpeed = 256
+			temp1 = object.value0
+			temp1 >>= 4
+			temp1 %= 10
+			switch temp1
+			case 0
+				object[tempObjectPos].xpos -= 10485760
+				break
+			case 1
+			case 9
+				object[tempObjectPos].xpos -= 8388608
+				break
+			case 2
+			case 8
+				object[tempObjectPos].xpos -= 6291456
+				break
+			case 3
+			case 7
+				object[tempObjectPos].xpos -= 4194304
+				break
+			case 4
+			case 6
+				object[tempObjectPos].xpos -= 2097152
+				break
+			case 5
+				break
+			end switch
+		end if
+		break
+	end switch
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

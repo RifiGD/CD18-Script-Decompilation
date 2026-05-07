@@ -1,0 +1,194 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Flipper Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 43 : TYPE_FLIPPER
+
+// Function declarations
+reserve function Flipper_DebugDraw
+reserve function Flipper_DebugSpawn
+
+
+public function Flipper_DebugDraw
+	DrawSpriteFX(0, FX_FLIP, object.xpos, object.ypos)
+end function
+
+
+public function Flipper_DebugSpawn
+	CreateTempObject(TypeName[Flipper], 0, object.xpos, object.ypos)
+	object[tempObjectPos].direction = object.direction
+	object[tempObjectPos].drawOrder = 4
+end function
+
+
+event ObjectUpdate
+	switch object.state
+	case 1
+		object.frame = object.value0
+		object.frame >>= 1
+		object.value0++
+		if object.value0 > 3
+			object.value0 = 6
+			object.state = 2
+		end if
+		break
+	case 2
+		object.frame = object.value0
+		object.frame /= 3
+		object.value0++
+		if object.value0 > 12
+			object.value0 = 0
+			object.frame = 0
+			object.state = 0
+		end if
+		break
+	end switch
+	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+		temp0 = 0
+		if object.direction == 0
+			if object[currentPlayer].ypos > object.ypos
+				if object[currentPlayer].yvel < 0
+					BoxCollisionTest(C_SOLID, object.entityPos, -32, -12, 28, 12, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+				end if
+			end if
+			BoxCollisionTest(C_PLATFORM, object.entityPos, 20, -16, 32, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			temp0 = checkResult
+			temp1 = object[currentPlayer].xpos
+			temp1 -= object.xpos
+			temp1 >>= 16
+			temp1 += 32
+			temp1 += object[currentPlayer].collisionRight
+			if temp1 >= 0
+				if temp1 < 54
+					temp2 = temp1
+					temp2 /= -2
+					temp2 += 10
+					BoxCollisionTest(C_PLATFORM, object.entityPos, -32, temp2, 32, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+					temp0 |= checkResult
+				end if
+			end if
+			if temp0 == 1
+				object[currentPlayer].collisionMode = 0
+				object[currentPlayer].ypos += 262144
+				object[currentPlayer].xpos -= 65536
+				if object[currentPlayer].speed < 16384
+					if object[currentPlayer].speed > -16384
+						object[currentPlayer].speed = -16384
+					end if
+				end if
+			else
+				BoxCollisionTest(C_TOUCH, object.entityPos, -32, -24, 32, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+				if checkResult == 1
+					if object[currentPlayer].yvel < -262144
+						if object[currentPlayer].jumpPress == 1
+							object[currentPlayer].speed = object[currentPlayer].xpos
+							object[currentPlayer].speed -= object.xpos
+							object[currentPlayer].speed >>= 2
+							object[currentPlayer].yvel = -917504
+							temp2 = object[currentPlayer].speed
+							temp2 >>= 2
+							if temp2 < 0
+								object[currentPlayer].yvel += temp2
+							else
+								object[currentPlayer].yvel -= temp2
+							end if
+							object.state = 1
+							StopSfx(SfxName[Jump])
+							PlaySfx(SfxName[Flipper], 0)
+						end if
+					end if
+				end if
+			end if
+		else
+			if object[currentPlayer].ypos > object.ypos
+				if object[currentPlayer].yvel < 0
+					BoxCollisionTest(C_SOLID, object.entityPos, -28, -12, 32, 12, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+				end if
+			end if
+			BoxCollisionTest(C_PLATFORM, object.entityPos, -32, -16, -20, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			temp0 = checkResult
+			temp1 = object[currentPlayer].xpos
+			temp1 -= object.xpos
+			temp1 >>= 16
+			temp1 += 32
+			temp1 += object[currentPlayer].collisionLeft
+			if temp1 >= 12
+				if temp1 < 64
+					temp2 = temp1
+					temp2 /= 2
+					temp2 -= 21
+					BoxCollisionTest(C_PLATFORM, object.entityPos, -32, temp2, 32, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+					temp0 |= checkResult
+				end if
+			end if
+			if temp0 == 1
+				object[currentPlayer].collisionMode = 0
+				object[currentPlayer].ypos += 262144
+				object[currentPlayer].xpos += 65536
+				if object[currentPlayer].speed > -16384
+					if object[currentPlayer].speed < 16384
+						object[currentPlayer].speed = 16384
+					end if
+				end if
+			else
+				BoxCollisionTest(C_TOUCH, object.entityPos, -32, -24, 32, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+				if checkResult == 1
+					if object[currentPlayer].yvel < -262144
+						if object[currentPlayer].jumpPress == 1
+							object[currentPlayer].speed = object[currentPlayer].xpos
+							object[currentPlayer].speed -= object.xpos
+							object[currentPlayer].speed >>= 2
+							object[currentPlayer].yvel = -917504
+							temp2 = object[currentPlayer].speed
+							temp2 >>= 2
+							if temp2 < 0
+								object[currentPlayer].yvel += temp2
+							else
+								object[currentPlayer].yvel -= temp2
+							end if
+							object.state = 1
+							StopSfx(SfxName[Jump])
+							PlaySfx(SfxName[Flipper], 0)
+						end if
+					end if
+				end if
+			end if
+		end if
+	next
+end event
+
+
+event ObjectDraw
+	DrawSpriteFX(object.frame, FX_FLIP, object.xpos, object.ypos)
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R3/Objects.gif")
+	foreach (TypeName[Flipper], arrayPos0, ALL_ENTITIES)
+		object[arrayPos0].direction = object[arrayPos0].propertyValue
+		object[arrayPos0].drawOrder = 4
+	next
+	SpriteFrame(-32, -12, 64, 32, 100, 167)
+	SpriteFrame(-32, -12, 64, 24, 67, 200)
+	SpriteFrame(-32, -20, 64, 32, 132, 200)
+	SpriteFrame(-32, -12, 64, 24, 67, 200)
+	SetTableValue(TypeName[Flipper], DebugMode_ObjCount, DebugMode_TypesTable)
+	SetTableValue(Flipper_DebugDraw, DebugMode_ObjCount, DebugMode_DrawTable)
+	SetTableValue(Flipper_DebugSpawn, DebugMode_ObjCount, DebugMode_SpawnTable)
+	DebugMode_ObjCount++
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

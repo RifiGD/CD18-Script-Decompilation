@@ -1,0 +1,140 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: S G Laser Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 63 : TYPE_SGLASER
+
+
+
+event ObjectUpdate
+	switch object.state
+	case 0
+		if object.value0 < 24
+			temp0 = object.value0
+			temp0 &= 3
+			if temp0 == 0
+				CreateTempObject(TypeName[S G Laser], object.propertyValue, object.xpos, object.ypos)
+				object[tempObjectPos].state = 1
+			end if
+		end if
+		if object.value0 == 0
+			BoxCollisionTest(C_TOUCH, object.entityPos, -96, -128, 96, 128, 0, C_BOX, C_BOX, C_BOX, C_BOX)
+			if checkResult == 1
+				if object.propertyValue == 0
+					PlaySfx(SfxName[Shrink Lazer], 0)
+				else
+					PlaySfx(SfxName[Grow Lazer], 0)
+				end if
+			end if
+		end if
+		object.value0++
+		object.value0 &= 31
+		break
+	case 1
+		object.ypos += 262144
+		ObjectTileCollision(0, 0, 8, 0)
+		if checkResult == 1
+			object.value1 = object.ypos
+			object.state++
+		end if
+		break
+	case 2
+		if object.value0 < 4
+			object.ypos += 262144
+			object.value0++
+		else
+			object.type = TypeName[Blank Object]
+		end if
+		break
+	end switch
+	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+		if object.state > 0
+			if object.propertyValue == Mini_PlayerFlag
+				if object[currentPlayer].state != Player_State_SizeChange
+					BoxCollisionTest(C_TOUCH, object.entityPos, -4, -8, 4, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+					if checkResult == 1
+						object[currentPlayer].state = Player_State_SizeChange
+						object[currentPlayer].animation = ANI_SIZE_CHANGE
+						object[currentPlayer].yvel = -262144
+						object[currentPlayer].gravity = 1
+						if object[currentPlayer].xpos > object.xpos
+							object[currentPlayer].speed = 131072
+						else
+							object[currentPlayer].speed = -131072
+						end if
+					end if
+				end if
+			end if
+		end if
+	next
+end event
+
+
+event ObjectDraw
+	switch object.state
+	case 0
+		DrawSprite(object.propertyValue)
+		break
+	case 1
+		if object.animationTimer < 2
+			temp0 = 2
+			temp0 += object.propertyValue
+			DrawSprite(temp0)
+		else
+			DrawSprite(4)
+		end if
+		object.animationTimer++
+		object.animationTimer &= 3
+		break
+	case 2
+		if object.animationTimer < 2
+			temp0 = 2
+			temp0 += object.propertyValue
+			DrawSprite(temp0)
+			temp0 += 3
+			DrawSpriteXY(temp0, object.xpos, object.value1)
+		else
+			DrawSprite(4)
+			DrawSpriteXY(7, object.xpos, object.value1)
+		end if
+		object.animationTimer++
+		object.animationTimer &= 3
+		break
+	end switch
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R8/Objects2.gif")
+	Mini_PlayerFlag = false
+	if stage.playerListPos == 0
+		LoadAnimation("MiniSonic.ani")
+	else
+		LoadAnimation("MiniTails.ani")
+	end if
+	SpriteFrame(-8, -12, 16, 24, 151, 144)
+	SpriteFrame(-8, -12, 16, 24, 168, 144)
+	SpriteFrame(-4, -8, 8, 16, 82, 196)
+	SpriteFrame(-4, -8, 8, 16, 91, 196)
+	SpriteFrame(-4, -8, 8, 16, 100, 196)
+	SpriteFrame(-8, 0, 16, 8, 169, 169)
+	SpriteFrame(-8, 0, 16, 8, 134, 178)
+	SpriteFrame(-8, 0, 16, 8, 152, 169)
+	foreach (TypeName[S G Laser], arrayPos0, ALL_ENTITIES)
+		object[arrayPos0].drawOrder = 4
+	next
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

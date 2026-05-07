@@ -1,0 +1,536 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Boss Body Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 54 : TYPE_BOSSBODY
+
+// Function declarations
+reserve function BossBody_Function96
+reserve function BossBody_Function97
+reserve function BossBody_Function98
+reserve function BossBody_Function99
+reserve function BossBody_Function100
+reserve function BossBody_Function101
+reserve function BossBody_Function102
+reserve function BossBody_Function103
+reserve function BossBody_Function104
+
+
+public function BossBody_Function96
+	arrayPos0 = object.value1
+	object[arrayPos0].value5 = 2
+	arrayPos1 = object[arrayPos0].value1
+	object[arrayPos1].xvel = 32768
+	object[arrayPos1].yvel = 16384
+	arrayPos0 = object[arrayPos1].value1
+	object[arrayPos0].xvel = 16384
+	object[arrayPos0].yvel = 32768
+	arrayPos0 = object.value2
+	object[arrayPos0].value5 = 2
+	arrayPos1 = object[arrayPos0].value1
+	object[arrayPos1].xvel = 32768
+	object[arrayPos1].yvel = 16384
+	arrayPos0 = object[arrayPos1].value1
+	object[arrayPos0].xvel = 16384
+	object[arrayPos0].yvel = 32768
+	arrayPos0 = object.value0
+	arrayPos1 = object[arrayPos0].value2
+	arrayPos0 = object[arrayPos1].value1
+	SetBit(object[arrayPos0].value4, 7, 0)
+	arrayPos1 = object[arrayPos0].value1
+	SetBit(object[arrayPos1].value4, 7, 0)
+	arrayPos0 = object.value0
+	arrayPos1 = object[arrayPos0].value2
+	arrayPos0 = object[arrayPos1].value2
+	SetBit(object[arrayPos0].value4, 7, 0)
+	arrayPos1 = object[arrayPos0].value1
+	SetBit(object[arrayPos1].value4, 7, 0)
+end function
+
+
+public function BossBody_Function97
+	SetBit(object[arrayPos0].value4, 5, 1)
+	arrayPos1 = object[arrayPos0].value1
+	SetBit(object[arrayPos1].value4, 5, 1)
+	arrayPos0 = object[arrayPos1].value1
+	SetBit(object[arrayPos0].value4, 5, 1)
+end function
+
+
+public function BossBody_Function98
+	SetBit(object[arrayPos0].value4, 5, 0)
+	arrayPos1 = object[arrayPos0].value1
+	SetBit(object[arrayPos1].value4, 5, 0)
+	arrayPos0 = object[arrayPos1].value1
+	SetBit(object[arrayPos0].value4, 5, 0)
+end function
+
+
+public function BossBody_Function99
+	SetBit(object[arrayPos0].value4, 4, 1)
+	arrayPos1 = object[arrayPos0].value1
+	SetBit(object[arrayPos1].value4, 4, 1)
+	arrayPos0 = object[arrayPos1].value1
+	SetBit(object[arrayPos0].value4, 4, 1)
+end function
+
+
+public function BossBody_Function100
+	SetBit(object[arrayPos0].value4, 4, 0)
+	arrayPos1 = object[arrayPos0].value1
+	SetBit(object[arrayPos1].value4, 4, 0)
+	arrayPos0 = object[arrayPos1].value1
+	SetBit(object[arrayPos0].value4, 4, 0)
+end function
+
+
+public function BossBody_Function101
+	arrayPos0 = object.value0
+	arrayPos1 = object[arrayPos0].value2
+	arrayPos0 = object[arrayPos1].value2
+	if object[arrayPos0].state < 5
+		object[arrayPos0].state = 3
+		arrayPos1 = object[arrayPos0].value1
+		object[arrayPos1].state = 3
+		object[arrayPos1].frame = 0
+	end if
+	arrayPos0 = object.value0
+	arrayPos1 = object[arrayPos0].value2
+	arrayPos0 = object[arrayPos1].value1
+	if object[arrayPos0].state < 5
+		object[arrayPos0].state = 1
+		arrayPos1 = object[arrayPos0].value1
+		object[arrayPos1].state = 4
+		object[arrayPos1].frame = 0
+	end if
+end function
+
+
+public function BossBody_Function102
+	arrayPos0 = object.value0
+	arrayPos1 = object[arrayPos0].value2
+	arrayPos0 = object[arrayPos1].value2
+	if object[arrayPos0].state < 5
+		object[arrayPos0].state = 1
+		arrayPos1 = object[arrayPos0].value1
+		object[arrayPos1].state = 4
+		object[arrayPos1].frame = 0
+	end if
+	arrayPos0 = object.value0
+	arrayPos1 = object[arrayPos0].value2
+	arrayPos0 = object[arrayPos1].value1
+	if object[arrayPos0].state < 5
+		object[arrayPos0].state = 3
+		arrayPos1 = object[arrayPos0].value1
+		object[arrayPos1].state = 3
+		object[arrayPos1].frame = 0
+	end if
+end function
+
+
+public function BossBody_Function103
+	arrayPos0 = object.value1
+	object[arrayPos0].value5 = 8
+	arrayPos1 = object[arrayPos0].value1
+	object[arrayPos1].xvel = 65536
+	object[arrayPos1].yvel = 32768
+	arrayPos0 = object[arrayPos1].value1
+	object[arrayPos0].xvel = 49152
+	object[arrayPos0].yvel = 98304
+	arrayPos0 = object.value2
+	object[arrayPos0].value5 = 8
+	arrayPos1 = object[arrayPos0].value1
+	object[arrayPos1].xvel = 65536
+	object[arrayPos1].yvel = 32768
+	arrayPos0 = object[arrayPos1].value1
+	object[arrayPos0].xvel = 49152
+	object[arrayPos0].yvel = 98304
+	arrayPos0 = object.value0
+	arrayPos1 = object[arrayPos0].value2
+	arrayPos0 = object[arrayPos1].value1
+	SetBit(object[arrayPos0].value4, 7, 1)
+	arrayPos1 = object[arrayPos0].value1
+	SetBit(object[arrayPos1].value4, 7, 1)
+	arrayPos0 = object.value0
+	arrayPos1 = object[arrayPos0].value2
+	arrayPos0 = object[arrayPos1].value2
+	SetBit(object[arrayPos0].value4, 7, 1)
+	arrayPos1 = object[arrayPos0].value1
+	SetBit(object[arrayPos1].value4, 7, 1)
+end function
+
+
+public function BossBody_Function104
+	arrayPos0 = object.value0
+	arrayPos1 = object[arrayPos0].value2
+	arrayPos0 = object[arrayPos1].value2
+	if object[arrayPos0].state < 5
+		object[arrayPos0].state = 1
+		arrayPos1 = object[arrayPos0].value1
+		object[arrayPos1].state = 5
+		object[arrayPos1].frame = 1
+	end if
+	arrayPos0 = object.value0
+	arrayPos1 = object[arrayPos0].value2
+	arrayPos0 = object[arrayPos1].value1
+	if object[arrayPos0].state < 5
+		object[arrayPos0].state = 1
+		arrayPos1 = object[arrayPos0].value1
+		object[arrayPos1].state = 5
+		object[arrayPos1].frame = 1
+	end if
+end function
+
+
+event ObjectUpdate
+	switch object.state
+	case 0
+		CallFunction(BossBody_Function96)
+		object.value6 = object.xpos
+		object.value6 -= 7995392
+		object.value7 = object.xpos
+		object.value7 -= 3276800
+		object.state = 1
+		break
+	case 1
+		arrayPos0 = object.value2
+		object[arrayPos0].state = 8
+		arrayPos1 = object[arrayPos0].value1
+		object[arrayPos1].state = 2
+		arrayPos0 = object[arrayPos1].value1
+		object[arrayPos0].state = 5
+		arrayPos0 = object.value1
+		CallFunction(BossBody_Function97)
+		arrayPos0 = object.value1
+		GetBit(temp0, object[arrayPos0].value4, 4)
+		if temp0 == 0
+			object.ypos += 98304
+			arrayPos0 = object.value0
+			object[arrayPos0].ypos += 98304
+		else
+			SetBit(object.value4, 0, 1)
+		end if
+		break
+	case 2
+		arrayPos0 = object.value2
+		SetBit(object[arrayPos0].value4, 0, 0)
+		arrayPos0 = object.value1
+		GetBit(temp0, object[arrayPos0].value4, 0)
+		if temp0 == 1
+			SetBit(object[arrayPos0].value4, 0, 0)
+			if object[arrayPos0].state != 6
+				if object[arrayPos0].state != 5
+					object[arrayPos0].state = 1
+					CallFunction(BossBody_Function98)
+					arrayPos0 = object.value1
+					CallFunction(BossBody_Function100)
+					arrayPos0 = object.value2
+					object[arrayPos0].state = 4
+					CallFunction(BossBody_Function98)
+					arrayPos0 = object.value2
+					CallFunction(BossBody_Function99)
+					arrayPos0 = object.value2
+					arrayPos1 = object[arrayPos0].value1
+					object[arrayPos1].state = 1
+					arrayPos0 = object[arrayPos1].value1
+					object[arrayPos0].state = 2
+					SetBit(object.value4, 0, 1)
+				else
+					object[arrayPos0].state = 7
+				end if
+			else
+				object[arrayPos0].state = 5
+			end if
+		end if
+		break
+	case 3
+		GetBit(temp0, object.value4, 1)
+		if temp0 == 0
+			SetBit(object.value4, 1, 1)
+			CallFunction(BossBody_Function101)
+		end if
+		arrayPos0 = object.value1
+		GetBit(temp0, object[arrayPos0].value4, 0)
+		if temp0 == 1
+			arrayPos0 = object.value2
+			GetBit(temp0, object[arrayPos0].value4, 0)
+			if temp0 == 1
+				SetBit(object.value4, 1, 0)
+				SetBit(object.value4, 6, 1)
+				SetBit(object.value4, 0, 1)
+			end if
+		end if
+		break
+	case 4
+		arrayPos0 = object.value1
+		GetBit(checkResult, object[arrayPos0].value4, 0)
+		arrayPos0 = object.value2
+		GetBit(temp0, object[arrayPos0].value4, 0)
+		checkResult &= temp0
+		if checkResult == 1
+			arrayPos0 = object.value1
+			SetBit(object[arrayPos0].value4, 0, 0)
+			arrayPos1 = object[arrayPos0].value1
+			SetBit(object[arrayPos1].value4, 0, 0)
+			arrayPos0 = object.value2
+			SetBit(object[arrayPos0].value4, 0, 0)
+			arrayPos1 = object[arrayPos0].value1
+			SetBit(object[arrayPos1].value4, 0, 0)
+			if object.xpos < object.value6
+				object.value5 = 1
+			end if
+			object.value5--
+			if object.value5 == 0
+				SetBit(object.value4, 0, 1)
+				SetBit(object.value4, 1, 0)
+			else
+				GetBit(temp0, object.value4, 6)
+				if temp0 == 0
+					SetBit(object.value4, 6, 1)
+					arrayPos0 = object.value1
+					object[arrayPos0].state = 1
+					CallFunction(BossBody_Function98)
+					arrayPos0 = object.value1
+					CallFunction(BossBody_Function100)
+					arrayPos0 = object.value1
+					arrayPos1 = object[arrayPos0].value1
+					object[arrayPos1].state = 4
+					arrayPos0 = object.value2
+					object[arrayPos0].state = 4
+					CallFunction(BossBody_Function97)
+					arrayPos0 = object.value2
+					CallFunction(BossBody_Function99)
+					arrayPos0 = object.value2
+					arrayPos1 = object[arrayPos0].value1
+					object[arrayPos1].state = 3
+					CallFunction(BossBody_Function101)
+				else
+					SetBit(object.value4, 6, 0)
+					arrayPos0 = object.value1
+					object[arrayPos0].state = 4
+					CallFunction(BossBody_Function97)
+					arrayPos0 = object.value1
+					CallFunction(BossBody_Function99)
+					arrayPos0 = object.value1
+					arrayPos1 = object[arrayPos0].value1
+					object[arrayPos1].state = 3
+					arrayPos0 = object.value2
+					object[arrayPos0].state = 1
+					CallFunction(BossBody_Function98)
+					arrayPos0 = object.value2
+					CallFunction(BossBody_Function100)
+					arrayPos0 = object.value2
+					arrayPos1 = object[arrayPos0].value1
+					object[arrayPos1].state = 4
+					CallFunction(BossBody_Function102)
+				end if
+			end if
+		end if
+		break
+	case 5
+		arrayPos0 = object.value1
+		GetBit(checkResult, object[arrayPos0].value4, 0)
+		arrayPos0 = object.value2
+		GetBit(temp0, object[arrayPos0].value4, 0)
+		checkResult &= temp0
+		if checkResult == 1
+			GetBit(temp0, object.value4, 1)
+			if temp0 == 0
+				SetBit(object.value4, 1, 1)
+				CallFunction(BossBody_Function96)
+			else
+				arrayPos0 = object.value1
+				SetBit(object[arrayPos0].value4, 0, 0)
+				arrayPos1 = object[arrayPos0].value1
+				SetBit(object[arrayPos1].value4, 0, 0)
+				arrayPos0 = object.value2
+				SetBit(object[arrayPos0].value4, 0, 0)
+				arrayPos1 = object[arrayPos0].value1
+				SetBit(object[arrayPos1].value4, 0, 0)
+				if object.xpos >= object.value7
+					object.value5 = 1
+				end if
+				object.value5--
+				if object.value5 == 0
+					SetBit(object.value4, 1, 0)
+					SetBit(object.value4, 0, 1)
+				else
+					GetBit(temp0, object.value4, 6)
+					if temp0 == 0
+						SetBit(object.value4, 6, 1)
+						arrayPos0 = object.value1
+						object[arrayPos0].state = 11
+						CallFunction(BossBody_Function97)
+						arrayPos0 = object.value1
+						CallFunction(BossBody_Function99)
+						arrayPos0 = object.value1
+						arrayPos1 = object[arrayPos0].value1
+						object[arrayPos1].state = 4
+						arrayPos0 = object.value2
+						object[arrayPos0].state = 9
+						CallFunction(BossBody_Function98)
+						arrayPos0 = object.value2
+						CallFunction(BossBody_Function100)
+						arrayPos0 = object.value2
+						arrayPos1 = object[arrayPos0].value1
+						object[arrayPos1].state = 3
+						CallFunction(BossBody_Function101)
+					else
+						SetBit(object.value4, 6, 0)
+						arrayPos0 = object.value1
+						object[arrayPos0].state = 9
+						CallFunction(BossBody_Function98)
+						arrayPos0 = object.value1
+						CallFunction(BossBody_Function100)
+						arrayPos0 = object.value1
+						arrayPos1 = object[arrayPos0].value1
+						object[arrayPos1].state = 3
+						arrayPos0 = object.value2
+						object[arrayPos0].state = 11
+						CallFunction(BossBody_Function97)
+						arrayPos0 = object.value2
+						CallFunction(BossBody_Function99)
+						arrayPos0 = object.value2
+						arrayPos1 = object[arrayPos0].value1
+						object[arrayPos1].state = 4
+						CallFunction(BossBody_Function102)
+					end if
+				end if
+			end if
+		end if
+		break
+	case 6
+		GetBit(temp0, object.value4, 1)
+		if temp0 == 0
+			SetBit(object.value4, 1, 1)
+			CallFunction(BossBody_Function103)
+		end if
+		GetBit(temp0, object.value4, 6)
+		if temp0 == 1
+			arrayPos0 = object.value1
+			arrayPos1 = object[arrayPos0].value1
+			object[arrayPos1].state = 5
+			arrayPos0 = object.value2
+			arrayPos1 = object[arrayPos0].value1
+			object[arrayPos1].state = 6
+		else
+			arrayPos0 = object.value2
+			arrayPos1 = object[arrayPos0].value1
+			object[arrayPos1].state = 5
+			arrayPos0 = object.value1
+			arrayPos1 = object[arrayPos0].value1
+			object[arrayPos1].state = 6
+		end if
+		arrayPos0 = object.value1
+		GetBit(checkResult, object[arrayPos0].value4, 0)
+		arrayPos0 = object.value2
+		GetBit(temp0, object[arrayPos0].value4, 0)
+		checkResult &= temp0
+		if checkResult == 1
+			arrayPos0 = object.value1
+			SetBit(object[arrayPos0].value4, 0, 0)
+			arrayPos1 = object[arrayPos0].value1
+			SetBit(object[arrayPos1].value4, 0, 0)
+			arrayPos0 = object.value2
+			SetBit(object[arrayPos0].value4, 0, 0)
+			arrayPos1 = object[arrayPos0].value1
+			SetBit(object[arrayPos1].value4, 0, 0)
+			object.value5--
+			if object.value5 == 0
+				SetBit(object.value4, 1, 0)
+				SetBit(object.value4, 0, 1)
+			else
+				GetBit(temp0, object.value4, 6)
+				if temp0 == 0
+					SetBit(object.value4, 6, 1)
+					arrayPos0 = object.value1
+					SetBit(object[arrayPos0].value4, 1, 0)
+					CallFunction(BossBody_Function97)
+					arrayPos0 = object.value1
+					CallFunction(BossBody_Function99)
+					arrayPos0 = object.value1
+					arrayPos1 = object[arrayPos0].value1
+					object[arrayPos1].state = 5
+					arrayPos0 = object[arrayPos1].value1
+					object[arrayPos0].state = 1
+					arrayPos0 = object.value2
+					SetBit(object[arrayPos0].value4, 1, 0)
+					object[arrayPos0].state = 1
+					CallFunction(BossBody_Function98)
+					arrayPos0 = object.value2
+					CallFunction(BossBody_Function100)
+					arrayPos0 = object.value2
+					arrayPos1 = object[arrayPos0].value1
+					object[arrayPos1].state = 6
+					CallFunction(BossBody_Function104)
+				else
+					SetBit(object.value4, 6, 0)
+					arrayPos0 = object.value2
+					SetBit(object[arrayPos0].value4, 1, 0)
+					CallFunction(BossBody_Function97)
+					arrayPos0 = object.value2
+					CallFunction(BossBody_Function99)
+					arrayPos0 = object.value2
+					arrayPos1 = object[arrayPos0].value1
+					object[arrayPos1].state = 5
+					arrayPos0 = object[arrayPos1].value1
+					object[arrayPos0].state = 1
+					arrayPos0 = object.value1
+					SetBit(object[arrayPos0].value4, 1, 0)
+					object[arrayPos0].state = 1
+					CallFunction(BossBody_Function98)
+					arrayPos0 = object.value1
+					CallFunction(BossBody_Function100)
+					arrayPos0 = object.value1
+					arrayPos1 = object[arrayPos0].value1
+					object[arrayPos1].state = 6
+					CallFunction(BossBody_Function104)
+				end if
+			end if
+		end if
+		break
+	case 7
+		if object.value3 == 0
+			object.ypos += 131072
+			ObjectTileCollision(0, 0, 30, 0)
+			object.value3 = checkResult
+			object[-1].ypos = object.ypos
+		end if
+		break
+	case 8
+		object.value5--
+		if object.value5 == 0
+			CallFunction(BossBody_Function96)
+			SetBit(object.value4, 0, 1)
+			SetBit(object.value4, 1, 0)
+		end if
+		break
+	end switch
+end event
+
+
+event ObjectDraw
+	DrawSprite(0)
+	DrawSprite(1)
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R1/Objects3.gif")
+	SpriteFrame(-36, -32, 72, 64, 1, 1)
+	SpriteFrame(0, 8, 24, 24, 99, 1)
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

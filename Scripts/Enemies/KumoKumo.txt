@@ -1,0 +1,191 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Kumo Kumo Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 63 : TYPE_KUMOKUMO
+
+// Function declarations
+reserve function KumoKumo_DebugDraw
+reserve function KumoKumo_DebugSpawn
+
+// Static Values
+public value KumoKumo_value29 = 0;
+
+
+public function KumoKumo_DebugDraw
+	temp0 = object[0].value16
+	temp0 -= KumoKumo_value29
+	if temp0 == 0
+		DrawSprite(0)
+	else
+		DrawSprite(3)
+	end if
+end function
+
+
+public function KumoKumo_DebugSpawn
+	temp0 = object[0].value16
+	temp0 -= KumoKumo_value29
+	CreateTempObject(TypeName[Kumo Kumo], temp0, object.xpos, object.ypos)
+end function
+
+
+event ObjectUpdate
+	switch object.state
+	case 0
+		object.yvel += 16384
+		object.ypos += object.yvel
+		if object.yvel > 0
+			ObjectTileCollision(0, 0, 24, 0)
+			if checkResult == 1
+				object.ypos += 524288
+				object.frame = 0
+				object.drawOrder = 3
+				if object.propertyValue == 0
+					object.state = 1
+				else
+					object.state = 2
+					object.direction = 1
+				end if
+			end if
+		end if
+		break
+	case 1
+		if object.value0 < 180
+			object.value0++
+			object.frame++
+			object.frame &= 15
+		else
+			object.ypos -= 524288
+			object.value0 = 0
+			object.yvel = -524288
+			object.ypos += object.yvel
+			object.yvel += 16384
+			object.state = 0
+		end if
+		break
+	case 2
+		if object.value0 < 180
+			object.value0++
+			object.frame++
+			object.frame &= 31
+		else
+			object.ypos -= 524288
+			object.value0 = 0
+			object.yvel = -327680
+			object.ypos += object.yvel
+			object.state = 0
+		end if
+		break
+	case 3
+		if object.value0 < 62
+			object.value0++
+		else
+			CreateTempObject(TypeName[Kumo Kumo Web], 0, object.xpos, object.ypos)
+			object[tempObjectPos].drawOrder = 4
+			if object.direction == 0
+				object[tempObjectPos].xpos += 524288
+				object[tempObjectPos].xvel = 196608
+			else
+				object[tempObjectPos].xpos -= 524288
+				object[tempObjectPos].xvel = -196608
+			end if
+			object.ypos -= 524288
+			object.value0 = 0
+			object.yvel = -524288
+			object.ypos += object.yvel
+			object.yvel += 16384
+			object.state = 0
+			object.drawOrder = 4
+			PlaySfx(SfxName[Shot], 0)
+		end if
+		break
+	end switch
+	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+		BoxCollisionTest(C_TOUCH, object.entityPos, -24, -16, 24, 16, currentPlayer, object[currentPlayer].value41, object[currentPlayer].value39, object[currentPlayer].value42, object[currentPlayer].value40)
+		if checkResult == 1
+			CallFunction(Player_BadnikBreak)
+		end if
+		if object.state == 1
+			if object.direction == 0
+				BoxCollisionTest(C_TOUCH, object.entityPos, -64, -32, 0, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+				if checkResult == 1
+					object.direction = 1
+					object.state = 3
+					object.frame = 0
+					object.value0 = 0
+				end if
+			else
+				BoxCollisionTest(C_TOUCH, object.entityPos, 0, -32, 64, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+				if checkResult == 1
+					object.direction = 0
+					object.state = 3
+					object.frame = 0
+					object.value0 = 0
+				end if
+			end if
+		end if
+	next
+	CallFunction(StageSetup_CheckGoodFuture)
+end event
+
+
+event ObjectDraw
+	switch object.state
+	case 0
+		if object.propertyValue == 0
+			DrawSpriteFX(2, FX_FLIP, object.xpos, object.ypos)
+		else
+			DrawSpriteFX(5, FX_FLIP, object.xpos, object.ypos)
+		end if
+		break
+	case 1
+		temp0 = object.frame
+		temp0 >>= 3
+		DrawSpriteFX(temp0, FX_FLIP, object.xpos, object.ypos)
+		break
+	case 2
+		temp0 = object.frame
+		temp0 >>= 4
+		temp0 += 3
+		DrawSpriteFX(temp0, FX_FLIP, object.xpos, object.ypos)
+		break
+	case 3
+		DrawSpriteFX(0, FX_FLIP, object.xpos, object.ypos)
+		break
+	end switch
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R5/Objects.gif")
+	SpriteFrame(-28, -20, 56, 36, 199, 1)
+	SpriteFrame(-28, -16, 56, 32, 199, 38)
+	SpriteFrame(-28, -28, 56, 52, 142, 1)
+	SpriteFrame(-28, -20, 56, 36, 199, 71)
+	SpriteFrame(-28, -16, 56, 32, 199, 108)
+	SpriteFrame(-28, -28, 56, 52, 142, 54)
+	temp0 = 0
+	KumoKumo_value29 = DebugMode_ObjCount
+	while temp0 < 2
+		SetTableValue(TypeName[Kumo Kumo], DebugMode_ObjCount, DebugMode_TypesTable)
+		SetTableValue(KumoKumo_DebugDraw, DebugMode_ObjCount, DebugMode_DrawTable)
+		SetTableValue(KumoKumo_DebugSpawn, DebugMode_ObjCount, DebugMode_SpawnTable)
+		DebugMode_ObjCount++
+		temp0++
+	loop
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

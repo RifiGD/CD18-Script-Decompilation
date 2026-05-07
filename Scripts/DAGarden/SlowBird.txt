@@ -1,0 +1,75 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Slow Bird Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 13 : TYPE_SLOWBIRD
+
+
+
+event ObjectUpdate
+	object.value3++
+	object.value3 %= 192
+	if object.value3 > 133
+		if object.direction == 0
+			object.xpos += 65536
+		else
+			object.xpos -= 65536
+		end if
+	else
+		if object.direction == 0
+			object.xpos += 16384
+		else
+			object.xpos -= 16384
+		end if
+	end if
+	switch object.state
+	case 0
+		object.value1 = object.ypos
+		object.state++
+		break
+	case 1
+		object.angle += object.propertyValue
+		object.angle &= 511
+		Sin(object.ypos, object.angle)
+		object.ypos <<= 10
+		object.ypos += object.value1
+		break
+	end switch
+	if object.outOfBounds == 1
+		object.type = TypeName[Blank Object]
+	end if
+end event
+
+
+event ObjectDraw
+	temp0 = object.animationSpeed
+	temp0 >>= 4
+	DrawSpriteFX(temp0, FX_FLIP, object.xpos, object.ypos)
+	if object.value3 > 133
+		object.animationSpeed += 4
+	else
+		object.animationSpeed++
+	end if
+	object.animationSpeed &= 31
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("DAGarden/Objects.gif")
+	SpriteFrame(-8, -9, 16, 16, 466, 577)
+	SpriteFrame(-8, -8, 16, 16, 483, 577)
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

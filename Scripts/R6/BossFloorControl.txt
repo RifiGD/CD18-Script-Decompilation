@@ -1,0 +1,283 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Floor Control Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 70 : TYPE_FLOORCONTROL
+
+// Function declarations
+reserve function FloorControl_Function104
+reserve function FloorControl_Function105
+reserve function FloorControl_Function106
+reserve function FloorControl_Function107
+reserve function FloorControl_Function108
+
+
+public function FloorControl_Function104
+	CreateTempObject(TypeName[Floor Rubble], 0, object[-1].xpos, object.value4)
+	Rand(object[tempObjectPos].xpos, 160)
+	object[tempObjectPos].xpos -= 80
+	object[tempObjectPos].xpos <<= 16
+	object[tempObjectPos].xpos += object[-1].xpos
+	Rand(object[tempObjectPos].xvel, 1280)
+	temp0 = object[tempObjectPos].xvel
+	object[tempObjectPos].xvel -= 640
+	object[tempObjectPos].xvel <<= 8
+	object[tempObjectPos].yvel = 65536
+	object[tempObjectPos].value2 = 2048
+	temp0 &= 4095
+	object[tempObjectPos].value2 += temp0
+end function
+
+
+public function FloorControl_Function105
+	switch object.value5
+	case 0
+		arrayPos0 = 2
+		break
+	case 1
+		arrayPos0 = 5
+		break
+	case 2
+		arrayPos0 = 11
+		break
+	end switch
+	object[+arrayPos0].type = TypeName[Boss Platform]
+	object[+arrayPos0].ypos = object.value4
+	object[+arrayPos0].yvel = 0
+	object[+arrayPos0].value2 = 2816
+	object[+arrayPos0].value5 = object.entityPos
+end function
+
+
+public function FloorControl_Function106
+	switch object.value5
+	case 0
+		arrayPos0 = 3
+		break
+	case 1
+		arrayPos0 = 6
+		break
+	case 2
+		arrayPos0 = 12
+		break
+	end switch
+	object[+arrayPos0].type = TypeName[Boss Platform]
+	object[+arrayPos0].ypos = object.value4
+	object[+arrayPos0].yvel = 0
+	object[+arrayPos0].value2 = 2816
+	object[+arrayPos0].value5 = object.entityPos
+end function
+
+
+public function FloorControl_Function107
+	switch object.value5
+	case 0
+		arrayPos0 = 1
+		break
+	case 1
+		arrayPos0 = 7
+		break
+	case 2
+		arrayPos0 = 10
+		break
+	end switch
+	object[+arrayPos0].type = TypeName[Boss Platform]
+	object[+arrayPos0].ypos = object.value4
+	object[+arrayPos0].yvel = 0
+	object[+arrayPos0].value2 = 2816
+	object[+arrayPos0].value5 = object.entityPos
+end function
+
+
+public function FloorControl_Function108
+	switch object.value5
+	case 0
+		arrayPos0 = 4
+		break
+	case 1
+		arrayPos0 = 8
+		break
+	case 2
+		arrayPos0 = 9
+		break
+	end switch
+	object[+arrayPos0].type = TypeName[Boss Platform]
+	object[+arrayPos0].ypos = object.value4
+	object[+arrayPos0].yvel = 0
+	object[+arrayPos0].value2 = 2816
+	object[+arrayPos0].value5 = object.entityPos
+end function
+
+
+event ObjectUpdate
+	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+		if object[currentPlayer].state == Player_State_Fly
+			if object[currentPlayer].value1 < 360
+				object[currentPlayer].value1 = 360
+			end if
+		end if
+	next
+	temp0 = object[-7].ypos
+	temp0 += 8388608
+	temp0 -= object[0].ypos
+	temp0 >>= 25
+	if temp0 < object.value6
+		switch object.value5
+		case 0
+			SetTileLayerEntry(500, 0, 20, 9)
+			SetTileLayerEntry(501, 0, 21, 9)
+			SetTileLayerEntry(506, 0, 22, 9)
+		case 1
+			SetTileLayerEntry(500, 0, 20, 5)
+			SetTileLayerEntry(501, 0, 21, 5)
+			SetTileLayerEntry(502, 0, 22, 5)
+		end switch
+		object.value6 = object.value5
+	end if
+	switch object.state
+	case 1
+		if object.value0 < 90
+			object.value0++
+		else
+			object.value5 = object[-7].ypos
+			object.value5 -= object[-1].ypos
+			object.value5 >>= 25
+			switch object.value5
+			case 0
+				object.value4 = 93061120
+				object.scale = 0
+				break
+			case 1
+				object.value4 = 59506688
+				object.scale = 0
+				break
+			case 2
+				object.value4 = 25952256
+				object.scale = 6
+				if object[0].xpos > object[-1].xpos
+					object.value1 = 10485760
+				else
+					object.value1 = -10485760
+				end if
+				break
+			end switch
+			PlaySfx(SfxName[Crumble], 0)
+			object.value0 = 0
+			object.value3 = 24
+			object.value7 = 0
+			object.state++
+		end if
+		break
+	case 2
+		object.value7++
+		if object.value7 == 128
+			CallFunction(FloorControl_Function105)
+		end if
+		if object.value7 == 148
+			CallFunction(FloorControl_Function106)
+		end if
+		if object.value7 == 168
+			CallFunction(FloorControl_Function107)
+		end if
+		if object.value7 == 188
+			CallFunction(FloorControl_Function108)
+		end if
+		temp0 = object.value7
+		temp0 &= 3
+		if temp0 == 0
+			screen.shakeY = 2
+		end if
+		if object.scale > 0
+			temp0 = object.value7
+			temp0 %= 35
+			if temp0 == 0
+				object.scale--
+				CreateTempObject(TypeName[Boss Spike], 0, 180355072, object.value4)
+				object[tempObjectPos].xpos += object.value1
+				if object.value1 > 0
+					object.value1 -= 2097152
+				else
+					object.value1 += 2097152
+				end if
+			end if
+		end if
+		object.value0++
+		if object.value0 == 16
+			object.value0 = 0
+			CallFunction(FloorControl_Function104)
+			if object.value3 > 0
+				object.value3--
+			else
+				object.state++
+			end if
+		end if
+		break
+	case 3
+		if object.value0 == 30
+			PlaySfx(SfxName[Electricity], 0)
+			object.value5 = object[-7].ypos
+			object.value5 -= object[0].ypos
+			object.value5 >>= 25
+			if object.value6 < object.value5
+				object.value6 = object.value5
+				CreateTempObject(TypeName[Electric Arc], 0, object[-1].xpos, object[-6].ypos)
+				temp0 = object.value5
+				temp0 <<= 25
+				temp0 += 131072
+				object[tempObjectPos].ypos -= temp0
+				object[tempObjectPos].direction = 1
+				object[tempObjectPos].drawOrder = 4
+			end if
+		end if
+		object.value0++
+		if object.value0 == 60
+			object.value0 = 0
+			object.state++
+		end if
+		break
+	case 4
+		object.value0++
+		if object.value0 == 60
+			object.value0 = 0
+			object.state++
+			if object[9].propertyValue == 2
+				Copy16x16Tile(739, 827)
+			else
+				Copy16x16Tile(810, 863)
+			end if
+		else
+			temp0 = object.value0
+			temp0 >>= 1
+			temp0 %= 5
+			if object[9].propertyValue == 2
+				temp0 += 826
+				Copy16x16Tile(739, temp0)
+			else
+				temp0 += 862
+				Copy16x16Tile(810, temp0)
+			end if
+		end if
+		break
+	case 5
+		object.value0++
+		if object.value0 == 420
+			object.value0 = 0
+			object.state = 3
+		end if
+		break
+	end switch
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

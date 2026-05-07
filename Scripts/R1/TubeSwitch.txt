@@ -1,0 +1,161 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Tube Switch Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 47 : TYPE_TUBESWITCH
+
+
+// Property Values
+private alias 0	:	HORIZONTAL_TUBE
+private alias 1	:	VERTICAL_TUBE
+private alias 2	:	BOOST_ANGLE_TUBE
+private alias 3	:	BOOST_VERTICAL_TUBE
+private alias 4	:	HORIZONTAL_EXIT_TUBE
+private alias 5	:	VERTICAL_EXIT_TUBE
+private alias 6	:	SPEED_LIMITED_TUBE
+private alias 7	:	EXIT_ANGLE_TUBE
+private alias 8	:	EXIT_BOOST_TUBE
+
+
+event ObjectUpdate
+	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+		BoxCollisionTest(C_TOUCH, object.entityPos, -16, -16, 16, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+		if checkResult == 1
+			switch object.propertyValue
+			case HORIZONTAL_TUBE
+				if object[currentPlayer].speed > 0
+					if object[currentPlayer].state != Player_State_TubeRoll
+						PlaySfx(SfxName[Release], 0)
+					end if
+					object[currentPlayer].direction = 0
+					object[currentPlayer].state = Player_State_TubeRoll
+					object[currentPlayer].animation = ANI_JUMPING
+					object[currentPlayer].value17 = 655360
+					if object[currentPlayer].speed < 655360
+						object[currentPlayer].speed = 655360
+					end if
+				else
+					if object[currentPlayer].gravity == 0
+						if object[currentPlayer].speed > -131072
+							object[currentPlayer].speed = -131072
+						end if
+					end if
+					object[currentPlayer].state = Player_State_Roll
+					object[currentPlayer].animation = ANI_JUMPING
+				end if
+				break
+			case VERTICAL_TUBE
+				if object[currentPlayer].state != Player_State_TubeRoll
+					PlaySfx(SfxName[Release], 0)
+				end if
+				object[currentPlayer].gravity = 0
+				object[currentPlayer].value43 = 0
+				object[currentPlayer].state = Player_State_TubeRoll
+				object[currentPlayer].animation = ANI_JUMPING
+				object[currentPlayer].collisionMode = 3
+				object[currentPlayer].angle = 64
+				object[currentPlayer].speed = 1048576
+				object[currentPlayer].value17 = 1048576
+				break
+			case BOOST_ANGLE_TUBE
+				if object.value0 == 0
+					if object[currentPlayer].collisionMode == 0
+						object[currentPlayer].collisionMode = 2
+						FlipSign(object[currentPlayer].speed)
+						object[currentPlayer].angle = 128
+					else
+						object[currentPlayer].collisionMode = 0
+						FlipSign(object[currentPlayer].speed)
+						object[currentPlayer].angle = 0
+						object[currentPlayer].ypos += 262144
+					end if
+					object[currentPlayer].state = Player_State_TubeRoll
+					object[currentPlayer].animation = ANI_JUMPING
+				end if
+				break
+			case BOOST_VERTICAL_TUBE
+				if object[currentPlayer].yvel < 0
+					object[currentPlayer].gravity = 0
+					object[currentPlayer].value43 = 0
+					object[currentPlayer].state = Player_State_TubeRoll
+					object[currentPlayer].animation = ANI_JUMPING
+					object[currentPlayer].collisionMode = 1
+					object[currentPlayer].angle = 192
+					object[currentPlayer].value17 = 655360
+					object[currentPlayer].speed = object[currentPlayer].yvel
+					FlipSign(object[currentPlayer].speed)
+				end if
+				break
+			case HORIZONTAL_EXIT_TUBE
+				if object[currentPlayer].speed < 0
+					if object[currentPlayer].state != Player_State_TubeRoll
+						PlaySfx(SfxName[Release], 0)
+					end if
+					object[currentPlayer].state = Player_State_TubeRoll
+					object[currentPlayer].animation = ANI_JUMPING
+					object[currentPlayer].value17 = 655360
+				else
+					object[currentPlayer].state = Player_State_Roll
+					object[currentPlayer].animation = ANI_JUMPING
+				end if
+				break
+			case VERTICAL_EXIT_TUBE
+				if object[currentPlayer].gravity == 1
+					object[currentPlayer].xvel = object.xvel
+					object[currentPlayer].speed = object.xvel
+					if object[currentPlayer].yvel < -950272
+						object[currentPlayer].yvel = -950272
+					end if
+				else
+					if object[currentPlayer].collisionMode == 1
+						object[currentPlayer].angle = 196
+						Cos256(temp0, object[currentPlayer].angle)
+						temp0 *= object[currentPlayer].speed
+						temp0 >>= 8
+						if temp0 != 0
+							object.xvel = temp0
+						end if
+					end if
+				end if
+				break
+			case SPEED_LIMITED_TUBE
+				if object[currentPlayer].state == Player_State_TubeRoll
+					if object[currentPlayer].yvel < -393216
+						object[currentPlayer].yvel = -393216
+					end if
+				else
+					object[currentPlayer].animation = ANI_JUMPING
+				end if
+				break
+			case EXIT_ANGLE_TUBE
+				if object[currentPlayer].state == Player_State_TubeRoll
+					object.propertyValue = EXIT_BOOST_TUBE
+				end if
+				break
+			case EXIT_BOOST_TUBE
+				if object[currentPlayer].gravity == GRAVITY_AIR
+					object[currentPlayer].yvel = -0xA8000
+					object.propertyValue = EXIT_ANGLE_TUBE
+				end if
+				break
+			end switch
+			object.value0 = 1
+		else
+			object.value0 = 0
+		end if
+	next
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

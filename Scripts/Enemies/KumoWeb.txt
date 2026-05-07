@@ -1,0 +1,78 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Kumo Kumo Web Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 64 : TYPE_KUMOKUMOWEB
+
+
+
+event ObjectUpdate
+	if object.state == 0
+		object.xpos += object.xvel
+		if object.outOfBounds == 1
+			object.type = TypeName[Blank Object]
+		else
+			temp0 = screen.yoffset
+			temp0 -= 8
+			temp0 <<= 16
+			if object.ypos < temp0
+				object.type = TypeName[Blank Object]
+			end if
+		end if
+	else
+		if object.value0 < 120
+			object.value0++
+			currentPlayer = object.value1
+			if object[currentPlayer].speed > 16384
+				object[currentPlayer].speed = 16384
+			end if
+			if object[currentPlayer].speed < -16384
+				object[currentPlayer].speed = -16384
+			end if
+		else
+			object.type = TypeName[Blank Object]
+		end if
+	end if
+	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+		BoxCollisionTest(C_TOUCH, object.entityPos, -6, -6, 6, 6, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+		if checkResult == 1
+			object.state = 1
+			object.value1 = currentPlayer
+		end if
+	next
+end event
+
+
+event ObjectDraw
+	if object.state == 1
+		currentPlayer = object.value1
+		object.xpos = object[currentPlayer].xpos
+		object.ypos = object[currentPlayer].ypos
+	end if
+	temp0 = object.frame
+	temp0 /= 3
+	DrawSprite(temp0)
+	object.frame++
+	object.frame %= 6
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R5/Objects.gif")
+	SpriteFrame(-12, -8, 24, 16, 69, 1)
+	SpriteFrame(-12, -8, 24, 16, 94, 1)
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

@@ -1,0 +1,232 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Round Icon Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 2 : TYPE_ROUNDICON
+
+
+
+event ObjectUpdate
+	if options.physicalControls == 0
+		if object[0].state == 2
+			if object.value4 == 0
+				temp0 = object.ixpos
+				temp0 -= 34
+				temp1 = object.ixpos
+				temp1 += 34
+				temp2 = object.iypos
+				temp2 -= 45
+				temp3 = object.iypos
+				temp3 += 45
+				CheckTouchRect(temp0, temp2, temp1, temp3)
+				if checkResult > -1
+					object[0].value2 = object.propertyValue
+				else
+					CheckTouchRect(0, 0, screen.xsize, screen.ysize)
+					if checkResult < 0
+						if object[0].value2 == object.propertyValue
+							PlaySfx(SfxName[Select], 0)
+							object[0].state = 3
+							object.state = 1
+							if object.propertyValue == 7
+								StopMusic()
+							end if
+						end if
+					else
+						if object[0].value2 == object.propertyValue
+							object[0].value2 = -1
+						end if
+					end if
+				end if
+			end if
+		end if
+	end if
+end event
+
+
+event ObjectDraw
+	DrawSprite(10)
+	object.rotation++
+	object.rotation &= 511
+	Cos(temp0, object.rotation)
+	temp0 >>= 4
+	Sin(temp1, object.rotation)
+	temp1 >>= 4
+	switch object.propertyValue
+	case 0
+		temp0 += 64
+		temp1 += 76
+		break
+	case 1
+		temp0 += 320
+		temp1 += 76
+		break
+	case 2
+		temp0 += 448
+		temp1 += 76
+		break
+	case 3
+		temp0 += 64
+		temp1 += 220
+		break
+	case 4
+		temp0 += 192
+		temp1 += 220
+		break
+	case 5
+		temp0 += 320
+		temp1 += 220
+		break
+	case 6
+		temp0 += 448
+		temp1 += 220
+		break
+	end switch
+	if object.propertyValue < 7
+		vertexBuffer[0].x = object.xpos
+		vertexBuffer[0].x >>= 16
+		vertexBuffer[0].x -= 32
+		vertexBuffer[0].u = temp0
+		vertexBuffer[0].u -= 32
+		vertexBuffer[0].y = object.ypos
+		vertexBuffer[0].y >>= 16
+		vertexBuffer[0].y -= 43
+		vertexBuffer[0].v = temp1
+		vertexBuffer[0].v -= 43
+		vertexBuffer[1].x = object.xpos
+		vertexBuffer[1].x >>= 16
+		vertexBuffer[1].x += 31
+		vertexBuffer[1].u = temp0
+		vertexBuffer[1].u += 31
+		vertexBuffer[1].y = vertexBuffer[0].y
+		vertexBuffer[1].v = vertexBuffer[0].v
+		vertexBuffer[2].x = vertexBuffer[0].x
+		vertexBuffer[2].u = vertexBuffer[0].u
+		vertexBuffer[2].y = object.ypos
+		vertexBuffer[2].y >>= 16
+		vertexBuffer[2].y += 24
+		vertexBuffer[2].v = temp1
+		vertexBuffer[2].v += 24
+		vertexBuffer[3].x = vertexBuffer[1].x
+		vertexBuffer[3].u = vertexBuffer[1].u
+		vertexBuffer[3].y = vertexBuffer[2].y
+		vertexBuffer[3].v = vertexBuffer[2].v
+		Draw3DScene()
+		DrawSprite(19)
+		temp0 = object.xpos
+		temp0 >>= 16
+		temp0 -= 24
+		temp1 = object.ypos
+		temp1 >>= 16
+		temp1 += 34
+		DrawNumbers(0, temp0, temp1, object.value1, 2, 6, 1)
+		temp0 += 16
+		DrawNumbers(0, temp0, temp1, object.value2, 2, 6, 1)
+		temp0 += 19
+		DrawNumbers(0, temp0, temp1, object.value3, 2, 6, 1)
+	else
+		DrawSprite(20)
+		temp0 = object.xpos
+		temp0 >>= 16
+		temp0 -= 18
+		temp1 = object.ypos
+		temp1 >>= 16
+		temp1 += 34
+		DrawNumbers(0, temp0, temp1, object.value1, 3, 6, 1)
+		temp0 += 16
+		DrawNumbers(0, temp0, temp1, object.value2, 2, 6, 1)
+		temp0 += 19
+		DrawNumbers(0, temp0, temp1, object.value3, 2, 6, 1)
+		DrawSprite(22)
+	end if
+	DrawSprite(object.frame)
+	if object.state == 1
+		temp0 = object.value0
+		temp0 &= 3
+		temp0 >>= 1
+		if temp0 == 0
+			if object[0].value3 == object.propertyValue
+				DrawSprite(21)
+			end if
+		end if
+		object.value0++
+		if object.value0 == 30
+			object.value0 = 0
+			object.state = 0
+			if object.propertyValue == 7
+				object[0].state = 4
+			else
+				object[0].state = 5
+				object[0].value2 = -1
+			end if
+		end if
+	else
+		if object[0].state == 2
+			if object[0].value3 == object.propertyValue
+				DrawSprite(21)
+			end if
+		end if
+	end if
+	if object.value4 == 1
+		DrawSprite(23)
+	end if
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("TAttack/TimeAttack.gif")
+	SpriteFrame(0, 0, 6, 8, 330, 577)
+	SpriteFrame(0, 0, 6, 8, 337, 577)
+	SpriteFrame(0, 0, 6, 8, 344, 577)
+	SpriteFrame(0, 0, 6, 8, 351, 577)
+	SpriteFrame(0, 0, 6, 8, 330, 586)
+	SpriteFrame(0, 0, 6, 8, 337, 586)
+	SpriteFrame(0, 0, 6, 8, 344, 586)
+	SpriteFrame(0, 0, 6, 8, 351, 586)
+	SpriteFrame(0, 0, 6, 8, 330, 595)
+	SpriteFrame(0, 0, 6, 8, 337, 595)
+	SpriteFrame(-34, -45, 68, 90, 1, 609)
+	SpriteFrame(-32, 15, 64, 16, 70, 577)
+	SpriteFrame(-32, 15, 64, 16, 135, 577)
+	SpriteFrame(-32, 15, 64, 16, 200, 577)
+	SpriteFrame(-32, 15, 64, 16, 265, 577)
+	SpriteFrame(-32, 15, 64, 16, 70, 593)
+	SpriteFrame(-32, 15, 64, 16, 135, 593)
+	SpriteFrame(-32, 15, 64, 16, 200, 593)
+	SpriteFrame(-32, 15, 64, 16, 265, 593)
+	SpriteFrame(-32, 31, 64, 13, 70, 638)
+	SpriteFrame(-32, 31, 64, 13, 70, 652)
+	SpriteFrame(-35, -46, 70, 92, 441, 860)
+	SpriteFrame(-29, -22, 56, 21, 223, 679)
+	SpriteFrame(20, 16, 8, 13, 330, 604)
+	foreach (TypeName[Round Icon], arrayPos0, ALL_ENTITIES)
+		object[arrayPos0].frame = object[arrayPos0].propertyValue
+		object[arrayPos0].frame += 11
+		object[arrayPos0].rotation = object[arrayPos0].propertyValue
+		object[arrayPos0].rotation <<= 8
+		if object[arrayPos0].propertyValue > 3
+			object[arrayPos0].rotation += 256
+		end if
+	next
+	scene3D.vertexCount = 4
+	scene3D.faceCount = 1
+	faceBuffer[0].a = 0
+	faceBuffer[0].b = 1
+	faceBuffer[0].c = 2
+	faceBuffer[0].d = 3
+	faceBuffer[0].flag = 1
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

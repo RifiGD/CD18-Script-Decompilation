@@ -1,0 +1,199 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Ice Block Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 49 : TYPE_ICEBLOCK
+
+// Function declarations
+reserve function IceBlock_Function87
+
+
+public function IceBlock_Function87
+	CreateTempObject(TypeName[Ice Block], 1, object.xpos, object.ypos)
+	object[tempObjectPos].drawOrder = 4
+	object[tempObjectPos].xpos -= 1114112
+	object[tempObjectPos].ypos -= 851968
+	object[tempObjectPos].xvel = -65536
+	object[tempObjectPos].yvel = -65536
+	object[tempObjectPos].direction = 0
+	CreateTempObject(TypeName[Ice Block], 1, object.xpos, object.ypos)
+	object[tempObjectPos].drawOrder = 4
+	object[tempObjectPos].xpos += 1114112
+	object[tempObjectPos].ypos -= 851968
+	object[tempObjectPos].xvel = 65536
+	object[tempObjectPos].yvel = -65536
+	object[tempObjectPos].direction = 1
+	CreateTempObject(TypeName[Ice Block], 1, object.xpos, object.ypos)
+	object[tempObjectPos].drawOrder = 4
+	object[tempObjectPos].xpos -= 1114112
+	object[tempObjectPos].ypos += 851968
+	object[tempObjectPos].xvel = -65536
+	object[tempObjectPos].yvel = 65536
+	object[tempObjectPos].direction = 2
+	CreateTempObject(TypeName[Ice Block], 1, object.xpos, object.ypos)
+	object[tempObjectPos].drawOrder = 4
+	object[tempObjectPos].xpos += 1114112
+	object[tempObjectPos].ypos += 851968
+	object[tempObjectPos].xvel = 65536
+	object[tempObjectPos].yvel = 65536
+	object[tempObjectPos].direction = 3
+	CreateTempObject(TypeName[Ice Block], 3, object.xpos, object.ypos)
+	object[tempObjectPos].drawOrder = 4
+	object[tempObjectPos].direction = 0
+	CreateTempObject(TypeName[Ice Block], 2, object.xpos, object.ypos)
+	object[tempObjectPos].drawOrder = 4
+	object[tempObjectPos].ypos -= 1114112
+	object[tempObjectPos].yvel = -65536
+	object[tempObjectPos].direction = 1
+	CreateTempObject(TypeName[Ice Block], 2, object.xpos, object.ypos)
+	object[tempObjectPos].drawOrder = 4
+	object[tempObjectPos].ypos += 1114112
+	object[tempObjectPos].yvel = 65536
+	object[tempObjectPos].direction = 3
+end function
+
+
+event ObjectUpdate
+	switch object.propertyValue
+	case 0
+		if object.state == 0
+			object.ypos += object.yvel
+			object.yvel += object[0].value24
+			if object.yvel > 1310720
+				object.yvel = 1310720
+			end if
+			ObjectTileCollision(0, 0, 24, 0)
+			if checkResult == 1
+				object.state = 1
+				object.yvel = 0
+				PlaySfx(SfxName[Glass Smash], 0)
+			end if
+			object[0].xpos = object.xpos
+			object[0].ypos = object.ypos
+		else
+			if object.value0 < 16
+				object.value0++
+				if object[0].type == TypeName[Player Object]
+					if object[0].jumpPress == 1
+						CallFunction(IceBlock_Function87)
+						object.type = TypeName[Blank Object]
+						arrayPos1 = stage.entityPos
+						stage.entityPos = 0
+						CallFunction(Player_Action_Jump)
+						stage.entityPos = arrayPos1
+						object[0].visible = 1
+						object[0].interaction = 1
+					end if
+				end if
+			else
+				CallFunction(IceBlock_Function87)
+				object.type = TypeName[Blank Object]
+				object[0].state = 13
+				CallFunction(Player_Hit)
+				object[0].visible = 1
+				object[0].interaction = 1
+			end if
+		end if
+		break
+	case 1
+		if object.value0 < 10
+			object.value0++
+			object.xpos += object.xvel
+			object.ypos += object.yvel
+		else
+			object.type = TypeName[Blank Object]
+			CreateTempObject(TypeName[Ice Block], 4, object.xpos, object.ypos)
+			object[tempObjectPos].drawOrder = 4
+			object[tempObjectPos].xvel = 0
+			object[tempObjectPos].yvel = -65536
+			CreateTempObject(TypeName[Ice Block], 4, object.xpos, object.ypos)
+			object[tempObjectPos].drawOrder = 4
+			object[tempObjectPos].xvel = -65536
+			object[tempObjectPos].yvel = 0
+			CreateTempObject(TypeName[Ice Block], 4, object.xpos, object.ypos)
+			object[tempObjectPos].drawOrder = 4
+			object[tempObjectPos].xvel = 65536
+			object[tempObjectPos].yvel = 0
+			CreateTempObject(TypeName[Ice Block], 4, object.xpos, object.ypos)
+			object[tempObjectPos].drawOrder = 4
+			object[tempObjectPos].xvel = 0
+			object[tempObjectPos].yvel = 65536
+		end if
+		break
+	case 2
+		if object.value0 < 16
+			object.value0++
+			object.xpos += object.xvel
+			object.ypos += object.yvel
+		else
+			object.type = TypeName[Blank Object]
+			CreateTempObject(TypeName[Ice Block], 4, object.xpos, object.ypos)
+			object[tempObjectPos].drawOrder = 4
+			object[tempObjectPos].xvel = 0
+			object[tempObjectPos].yvel = -65536
+			CreateTempObject(TypeName[Ice Block], 4, object.xpos, object.ypos)
+			object[tempObjectPos].drawOrder = 4
+			object[tempObjectPos].xvel = -65536
+			object[tempObjectPos].yvel = 65536
+			CreateTempObject(TypeName[Ice Block], 4, object.xpos, object.ypos)
+			object[tempObjectPos].drawOrder = 4
+			object[tempObjectPos].xvel = 65536
+			object[tempObjectPos].yvel = 65536
+		end if
+		break
+	case 3
+		if object.value0 < 1
+			object.value0++
+		else
+			object.type = TypeName[Blank Object]
+		end if
+		break
+	case 4
+		if object.value0 < 12
+			object.value0++
+			object.xpos += object.xvel
+			object.ypos += object.yvel
+		else
+			object.type = TypeName[Blank Object]
+		end if
+		break
+	end switch
+end event
+
+
+event ObjectDraw
+	DrawSpriteFX(object.propertyValue, FX_FLIP, object.xpos, object.ypos)
+end event
+
+
+event ObjectStartup
+	if stage.playerListPos == 0
+		LoadSpriteSheet("R6/Objects.gif")
+		SpriteFrame(-24, -24, 48, 48, 34, 18)
+		SpriteFrame(-8, -12, 16, 24, 206, 1)
+		SpriteFrame(-8, -8, 16, 16, 66, 1)
+		SpriteFrame(-8, -8, 16, 16, 66, 1)
+		SpriteFrame(-4, -4, 8, 8, 34, 67)
+	else
+		LoadSpriteSheet("R6/Objects3.gif")
+		SpriteFrame(-24, -24, 48, 48, 1, 101)
+		SpriteFrame(-8, -12, 16, 24, 50, 86)
+		SpriteFrame(-8, -8, 16, 16, 50, 111)
+		SpriteFrame(-8, -8, 16, 16, 50, 111)
+		SpriteFrame(-4, -4, 8, 8, 50, 128)
+	end if
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

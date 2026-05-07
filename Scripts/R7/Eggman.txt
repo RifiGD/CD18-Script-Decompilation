@@ -1,0 +1,562 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Eggman Object
+// Script Author: Christian Whitehead
+// Unpacked by RifiGD's UnScriptR
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 53 : TYPE_EGGMAN
+
+// Function declarations
+reserve function Eggman_Function85
+
+
+public function Eggman_Function85
+	object.ypos -= 2097152
+	ObjectTileGrip(0, 6, 176, 0)
+	if checkResult == 0
+		object.ypos += 1048576
+		ObjectTileGrip(0, 6, 176, 0)
+		if checkResult == 0
+			object.ypos += 1048576
+			ObjectTileGrip(0, 6, 176, 0)
+			if checkResult == 0
+				object.ypos += 1048576
+			end if
+		end if
+	end if
+end function
+
+
+event ObjectUpdate
+	switch object.state
+	case 0
+		stage.curXBoundary2 = object.ixpos
+		stage.curXBoundary2 -= 64
+		temp0 = stage.curXBoundary2
+		temp0 -= screen.xsize
+		stage.newXBoundary1 = temp0
+		BoxCollisionTest(C_TOUCH, object.entityPos, -256, -256, 0, 256, 0, C_BOX, C_BOX, C_BOX, C_BOX)
+		if checkResult == 1
+			CreateTempObject(TypeName[Fade Music], 0, object.xpos, object.ypos)
+			object.direction = 1
+			object.priority = 1
+			object.state++
+		end if
+		break
+	case 1
+		if object.value0 < 120
+			object.value0++
+		else
+			object.value0 = 0
+			object.animation = 1
+			object.state++
+		end if
+		break
+	case 2
+		if object.value0 < 140
+			object.xpos -= 393216
+			object.value0++
+		else
+			object.value0 = 0
+			object.direction = 0
+			object.state++
+		end if
+		break
+	case 3
+		if object.value0 < 160
+			object.xpos += 393216
+			object.value0++
+		else
+			object.value0 = 0
+			object.direction = 1
+			object.state++
+		end if
+		break
+	case 4
+		if object.value0 < 47
+			object.xpos -= 393216
+			object.value0++
+		else
+			object.value0 = 0
+			object.animation = 0
+			object.state++
+		end if
+		break
+	case 5
+		if object.value0 < 94
+			object.value0++
+			if object.value0 == 30
+				object[+1].state = 1
+				object[+1].animation = 2
+				object[+1].value0 = 0
+			end if
+			if object.value0 == 90
+				object.value2 = 1
+			end if
+		else
+			object.value0 = 0
+			object.animation = 1
+			object.value5 = -393216
+			object.state++
+		end if
+		break
+	case 6
+		object.xpos -= 131072
+		if object.value0 < 6
+			object.value0++
+		else
+			object.value0 = 0
+			object.value2 = 0
+			object.state++
+		end if
+		break
+	case 7
+		object.xpos -= 131072
+		if object.value0 < 30
+			object.value0++
+		else
+			object.value0 = 0
+			object.value2 = 1
+			object.state++
+		end if
+		break
+	case 8
+		object.xpos -= 131072
+		if object.value0 < 10
+			object.value0++
+		else
+			object.value0 = 0
+			object.value2 = 0
+			object.state++
+		end if
+		break
+	case 9
+		object.xpos -= 131072
+		if object.value0 < 30
+			object.value0++
+		else
+			object.value0 = 0
+			object.value2 = 1
+			object.state++
+		end if
+		break
+	case 10
+		object.xpos -= 131072
+		if object.value0 < 10
+			object.value0++
+		else
+			object.value0 = 0
+			object.value2 = 0
+			object.state++
+		end if
+		CallFunction(Eggman_Function85)
+		break
+	case 11
+		object.xpos -= 131072
+		if object.value0 < 120
+			object.value0++
+		else
+			if object[9].propertyValue == 2
+				if options.soundtrack == 0
+					SetMusicTrack("JP/R7D.ogg", 0, 1)
+				else
+					SetMusicTrack("US/R7D.ogg", 0, 92324)
+				end if
+			end if
+			CreateTempObject(TypeName[Fade Music], 2, object.xpos, object.ypos)
+			object[-2].state = 1
+			object[-1].state = 3
+			object[-1].value0 = 4194304
+			object[-1].ypos -= 4194304
+			object.value0 = 0
+			object.direction = 0
+			object.value2 = 1
+			object.value5 = 393216
+			object.xvel = 131072
+			object.state++
+		end if
+		CallFunction(Eggman_Function85)
+		break
+	case 12
+		object.xpos += object.xvel
+		temp0 = object.ixpos
+		temp0 -= 16
+		if stage.curXBoundary2 < 16352
+			temp1 = object[0].xvel
+			temp1 >>= 16
+			stage.curXBoundary2 += 6
+			stage.curXBoundary2 += temp1
+		end if
+		if stage.curXBoundary1 < temp0
+			stage.curXBoundary1 = temp0
+		end if
+		if object.value0 < 360
+			object.value0++
+		else
+			object.value0 = 0
+			stage.curXBoundary2 = object[-1].ixpos
+			stage.curXBoundary2 += 112
+			object.state++
+		end if
+		CallFunction(Eggman_Function85)
+		break
+	case 13
+		temp0 = object.xvel
+		object.value6++
+		object.value6 &= 16383
+		temp1 = object.value6
+		temp1 >>= 4
+		object.xvel += temp1
+		if object.xvel > 327680
+			object.xvel = 327680
+		end if
+		temp1 = screen.xoffset
+		temp1 <<= 16
+		temp1 -= object.xpos
+		if temp1 > 0
+			temp1 >>= 7
+			if temp1 > 262144
+				temp1 = 262144
+			end if
+			temp0 += temp1
+		end if
+		if temp0 > 327680
+			temp0 = 327680
+		end if
+		if temp0 > 196608
+			temp0 -= 196608
+			object.xpos += 196608
+			CallFunction(Eggman_Function85)
+			object.xpos += temp0
+			CallFunction(Eggman_Function85)
+		else
+			object.xpos += temp0
+			CallFunction(Eggman_Function85)
+		end if
+		temp0 = object.ixpos
+		temp0 -= 16
+		if stage.curXBoundary1 < temp0
+			stage.curXBoundary1 = temp0
+			if stage.curXBoundary1 > 15840
+				stage.curXBoundary1 = 15840
+			end if
+		end if
+		temp0 = object[-1].xpos
+		temp0 -= 2228224
+		if object.xpos > temp0
+			object.xpos = temp0
+			object.animation = 0
+			object.xvel = 0
+			object.state++
+		end if
+		break
+	case 14
+		if object[0].animation != ANI_DYING
+			if object.value0 < 50
+				object.value0++
+			else
+				object.value0 = 0
+				object.value2 = 0
+				object.state++
+			end if
+		end if
+		break
+	case 15
+		if object.value0 < 20
+			object.value0++
+		else
+			object.value0 = 0
+			object.value2 = 1
+			object.state++
+		end if
+		break
+	case 16
+		if object.value0 < 20
+			object.value0++
+		else
+			object.value0 = 0
+			object.value2 = 0
+			object.state++
+		end if
+		break
+	case 17
+		if object.value0 < 20
+			object.value0++
+		else
+			object.value0 = 0
+			object.value2 = 1
+			object.state++
+		end if
+		break
+	case 18
+		if object.value0 < 20
+			object.value0++
+		else
+			object.value0 = 0
+			object.value2 = 0
+			object.state++
+		end if
+		break
+	case 19
+		if object.value0 < 60
+			object.value0++
+		else
+			object.value0 = 0
+			object.state++
+		end if
+		break
+	case 20
+		object.ypos += 131072
+		if object.value0 < 42
+			object.value0++
+		else
+			object.value0 = 0
+			object.value2 = 0
+			object.state++
+		end if
+		break
+	case 21
+		if object.value0 < 60
+			object.value0++
+		else
+			player.score += 1000
+			object.value0 = 0
+			object.animation = 1
+			object.state++
+		end if
+		break
+	case 22
+		object.xpos += 393216
+		if object.outOfBounds == 1
+			object.type = TypeName[Blank Object]
+			object.priority = 0
+			if object[9].propertyValue == 2
+				if options.soundtrack == 0
+					SetMusicTrack("JP/R7C.ogg", 0, 103060)
+				else
+					SetMusicTrack("US/R7C.ogg", 0, 136670)
+				end if
+				CreateTempObject(TypeName[Fade Music], 1, object.xpos, object.ypos)
+			end if
+			stage.newXBoundary2 = 16352
+		end if
+		break
+	end switch
+	if object.value2 == 1
+		if object.value3 == 0
+			CreateTempObject(TypeName[Explosion], 0, object.xpos, object.ypos)
+			object[tempObjectPos].xpos += object.value5
+			object[tempObjectPos].ypos += 11534336
+			arrayPos0 = object.value4
+			object.value4 = object[tempObjectPos].entityPos
+			object.value3 = 8
+			if object[arrayPos0].drawOrder == 3
+				object[tempObjectPos].drawOrder = 4
+				Rand(temp0, 4)
+				CreateTempObject(TypeName[Debris], temp0, object.xpos, object.ypos)
+				object[tempObjectPos].xpos += object.value5
+				object[tempObjectPos].ypos += 11534336
+				Rand(object[tempObjectPos].xvel, 6)
+				object[tempObjectPos].xvel <<= 16
+				object[tempObjectPos].xvel -= 163840
+				object[tempObjectPos].xvel += object.xvel
+				Rand(object[tempObjectPos].yvel, 3)
+				object[tempObjectPos].yvel += 2
+				object[tempObjectPos].yvel <<= 16
+				FlipSign(object[tempObjectPos].yvel)
+			end if
+		else
+			arrayPos0 = object.value4
+			object[arrayPos0].xpos = object.xpos
+			object[arrayPos0].xpos += object.value5
+			object[arrayPos0].ypos = object.ypos
+			object[arrayPos0].ypos += 11534336
+			object.value3--
+		end if
+	else
+		if object.value3 > 0
+			arrayPos0 = object.value4
+			object[arrayPos0].xpos = object.xpos
+			object[arrayPos0].xpos += object.value5
+			object[arrayPos0].ypos = object.ypos
+			object[arrayPos0].ypos += 11534336
+			object.value3--
+		end if
+	end if
+	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+		if object.value2 == 1
+			if object.state < 12
+				BoxCollisionTest(C_TOUCH, object.entityPos, -12, 48, 12, 176, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+				if checkResult == 1
+					CallFunction(Player_Hit)
+				end if
+			else
+				if object[currentPlayer].xpos < object.xpos
+					object[currentPlayer].xpos = object.xpos
+					if player.rcollisionFlag == 1
+						CallFunction(Player_Kill)
+					end if
+				end if
+				player.rcollisionFlag = 0
+				if object.state < 14
+					BoxCollisionTest(C_TOUCH, object.entityPos, -12, 48, 12, 176, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+				else
+					BoxCollisionTest(C_TOUCH, object.entityPos, -64, -256, 16, 176, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+				end if
+				if checkResult == 1
+					CallFunction(Player_Kill)
+				end if
+			end if
+		end if
+		if object[currentPlayer].ypos < object.ypos
+			if object[currentPlayer].xpos < 234881024
+				if object[currentPlayer].state == Player_State_Fly
+					if object[currentPlayer].value1 < 470
+						object[currentPlayer].value1 = 470
+					end if
+				end if
+			end if
+			if object[currentPlayer].xpos > 948961280
+				if object[currentPlayer].state == Player_State_Fly
+					if object[currentPlayer].value1 < 470
+						object[currentPlayer].value1 = 470
+					end if
+				end if
+			end if
+		end if
+	next
+end event
+
+
+event ObjectDraw
+	switch object.animation
+	case 0
+		DrawSpriteFX(0, FX_FLIP, object.xpos, object.ypos)
+		temp0 = object.animationTimer
+		temp0 /= 6
+		if temp0 == 1
+			DrawSpriteFX(1, FX_FLIP, object.xpos, object.ypos)
+			DrawSpriteFX(2, FX_FLIP, object.xpos, object.ypos)
+			DrawSpriteFX(3, FX_FLIP, object.xpos, object.ypos)
+		end if
+		if object.value2 == 1
+			temp0 = object.animationTimer
+			temp0 &= 3
+			temp0 >>= 1
+			temp0 += 12
+			temp1 = object.xpos
+			temp2 = object.ypos
+			temp2 += 3145728
+			DrawSpriteXY(temp0, temp1, temp2)
+			if object.direction == 0
+				temp2 += 2097152
+				temp1 += 131072
+				DrawSpriteXY(temp0, temp1, temp2)
+				temp2 += 2097152
+				temp1 += 131072
+				DrawSpriteXY(temp0, temp1, temp2)
+				temp2 += 2097152
+				temp1 += 131072
+				DrawSpriteXY(temp0, temp1, temp2)
+			else
+				temp2 += 2097152
+				temp1 -= 131072
+				DrawSpriteXY(temp0, temp1, temp2)
+				temp2 += 2097152
+				temp1 -= 131072
+				DrawSpriteXY(temp0, temp1, temp2)
+				temp2 += 2097152
+				temp1 -= 131072
+				DrawSpriteXY(temp0, temp1, temp2)
+			end if
+		end if
+		object.animationTimer++
+		object.animationTimer %= 12
+		break
+	case 1
+		temp0 = object.animationTimer
+		temp0 &= 1
+		if temp0 == 1
+			object.frame++
+			object.frame &= 3
+		end if
+		temp0 = object.frame
+		temp0 += 4
+		DrawSpriteFX(temp0, FX_FLIP, object.xpos, object.ypos)
+		temp0 += 4
+		DrawSpriteFX(temp0, FX_FLIP, object.xpos, object.ypos)
+		temp0 = object.animationTimer
+		temp0 /= 6
+		DrawSpriteFX(0, FX_FLIP, object.xpos, object.ypos)
+		if temp0 == 1
+			DrawSpriteFX(1, FX_FLIP, object.xpos, object.ypos)
+			DrawSpriteFX(2, FX_FLIP, object.xpos, object.ypos)
+			DrawSpriteFX(3, FX_FLIP, object.xpos, object.ypos)
+		end if
+		if object.value2 == 1
+			temp0 = object.animationTimer
+			temp0 &= 3
+			temp0 >>= 1
+			temp0 += 12
+			temp1 = object.xpos
+			temp2 = object.ypos
+			temp2 += 3145728
+			DrawSpriteXY(temp0, temp1, temp2)
+			if object.direction == 0
+				temp2 += 2097152
+				temp1 += 131072
+				DrawSpriteXY(temp0, temp1, temp2)
+				temp2 += 2097152
+				temp1 += 131072
+				DrawSpriteXY(temp0, temp1, temp2)
+				temp2 += 2097152
+				temp1 += 131072
+				DrawSpriteXY(temp0, temp1, temp2)
+			else
+				temp2 += 2097152
+				temp1 -= 131072
+				DrawSpriteXY(temp0, temp1, temp2)
+				temp2 += 2097152
+				temp1 -= 131072
+				DrawSpriteXY(temp0, temp1, temp2)
+				temp2 += 2097152
+				temp1 -= 131072
+				DrawSpriteXY(temp0, temp1, temp2)
+			end if
+		end if
+		object.animationTimer++
+		object.animationTimer %= 12
+		break
+	end switch
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R7/Objects2.gif")
+	SpriteFrame(-40, -24, 72, 72, 91, 1)
+	SpriteFrame(-24, -9, 24, 16, 164, 1)
+	SpriteFrame(22, 27, 8, 8, 75, 99)
+	SpriteFrame(-32, 8, 16, 24, 176, 142)
+	SpriteFrame(-68, -10, 40, 16, 66, 133)
+	SpriteFrame(-60, -10, 32, 16, 66, 116)
+	SpriteFrame(-68, -10, 40, 16, 124, 150)
+	SpriteFrame(-60, -10, 32, 16, 66, 150)
+	SpriteFrame(-63, 30, 32, 16, 66, 150)
+	SpriteFrame(-55, 30, 24, 16, 99, 150)
+	SpriteFrame(-63, 30, 32, 16, 66, 116)
+	SpriteFrame(-55, 30, 24, 16, 99, 116)
+	SpriteFrame(-8, 0, 16, 32, 91, 74)
+	SpriteFrame(-8, 0, 16, 32, 108, 74)
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

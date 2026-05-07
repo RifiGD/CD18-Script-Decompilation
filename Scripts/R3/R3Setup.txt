@@ -1,0 +1,477 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: R3 Setup Object
+// Script Author: Christian Whitehead/Simon Thomley
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+private alias 40 : TYPE_R3SETUP
+
+// Function declarations
+reserve function R3Setup_Function83
+reserve function R3Setup_Function84
+reserve function R3Setup_Function85
+reserve function R3Setup_Function86
+
+// Static Values
+public value R3Setup_value13 = 0;
+
+// Tables
+public table R3Setup_table13
+	57568, 57568, 0, 0, 0
+end table
+
+public table R3Setup_table14
+	0, 0, 14733536, 14733536, 14680288, 14680288, 14680288
+end table
+
+public table R3Setup_table15
+	0, 0, 0, 57568, 57568, 57568, 49248, 49248
+end table
+
+public table R3Setup_table16
+	0, 0, 0, 0, 0, 0, 4194304, 4194304, 6299648, 6299648, 8404992, 8404992, 10510336, 10510336, 12615680, 12615680
+	14721024, 14721024, 14737408, 14737408, 14737408, 14721024, 14721024, 12615680, 12615680, 10510336, 10510336, 8404992, 8404992, 6299648, 6299648, 4194304
+	4194304
+end table
+
+public table R3Setup_table17
+	57344, 8445952, 14737408, 14737536, 14737408, 57344, 57472, 57568, 32992, 8388832, 14680288, 14680288, 8388832, 32992, 57568, 57472
+end table
+
+public table R3Setup_table10
+	14737408, 14737408, 14737408, 14737408, 0, 0, 0
+end table
+
+public table R3Setup_table11
+	14737408, 14737408, 0, 0, 0, 14737408, 14737408, 0, 0, 0
+	14737408, 14737408, 0, 0, 0, 14737408, 14737408, 0, 0, 0
+	14737408, 14737408, 0, 0, 0, 14737408, 14737408, 0, 0, 0
+	14737408, 14737408, 0, 0, 0, 0, 0, 0, 0, 0, 0
+end table
+
+public table R3Setup_table12
+	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+	0, 0, 0, 0, 0, 0, 0, 0, 14680288, 14680288, 14680288, 0, 0, 0, 14680288, 14680288
+	14680288, 0, 0, 0, 14680288, 14680288, 14680288, 0, 0, 0, 14680288, 14680288, 14680288, 0, 0, 0
+	14721248, 14721248, 14680288, 14680288, 14680288, 14721248, 14721248, 14680288, 14680288, 14680288, 14721248, 14721248, 14680288, 14680288, 14680288
+end table
+
+
+// //Unknown Variables
+// private value value41905 = 7;
+// private value value41906 = 14737408;
+// private value value41907 = 14737408;
+// private value value41908 = 14737408;
+// private value value41909 = 14737408;
+// private value value41910 = 0;
+// private value value41911 = 0;
+// private value value41912 = 0;
+// private value value41913 = 41;
+// private value value41914 = 14737408; 
+// private value value41915 = 14737408;
+// private value value41916 = 0;
+// private value value41917 = 0;
+// private value value41918 = 0;
+// private value value41919 = 14737408;
+// private value value41920 = 14737408;
+// private value value41921 = 0;
+// private value value41922 = 0;
+// private value value41923 = 0;
+// private value value41924 = 14737408;
+// private value value41925 = 14737408;
+// private value value41926 = 0;
+// private value value41927 = 0;
+// private value value41928 = 0;
+// private value value41929 = 14737408;
+// private value value41930 = 14737408;
+// private value value41931 = 0;
+// private value value41932 = 0;
+// private value value41933 = 0;
+// private value value41934 = 14737408;
+// private value value41935 = 14737408;
+// private value value41936 = 0;
+// private value value41937 = 0;
+// private value value41938 = 0;
+// private value value41939 = 14737408;
+// private value value41940 = 14737408;
+// private value value41941 = 0;
+// private value value41942 = 0;
+// private value value41943 = 0;
+// private value value41944 = 14737408;
+// private value value41945 = 14737408;
+// private value value41946 = 0;
+// private value value41947 = 0;
+// private value value41948 = 0;
+// private value value41949 = 0;
+// private value value41950 = 0;
+// private value value41951 = 0;
+// private value value41952 = 0;
+// private value value41953 = 0;
+// private value value41954 = 0;
+// private value value41955 = 63;
+// private value value41956 = 0;
+// private value value41957 = 0;
+// private value value41958 = 0;
+// private value value41959 = 0;
+// private value value41960 = 0;
+// private value value41961 = 0;
+// private value value41962 = 0;
+// private value value41963 = 0;
+// private value value41964 = 0;
+// private value value41965 = 0;
+// private value value41966 = 0;
+// private value value41967 = 0;
+// private value value41968 = 0;
+// private value value41969 = 0;
+// private value value41970 = 0;
+// private value value41971 = 0;
+// private value value41972 = 0;
+// private value value41973 = 0;
+// private value value41974 = 0;
+// private value value41975 = 0;
+// private value value41976 = 0;
+// private value value41977 = 0;
+// private value value41978 = 0;
+// private value value41979 = 0;
+// private value value41980 = 14680288;
+// private value value41981 = 14680288;
+// private value value41982 = 14680288;
+// private value value41983 = 0;
+// private value value41984 = 0;
+// private value value41985 = 0;
+// private value value41986 = 14680288;
+// private value value41987 = 14680288;
+// private value value41988 = 14680288;
+// private value value41989 = 0;
+// private value value41990 = 0;
+// private value value41991 = 0;
+// private value value41992 = 14680288;
+// private value value41993 = 14680288;
+// private value value41994 = 14680288;
+// private value value41995 = 0;
+// private value value41996 = 0;
+// private value value41997 = 0;
+// private value value41998 = 14680288;
+// private value value41999 = 14680288;
+// private value value42000 = 14680288;
+// private value value42001 = 0;
+// private value value42002 = 0;
+// private value value42003 = 0;
+// private value value42004 = 14721248;
+// private value value42005 = 14721248;
+// private value value42006 = 14680288;
+// private value value42007 = 14680288;
+// private value value42008 = 14680288;
+// private value value42009 = 14721248;
+// private value value42010 = 14721248;
+// private value value42011 = 14680288;
+// private value value42012 = 14680288;
+// private value value42013 = 14680288;
+// private value value42014 = 14721248;
+// private value value42015 = 14721248;
+// private value value42016 = 14680288;
+// private value value42017 = 14680288;
+// private value value42018 = 14680288;
+
+public function R3Setup_Function83 // Present
+	GetTableValue(temp0, object.value5, R3Setup_table10)
+	object.value5++
+	object.value5 %= 7
+	SetPaletteEntry(0, 175, temp0)
+	GetTableValue(temp0, object.value6, R3Setup_table11)
+	object.value6++
+	object.value6 %= 41
+	SetPaletteEntry(0, 188, temp0)
+	GetTableValue(temp0, object.value7, R3Setup_table12)
+	object.value7++
+	object.value7 %= 63
+	SetPaletteEntry(0, 189, temp0)
+	GetTableValue(temp0, object.value8, R3Setup_table13)
+	object.value8++
+	object.value8 %= 5
+	SetPaletteEntry(0, 191, temp0)
+end function
+
+
+public function R3Setup_Function84 // Past, handled in ObjectUpdate like v3
+end function
+
+
+public function R3Setup_Function85 // Good Future
+	GetTableValue(temp0, object.value5, R3Setup_table14)
+	object.value5++
+	object.value5 %= 7
+	SetPaletteEntry(0, 172, temp0)
+end function
+
+
+public function R3Setup_Function86 // Bad Future
+	GetTableValue(temp0, object.value5, R3Setup_table15)
+	object.value5++
+	object.value5 &= 7
+	SetPaletteEntry(0, 170, temp0)
+	object.value9++
+	if object.value9 == 5
+		object.value9 = 0
+		GetTableValue(temp0, object.value6, R3Setup_table16)
+		object.value6++
+		object.value6 %= 33
+		SetPaletteEntry(0, 189, temp0)
+	end if
+	object.value10++
+	if object.value10 == 10
+		object.value10 = 0
+		GetTableValue(temp0, object.value7, R3Setup_table17)
+		object.value7++
+		object.value7 &= 15
+		SetPaletteEntry(0, 187, temp0)
+	end if
+end function
+
+
+event ObjectUpdate
+	CallFunction(object.value4)
+	if object.value3 == 0
+		if object.value2 < 3145728
+			object.value2 += 65536
+		else
+			object.value3 = 1
+		end if
+	else
+		if object.value2 > -3145728
+			object.value2 -= 65536
+		else
+			object.value3 = 0
+		end if
+	end if
+	if object[9].propertyValue != 1
+		R3Setup_value13++
+		R3Setup_value13 %= 20
+	end if
+	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+		temp2 = object[currentPlayer].xpos
+		temp2 >>= 16
+		temp4 = temp2
+		temp2 -= 8
+		temp4 += 8
+		temp3 = object[currentPlayer].ypos
+		temp3 >>= 16
+		if object[currentPlayer].yvel >= 0
+			temp3 += object[currentPlayer].collisionBottom
+			temp3 -= 2
+		else
+			temp3 += object[currentPlayer].collisionTop
+			temp3 += 2
+		end if
+		temp5 = temp3
+		temp7 = 0
+		Get16x16TileInfo(temp0, temp2, temp3, 6)
+		switch temp0
+		case 1
+			temp7 = 1
+			break
+		case 3
+			temp7 = 3
+			Get16x16TileInfo(temp6, temp2, temp3, 1)
+			break
+		case 5
+			temp7 = 2
+			break
+		end switch
+		Get16x16TileInfo(temp0, temp4, temp5, 6)
+		switch temp0
+		case 1
+			temp7 = 1
+			break
+		case 3
+			temp7 = 3
+			Get16x16TileInfo(temp6, temp4, temp5, 1)
+			break
+		case 5
+			temp7 = 2
+			break
+		end switch
+		switch temp7
+		case 1
+			if object[currentPlayer].yvel >= 0
+				object[currentPlayer].gravity = 1
+				PlaySfx(SfxName[Bumper 2], 0)
+				if object[currentPlayer].state == Player_State_Fly
+					object[currentPlayer].yvel = -262144
+				else
+					object[currentPlayer].yvel = -458752
+				end if
+				if object[currentPlayer].state == Player_State_Hurt
+					object[currentPlayer].state = Player_State_Air
+					object[currentPlayer].value1 = 0
+				end if
+			else
+				if object[currentPlayer].gravity == 1
+					object[currentPlayer].yvel = 262144
+					PlaySfx(SfxName[Bumper 2], 0)
+				end if
+			end if
+			break
+		case 2
+			if object[currentPlayer].gravity == 1
+				PlaySfx(SfxName[Mini Bumper], 0)
+				if object[currentPlayer].yvel >= 0
+					object[currentPlayer].yvel = -262144
+				else
+					object[currentPlayer].yvel = 262144
+				end if
+			end if
+			break
+		case 3
+			if object[currentPlayer].gravity == 1
+				PlaySfx(SfxName[Bumper 2], 0)
+				if object[currentPlayer].yvel >= 0
+					if object[currentPlayer].state == Player_State_Fly
+						object[currentPlayer].yvel = -262144
+					else
+						object[currentPlayer].yvel = -458752
+					end if
+				else
+					object[currentPlayer].yvel = 262144
+				end if
+				if temp6 == 0
+					if object[currentPlayer].xvel > 0
+						FlipSign(object[currentPlayer].xvel)
+						object[currentPlayer].xvel *= 5
+						object[currentPlayer].xvel >>= 2
+						if object[currentPlayer].xvel > -131072
+							object[currentPlayer].xvel = -131072
+						end if
+					else
+						if object[currentPlayer].xvel > -131072
+							object[currentPlayer].xvel = -131072
+						end if
+					end if
+				else
+					if object[currentPlayer].xvel < 0
+						FlipSign(object[currentPlayer].xvel)
+						object[currentPlayer].xvel *= 5
+						object[currentPlayer].xvel >>= 2
+						if object[currentPlayer].xvel < 131072
+							object[currentPlayer].xvel = 131072
+						end if
+					else
+						if object[currentPlayer].xvel < 131072
+							object[currentPlayer].xvel = 131072
+						end if
+					end if
+				end if
+				object[currentPlayer].speed = object[currentPlayer].xvel
+			end if
+			break
+		end switch
+		temp3 = object[currentPlayer].ypos
+		temp3 >>= 16
+		temp5 = temp3
+		temp3 -= 6
+		temp5 += 6
+		temp2 = object[currentPlayer].xpos
+		temp2 >>= 16
+		if object[currentPlayer].xvel > 0
+			temp2 += 8
+		else
+			temp2 -= 8
+		end if
+		temp4 = temp2
+		temp7 = 0
+		Get16x16TileInfo(temp0, temp2, temp3, 6)
+		switch temp0
+		case 3
+			temp7 = 1
+			break
+		case 5
+			temp7 = 2
+			break
+		case 7
+			temp7 = 1
+			break
+		end switch
+		Get16x16TileInfo(temp0, temp4, temp5, 6)
+		switch temp0
+		case 3
+			temp7 = 1
+			break
+		case 5
+			temp7 = 2
+			break
+		case 7
+			temp7 = 1
+			break
+		end switch
+		switch temp7
+		case 1
+			if object[currentPlayer].xvel > 0
+				object[currentPlayer].xvel = -327680
+			else
+				object[currentPlayer].xvel = 327680
+			end if
+			object[currentPlayer].speed = object[currentPlayer].xvel
+			PlaySfx(SfxName[Bumper 2], 0)
+			break
+		case 2
+			if object[currentPlayer].xvel > 0
+				object[currentPlayer].xvel = -262144
+			else
+				object[currentPlayer].xvel = 262144
+			end if
+			object[currentPlayer].speed = object[currentPlayer].xvel
+			PlaySfx(SfxName[Mini Bumper], 0)
+			break
+		end switch
+	next
+end event
+
+
+event ObjectDraw
+	object.value0++
+	if object.value0 > 3
+		tileLayer[0].deformationOffsetW++
+		tileLayer[1].deformationOffset++
+		object.value0 = 0
+	end if
+end event
+
+
+event ObjectStartup
+	object[29].type = TypeName[R3 Setup]
+	object[29].priority = 1
+	object[29].drawOrder = 0
+	switch object[9].propertyValue
+	case 0
+		object[29].value4 = R3Setup_Function83
+		break
+	case 1
+		object[29].value4 = R3Setup_Function84
+		break
+	case 2
+		object[29].value4 = R3Setup_Function85
+		break
+	case 3
+		object[29].value4 = R3Setup_Function86
+		break
+	end switch
+	SetLayerDeformation(2, 128, 6, 0, 0, 0)
+	SetLayerDeformation(1, 64, 4, 0, 0, 0)
+	stage.waterLevel = 1472
+	if object[9].propertyValue == 1
+		R3Setup_value13 = 1
+	else
+		R3Setup_value13 = 0
+	end if
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

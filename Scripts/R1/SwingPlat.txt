@@ -1,0 +1,113 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Swing Platform Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 67 : TYPE_SWINGPLATFORM
+
+// Function declarations
+reserve function SwingPlatform_DebugDraw
+reserve function SwingPlatform_DebugSpawn
+
+
+public function SwingPlatform_DebugDraw
+	DrawSpriteFX(0, FX_FLIP, object.xpos, object.ypos)
+end function
+
+
+public function SwingPlatform_DebugSpawn
+	CreateTempObject(TypeName[Swing Platform], 4, object.xpos, object.ypos)
+end function
+
+
+event ObjectUpdate
+	object.value5 += 2
+	object.value5 &= 511
+	Sin(object.angle, object.value5)
+	object.angle >>= 2
+	object.angle += 128
+	temp1 = object.propertyValue
+	temp1++
+	temp1 <<= 4
+	Cos(object.value3, object.angle)
+	object.value3 *= temp1
+	object.value3 <<= 7
+	object.value3 += object.xpos
+	object.value3 &= -65536
+	object.value3 -= object.value1
+	Sin(object.value4, object.angle)
+	object.value4 *= temp1
+	object.value4 <<= 7
+	object.value4 += object.ypos
+	object.value4 &= -65536
+	object.value4 -= object.value2
+	temp0 = object.xpos
+	temp1 = object.ypos
+	object.xpos = object.value1
+	object.ypos = object.value2
+	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+		BoxCollisionTest(C_PLATFORM, object.entityPos, -24, -6, 24, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+		if checkResult == 1
+			object[currentPlayer].xpos += object.value3
+			object[currentPlayer].ypos += object.value4
+		end if
+	next
+	object.xpos = temp0
+	object.ypos = temp1
+end event
+
+
+event ObjectDraw
+	DrawSprite(0)
+	temp0 = 0
+	temp1 = 16
+	while temp0 < object.propertyValue
+		Cos(temp2, object.angle)
+		temp2 *= temp1
+		temp2 <<= 7
+		temp2 += object.xpos
+		Sin(temp3, object.angle)
+		temp3 *= temp1
+		temp3 <<= 7
+		temp3 += object.ypos
+		DrawSpriteXY(1, temp2, temp3)
+		temp0++
+		temp1 += 16
+	loop
+	Cos(object.value1, object.angle)
+	object.value1 *= temp1
+	object.value1 <<= 7
+	object.value1 += object.xpos
+	object.value1 &= -65536
+	Sin(object.value2, object.angle)
+	object.value2 *= temp1
+	object.value2 <<= 7
+	object.value2 += object.ypos
+	object.value2 &= -65536
+	DrawSpriteXY(2, object.value1, object.value2)
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R1/Objects2.gif")
+	SpriteFrame(-8, -8, 16, 16, 173, 230)
+	SpriteFrame(-8, -8, 16, 16, 190, 230)
+	SpriteFrame(-24, -8, 48, 16, 207, 230)
+	SetTableValue(TypeName[Swing Platform], DebugMode_ObjCount, DebugMode_TypesTable)
+	SetTableValue(SwingPlatform_DebugDraw, DebugMode_ObjCount, DebugMode_DrawTable)
+	SetTableValue(SwingPlatform_DebugSpawn, DebugMode_ObjCount, DebugMode_SpawnTable)
+	DebugMode_ObjCount++
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

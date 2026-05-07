@@ -1,0 +1,166 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Boss Curtain Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 64 : TYPE_BOSSCURTAIN
+
+
+
+event ObjectUpdate
+	switch object.state
+	case 0
+		if object[0].xpos > object.xpos
+			if object[9].propertyValue > 1
+				if options.soundtrack == 0
+					SetMusicTrack("JP/FinalBoss.ogg", 4, 1)
+				else
+					SetMusicTrack("US/FinalBoss.ogg", 4, 1)
+				end if
+			end if
+			object.state++
+		end if
+		break
+	case 1
+		if object.value0 < 240
+			object.value0++
+			if object.value0 == 140
+				CreateTempObject(TypeName[Fade Music], 0, object.xpos, object.ypos)
+			end if
+		else
+			object.value0 = 0
+			object[19].value1 = 0
+			arrayPos0 = object.entityPos
+			arrayPos0 -= 3
+			object[-3].type = TypeName[Egg Mobile]
+			object[-7].type = TypeName[Boss Wing]
+			object[-7].value7 = arrayPos0
+			object[-6].type = TypeName[Boss Wing]
+			object[-6].value7 = arrayPos0
+			object[-5].type = TypeName[Boss Wing]
+			object[-5].value7 = arrayPos0
+			object[-4].type = TypeName[Boss Wing]
+			object[-4].value7 = arrayPos0
+			object[-2].value0 = 4
+			object[-2].value6 = object.xpos
+			object[-2].value4 = object.xpos
+			object[-2].value4 -= 8126464
+			object[-2].value5 = object.xpos
+			object[-2].value5 += 8126464
+			object[-3].value4 = 4096
+			object[-2].value1 = 113
+			object[-1].value6 = stage.curXBoundary2
+			object.state++
+		end if
+		break
+	case 2
+		if object.alpha > 0
+			object.alpha -= 4
+		end if
+		object.value1 -= 131072
+		object.value2 += 131072
+		temp1 = object.value1
+		temp1 >>= 16
+		temp1 += 7
+		temp3 = object.value2
+		temp3 >>= 16
+		temp3 -= 7
+		temp2 = object.iypos
+		temp2 -= 92
+		temp0 = 0
+		while temp0 < 12
+			Set16x16TileInfo(0, temp1, temp2, 0)
+			temp1 -= 16
+			Set16x16TileInfo(395, temp1, temp2, 0)
+			temp1 += 16
+			Set16x16TileInfo(0, temp3, temp2, 0)
+			temp3 += 16
+			Set16x16TileInfo(395, temp3, temp2, 0)
+			temp3 -= 16
+			temp2 += 16
+			temp0++
+		loop
+		if object.value0 < 120
+			object.value0++
+		else
+			object.value0 = 0
+			object.state++
+			if screen.xsize > 320
+				ResetObjectEntity(object.entityPos, TypeName[Forcefield], 240, object.xpos, object.ypos)
+			else
+				ResetObjectEntity(object.entityPos, TypeName[Blank Object], 0, object.xpos, object.ypos)
+			end if
+		end if
+		break
+	end switch
+	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+		temp0 = object[currentPlayer].collisionRight
+		temp0 <<= 16
+		temp0 += object[currentPlayer].xpos
+		temp1 = stage.curXBoundary2
+		temp1 <<= 16
+		if temp0 > temp1
+			object[currentPlayer].xvel = 0
+			object[currentPlayer].speed = 0
+			object[currentPlayer].xpos = temp1
+			temp0 = object[currentPlayer].collisionRight
+			temp0 <<= 16
+			object[currentPlayer].xpos -= temp0
+		end if
+	next
+end event
+
+
+event ObjectDraw
+	if object.drawOrder == 2
+		DrawRect(0, 0, screen.xsize, screen.ysize, 0, 0, 0, object.alpha)
+		SetDrawListEntityRef(object.entityPos, 3, screen[3].drawListSize)
+		screen[3].drawListSize++
+		object.drawOrder = 3
+	else
+		temp0 = 0
+		while temp0 < 6
+			DrawSpriteXY(temp0, object.value1, object.ypos)
+			DrawSpriteFX(temp0, FX_FLIP, object.value2, object.ypos)
+			temp0++
+		loop
+		object.drawOrder = 2
+	end if
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R8/Objects2.gif")
+	SpriteFrame(-8, -96, 16, 32, 134, 187)
+	SpriteFrame(-8, -64, 16, 32, 134, 187)
+	SpriteFrame(-8, -32, 16, 32, 134, 187)
+	SpriteFrame(-8, 0, 16, 32, 134, 187)
+	SpriteFrame(-8, 32, 16, 32, 134, 187)
+	SpriteFrame(-8, 64, 16, 32, 134, 187)
+	arrayPos0 = 32
+	while arrayPos0 < 1056
+		if object[arrayPos0].type == TypeName[Boss Curtain]
+			object[arrayPos0].direction = 1
+			object[arrayPos0].drawOrder = 2
+			object[arrayPos0].alpha = 224
+			object[arrayPos0].value1 = object[arrayPos0].xpos
+			object[arrayPos0].value1 -= 524288
+			object[arrayPos0].value2 = object[arrayPos0].xpos
+			object[arrayPos0].value2 += 524288
+		end if
+		arrayPos0++
+	loop
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

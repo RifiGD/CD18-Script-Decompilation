@@ -1,0 +1,222 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Broken Monitor Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 12 : TYPE_BROKENMONITOR
+
+//---Monitor Aliases---//
+private alias 0  : MONITOR_BLANK
+private alias 1  : MONITOR_RINGS
+private alias 2  : MONITOR_SHIELD_BLUE
+private alias 3  : MONITOR_INVINCIBILITY
+private alias 4  : MONITOR_SPEEDSHOES
+private alias 5  : MONITOR_1UP_SONIC
+private alias 6  : MONITOR_1UP_TAILS
+private alias 7  : MONITOR_TIME
+private alias 8  : MONITOR_SUPER
+private alias 9  : MONITOR_SHIELD_LIGHTNING
+private alias 10 : MONITOR_SHIELD_FIRE
+private alias 11 : MONITOR_SHIELD_BUBBLE
+private alias 12 : MONITOR_EGGMAN
+private alias 13 : MONITOR_DEBUG_SHIELD
+private alias 14 : MONITOR_DEBUG_TIMESTONES
+
+event ObjectUpdate
+	switch object.state
+	case 0
+		if object.value1 < 0
+			object.value0 += object.value1
+			object.value1 += 6144
+		else
+			object.value1 = 0
+		end if
+		if object.value1 == 0
+			object.state = 1
+			object.inkEffect = 2
+			switch object.propertyValue
+			case MONITOR_RINGS
+				object[0].value0 += 10
+				if ringPan == 0
+					PlaySfx(SfxName[Ring L], 0)
+					SetSfxAttributes(SfxName[Ring L], -1, -100)
+					ringPan = 1
+				else
+					PlaySfx(SfxName[Ring R], 0)
+					SetSfxAttributes(SfxName[Ring R], -1, 100)
+					ringPan = 0
+				end if
+				if object[0].value0 > 999
+					object[0].value0 = 999
+				end if
+				if object[0].value0 >= ringExtraLife
+					if options.gameMode != 2
+						player.lives++
+#platform: USE_ORIGINAL_CODE
+						PlaySfx(SfxName[Jump], 0)
+						PauseMusic()
+#endplatform
+
+#platform: USE_DECOMP
+						if stage.playerListPos == 0
+							PlaySfx(SfxName[1 Up], 0)
+						else
+							PlaySfx(SfxName[Achievement], 0)
+						end if
+#endplatform
+						ResetObjectEntity(25, TypeName[Blank Object], 2, 0, 0)
+						object[25].priority = 1
+					end if
+					ringExtraLife += 100
+					if ringExtraLife > 300
+						ringExtraLife = 1000
+					end if
+					if stage.debugMode == 0
+						if object[0].value0 >= 200
+						end if
+					end if
+				end if
+				break
+			case MONITOR_SHIELD_BLUE
+				PlaySfx(SfxName[Blue Shield], 0)
+				arrayPos0 = playerCount
+				currentPlayer = 0
+				object[currentPlayer].value38 = 1
+				if object[arrayPos0].type != invincibilityType
+					CallFunction(Player_ApplyShield)
+				end if
+				break
+			case MONITOR_INVINCIBILITY
+				arrayPos0 = playerCount
+				currentPlayer = 0
+				ResetObjectEntity(arrayPos0, invincibilityType, 0, object[currentPlayer].xpos, object[currentPlayer].ypos)
+				object[arrayPos0].priority = 1
+				object[currentPlayer].value7 = 1260
+				PlayMusic(2)
+				break
+			case MONITOR_SPEEDSHOES
+				currentPlayer = 0
+				PlayMusic(3)
+				object[currentPlayer].value6 = 1320
+				CallFunction(Player_UpdatePhysicsState)
+				break
+			case MONITOR_1UP_SONIC
+			case MONITOR_1UP_TAILS
+				player.lives++
+				if stage.playerListPos == 0
+					PlaySfx(SfxName[1 Up], 0)
+				else
+					PlaySfx(SfxName[Achievement], 0)
+				end if
+				break
+			case MONITOR_TIME
+				break
+			case MONITOR_SUPER
+				break
+			case MONITOR_SHIELD_LIGHTNING
+				PlaySfx(SfxName[Lightning Shield], 0)
+				arrayPos0 = playerCount
+				currentPlayer = 0
+				object[currentPlayer].value38 = 4
+				if object[arrayPos0].type != invincibilityType
+					CallFunction(Player_ApplyShield)
+				end if
+				break
+			case MONITOR_SHIELD_FIRE
+				PlaySfx(SfxName[Fire Shield], 0)
+				arrayPos0 = playerCount
+				currentPlayer = 0
+				object[currentPlayer].value38 = 3
+				if object[arrayPos0].type != invincibilityType
+					CallFunction(Player_ApplyShield)
+				end if
+				break
+			case MONITOR_SHIELD_BUBBLE
+				PlaySfx(SfxName[Bubble Shield], 0)
+				arrayPos0 = playerCount
+				currentPlayer = 0
+				object[currentPlayer].value38 = 2
+				if object[arrayPos0].type != invincibilityType
+					CallFunction(Player_ApplyShield)
+				end if
+				break
+			case MONITOR_EGGMAN
+				currentPlayer = 0
+				CallFunction(Player_Hit)
+				break
+			case MONITOR_DEBUG_SHIELD
+				PlaySfx(SfxName[Blue Shield], 0)
+				options.shieldType++
+				options.shieldType &= 1
+				arrayPos0 = playerCount
+				currentPlayer = 0
+				CallFunction(Player_ApplyShield)
+				break
+			case MONITOR_DEBUG_TIMESTONES
+				if specialStage.timeStones != 127
+					specialStage.timeStones = 127
+				else
+					specialStage.timeStones = 0
+				end if
+				break
+			end switch
+		end if
+		break
+	case 1
+		object.value1++
+		if object.value1 == 30
+			object.value1 = 0
+			object.state = 2
+			object.propertyValue = 0
+			if object.priority != 4
+				object.priority = 0
+			end if
+		else
+			if object.value1 > 14
+				object.alpha -= 16
+			end if
+		end if
+		break
+	end switch
+end event
+
+
+event ObjectDraw
+	DrawSprite(0)
+	if object.propertyValue > 0
+		DrawSpriteFX(object.propertyValue, FX_INK, object.xpos, object.value0)
+	end if
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("Global/Items.gif")
+	SpriteFrame(-16, 0, 32, 16, 51, 166)
+	SpriteFrame(-8, -9, 16, 14, 18, 49)
+	SpriteFrame(-8, -9, 16, 14, 35, 49)
+	SpriteFrame(-8, -9, 16, 14, 18, 64)
+	SpriteFrame(-8, -9, 16, 14, 35, 64)
+	SpriteFrame(-8, -9, 16, 14, 18, 79)
+	SpriteFrame(-8, -9, 16, 14, 35, 79)
+	SpriteFrame(-8, -9, 16, 14, 18, 94)
+	SpriteFrame(-8, -9, 16, 14, 35, 94)
+	SpriteFrame(-8, -9, 16, 14, 18, 109)
+	SpriteFrame(-8, -9, 16, 14, 35, 109)
+	SpriteFrame(-8, -9, 16, 14, 18, 124)
+	SpriteFrame(-8, -9, 16, 14, 35, 124)
+	SpriteFrame(-8, -9, 16, 14, 18, 139)
+	SpriteFrame(-8, -9, 16, 14, 35, 139)
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

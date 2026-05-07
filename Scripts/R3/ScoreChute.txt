@@ -1,0 +1,219 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Score Chute Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 47 : TYPE_SCORECHUTE
+
+// Function declarations
+reserve function ScoreChute_DebugDraw
+reserve function ScoreChute_DebugSpawn
+
+
+public function ScoreChute_DebugDraw
+	DrawSprite(0)
+end function
+
+
+public function ScoreChute_DebugSpawn
+	CreateTempObject(TypeName[Score Chute], 0, object.xpos, object.ypos)
+	object[tempObjectPos].drawOrder = 4
+end function
+
+
+event ObjectUpdate
+	switch object.state
+	case 1
+		if object.value0 < 8
+			object.value0++
+			object[0].xpos = object.xpos
+			object[0].ypos = object.ypos
+			object[0].ypos -= 524288
+			object[0].yvel = 0
+			object[0].xvel = 0
+			object[0].speed = 0
+		else
+			object.state = 2
+			object.value0 = 0
+			object[0].yvel = 0
+			object[0].xvel = 0
+			object[0].visible = 0
+			if object[0].value8 > 0
+				object[0].value7 = 0
+				object[0].value8 = 0
+			end if
+			object[0].state = 1
+		end if
+		break
+	case 2
+		if object.value0 < 8
+			object.value0++
+			object[0].xpos = object.xpos
+			object[0].ypos = object.ypos
+			object[0].ypos -= 524288
+		else
+			object.state = 3
+			object.value0 = 0
+		end if
+		break
+	case 3
+		if object.value0 < 4
+			object.value0++
+		else
+			object.state = 4
+			object.value0 = 0
+		end if
+		if object[0].state == 26
+			object.state = 7
+			object.value0 = 0
+			object[0].visible = 1
+		end if
+		break
+	case 4
+		if object.value1 < 4
+			if object.value0 == 32
+				CreateTempObject(TypeName[Object Score], 0, object.xpos, object.ypos)
+				player.score += 100
+			end if
+		end if
+		if object.value1 < 3
+			if object.value0 == 64
+				CreateTempObject(TypeName[Object Score], 0, object.xpos, object.ypos)
+				player.score += 100
+			end if
+		end if
+		if object.value0 < 80
+			object.value0++
+		else
+			object.state = 5
+			object.value0 = 0
+		end if
+		if object[0].state == 26
+			object.state = 7
+			object.value0 = 0
+			object[0].visible = 1
+		end if
+		break
+	case 5
+		if object.value0 < 4
+			object.value0++
+		else
+			object.state = 6
+			object.value0 = 0
+		end if
+		if object[0].state == 26
+			object.state = 7
+			object.value0 = 0
+			object[0].visible = 1
+		end if
+		break
+	case 6
+		if object.value0 < 8
+			object.value0++
+		else
+			object.state = 7
+			object.value0 = 0
+			object[0].visible = 1
+			object[0].state = 13
+			object[0].animation = ANI_JUMPING
+			object[0].interaction = 1
+			object[0].yvel = -475136
+			object[0].value1 = 0
+			PlaySfx(SfxName[Chute Exit], 0)
+		end if
+		break
+	case 7
+		if object.value0 < 120
+			object.value0++
+		else
+			object.state = 0
+			object.value0 = 0
+			object.value1++
+		end if
+		break
+	end switch
+	if object.outOfBounds == 1
+		object.value1 = 0
+		object.priority = 0
+	end if
+	if object.state == 0
+		foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+			if object[currentPlayer].yvel >= 0
+				BoxCollisionTest(C_TOUCH, object.entityPos, -16, -8, 16, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+				if checkResult == 1
+					object.state = 1
+					object.priority = 1
+					object[currentPlayer].animation = ANI_JUMPING
+					object[currentPlayer].interaction = 0
+					PlaySfx(SfxName[Score Chute], 0)
+				end if
+			end if
+		next
+	end if
+end event
+
+
+event ObjectDraw
+	switch object.state
+	case 1
+		DrawSprite(0)
+		break
+	case 2
+		DrawSprite(0)
+		DrawSprite(1)
+		break
+	case 3
+		DrawSprite(0)
+		DrawSprite(2)
+		break
+	case 4
+		temp0 = object.value0
+		temp0 &= 7
+		temp0 >>= 2
+		if temp0 > 0
+			DrawSprite(0)
+		end if
+		break
+	case 5
+		DrawSprite(0)
+		DrawSprite(2)
+		break
+	case 6
+		DrawSprite(0)
+		DrawSprite(1)
+		break
+	end switch
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R3/Objects.gif")
+	foreach (TypeName[Score Chute], arrayPos0, ALL_ENTITIES)
+		object[arrayPos0].drawOrder = 4
+	next
+	SpriteFrame(-24, -8, 48, 16, 117, 233)
+	if stage.playerListPos == 0
+		SpriteFrame(-16, -24, 32, 16, 2, 240)
+		SpriteFrame(-8, -16, 16, 8, 35, 241)
+	else
+		SpriteFrame(-12, -20, 24, 12, 228, 244)
+		SpriteFrame(-8, -16, 16, 8, 211, 247)
+	end if
+	SetTableValue(TypeName[Score Chute], DebugMode_ObjCount, DebugMode_TypesTable)
+	SetTableValue(ScoreChute_DebugDraw, DebugMode_ObjCount, DebugMode_DrawTable)
+	SetTableValue(ScoreChute_DebugSpawn, DebugMode_ObjCount, DebugMode_SpawnTable)
+	DebugMode_ObjCount++
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

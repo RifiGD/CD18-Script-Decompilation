@@ -1,0 +1,644 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Kemusi Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 62 : TYPE_KEMUSI
+
+// Function declarations
+reserve function Kemusi_DebugDraw
+reserve function Kemusi_DebugSpawn
+
+// Static Values
+public value Kemusi_value28 = 0;
+
+
+public function Kemusi_DebugDraw
+	temp0 = object[0].value16
+	temp0 -= Kemusi_value28
+	if temp0 == 0
+		DrawSprite(0)
+	else
+		DrawSprite(1)
+	end if
+end function
+
+
+public function Kemusi_DebugSpawn
+	temp0 = object[0].value16
+	temp0 -= Kemusi_value28
+	CreateTempObject(TypeName[Kemusi], temp0, object.xpos, object.ypos)
+end function
+
+
+event ObjectUpdate
+	switch object.state
+	case 0
+		object.value1 = object.xpos
+		object.value1 += 786432
+		object.value2 = object.xpos
+		object.value2 += 1572864
+		object.value3 = object.xpos
+		object.value3 += 2359296
+		object.value4 = object.ypos
+		object.value5 = object.ypos
+		object.value6 = object.ypos
+		object.value8 = object.xpos
+		object.value8 -= 4194304
+		object.value9 = object.xpos
+		object.value9 += 4194304
+		object.state = 1
+		break
+	case 1
+		GetBit(temp0, object.value7, 0)
+		GetBit(temp1, object.value7, 1)
+		GetBit(temp2, object.value7, 2)
+		GetBit(temp3, object.value7, 3)
+		if temp0 == 0
+			ObjectTileCollision(0, 0, 8, 0)
+			if checkResult == 0
+				object.ypos += 65536
+			else
+				temp0 = checkResult
+			end if
+		end if
+		temp4 = object.xpos
+		temp5 = object.ypos
+		if temp1 == 0
+			object.xpos = object.value1
+			object.ypos = object.value4
+			ObjectTileCollision(0, 0, 8, 0)
+			if checkResult == 0
+				object.value4 += 65536
+			else
+				temp1 = checkResult
+				object.value4 = object.ypos
+			end if
+		end if
+		if temp2 == 0
+			object.xpos = object.value2
+			object.ypos = object.value5
+			ObjectTileCollision(0, 0, 8, 0)
+			if checkResult == 0
+				object.value5 += 65536
+			else
+				temp2 = checkResult
+				object.value5 = object.ypos
+			end if
+		end if
+		if temp3 == 0
+			object.xpos = object.value3
+			object.ypos = object.value6
+			ObjectTileCollision(0, 0, 8, 0)
+			if checkResult == 0
+				object.value6 += 65536
+			else
+				temp3 = checkResult
+				object.value6 = object.ypos
+			end if
+		end if
+		object.xpos = temp4
+		object.ypos = temp5
+		temp4 = temp0
+		temp4 += temp1
+		temp4 += temp2
+		temp4 += temp3
+		if temp4 == 4
+			if object.propertyValue == 0
+				object.state = 3
+			else
+				object.state = 5
+			end if
+			object.value7 = 0
+		else
+			SetBit(object.value7, 0, temp0)
+			SetBit(object.value7, 1, temp1)
+			SetBit(object.value7, 2, temp2)
+			SetBit(object.value7, 3, temp3)
+		end if
+		break
+	case 2
+		if object.value0 < 36
+			object.value0++
+			GetBit(temp0, object.value7, 0)
+			if temp0 == 0
+				object.xpos -= 32768
+				ObjectTileGrip(0, 0, 8, 0)
+				if checkResult == 1
+					if object.xpos < object.value8
+						SetBit(object.value7, 0, 1)
+					end if
+				else
+					SetBit(object.value7, 0, 1)
+				end if
+			else
+				object.xpos += 32768
+				ObjectTileGrip(0, 0, 8, 0)
+				if checkResult == 1
+					if object.xpos > object.value9
+						SetBit(object.value7, 0, 0)
+					end if
+				else
+					SetBit(object.value7, 0, 0)
+				end if
+			end if
+			temp1 = object.xpos
+			temp2 = object.ypos
+			GetBit(temp0, object.value7, 1)
+			if temp0 == 0
+				object.value1 -= 21845
+				object.xpos = object.value1
+				object.ypos = object.value4
+				ObjectTileGrip(0, 0, 8, 0)
+				if checkResult == 1
+					object.value4 = object.ypos
+					if object.value1 < object.value8
+						SetBit(object.value7, 1, 1)
+					end if
+				else
+					SetBit(object.value7, 1, 1)
+				end if
+			else
+				object.value1 += 21845
+				object.xpos = object.value1
+				object.ypos = object.value4
+				ObjectTileGrip(0, 0, 8, 0)
+				if checkResult == 1
+					object.value4 = object.ypos
+					if object.value1 > object.value9
+						SetBit(object.value7, 1, 0)
+					end if
+				else
+					SetBit(object.value7, 1, 0)
+				end if
+			end if
+			GetBit(temp0, object.value7, 2)
+			if temp0 == 0
+				object.value2 -= 10922
+				object.xpos = object.value2
+				object.ypos = object.value5
+				ObjectTileGrip(0, 0, 8, 0)
+				if checkResult == 1
+					object.value5 = object.ypos
+					if object.value2 < object.value8
+						SetBit(object.value7, 2, 1)
+					end if
+				else
+					SetBit(object.value7, 2, 1)
+				end if
+			else
+				object.value2 += 10922
+				object.xpos = object.value2
+				object.ypos = object.value5
+				ObjectTileGrip(0, 0, 8, 0)
+				if checkResult == 1
+					object.value5 = object.ypos
+					if object.value2 > object.value9
+						SetBit(object.value7, 2, 0)
+					end if
+				else
+					SetBit(object.value7, 2, 0)
+				end if
+			end if
+			object.xpos = temp1
+			object.ypos = temp2
+		else
+			if object.value7 == 0
+				object.value1 = object.xpos
+				object.value1 += 786432
+				object.value2 = object.xpos
+				object.value2 += 1572864
+				object.value3 = object.xpos
+				object.value3 += 2359296
+			end if
+			if object.value7 == 15
+				object.value1 = object.xpos
+				object.value1 -= 786432
+				object.value2 = object.xpos
+				object.value2 -= 1572864
+				object.value3 = object.xpos
+				object.value3 -= 2359296
+			end if
+			object.value0 = 0
+			object.state = 3
+		end if
+		break
+	case 3
+		if object.value0 < 36
+			object.value0++
+			temp1 = object.xpos
+			temp2 = object.ypos
+			GetBit(temp0, object.value7, 1)
+			if temp0 == 0
+				object.value1 -= 10922
+				object.xpos = object.value1
+				object.ypos = object.value4
+				ObjectTileGrip(0, 0, 8, 0)
+				if checkResult == 1
+					object.value4 = object.ypos
+					if object.value1 < object.value8
+						SetBit(object.value7, 1, 1)
+					end if
+				else
+					SetBit(object.value7, 1, 1)
+				end if
+			else
+				object.value1 += 10922
+				object.xpos = object.value1
+				object.ypos = object.value4
+				ObjectTileGrip(0, 0, 8, 0)
+				if checkResult == 1
+					object.value4 = object.ypos
+					if object.value1 > object.value9
+						SetBit(object.value7, 1, 0)
+					end if
+				else
+					SetBit(object.value7, 1, 0)
+				end if
+			end if
+			GetBit(temp0, object.value7, 2)
+			if temp0 == 0
+				object.value2 -= 21845
+				object.xpos = object.value2
+				object.ypos = object.value5
+				ObjectTileGrip(0, 0, 8, 0)
+				if checkResult == 1
+					object.value5 = object.ypos
+					if object.value2 < object.value8
+						SetBit(object.value7, 2, 1)
+					end if
+				else
+					SetBit(object.value7, 2, 1)
+				end if
+			else
+				object.value2 += 21845
+				object.xpos = object.value2
+				object.ypos = object.value5
+				ObjectTileGrip(0, 0, 8, 0)
+				if checkResult == 1
+					object.value5 = object.ypos
+					if object.value2 > object.value9
+						SetBit(object.value7, 2, 0)
+					end if
+				else
+					SetBit(object.value7, 2, 0)
+				end if
+			end if
+			GetBit(temp0, object.value7, 3)
+			if temp0 == 0
+				object.value3 -= 32768
+				object.xpos = object.value3
+				object.ypos = object.value6
+				ObjectTileGrip(0, 0, 8, 0)
+				if checkResult == 1
+					object.value6 = object.ypos
+					if object.value3 < object.value8
+						SetBit(object.value7, 3, 1)
+					end if
+				else
+					SetBit(object.value7, 3, 1)
+				end if
+			else
+				object.value3 += 32768
+				object.xpos = object.value3
+				object.ypos = object.value6
+				ObjectTileGrip(0, 0, 8, 0)
+				if checkResult == 1
+					object.value6 = object.ypos
+					if object.value3 > object.value9
+						SetBit(object.value7, 3, 0)
+					end if
+				else
+					SetBit(object.value7, 3, 0)
+				end if
+			end if
+			object.xpos = temp1
+			object.ypos = temp2
+		else
+			object.value0 = 0
+			object.state = 2
+		end if
+		break
+	case 4
+		if object.value0 < 36
+			object.value0++
+			GetBit(temp0, object.value7, 0)
+			if temp0 == 0
+				object.xpos -= 16384
+				ObjectTileGrip(0, 0, 8, 0)
+				if checkResult == 1
+					if object.xpos < object.value8
+						SetBit(object.value7, 0, 1)
+					end if
+				else
+					SetBit(object.value7, 0, 1)
+				end if
+			else
+				object.xpos += 16384
+				ObjectTileGrip(0, 0, 8, 0)
+				if checkResult == 1
+					if object.xpos > object.value9
+						SetBit(object.value7, 0, 0)
+					end if
+				else
+					SetBit(object.value7, 0, 0)
+				end if
+			end if
+			temp1 = object.xpos
+			temp2 = object.ypos
+			GetBit(temp0, object.value7, 1)
+			if temp0 == 0
+				object.value1 -= 10922
+				object.xpos = object.value1
+				object.ypos = object.value4
+				ObjectTileGrip(0, 0, 8, 0)
+				if checkResult == 1
+					object.value4 = object.ypos
+					if object.value1 < object.value8
+						SetBit(object.value7, 1, 1)
+					end if
+				else
+					SetBit(object.value7, 1, 1)
+				end if
+			else
+				object.value1 += 10922
+				object.xpos = object.value1
+				object.ypos = object.value4
+				ObjectTileGrip(0, 0, 8, 0)
+				if checkResult == 1
+					object.value4 = object.ypos
+					if object.value1 > object.value9
+						SetBit(object.value7, 1, 0)
+					end if
+				else
+					SetBit(object.value7, 1, 0)
+				end if
+			end if
+			GetBit(temp0, object.value7, 2)
+			if temp0 == 0
+				object.value2 -= 5461
+				object.xpos = object.value2
+				object.ypos = object.value5
+				ObjectTileGrip(0, 0, 8, 0)
+				if checkResult == 1
+					object.value5 = object.ypos
+					if object.value2 < object.value8
+						SetBit(object.value7, 2, 1)
+					end if
+				else
+					SetBit(object.value7, 2, 1)
+				end if
+			else
+				object.value2 += 5461
+				object.xpos = object.value2
+				object.ypos = object.value5
+				ObjectTileGrip(0, 0, 8, 0)
+				if checkResult == 1
+					object.value5 = object.ypos
+					if object.value2 > object.value9
+						SetBit(object.value7, 2, 0)
+					end if
+				else
+					SetBit(object.value7, 2, 0)
+				end if
+			end if
+			object.xpos = temp1
+			object.ypos = temp2
+		else
+			if object.value7 == 0
+				object.value1 = object.xpos
+				object.value1 += 786432
+				object.value2 = object.xpos
+				object.value2 += 1572864
+				object.value3 = object.xpos
+				object.value3 += 2359296
+			end if
+			if object.value7 == 15
+				object.value1 = object.xpos
+				object.value1 -= 786432
+				object.value2 = object.xpos
+				object.value2 -= 1572864
+				object.value3 = object.xpos
+				object.value3 -= 2359296
+			end if
+			object.value0 = 0
+			object.state = 5
+		end if
+		break
+	case 5
+		if object.value0 < 36
+			object.value0++
+			temp1 = object.xpos
+			temp2 = object.ypos
+			GetBit(temp0, object.value7, 1)
+			if temp0 == 0
+				object.value1 -= 5461
+				object.xpos = object.value1
+				object.ypos = object.value4
+				ObjectTileGrip(0, 0, 8, 0)
+				if checkResult == 1
+					object.value4 = object.ypos
+					if object.value1 < object.value8
+						SetBit(object.value7, 1, 1)
+					end if
+				else
+					SetBit(object.value7, 1, 1)
+				end if
+			else
+				object.value1 += 5461
+				object.xpos = object.value1
+				object.ypos = object.value4
+				ObjectTileGrip(0, 0, 8, 0)
+				if checkResult == 1
+					object.value4 = object.ypos
+					if object.value1 > object.value9
+						SetBit(object.value7, 1, 0)
+					end if
+				else
+					SetBit(object.value7, 1, 0)
+				end if
+			end if
+			GetBit(temp0, object.value7, 2)
+			if temp0 == 0
+				object.value2 -= 10922
+				object.xpos = object.value2
+				object.ypos = object.value5
+				ObjectTileGrip(0, 0, 8, 0)
+				if checkResult == 1
+					object.value5 = object.ypos
+					if object.value2 < object.value8
+						SetBit(object.value7, 2, 1)
+					end if
+				else
+					SetBit(object.value7, 2, 1)
+				end if
+			else
+				object.value2 += 10922
+				object.xpos = object.value2
+				object.ypos = object.value5
+				ObjectTileGrip(0, 0, 8, 0)
+				if checkResult == 1
+					object.value5 = object.ypos
+					if object.value2 > object.value9
+						SetBit(object.value7, 2, 0)
+					end if
+				else
+					SetBit(object.value7, 2, 0)
+				end if
+			end if
+			GetBit(temp0, object.value7, 3)
+			if temp0 == 0
+				object.value3 -= 16384
+				object.xpos = object.value3
+				object.ypos = object.value6
+				ObjectTileGrip(0, 0, 8, 0)
+				if checkResult == 1
+					object.value6 = object.ypos
+					if object.value3 < object.value8
+						SetBit(object.value7, 3, 1)
+					end if
+				else
+					SetBit(object.value7, 3, 1)
+				end if
+			else
+				object.value3 += 16384
+				object.xpos = object.value3
+				object.ypos = object.value6
+				ObjectTileGrip(0, 0, 8, 0)
+				if checkResult == 1
+					object.value6 = object.ypos
+					if object.value3 > object.value9
+						SetBit(object.value7, 3, 0)
+					end if
+				else
+					SetBit(object.value7, 3, 0)
+				end if
+			end if
+			object.xpos = temp1
+			object.ypos = temp2
+		else
+			object.value0 = 0
+			object.state = 4
+		end if
+		break
+	end switch
+	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+		BoxCollisionTest(C_TOUCH, object.entityPos, -8, -10, 8, 8, currentPlayer, object[currentPlayer].value41, object[currentPlayer].value39, object[currentPlayer].value42, object[currentPlayer].value40)
+		if checkResult == 1
+			CallFunction(Player_BadnikBreak)
+		else
+			temp1 = object.xpos
+			temp2 = object.ypos
+			if object.propertyValue == 0
+				object.xpos = object.value1
+				object.ypos = object.value4
+				BoxCollisionTest(C_TOUCH, object.entityPos, -8, -10, 8, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+				if checkResult == 1
+					CallFunction(Player_Hit)
+				else
+					object.xpos = object.value2
+					object.ypos = object.value5
+					BoxCollisionTest(C_TOUCH, object.entityPos, -8, -10, 8, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+					if checkResult == 1
+						CallFunction(Player_Hit)
+					else
+						object.xpos = object.value3
+						object.ypos = object.value6
+						BoxCollisionTest(C_TOUCH, object.entityPos, -8, -10, 8, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+						if checkResult == 1
+							CallFunction(Player_Hit)
+						end if
+					end if
+				end if
+			else
+				object.xpos = object.value1
+				object.ypos = object.value4
+				BoxCollisionTest(C_TOUCH, object.entityPos, -8, -10, 8, 8, currentPlayer, object[currentPlayer].value41, object[currentPlayer].value39, object[currentPlayer].value42, object[currentPlayer].value40)
+				if checkResult == 1
+					CallFunction(Player_BadnikBreak)
+				else
+					object.xpos = object.value2
+					object.ypos = object.value5
+					BoxCollisionTest(C_TOUCH, object.entityPos, -8, -8, 8, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+					if checkResult == 1
+						CallFunction(Player_BadnikBreak)
+					else
+						object.xpos = object.value3
+						object.ypos = object.value6
+						BoxCollisionTest(C_TOUCH, object.entityPos, -8, -8, 8, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+						if checkResult == 1
+							CallFunction(Player_BadnikBreak)
+						end if
+					end if
+				end if
+			end if
+			object.xpos = temp1
+			object.ypos = temp2
+		end if
+	next
+	CallFunction(StageSetup_CheckGoodFuture)
+end if
+end event
+
+
+event ObjectDraw
+	if object.propertyValue == 0
+		GetBit(object.direction, object.value7, 3)
+		DrawSpriteFX(2, FX_FLIP, object.value3, object.value6)
+		GetBit(object.direction, object.value7, 2)
+		DrawSpriteFX(2, FX_FLIP, object.value2, object.value5)
+		GetBit(object.direction, object.value7, 1)
+		DrawSpriteFX(2, FX_FLIP, object.value1, object.value4)
+	else
+		GetBit(object.direction, object.value7, 3)
+		DrawSpriteFX(3, FX_FLIP, object.value3, object.value6)
+		GetBit(object.direction, object.value7, 2)
+		DrawSpriteFX(3, FX_FLIP, object.value2, object.value5)
+		GetBit(object.direction, object.value7, 1)
+		DrawSpriteFX(3, FX_FLIP, object.value1, object.value4)
+	end if
+	GetBit(object.direction, object.value7, 0)
+	switch object.state
+	case 0
+	case 1
+	case 3
+	case 5
+		DrawSpriteFX(0, FX_FLIP, object.xpos, object.ypos)
+		break
+	case 2
+	case 4
+		DrawSpriteFX(1, FX_FLIP, object.xpos, object.ypos)
+		break
+	end switch
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R5/Objects.gif")
+	SpriteFrame(-8, -16, 16, 24, 125, 75)
+	SpriteFrame(-8, -16, 16, 24, 125, 50)
+	SpriteFrame(-8, -16, 16, 24, 67, 150)
+	SpriteFrame(-8, -8, 16, 16, 52, 1)
+	temp0 = 0
+	Kemusi_value28 = DebugMode_ObjCount
+	while temp0 < 2
+		SetTableValue(TypeName[Kemusi], DebugMode_ObjCount, DebugMode_TypesTable)
+		SetTableValue(Kemusi_DebugDraw, DebugMode_ObjCount, DebugMode_DrawTable)
+		SetTableValue(Kemusi_DebugSpawn, DebugMode_ObjCount, DebugMode_SpawnTable)
+		DebugMode_ObjCount++
+		temp0++
+	loop
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

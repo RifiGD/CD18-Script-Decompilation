@@ -1,0 +1,305 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Sasuri Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 60 : TYPE_SASURI
+
+// Function declarations
+reserve function Sasuri_DebugDraw
+reserve function Sasuri_DebugSpawn
+
+// Static Values
+public value Sasuri_value27 = 0;
+
+
+public function Sasuri_DebugDraw
+	temp0 = object[0].value16
+	temp0 -= Sasuri_value27
+	if temp0 == 0
+		DrawSprite(2)
+		DrawSprite(0)
+		DrawSprite(3)
+		DrawSprite(10)
+	else
+		DrawSprite(6)
+		DrawSprite(1)
+		DrawSprite(7)
+		DrawSprite(12)
+	end if
+end function
+
+
+public function Sasuri_DebugSpawn
+	temp0 = object[0].value16
+	temp0 -= Sasuri_value27
+	CreateTempObject(TypeName[Sasuri], temp0, object.xpos, object.ypos)
+end function
+
+
+event ObjectUpdate
+	object.frame++
+	object.frame %= 60
+	if object.propertyValue == 0
+		switch object.state
+		case 0
+			ObjectTileCollision(0, 0, 13, 0)
+			if checkResult == 1
+				object.state = 1
+			else
+				object.ypos += 65536
+			end if
+			break
+		case 1
+			object.xpos -= 65536
+			object.value0--
+			if object.value0 <= -80
+				object.state = 2
+				object.direction = 1
+			end if
+			ObjectTileGrip(0, 0, 13, 0)
+			if checkResult == 0
+				object.state = 2
+				object.value0 = 0
+				object.direction = 1
+			end if
+			break
+		case 2
+			object.xpos += 65536
+			object.value0++
+			if object.value0 >= 80
+				object.state = 1
+				object.direction = 0
+			end if
+			ObjectTileGrip(0, 0, 13, 0)
+			if checkResult == 0
+				object.state = 1
+				object.value0 = 0
+				object.direction = 0
+			end if
+			break
+		case 3
+			if object.value1 < 30
+				object.value1++
+			else
+				object.state = 4
+				object.value1 = 0
+			end if
+			break
+		case 4
+			if object.value1 < 40
+				if object.value1 == 10
+					PlaySfx(SfxName[Shot], 0)
+					CreateTempObject(TypeName[Sasuri Shot], 0, object.xpos, object.ypos)
+					object[tempObjectPos].ypos -= 1572864
+					if object.direction == 0
+						object[tempObjectPos].xpos -= 458752
+						object[tempObjectPos].xvel = -196608
+					else
+						object[tempObjectPos].xpos += 458752
+						object[tempObjectPos].xvel = 196608
+					end if
+					object.drawOrder = 4
+				end if
+				object.value1++
+			else
+				object.state = 5
+				object.value1 = 0
+				object.drawOrder = 3
+			end if
+			break
+		case 5
+			if object.value1 < 30
+				object.value1++
+			else
+				if object.direction == 0
+					object.state = 1
+				else
+					object.state = 2
+				end if
+			end if
+			break
+		end switch
+	else
+		switch object.state
+		case 0
+			ObjectTileGrip(0, 0, 13, 0)
+			if checkResult == 1
+				object.state = 1
+			else
+				object.ypos += 65536
+			end if
+			break
+		case 1
+			object.xpos -= 32768
+			object.value0--
+			if object.value0 <= -160
+				object.state = 2
+				object.direction = 1
+			end if
+			ObjectTileGrip(0, 0, 13, 0)
+			if checkResult == 0
+				object.state = 2
+				object.value0 = 0
+				object.direction = 1
+			end if
+			break
+		case 2
+			object.xpos += 32768
+			object.value0++
+			if object.value0 >= 160
+				object.state = 1
+				object.direction = 0
+			end if
+			ObjectTileGrip(0, 0, 13, 0)
+			if checkResult == 0
+				object.state = 1
+				object.value0 = 0
+				object.direction = 0
+			end if
+			break
+		case 3
+			if object.value1 < 30
+				object.value1++
+			else
+				object.state = 4
+				object.value1 = 0
+			end if
+			break
+		case 4
+			if object.value1 < 40
+				object.value1++
+			else
+				object.state = 5
+				object.value1 = 0
+			end if
+			break
+		case 5
+			if object.value1 < 30
+				object.value1++
+			else
+				if object.direction == 0
+					object.state = 1
+				else
+					object.state = 2
+				end if
+			end if
+			break
+		end switch
+	end if
+	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+		BoxCollisionTest(C_TOUCH, object.entityPos, -22, -14, 22, 14, currentPlayer, object[currentPlayer].value41, object[currentPlayer].value39, object[currentPlayer].value42, object[currentPlayer].value40)
+		if checkResult == 1
+			CallFunction(Player_BadnikBreak)
+		end if
+		switch object.state
+		case 1
+		case 2
+			if object.value1 == 0
+				BoxCollisionTest(C_TOUCH, object.entityPos, -64, -24, 64, 24, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+				if checkResult == 1
+					object.state = 3
+					if object[currentPlayer].xpos < object.xpos
+						object.direction = 0
+					else
+						object.direction = 1
+					end if
+				end if
+			else
+				object.value1 = 0
+			end if
+			break
+		end switch
+	next
+	CallFunction(StageSetup_CheckGoodFuture)
+end event
+
+
+event ObjectDraw
+	if object.propertyValue == 0
+		if object.frame < 30
+			DrawSpriteFX(2, FX_FLIP, object.xpos, object.ypos)
+			DrawSpriteFX(0, FX_FLIP, object.xpos, object.ypos)
+			DrawSpriteFX(3, FX_FLIP, object.xpos, object.ypos)
+		else
+			DrawSpriteFX(4, FX_FLIP, object.xpos, object.ypos)
+			DrawSpriteFX(0, FX_FLIP, object.xpos, object.ypos)
+			DrawSpriteFX(5, FX_FLIP, object.xpos, object.ypos)
+		end if
+		switch object.state
+		case 0
+		case 1
+		case 2
+		case 3
+		case 5
+			DrawSpriteFX(10, FX_FLIP, object.xpos, object.ypos)
+			break
+		case 4
+			DrawSpriteFX(11, FX_FLIP, object.xpos, object.ypos)
+			break
+		end switch
+	else
+		if object.frame < 30
+			DrawSpriteFX(6, FX_FLIP, object.xpos, object.ypos)
+			DrawSpriteFX(1, FX_FLIP, object.xpos, object.ypos)
+			DrawSpriteFX(7, FX_FLIP, object.xpos, object.ypos)
+		else
+			DrawSpriteFX(8, FX_FLIP, object.xpos, object.ypos)
+			DrawSpriteFX(1, FX_FLIP, object.xpos, object.ypos)
+			DrawSpriteFX(9, FX_FLIP, object.xpos, object.ypos)
+		end if
+		switch object.state
+		case 0
+		case 1
+		case 2
+		case 3
+		case 5
+			DrawSpriteFX(12, FX_FLIP, object.xpos, object.ypos)
+			break
+		case 4
+			DrawSpriteFX(13, FX_FLIP, object.xpos, object.ypos)
+			break
+		end switch
+	end if
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R5/Objects.gif")
+	SpriteFrame(-24, -16, 48, 32, 174, 141)
+	SpriteFrame(-24, -16, 48, 32, 174, 174)
+	SpriteFrame(-32, -4, 32, 16, 100, 110)
+	SpriteFrame(-21, -3, 32, 16, 100, 110)
+	SpriteFrame(-28, -4, 32, 16, 100, 110)
+	SpriteFrame(-25, -3, 32, 16, 100, 110)
+	SpriteFrame(-32, -4, 32, 16, 100, 127)
+	SpriteFrame(-21, -3, 32, 16, 100, 127)
+	SpriteFrame(-28, -4, 32, 16, 100, 127)
+	SpriteFrame(-25, -3, 32, 16, 100, 127)
+	SpriteFrame(-9, -24, 24, 16, 100, 93)
+	SpriteFrame(-5, -29, 24, 16, 100, 93)
+	SpriteFrame(-1, -24, 16, 16, 133, 110)
+	SpriteFrame(3, -29, 16, 16, 133, 110)
+	temp0 = 0
+	Sasuri_value27 = DebugMode_ObjCount
+	while temp0 < 2
+		SetTableValue(TypeName[Sasuri], DebugMode_ObjCount, DebugMode_TypesTable)
+		SetTableValue(Sasuri_DebugDraw, DebugMode_ObjCount, DebugMode_DrawTable)
+		SetTableValue(Sasuri_DebugSpawn, DebugMode_ObjCount, DebugMode_SpawnTable)
+		DebugMode_ObjCount++
+		temp0++
+	loop
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

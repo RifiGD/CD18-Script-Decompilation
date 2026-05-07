@@ -1,0 +1,140 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: R8 Setup Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 40 : TYPE_R8SETUP
+
+
+
+event ObjectUpdate
+	object.rotation++
+	object.rotation %= 144
+	temp0 = object.value2
+	temp0 %= 7
+	if temp0 == 0
+		temp0 = object.value2
+		temp0 /= 7
+		temp0 <<= 1
+		temp0 += 600
+		Copy16x16Tile(387, temp0)
+		temp0++
+		Copy16x16Tile(388, temp0)
+	end if
+	object.value2++
+	object.value2 %= 28
+	temp0 = object.value3
+	temp0 &= 3
+	if temp0 == 0
+		temp0 = object.value3
+		temp0 >>= 2
+		temp0 <<= 1
+		temp0 += 608
+		Copy16x16Tile(389, temp0)
+		temp0++
+		Copy16x16Tile(390, temp0)
+	end if
+	object.value3++
+	object.value3 &= 15
+	temp0 = object.value4
+	temp0 %= 5
+	if temp0 == 0
+		temp0 = object.value4
+		temp0 /= 5
+		temp0 <<= 2
+		temp0 += 616
+		Copy16x16Tile(391, temp0)
+		temp0++
+		Copy16x16Tile(392, temp0)
+		temp0++
+		Copy16x16Tile(393, temp0)
+		temp0++
+		Copy16x16Tile(394, temp0)
+	end if
+	object.value4++
+	object.value4 %= 20
+	temp0 = object.value5
+	temp0 &= 7
+	if temp0 == 0
+		temp0 = object.value5
+		temp0 >>= 3
+		temp0 += 632
+		Copy16x16Tile(396, temp0)
+	end if
+	object.value5++
+	object.value5 %= 56
+	object.value0++
+	if object.value0 == 6
+		object.value0 = 0
+		object.value1++
+		object.value1 %= 6
+		temp0 = object.value1
+		temp0 += 639
+		Copy16x16Tile(395, temp0)
+	end if
+	SetActivePalette(object.value1, 0, screen.ysize)
+	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+		temp1 = object[currentPlayer].xpos
+		temp1 >>= 16
+		temp1 += object[currentPlayer].collisionRight
+		temp2 = object[currentPlayer].ypos
+		temp2 >>= 16
+		temp2 += object[currentPlayer].collisionBottom
+		temp2 += 2
+		Get16x16TileInfo(temp0, temp1, temp2, 8)
+		if temp0 == 1
+			Get16x16TileInfo(temp0, temp1, temp2, 1)
+			if temp0 == 0
+				object[currentPlayer].xpos += 65536
+			else
+				object[currentPlayer].xpos -= 65536
+			end if
+		else
+			temp1 = object[currentPlayer].xpos
+			temp1 >>= 16
+			temp1 += object[currentPlayer].collisionLeft
+			Get16x16TileInfo(temp0, temp1, temp2, 8)
+			if temp0 == 1
+				Get16x16TileInfo(temp0, temp1, temp2, 1)
+				if temp0 == 0
+					object[currentPlayer].xpos += 65536
+				else
+					object[currentPlayer].xpos -= 65536
+				end if
+			end if
+		end if
+	next
+end event
+
+
+event ObjectStartup
+	object[21].type = TypeName[R8 Setup]
+	object[21].priority = 1
+	CopyPalette(0, 0, 1, 0, 255)
+	CopyPalette(0, 0, 2, 0, 255)
+	CopyPalette(0, 0, 3, 0, 255)
+	CopyPalette(0, 0, 4, 0, 255)
+	CopyPalette(0, 0, 5, 0, 255)
+	temp0 = 0
+	temp1 = 0
+	temp2 = 32
+	while temp0 < 6
+		LoadPalette("R83D_PalCycle.act", temp0, 160, temp1, temp2)
+		temp0++
+		temp1 += 32
+		temp2 += 32
+	loop
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

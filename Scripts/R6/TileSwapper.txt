@@ -1,0 +1,176 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Tile Swapper Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 64 : TYPE_TILESWAPPER
+
+
+
+event ObjectUpdate
+	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+		switch object.propertyValue
+		case 0
+			if object.state == 0
+				BoxCollisionTest(C_TOUCH, object.entityPos, 0, -64, 64, 64, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+				if checkResult == 1
+					object.state = 1
+					object.priority = 1
+					temp0 = object.xpos
+					temp0 >>= 23
+					temp1 = object.ypos
+					temp1 >>= 23
+					SetTileLayerEntry(386, 0, temp0, temp1)
+					temp0++
+					SetTileLayerEntry(387, 0, temp0, temp1)
+					temp0++
+					SetTileLayerEntry(390, 0, temp0, temp1)
+					temp0++
+					SetTileLayerEntry(391, 0, temp0, temp1)
+					temp0++
+					SetTileLayerEntry(394, 0, temp0, temp1)
+					temp0++
+					SetTileLayerEntry(395, 0, temp0, temp1)
+				end if
+			else
+				BoxCollisionTest(C_TOUCH, object.entityPos, 0, -64, 692, 64, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+				if checkResult == 0
+					object.state = 0
+					object.priority = 0
+					temp0 = object.xpos
+					temp0 >>= 23
+					temp1 = object.ypos
+					temp1 >>= 23
+					SetTileLayerEntry(86, 0, temp0, temp1)
+					temp0++
+					SetTileLayerEntry(87, 0, temp0, temp1)
+					temp0++
+					SetTileLayerEntry(122, 0, temp0, temp1)
+					temp0++
+					SetTileLayerEntry(123, 0, temp0, temp1)
+					temp0++
+					SetTileLayerEntry(126, 0, temp0, temp1)
+					temp0++
+					SetTileLayerEntry(127, 0, temp0, temp1)
+				end if
+			end if
+			break
+		case 1
+			if object.state == 0
+				BoxCollisionTest(C_TOUCH, object.entityPos, -48, -64, -8, 64, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+				if checkResult == 1
+					object.state = 1
+					object.priority = 1
+					temp0 = object.xpos
+					temp0 >>= 23
+					temp1 = object.ypos
+					temp1 >>= 23
+					SetTileLayerEntry(390, 0, temp0, temp1)
+					temp0++
+					SetTileLayerEntry(391, 0, temp0, temp1)
+					temp0++
+					SetTileLayerEntry(394, 0, temp0, temp1)
+				end if
+			else
+				BoxCollisionTest(C_TOUCH, object.entityPos, 0, -64, 384, 64, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+				if checkResult == 0
+					object.state = 0
+					object.priority = 0
+					temp0 = object.xpos
+					temp0 >>= 23
+					temp1 = object.ypos
+					temp1 >>= 23
+					SetTileLayerEntry(122, 0, temp0, temp1)
+					temp0++
+					SetTileLayerEntry(123, 0, temp0, temp1)
+					temp0++
+					SetTileLayerEntry(126, 0, temp0, temp1)
+				end if
+			end if
+			break
+		case 2
+			if object.state == 0
+				BoxCollisionTest(C_TOUCH, object.entityPos, -48, -64, -8, 64, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+				if checkResult == 1
+					object.state = 1
+					object.priority = 1
+					temp0 = object.xpos
+					temp0 >>= 23
+					temp1 = object.ypos
+					temp1 >>= 23
+					SetTileLayerEntry(399, 0, temp0, temp1)
+					temp0++
+					SetTileLayerEntry(390, 0, temp0, temp1)
+					temp0++
+					SetTileLayerEntry(391, 0, temp0, temp1)
+					temp0++
+					SetTileLayerEntry(394, 0, temp0, temp1)
+					temp0++
+					SetTileLayerEntry(395, 0, temp0, temp1)
+				end if
+			else
+				BoxCollisionTest(C_TOUCH, object.entityPos, 0, -64, 544, 64, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+				if checkResult == 0
+					object.state = 0
+					object.priority = 0
+					temp0 = object.xpos
+					temp0 >>= 23
+					temp1 = object.ypos
+					temp1 >>= 23
+					SetTileLayerEntry(203, 0, temp0, temp1)
+					temp0++
+					SetTileLayerEntry(122, 0, temp0, temp1)
+					temp0++
+					SetTileLayerEntry(123, 0, temp0, temp1)
+					temp0++
+					SetTileLayerEntry(126, 0, temp0, temp1)
+					temp0++
+					SetTileLayerEntry(127, 0, temp0, temp1)
+				end if
+			end if
+			break
+		case 3
+			if object.state == 0
+				BoxCollisionTest(C_TOUCH, object.entityPos, 0, -64, 64, 64, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+				if checkResult == 1
+					object.state = 1
+					object.priority = 1
+					temp0 = object.xpos
+					temp0 >>= 23
+					temp1 = object.ypos
+					temp1 >>= 23
+					SetTileLayerEntry(386, 0, temp0, temp1)
+					temp0++
+					SetTileLayerEntry(387, 0, temp0, temp1)
+				end if
+			else
+				BoxCollisionTest(C_TOUCH, object.entityPos, 0, -64, 672, 64, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+				if checkResult == 0
+					object.state = 0
+					object.priority = 0
+					temp0 = object.xpos
+					temp0 >>= 23
+					temp1 = object.ypos
+					temp1 >>= 23
+					SetTileLayerEntry(86, 0, temp0, temp1)
+					temp0++
+					SetTileLayerEntry(87, 0, temp0, temp1)
+				end if
+			end if
+			break
+		end switch
+	next
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

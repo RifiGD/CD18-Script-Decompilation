@@ -1,0 +1,203 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: R Platform Object
+// Script Author: Christian Whitehead
+// Unpacked by RifiGD's UnScriptR
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 53 : TYPE_RPLATFORM
+
+
+
+event ObjectUpdate
+	switch object.state
+	case 0
+		object.value5++
+		object.value5 &= 511
+		Sin(object.angle, object.value5)
+		object.angle /= 3
+		object.angle += 640
+		break
+	case 1
+		object.value5++
+		object.value5 &= 511
+		temp0 = object.value5
+		temp0 >>= 1
+		Cos(temp1, temp0)
+		temp1 >>= 1
+		object.angle = 640
+		object.angle -= temp1
+		break
+	case 2
+		object.value5++
+		object.value5 &= 511
+		temp0 = object.value5
+		temp0 >>= 1
+		Cos(object.angle, temp0)
+		object.angle >>= 1
+		object.angle += 640
+		break
+	case 3
+		object.value5++
+		object.value5 &= 511
+		Sin(object.angle, object.value5)
+		object.angle >>= 2
+		object.angle += 896
+		break
+	case 4
+		object.value5++
+		object.value5 &= 511
+		Sin(object.angle, object.value5)
+		object.angle >>= 2
+		object.angle += 512
+		break
+	case 5
+		object.value5++
+		object.value5 &= 511
+		Sin(object.angle, object.value5)
+		object.angle >>= 2
+		object.angle += 640
+		break
+	end switch
+	temp1 = object.value6
+	temp1++
+	temp1 <<= 4
+	Cos(object.value3, object.angle)
+	object.value3 *= temp1
+	object.value3 <<= 7
+	object.value3 += object.xpos
+	object.value3 &= -65536
+	object.value3 -= object.value1
+	Sin(object.value4, object.angle)
+	object.value4 *= temp1
+	object.value4 <<= 7
+	object.value4 += object.ypos
+	object.value4 &= -65536
+	object.value4 -= object.value2
+	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+		temp0 = object.xpos
+		temp1 = object.ypos
+		temp2 = object[currentPlayer].ypos
+		object.xpos = object.value1
+		object.ypos = object.value2
+		if object[currentPlayer].state == Player_State_Hurt
+			BoxCollisionTest(C_SOLID, object.entityPos, -32, -8, 32, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+		else
+			BoxCollisionTest(C_SOLID, object.entityPos, -24, -8, 24, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+		end if
+		switch checkResult
+		case 1
+			object[currentPlayer].xpos += object.value3
+			object[currentPlayer].ypos += object.value4
+			break
+		case 2
+		case 3
+			CallFunction(Player_Hit)
+		case 4
+			BoxCollisionTest(C_TOUCH, object.entityPos, -16, -8, 16, 9, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			if checkResult == 1
+				if object[currentPlayer].state != Player_State_Hurt
+					temp3 = object[currentPlayer].xvel
+					if temp3 < 0
+						FlipSign(temp3)
+					end if
+					if temp3 < 393216
+						if object[currentPlayer].gravity == 0
+							CallFunction(Player_Kill)
+						end if
+					else
+						if object[currentPlayer].gravity == 0
+							CallFunction(Player_Hit)
+						end if
+					end if
+				else
+					object[currentPlayer].ypos = temp2
+				end if
+			else
+				object[currentPlayer].ypos = temp2
+				if object[currentPlayer].gravity == 0
+					CallFunction(Player_Hit)
+				end if
+			end if
+			break
+		end switch
+		object.xpos = temp0
+		object.ypos = temp1
+	next
+end event
+
+
+event ObjectDraw
+	DrawSprite(0)
+	temp0 = 0
+	temp1 = 16
+	while temp0 < object.value6
+		Cos(temp2, object.angle)
+		temp2 *= temp1
+		temp2 <<= 7
+		temp2 += object.xpos
+		Sin(temp3, object.angle)
+		temp3 *= temp1
+		temp3 <<= 7
+		temp3 += object.ypos
+		DrawSpriteXY(1, temp2, temp3)
+		temp0++
+		temp1 += 16
+	loop
+	Cos(object.value1, object.angle)
+	object.value1 *= temp1
+	object.value1 <<= 7
+	object.value1 += object.xpos
+	object.value1 &= -65536
+	Sin(object.value2, object.angle)
+	object.value2 *= temp1
+	object.value2 <<= 7
+	object.value2 += object.ypos
+	object.value2 &= -65536
+	DrawSpriteXY(2, object.value1, object.value2)
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R7/Objects.gif")
+	SpriteFrame(-8, -8, 16, 16, 34, 1)
+	SpriteFrame(-8, -8, 16, 16, 51, 1)
+	SpriteFrame(-32, -8, 64, 16, 68, 1)
+	foreach (TypeName[R Platform], arrayPos0, ALL_ENTITIES)
+		if object[arrayPos0].propertyValue == 19
+			object[arrayPos0].state = 5
+			object[arrayPos0].value6 = 2
+		end if
+		if object[arrayPos0].propertyValue == 35
+			object[arrayPos0].state = 3
+			object[arrayPos0].value6 = 2
+		end if
+		if object[arrayPos0].propertyValue == 54
+			object[arrayPos0].state = 0
+			object[arrayPos0].value6 = 5
+		end if
+		if object[arrayPos0].propertyValue == 67
+			object[arrayPos0].state = 4
+			object[arrayPos0].value6 = 2
+		end if
+		if object[arrayPos0].propertyValue == 99
+			object[arrayPos0].state = 1
+			object[arrayPos0].value6 = 2
+		end if
+		if object[arrayPos0].propertyValue == 115
+			object[arrayPos0].state = 2
+			object[arrayPos0].value6 = 2
+		end if
+	next
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

@@ -1,0 +1,196 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Effect Trigger Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 46 : TYPE_EFFECTTRIGGER
+
+
+
+event ObjectUpdate
+	switch object.propertyValue
+	case 0
+		if object[0].xpos < 41943040
+			stage[0].activeLayer = 2
+			object.type = TypeName[Blank Object]
+			object[19].type = TypeName[Blank Object]
+		end if
+		break
+	case 1
+		if object[0].ypos > object.ypos
+			stage[0].activeLayer = 1
+			object[19].type = TypeName[Blank Object]
+		else
+			stage[0].activeLayer = 2
+			object[19].type = TypeName[Blank Object]
+		end if
+		break
+	case 2
+		if object[0].xpos > object.xpos
+			stage.newWaterLevel = 40108032
+		else
+			stage.newWaterLevel = 42205184
+		end if
+		break
+	case 4
+		BoxCollisionTest(C_TOUCH, object.entityPos, -10, -16, 10, 16, 0, C_BOX, C_BOX, C_BOX, C_BOX)
+		if checkResult == 1
+			if object[0].state != Player_State_Death
+				if object[0].state != Player_State_Drown
+					warp.timer = 0
+					object[0].state = Player_State_WaterCurrent
+					object[0].animation = ANI_FANROTATE
+					object[0].xvel = 0
+					object[0].yvel = -262144
+					if object[0].xpos < object.xpos
+						object[0].xpos += 65536
+					else
+						object[0].xpos -= 65536
+					end if
+				end if
+			end if
+		else
+			if object[0].state == Player_State_WaterCurrent
+				BoxCollisionTest(C_TOUCH, object.entityPos, -64, -16, -32, 16, 0, C_BOX, C_BOX, C_BOX, C_BOX)
+				if checkResult == 1
+					object[0].state = Player_State_Air
+					object[0].animation = ANI_WALKING
+				end if
+				BoxCollisionTest(C_TOUCH, object.entityPos, 32, -16, 64, 16, 0, C_BOX, C_BOX, C_BOX, C_BOX)
+				if checkResult == 1
+					object[0].state = Player_State_Air
+					object[0].animation = ANI_WALKING
+				end if
+			end if
+		end if
+		break
+	case 5
+		BoxCollisionTest(C_TOUCH, object.entityPos, -10, -16, 10, 16, 0, C_BOX, C_BOX, C_BOX, C_BOX)
+		if checkResult == 1
+			if object[0].state != Player_State_Death
+				if object[0].state != Player_State_Drown
+					warp.timer = 0
+					object[0].state = Player_State_WaterCurrent
+					object[0].animation = ANI_FANROTATE
+					object[0].xvel = 0
+					object[0].yvel = 262144
+					if object[0].xpos < object.xpos
+						object[0].xpos += 65536
+					else
+						object[0].xpos -= 65536
+					end if
+				end if
+			end if
+		else
+			if object[0].state == Player_State_WaterCurrent
+				BoxCollisionTest(C_TOUCH, object.entityPos, -64, -16, -32, 16, 0, C_BOX, C_BOX, C_BOX, C_BOX)
+				if checkResult == 1
+					object[0].state = Player_State_Ground
+					object[0].animation = ANI_WALKING
+				end if
+				BoxCollisionTest(C_TOUCH, object.entityPos, 32, -16, 64, 16, 0, C_BOX, C_BOX, C_BOX, C_BOX)
+				if checkResult == 1
+					object[0].state = Player_State_Ground
+					object[0].animation = ANI_WALKING
+				end if
+			end if
+		end if
+		break
+	case 6
+		BoxCollisionTest(C_TOUCH, object.entityPos, -16, -16, 16, 16, 0, C_BOX, C_BOX, C_BOX, C_BOX)
+		if checkResult == 1
+			if object[0].state != Player_State_Death
+				if object[0].state != Player_State_Drown
+					object[0].xvel = -262144
+					object[0].animation = ANI_FANROTATE
+				end if
+			end if
+		end if
+		break
+	case 7
+		BoxCollisionTest(C_TOUCH, object.entityPos, -16, -16, 16, 16, 0, C_BOX, C_BOX, C_BOX, C_BOX)
+		if checkResult == 1
+			if object[0].state != Player_State_Death
+				if object[0].state != Player_State_Drown
+					object[0].xvel = 262144
+					object[0].animation = ANI_FANROTATE
+				end if
+			end if
+		end if
+		break
+	case 8
+		BoxCollisionTest(C_TOUCH, object.entityPos, -16, -16, 16, 16, 0, C_BOX, C_BOX, C_BOX, C_BOX)
+		if checkResult == 1
+			if object[0].state != Player_State_Death
+				if object[0].state != Player_State_Drown
+					object[0].yvel = -262144
+					object[0].animation = ANI_FANROTATE
+				end if
+			end if
+		end if
+		break
+	case 9
+		BoxCollisionTest(C_TOUCH, object.entityPos, -16, -16, 16, 16, 0, C_BOX, C_BOX, C_BOX, C_BOX)
+		if checkResult == 1
+			if object[0].state != Player_State_Death
+				if object[0].state != Player_State_Drown
+					object[0].yvel = 262144
+					object[0].animation = ANI_FANROTATE
+				end if
+			end if
+		end if
+		break
+	case 10
+		BoxCollisionTest(C_TOUCH, object.entityPos, -16, -16, 16, 16, 0, C_BOX, C_BOX, C_BOX, C_BOX)
+		if checkResult == 1
+			if object[0].state != Player_State_Death
+				if object[0].state != Player_State_Drown
+					object[0].xvel = 0
+				end if
+			end if
+		end if
+		break
+	case 11
+		BoxCollisionTest(C_TOUCH, object.entityPos, -16, -16, 16, 16, 0, C_BOX, C_BOX, C_BOX, C_BOX)
+		if checkResult == 1
+			if object[0].state != Player_State_Death
+				if object[0].state != Player_State_Drown
+					object[0].yvel = 0
+				end if
+			end if
+		end if
+		break
+	case 12
+		BoxCollisionTest(C_TOUCH, object.entityPos, -16, -16, 16, 16, 0, C_BOX, C_BOX, C_BOX, C_BOX)
+		if checkResult == 1
+			if object[0].state != Player_State_Death
+				if object[0].state != Player_State_Drown
+					object[0].yvel = 262144
+					object[0].state = Player_State_Air
+					object[0].animation = ANI_WALKING
+				end if
+			end if
+		end if
+		break
+	case 13
+		if object[0].xpos > object.xpos
+			stage.newWaterLevel = 125829120
+		else
+			stage.newWaterLevel = 87293952
+		end if
+		break
+	end switch
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

@@ -1,0 +1,158 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Link Platforms Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 66 : TYPE_LINKPLATFORMS
+
+
+
+event ObjectUpdate
+	object.angle += object.value5
+	if object.angle < 0
+		object.angle += 512
+	end if
+	object.angle &= 511
+	temp1 = 96
+	Cos(object.value3, object.angle)
+	object.value3 *= temp1
+	object.value3 <<= 7
+	object.value3 += object.xpos
+	object.value3 &= -65536
+	object.value3 -= object.value1
+	Sin(object.value4, object.angle)
+	object.value4 *= temp1
+	object.value4 <<= 7
+	object.value4 += object.ypos
+	object.value4 &= -65536
+	object.value4 -= object.value2
+	if object.frame == 1
+		temp0 = object.xpos
+		temp1 = object.ypos
+		object.xpos = object.value1
+		object.ypos = object.value2
+		foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+			BoxCollisionTest(C_PLATFORM, object.entityPos, -32, -8, 32, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			if checkResult == 1
+				object[currentPlayer].xpos += object.value3
+				object[currentPlayer].ypos += object.value4
+			end if
+		next
+		object.xpos = temp0
+		object.ypos = temp1
+	end if
+end event
+
+
+event ObjectDraw
+	temp1 = 96
+	Cos(object.value1, object.angle)
+	object.value1 *= temp1
+	object.value1 <<= 7
+	object.value1 += object.xpos
+	object.value1 &= -65536
+	Sin(object.value2, object.angle)
+	object.value2 *= temp1
+	object.value2 <<= 7
+	object.value2 += object.ypos
+	object.value2 &= -65536
+	DrawSpriteXY(object.frame, object.value1, object.value2)
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R4/Objects.gif")
+	SpriteFrame(-8, -8, 16, 16, 180, 52)
+	SpriteFrame(-32, -8, 64, 16, 147, 69)
+	foreach (TypeName[Link Platforms], arrayPos0, ALL_ENTITIES)
+		switch object[arrayPos0].propertyValue
+		case 1
+			object[arrayPos0].angle = 112
+			object[arrayPos0].frame = 0
+			object[arrayPos0].value5 = 2
+			arrayPos0++
+			object[arrayPos0].angle = 16
+			object[arrayPos0].frame = 0
+			object[arrayPos0].value5 = 2
+			arrayPos0++
+			object[arrayPos0].angle = 32
+			object[arrayPos0].frame = 0
+			object[arrayPos0].value5 = 2
+			arrayPos0++
+			object[arrayPos0].angle = 48
+			object[arrayPos0].frame = 0
+			object[arrayPos0].value5 = 2
+			arrayPos0++
+			object[arrayPos0].angle = 96
+			object[arrayPos0].frame = 0
+			object[arrayPos0].value5 = 2
+			arrayPos0++
+			object[arrayPos0].angle = 80
+			object[arrayPos0].frame = 0
+			object[arrayPos0].value5 = 2
+			arrayPos0++
+			object[arrayPos0].angle = 64
+			object[arrayPos0].frame = 1
+			object[arrayPos0].value5 = 2
+			arrayPos0++
+			object[arrayPos0].angle = 0
+			object[arrayPos0].frame = 1
+			object[arrayPos0].value5 = 2
+			arrayPos0++
+			object[arrayPos0].angle = 128
+			object[arrayPos0].frame = 1
+			object[arrayPos0].value5 = 2
+			break
+		case 2
+			object[arrayPos0].angle = 112
+			object[arrayPos0].frame = 0
+			object[arrayPos0].value5 = -2
+			arrayPos0++
+			object[arrayPos0].angle = 16
+			object[arrayPos0].frame = 0
+			object[arrayPos0].value5 = -2
+			arrayPos0++
+			object[arrayPos0].angle = 32
+			object[arrayPos0].frame = 0
+			object[arrayPos0].value5 = -2
+			arrayPos0++
+			object[arrayPos0].angle = 48
+			object[arrayPos0].frame = 0
+			object[arrayPos0].value5 = -2
+			arrayPos0++
+			object[arrayPos0].angle = 96
+			object[arrayPos0].frame = 0
+			object[arrayPos0].value5 = -2
+			arrayPos0++
+			object[arrayPos0].angle = 80
+			object[arrayPos0].frame = 0
+			object[arrayPos0].value5 = -2
+			arrayPos0++
+			object[arrayPos0].angle = 64
+			object[arrayPos0].frame = 1
+			object[arrayPos0].value5 = -2
+			arrayPos0++
+			object[arrayPos0].angle = 0
+			object[arrayPos0].frame = 1
+			object[arrayPos0].value5 = -2
+			arrayPos0++
+			object[arrayPos0].angle = 128
+			object[arrayPos0].frame = 1
+			object[arrayPos0].value5 = -2
+			break
+		end switch
+	next
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

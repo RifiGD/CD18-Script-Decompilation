@@ -1,0 +1,195 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Little Planet Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 2 : TYPE_LITTLEPLANET
+
+
+
+event ObjectUpdate
+	if object[0].state == 2
+		if keyDown[0].left == 1
+			if object.xpos > -1024
+				object.xpos--
+			end if
+		end if
+		if keyDown[0].right == 1
+			if object.xpos < 1024
+				object.xpos++
+			end if
+		end if
+		if keyDown[0].up == 1
+			object.ypos--
+		end if
+		if keyDown[0].down == 1
+			object.ypos++
+		end if
+		if keyDown[0].start == 1
+			if object.value4 == 0
+				if object.value3 > -256
+					object.value3 -= 2
+				end if
+			else
+				if object.value3 < 256
+					object.value3 += 2
+				end if
+			end if
+		end if
+		if keyPress[0].start == 1
+			object.value4++
+			object.value4 &= 1
+			object.value3 = 0
+		end if
+		if keyPress[0].buttonC == 1
+			object.value5++
+			object.value5 &= 1
+		end if
+		if keyDown[0].buttonC == 1
+			if object.value5 == 0
+				if object.value1 > 48
+					object.value1 -= 8
+				end if
+			else
+				if object.value1 < 16384
+					object.value1 += 8
+				end if
+			end if
+		end if
+	end if
+	object.angle += object.value3
+	if object.angle < 0
+		object.angle += 8192
+	end if
+	object.angle &= 8191
+	object.rotation = object.angle
+	object.rotation >>= 4
+end event
+
+
+event ObjectDraw
+	if object.frame == 22
+		DrawRect(0, 32, screen.xsize, 176, 64, 64, 32, 176)
+	end if
+	if object.value1 > 0
+		temp0 = object.xpos
+		temp0 <<= 11
+		temp0 /= object.value1
+		temp0 += screen.xcenter
+		temp1 = object.ypos
+		temp1 <<= 11
+		temp1 /= object.value1
+		temp1 += 120
+		object.scale = 131072
+		object.scale /= object.value1
+		DrawSpriteScreenFX(object.frame, FX_ROTOZOOM, temp0, temp1)
+		temp2 = object.animationTimer
+		temp2 >>= 3
+		temp3 = object.frame
+		switch temp2
+		case 0
+			temp3++
+			DrawSpriteScreenFX(temp3, FX_ROTOZOOM, temp0, temp1)
+			break
+		case 1
+			temp3 += 2
+			DrawSpriteScreenFX(temp3, FX_ROTOZOOM, temp0, temp1)
+			break
+		case 2
+			temp3 += 3
+			DrawSpriteScreenFX(temp3, FX_ROTOZOOM, temp0, temp1)
+			break
+		case 3
+			temp3 += 4
+			DrawSpriteScreenFX(temp3, FX_ROTOZOOM, temp0, temp1)
+			break
+		case 4
+			temp3 += 5
+			DrawSpriteScreenFX(temp3, FX_ROTOZOOM, temp0, temp1)
+			break
+		case 24
+			temp3 += 6
+			DrawSpriteScreenFX(temp3, FX_ROTOZOOM, temp0, temp1)
+			break
+		case 25
+			temp3 += 7
+			DrawSpriteScreenFX(temp3, FX_ROTOZOOM, temp0, temp1)
+			break
+		case 26
+			temp3 += 8
+			DrawSpriteScreenFX(temp3, FX_ROTOZOOM, temp0, temp1)
+			break
+		case 27
+			temp3 += 9
+			DrawSpriteScreenFX(temp3, FX_ROTOZOOM, temp0, temp1)
+			break
+		case 28
+			temp3 += 10
+			DrawSpriteScreenFX(temp3, FX_ROTOZOOM, temp0, temp1)
+			break
+		end switch
+		object.animationTimer++
+		object.animationTimer &= 511
+	end if
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("DAGarden/LittlePlanet.gif")
+	arrayPos0 = 32
+	while arrayPos0 < 1056
+		if object[arrayPos0].type == TypeName[Little Planet]
+			object[arrayPos0].xpos = 0
+			object[arrayPos0].ypos = 0
+			object[arrayPos0].value1 = 384
+			object[arrayPos0].value3 = -8
+		end if
+		arrayPos0++
+	loop
+	SpriteFrame(-126, -126, 252, 252, 0, 0)
+	SpriteFrame(95, -70, 16, 16, 256, 257)
+	SpriteFrame(91, -75, 24, 24, 256, 274)
+	SpriteFrame(92, -88, 32, 32, 256, 299)
+	SpriteFrame(86, -92, 40, 40, 256, 332)
+	SpriteFrame(85, -94, 40, 40, 256, 373)
+	SpriteFrame(76, -90, 16, 16, 273, 257)
+	SpriteFrame(75, -97, 24, 24, 281, 274)
+	SpriteFrame(73, -104, 32, 32, 289, 299)
+	SpriteFrame(76, -107, 32, 32, 297, 332)
+	SpriteFrame(75, -110, 32, 32, 297, 365)
+	SpriteFrame(-126, -126, 252, 252, 256, 0)
+	SpriteFrame(95, -70, 16, 16, 330, 257)
+	SpriteFrame(91, -75, 24, 24, 330, 274)
+	SpriteFrame(92, -88, 32, 32, 330, 299)
+	SpriteFrame(86, -92, 40, 40, 330, 332)
+	SpriteFrame(85, -94, 40, 40, 330, 373)
+	SpriteFrame(76, -90, 16, 16, 347, 257)
+	SpriteFrame(75, -97, 24, 24, 355, 274)
+	SpriteFrame(73, -104, 32, 32, 363, 299)
+	SpriteFrame(76, -107, 32, 32, 371, 332)
+	SpriteFrame(75, -110, 32, 32, 371, 365)
+	SpriteFrame(-126, -126, 252, 252, 0, 256)
+	SpriteFrame(95, -70, 16, 16, 404, 257)
+	SpriteFrame(91, -75, 24, 24, 404, 274)
+	SpriteFrame(92, -88, 32, 32, 404, 299)
+	SpriteFrame(86, -92, 40, 40, 404, 332)
+	SpriteFrame(85, -94, 40, 40, 404, 373)
+	SpriteFrame(76, -90, 16, 16, 421, 257)
+	SpriteFrame(75, -97, 24, 24, 429, 274)
+	SpriteFrame(73, -104, 32, 32, 437, 299)
+	SpriteFrame(76, -107, 32, 32, 445, 332)
+	SpriteFrame(75, -110, 32, 32, 445, 365)
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

@@ -1,0 +1,256 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: BG Effects Object
+// Script Author: Christian Whitehead
+// Unpacked by RifiGD's UnScriptR
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 14 : TYPE_BGEFFECTS
+
+
+// Tables
+public table BGEffects_table0
+	0, 32, 64, 96, 128, 160, 192, 224, 0, 0, 0, 0, 0, 0, 0, 0
+	0, 0, 32, 64, 96, 128, 160, 192, 0, 0, 0, 0, 0, 0, 0, 32
+	0, 0, 0, 32, 64, 96, 128, 160, 0, 0, 0, 0, 0, 0, 32, 64
+	0, 0, 0, 0, 32, 64, 96, 128, 0, 0, 0, 0, 0, 32, 64, 96
+	0, 0, 0, 0, 0, 32, 64, 96, 0, 0, 0, 0, 32, 64, 96, 128
+	0, 0, 0, 0, 0, 0, 32, 64, 0, 0, 0, 32, 64, 96, 128, 160
+	0, 0, 0, 0, 0, 0, 0, 32, 0, 0, 32, 64, 96, 128, 160, 192
+	0, 0, 0, 0, 0, 0, 0, 0, 0, 32, 64, 96, 128, 160, 192, 224
+	0, 0, 0, 0, 0, 0, 0, 0, 32, 64, 96, 128, 160, 192, 224, 192
+	0, 32, 0, 0, 0, 0, 0, 0, 64, 96, 128, 160, 192, 224, 192, 160
+	0, 64, 32, 0, 0, 0, 0, 0, 96, 128, 160, 192, 224, 192, 160, 128
+	0, 96, 64, 32, 0, 0, 0, 0, 128, 160, 192, 224, 192, 160, 128, 96
+	0, 128, 96, 64, 32, 0, 0, 0, 160, 192, 224, 192, 160, 128, 96, 64
+	0, 160, 128, 96, 64, 32, 0, 0, 192, 224, 192, 160, 128, 96, 64, 32
+	0, 192, 160, 128, 96, 64, 32, 0, 224, 192, 160, 128, 96, 64, 32, 0
+	0, 224, 192, 160, 128, 96, 64, 32, 192, 160, 128, 96, 64, 32, 0, 0
+	0, 192, 224, 192, 160, 128, 96, 64, 160, 128, 96, 64, 32, 0, 0, 0
+	0, 160, 192, 224, 192, 160, 128, 96, 128, 96, 64, 32, 0, 0, 0, 0
+	0, 128, 160, 192, 224, 192, 160, 128, 96, 64, 32, 0, 0, 0, 0, 0
+	0, 96, 128, 160, 192, 224, 192, 160, 64, 32, 0, 0, 0, 0, 0, 0
+	0, 64, 96, 128, 160, 192, 224, 192, 32, 0, 0, 0, 0, 0, 0, 0
+	0, 32, 64, 96, 128, 160, 192, 224, 0, 0, 0, 0, 0, 0, 0, 0
+	0, 0, 32, 64, 96, 128, 160, 192, 0, 0, 0, 0, 0, 0, 0, 2
+	0, 0, 0, 32, 64, 96, 128, 160, 0, 0, 0, 0, 0, 0, 2, 4
+	0, 0, 0, 0, 32, 64, 96, 128, 0, 0, 0, 0, 0, 2, 4, 6
+	0, 0, 0, 0, 0, 32, 64, 96, 0, 0, 0, 0, 2, 4, 6, 8
+	0, 0, 0, 0, 0, 0, 32, 64, 0, 0, 0, 2, 4, 6, 8, 10
+	0, 0, 0, 0, 0, 0, 0, 32, 0, 0, 2, 4, 6, 8, 10, 12
+	0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 4, 6, 8, 10, 12, 14
+	0, 0, 0, 0, 0, 0, 0, 0, 2, 4, 6, 8, 10, 12, 14, 12
+	0, 2, 0, 0, 0, 0, 0, 0, 4, 6, 8, 10, 12, 14, 12, 10
+	0, 4, 2, 0, 0, 0, 0, 0, 6, 8, 10, 12, 14, 12, 10, 8
+	0, 6, 4, 2, 0, 0, 0, 0, 8, 10, 12, 14, 12, 10, 8, 6
+	0, 8, 6, 4, 2, 0, 0, 0, 10, 12, 14, 12, 10, 8, 6, 4
+	0, 10, 8, 6, 4, 2, 0, 0, 12, 14, 12, 10, 8, 6, 4, 2
+	0, 12, 10, 8, 6, 4, 2, 0, 14, 12, 10, 8, 6, 4, 2, 0
+	0, 14, 12, 10, 8, 6, 4, 2, 12, 10, 8, 6, 4, 2, 0, 0
+	0, 12, 14, 12, 10, 8, 6, 4, 10, 8, 6, 4, 2, 0, 0, 0
+	0, 10, 12, 14, 12, 10, 8, 6, 8, 6, 4, 2, 0, 0, 0, 0
+	0, 8, 10, 12, 14, 12, 10, 8, 6, 4, 2, 0, 0, 0, 0, 0
+	0, 6, 8, 10, 12, 14, 12, 10, 4, 2, 0, 0, 0, 0, 0, 0
+	0, 4, 6, 8, 10, 12, 14, 12, 2, 0, 0, 0, 0, 0, 0, 0
+	0, 2, 4, 6, 8, 10, 12, 14, 0, 0, 0, 0, 0, 0, 0, 0
+	0, 0, 2, 4, 6, 8, 10, 12, 0, 0, 0, 0, 0, 0, 0, 32
+	0, 0, 0, 2, 4, 6, 8, 10, 0, 0, 0, 0, 0, 0, 32, 64
+	0, 0, 0, 0, 2, 4, 6, 8, 0, 0, 0, 0, 0, 32, 64, 96
+	0, 0, 0, 0, 0, 2, 4, 6, 0, 0, 0, 0, 32, 64, 96, 128
+	0, 0, 0, 0, 0, 0, 2, 4, 0, 0, 0, 32, 64, 96, 128, 160
+	0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 32, 64, 96, 128, 160, 192
+	0, 0, 0, 0, 0, 0, 0, 0, 0, 32, 64, 96, 128, 160, 192, 224
+	0, 0, 0, 0, 0, 0, 0, 0, 32, 64, 96, 128, 160, 192, 224, 192
+	0, 32, 0, 0, 0, 0, 0, 0, 64, 96, 128, 160, 192, 224, 192, 160
+	0, 64, 32, 0, 0, 0, 0, 0, 96, 128, 160, 192, 224, 192, 160, 128
+	0, 96, 64, 32, 0, 0, 0, 0, 128, 160, 192, 224, 192, 160, 128, 96
+	0, 128, 96, 64, 32, 0, 0, 0, 160, 192, 224, 192, 160, 128, 96, 64
+	0, 160, 128, 96, 64, 32, 0, 0, 192, 224, 192, 160, 128, 96, 64, 32
+	0, 192, 160, 128, 96, 64, 32, 0, 224, 192, 160, 128, 96, 64, 32, 0
+	0, 224, 192, 160, 128, 96, 64, 32, 192, 160, 128, 96, 64, 32, 0, 0
+	0, 192, 224, 192, 160, 128, 96, 64, 160, 128, 96, 64, 32, 0, 0, 0
+	0, 160, 192, 224, 192, 160, 128, 96, 128, 96, 64, 32, 0, 0, 0, 0
+	0, 128, 160, 192, 224, 192, 160, 128, 96, 64, 32, 0, 0, 0, 0, 0
+	0, 96, 128, 160, 192, 224, 192, 160, 64, 32, 0, 0, 0, 0, 0, 0
+	0, 64, 96, 128, 160, 192, 224, 192, 32, 0, 0, 0, 0, 0, 0, 0
+end table
+
+
+
+event ObjectDraw
+	object.value3++
+	if object.value3 > 2
+		object.value3 = 0
+		object.value5++
+		object.value5 %= 3
+		switch object.value5
+		case 0
+			Copy16x16Tile(260, 420)
+			Copy16x16Tile(259, 421)
+			Copy16x16Tile(258, 422)
+			Copy16x16Tile(257, 423)
+			Copy16x16Tile(264, 424)
+			Copy16x16Tile(263, 425)
+			Copy16x16Tile(262, 426)
+			Copy16x16Tile(261, 427)
+			break
+		case 1
+			Copy16x16Tile(260, 428)
+			Copy16x16Tile(259, 429)
+			Copy16x16Tile(258, 430)
+			Copy16x16Tile(257, 431)
+			Copy16x16Tile(264, 432)
+			Copy16x16Tile(263, 433)
+			Copy16x16Tile(262, 434)
+			Copy16x16Tile(261, 435)
+			break
+		case 2
+			Copy16x16Tile(260, 436)
+			Copy16x16Tile(259, 437)
+			Copy16x16Tile(258, 438)
+			Copy16x16Tile(257, 439)
+			Copy16x16Tile(264, 440)
+			Copy16x16Tile(263, 441)
+			Copy16x16Tile(262, 442)
+			Copy16x16Tile(261, 443)
+			break
+		end switch
+	end if
+	object.value4++
+	if object.value4 > 5
+		object.value4 = 0
+		object.value6++
+		object.value6 &= 3
+		switch object.value6
+		case 0
+			Copy16x16Tile(99, 444)
+			Copy16x16Tile(98, 445)
+			Copy16x16Tile(101, 448)
+			Copy16x16Tile(100, 449)
+			break
+		case 1
+			Copy16x16Tile(99, 446)
+			Copy16x16Tile(98, 447)
+			Copy16x16Tile(101, 450)
+			Copy16x16Tile(100, 451)
+			break
+		case 2
+			Copy16x16Tile(99, 452)
+			Copy16x16Tile(98, 453)
+			Copy16x16Tile(101, 456)
+			Copy16x16Tile(100, 457)
+			break
+		case 3
+			Copy16x16Tile(99, 454)
+			Copy16x16Tile(98, 455)
+			Copy16x16Tile(101, 458)
+			Copy16x16Tile(100, 459)
+			break
+		end switch
+	end if
+	object.value0++
+	if object.value0 > 5
+		object.value0 = 0
+		RotatePalette(208, 239, 0, 1)
+	end if
+	object.value7--
+	if object.value7 < 0
+		object.value7 = 5
+		temp0 = object.value8
+		temp0 <<= 4
+		temp1 = 208
+		while temp1 < 240
+			GetTableValue(temp2, temp0, BGEffects_table0)
+			if temp2 < 16
+				temp2 <<= 20
+			end if
+			SetPaletteEntry(0, temp1, temp2)
+			temp0++
+			temp1++
+		loop
+		object.value8++
+		if object.value8 >= 63
+			object.value8 = 0
+		end if
+	end if
+	object.value9--
+	if object.value9 < 0
+		object.value9 = 2
+		if object.direction == 0
+			object.value10++
+			if object.value10 > 256
+				object.value10 = 255
+				object.direction = 1
+			end if
+		else
+			object.value10--
+			if object.value10 < -256
+				object.value10 = -255
+				object.direction = 0
+			end if
+		end if
+		temp0 = object.value10
+		temp0 *= 32768
+		temp1 = object.value10
+		temp1 *= 512
+		arrayPos0 = 0
+		while arrayPos0 < 256
+			temp2 = temp0
+			temp2 >>= 15
+			stage[arrayPos0].deformationData2 = temp2
+			temp0 -= temp1
+			arrayPos0++
+		loop
+	end if
+	temp1 = object.value2
+	temp2 = tileLayer[0].angle
+	if temp1 < temp2
+		temp3 = temp2
+		temp3 -= temp1
+		if temp3 > 256
+			temp1 += 512
+		end if
+	else
+		temp3 = temp1
+		temp3 -= temp2
+		if temp3 > 256
+			temp2 += 512
+		end if
+	end if
+	temp0 = temp1
+	temp0 -= temp2
+	object.value2 = tileLayer[0].angle
+	temp1 = 8192
+	temp2 = 131072
+	temp3 = 65536
+	temp1 *= temp0
+	temp2 *= temp0
+	temp3 *= temp0
+	hParallax[2].scrollPos += temp2
+	hParallax[3].scrollPos += temp3
+end event
+
+
+event ObjectStartup
+	stage.curXBoundary1 = 58720256
+	stage.curXBoundary2 = 209715200
+	stage.curYBoundary1 = 58720256
+	stage.curYBoundary2 = 209715200
+	hParallax[0].scrollPos += 983040
+	foreach (TypeName[BG Effects], arrayPos0, ALL_ENTITIES)
+		object[arrayPos0].priority = 1
+		object[arrayPos0].drawOrder = 0
+		object[arrayPos0].value2 = 368
+	next
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

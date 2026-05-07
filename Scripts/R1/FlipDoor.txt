@@ -1,0 +1,116 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Flip Door Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 53 : TYPE_FLIPDOOR
+
+// Function declarations
+reserve function FlipDoor_DebugDraw
+reserve function FlipDoor_DebugSpawn
+
+// Static Values
+public value FlipDoor_value18 = 0;
+
+
+public function FlipDoor_DebugDraw
+	temp0 = object[0].value16
+	temp0 -= FlipDoor_value18
+	temp0 <<= 1
+	DrawSprite(temp0)
+end function
+
+
+public function FlipDoor_DebugSpawn
+	temp0 = object[0].value16
+	temp0 -= FlipDoor_value18
+	CreateTempObject(TypeName[Flip Door], temp0, object.xpos, object.ypos)
+end function
+
+
+event ObjectUpdate
+	if object.value0 > 0
+		object.value0--
+	end if
+	if object.propertyValue == 0
+		foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+			BoxCollisionTest(C_PLATFORM, object.entityPos, -24, -4, 24, 32, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			BoxCollisionTest(C_TOUCH, object.entityPos, -24, -8, 24, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			if checkResult == 1
+				if object[currentPlayer].ypos > object.ypos
+					if object.value0 == 0
+						PlaySfx(SfxName[Door], 0)
+					end if
+					object.value0 = 10
+				end if
+			end if
+		next
+	else
+		foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+			if object[currentPlayer].xpos < object.xpos
+				BoxCollisionTest(C_TOUCH, object.entityPos, -16, -24, 0, 24, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+				if checkResult == 1
+					if object.value0 == 0
+						PlaySfx(SfxName[Door], 0)
+					end if
+					object.value0 = 10
+				end if
+			else
+				if object.value0 == 0
+					BoxCollisionTest(C_SOLID, object.entityPos, -24, -24, 4, 24, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+				end if
+			end if
+		next
+	end if
+end event
+
+
+event ObjectDraw
+	if object.propertyValue == 0
+		if object.value0 > 0
+			DrawSprite(1)
+		else
+			DrawSprite(0)
+		end if
+	else
+		if object.value0 > 0
+			DrawSprite(3)
+		else
+			DrawSprite(2)
+		end if
+	end if
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R1/Objects.gif")
+	SpriteFrame(-24, -4, 48, 8, 117, 34)
+	SpriteFrame(-24, -44, 8, 48, 167, 43)
+	SpriteFrame(-4, -24, 8, 48, 176, 43)
+	SpriteFrame(-4, -24, 48, 8, 117, 34)
+	foreach (TypeName[Flip Door], arrayPos0, ALL_ENTITIES)
+		object[arrayPos0].drawOrder = 5
+	next
+	temp0 = 0
+	FlipDoor_value18 = DebugMode_ObjCount
+	while temp0 < 2
+		SetTableValue(TypeName[Flip Door], DebugMode_ObjCount, DebugMode_TypesTable)
+		SetTableValue(FlipDoor_DebugDraw, DebugMode_ObjCount, DebugMode_DrawTable)
+		SetTableValue(FlipDoor_DebugSpawn, DebugMode_ObjCount, DebugMode_SpawnTable)
+		DebugMode_ObjCount++
+		temp0++
+	loop
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

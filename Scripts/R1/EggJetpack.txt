@@ -1,0 +1,72 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Eggman Jetpack Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 62 : TYPE_EGGMANJETPACK
+
+
+
+event ObjectUpdate
+	switch object.state
+	case 0
+		if object.value0 < 64
+			object.value0++
+			if object.value0 > 27
+				object.xpos += 32768
+				object.ypos -= 131072
+			end if
+		else
+			object.value0 = 0
+			object.state = 2
+			object.value1 = object.ypos
+		end if
+		break
+	case 2
+		object.angle += 3
+		object.angle &= 255
+		Sin256(temp0, object.angle)
+		temp0 <<= 11
+		object.xpos += 163840
+		object.ypos = object.value1
+		object.ypos -= temp0
+		if object.outOfBounds == 1
+			object.type = TypeName[Blank Object]
+			object[-1].state = 5
+			object[-1].value10 = 0
+		end if
+		break
+	end switch
+end event
+
+
+event ObjectDraw
+	temp0 = object.frame
+	temp0 >>= 2
+	temp0 += object.state
+	DrawSprite(temp0)
+	object.frame++
+	object.frame &= 7
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R1/Objects3.gif")
+	SpriteFrame(-28, -24, 56, 56, 1, 107)
+	SpriteFrame(-28, -24, 56, 56, 1, 164)
+	SpriteFrame(-28, -24, 56, 56, 58, 107)
+	SpriteFrame(-28, -24, 56, 56, 58, 164)
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

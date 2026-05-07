@@ -1,0 +1,716 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Tunnel Path Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 69 : TYPE_TUNNELPATH
+
+
+
+event ObjectUpdate
+	if object.state == 1
+		if object[0].state == 26
+			object.state = 0
+		end if
+		temp0 = object.value0
+		object.value0++
+		object[0].speed = object[0].xpos
+		object[0].visible = 0
+		switch temp0
+		case 0
+			object[0].interaction = 0
+			object[0].xpos = 334541056
+			object[0].ypos = 15754496
+			break
+		case 1
+			object[0].xpos = 335589632
+			object[0].ypos = 15754496
+			break
+		case 2
+			object[0].xpos = 336638208
+			object[0].ypos = 15754496
+			break
+		case 3
+			object[0].xpos = 337686784
+			object[0].ypos = 15754496
+			break
+		case 4
+			object[0].xpos = 338735360
+			object[0].ypos = 15754496
+			break
+		case 5
+			object[0].xpos = 339783936
+			object[0].ypos = 15754496
+			break
+		case 6
+			object[0].xpos = 340832512
+			object[0].ypos = 16203776
+			break
+		case 7
+			object[0].xpos = 341881088
+			object[0].ypos = 16653056
+			break
+		case 8
+			object[0].xpos = 342929664
+			object[0].ypos = 17102336
+			break
+		case 9
+			object[0].xpos = 343453952
+			object[0].ypos = 17364480
+			break
+		case 10
+			object[0].xpos = 343903232
+			object[0].ypos = 18413056
+			break
+		case 11
+			object[0].xpos = 344352512
+			object[0].ypos = 19461632
+			break
+		case 12
+			object[0].xpos = 344801792
+			object[0].ypos = 20510208
+			break
+		case 13
+			object[0].xpos = 344998400
+			object[0].ypos = 21034496
+			break
+		case 14
+			object[0].xpos = 344998400
+			object[0].ypos = 22083072
+			break
+		case 15
+			object[0].xpos = 344998400
+			object[0].ypos = 23131648
+			break
+		case 16
+			object[0].xpos = 344998400
+			object[0].ypos = 24180224
+			break
+		case 17
+			object[0].xpos = 344998400
+			object[0].ypos = 25228800
+			break
+		case 18
+			object[0].xpos = 344998400
+			object[0].ypos = 26277376
+			break
+		case 19
+			object[0].xpos = 344998400
+			object[0].ypos = 27325952
+			break
+		case 20
+			object[0].xpos = 344998400
+			object[0].ypos = 28374528
+			break
+		case 21
+			object[0].xpos = 344998400
+			object[0].ypos = 29423104
+			break
+		case 22
+			object[0].xpos = 344998400
+			object[0].ypos = 30471680
+			break
+		case 23
+			object[0].xpos = 344998400
+			object[0].ypos = 31520256
+			break
+		case 24
+			object[0].xpos = 343949824
+			object[0].ypos = 31834624
+			break
+		case 25
+			object[0].xpos = 342901248
+			object[0].ypos = 32148992
+			break
+		case 26
+			object[0].xpos = 341852672
+			object[0].ypos = 32463360
+			break
+		case 27
+			object[0].xpos = 340804096
+			object[0].ypos = 32777728
+			break
+		case 28
+			object[0].xpos = 339755520
+			object[0].ypos = 33092096
+			break
+		case 29
+			object[0].xpos = 338706944
+			object[0].ypos = 32698880
+			break
+		case 30
+			object[0].xpos = 337658368
+			object[0].ypos = 32305664
+			break
+		case 31
+			object[0].xpos = 336609792
+			object[0].ypos = 31912448
+			break
+		case 32
+			object[0].xpos = 335561216
+			object[0].ypos = 31519232
+			break
+		case 33
+			object[0].xpos = 335036928
+			object[0].ypos = 30470656
+			break
+		case 34
+			object[0].xpos = 334512640
+			object[0].ypos = 29422080
+			break
+		case 35
+			object[0].xpos = 334512640
+			object[0].ypos = 28373504
+			break
+		case 36
+			object[0].xpos = 334512640
+			object[0].ypos = 27324928
+			break
+		case 37
+			object[0].xpos = 334512640
+			object[0].ypos = 26276352
+			break
+		case 38
+			object[0].xpos = 334512640
+			object[0].ypos = 25227776
+			break
+		case 39
+			object[0].xpos = 335561216
+			object[0].ypos = 24179200
+			break
+		case 40
+			object[0].xpos = 336609792
+			object[0].ypos = 23917056
+			break
+		case 41
+			object[0].xpos = 337658368
+			object[0].ypos = 23654912
+			break
+		case 42
+			object[0].xpos = 338706944
+			object[0].ypos = 23917056
+			break
+		case 43
+			object[0].xpos = 339755520
+			object[0].ypos = 24179200
+			break
+		case 44
+			object[0].xpos = 340504320
+			object[0].ypos = 25227776
+			break
+		case 45
+			object[0].xpos = 341253120
+			object[0].ypos = 26276352
+			break
+		case 46
+			object[0].xpos = 342001920
+			object[0].ypos = 27324928
+			break
+		case 47
+			object[0].xpos = 342395136
+			object[0].ypos = 27849216
+			break
+		case 48
+			object[0].xpos = 343443712
+			object[0].ypos = 28082176
+			break
+		case 49
+			object[0].xpos = 344492288
+			object[0].ypos = 28315136
+			break
+		case 50
+			object[0].xpos = 345540864
+			object[0].ypos = 28548096
+			break
+		case 51
+			object[0].xpos = 346589440
+			object[0].ypos = 28781056
+			break
+		case 52
+			object[0].xpos = 347638016
+			object[0].ypos = 29014016
+			break
+		case 53
+			object[0].xpos = 348686592
+			object[0].ypos = 29246976
+			break
+		case 54
+			object[0].xpos = 349735168
+			object[0].ypos = 29479936
+			break
+		case 55
+			object[0].xpos = 350783744
+			object[0].ypos = 29712896
+			break
+		case 56
+			object[0].xpos = 351832320
+			object[0].ypos = 29945856
+			break
+		case 57
+			object[0].xpos = 352880896
+			object[0].ypos = 30178816
+			CreateTempObject(TypeName[Waterfall Splash], 0, object[0].xpos, object[0].ypos)
+			break
+		case 58
+			object[0].xpos = 353929472
+			object[0].ypos = 30411776
+			break
+		case 59
+			object[0].xpos = 354978048
+			object[0].ypos = 30644736
+			break
+		case 60
+			object[0].xpos = 356026624
+			object[0].ypos = 30877696
+			CreateTempObject(TypeName[Waterfall Splash], 0, object[0].xpos, object[0].ypos)
+			break
+		case 61
+			object[0].xpos = 357075200
+			object[0].ypos = 31110656
+			break
+		case 62
+			object[0].xpos = 358123776
+			object[0].ypos = 31343616
+			break
+		case 63
+			object[0].xpos = 359172352
+			object[0].ypos = 31576576
+			CreateTempObject(TypeName[Waterfall Splash], 0, object[0].xpos, object[0].ypos)
+			break
+		case 64
+			object[0].xpos = 360220928
+			object[0].ypos = 31809536
+			break
+		case 65
+			object[0].xpos = 361269504
+			object[0].ypos = 32042496
+			break
+		case 66
+			object[0].xpos = 362318080
+			object[0].ypos = 32275456
+			CreateTempObject(TypeName[Waterfall Splash], 0, object[0].xpos, object[0].ypos)
+			break
+		case 67
+			object[0].xpos = 363366656
+			object[0].ypos = 32508416
+			break
+		case 68
+			object[0].xpos = 364415232
+			object[0].ypos = 32741376
+			break
+		case 69
+			object[0].xpos = 365463808
+			object[0].ypos = 32974336
+			break
+		case 70
+			object[0].xpos = 366512384
+			object[0].ypos = 33207296
+			break
+		case 71
+			object[0].xpos = 368609536
+			object[0].ypos = 33673216
+			break
+		case 72
+			object[0].xpos = 369658112
+			object[0].ypos = 33906176
+			break
+		case 73
+			object[0].xpos = 370706688
+			object[0].ypos = 34139136
+			break
+		case 74
+			object[0].xpos = 371755264
+			object[0].ypos = 34372096
+			break
+		case 75
+			object[0].xpos = 372803840
+			object[0].ypos = 34605056
+			break
+		case 76
+			object[0].xpos = 373852416
+			object[0].ypos = 34838016
+			break
+		case 77
+			object[0].xpos = 374900992
+			object[0].ypos = 35070976
+			break
+		case 78
+			object[0].xpos = 375425280
+			object[0].ypos = 35136512
+			break
+		case 79
+			object[0].xpos = 376473856
+			object[0].ypos = 35005440
+			break
+		case 80
+			object[0].xpos = 377522432
+			object[0].ypos = 34874368
+			break
+		case 81
+			object[0].xpos = 378571008
+			object[0].ypos = 34743296
+			break
+		case 82
+			object[0].xpos = 379619584
+			object[0].ypos = 34612224
+			break
+		case 83
+			object[0].xpos = 380668160
+			object[0].ypos = 33825792
+			break
+		case 84
+			object[0].xpos = 381716736
+			object[0].ypos = 33039360
+			break
+		case 85
+			object[0].xpos = 382066176
+			object[0].ypos = 31990784
+			break
+		case 86
+			object[0].xpos = 382415616
+			object[0].ypos = 30942208
+			break
+		case 87
+			object[0].xpos = 382765056
+			object[0].ypos = 29893632
+			break
+		case 88
+			object[0].xpos = 382240768
+			object[0].ypos = 28845056
+			break
+		case 89
+			object[0].xpos = 381716480
+			object[0].ypos = 27796480
+			break
+		case 90
+			object[0].xpos = 380667904
+			object[0].ypos = 27534336
+			break
+		case 91
+			object[0].xpos = 379619328
+			object[0].ypos = 27272192
+			break
+		case 92
+			object[0].xpos = 378570752
+			object[0].ypos = 27010048
+			break
+		case 93
+			object[0].xpos = 377522176
+			object[0].ypos = 26747904
+			break
+		case 94
+			object[0].xpos = 376473600
+			object[0].ypos = 26957568
+			break
+		case 95
+			object[0].xpos = 375425024
+			object[0].ypos = 27167232
+			break
+		case 96
+			object[0].xpos = 374900736
+			object[0].ypos = 27298304
+			break
+		case 97
+			object[0].xpos = 374271744
+			object[0].ypos = 28346880
+			break
+		case 98
+			object[0].xpos = 373642752
+			object[0].ypos = 29395456
+			break
+		case 99
+			object[0].xpos = 373315072
+			object[0].ypos = 29919744
+			break
+		case 100
+			object[0].xpos = 373734400
+			object[0].ypos = 30968320
+			break
+		case 101
+			object[0].xpos = 374153728
+			object[0].ypos = 32016896
+			break
+		case 102
+			object[0].xpos = 374350336
+			object[0].ypos = 32541184
+			break
+		case 103
+			object[0].xpos = 375398912
+			object[0].ypos = 32890624
+			break
+		case 104
+			object[0].xpos = 376447488
+			object[0].ypos = 33240064
+			break
+		case 105
+			object[0].xpos = 377496064
+			object[0].ypos = 33589504
+			break
+		case 106
+			object[0].xpos = 378544640
+			object[0].ypos = 33589504
+			break
+		case 107
+			object[0].xpos = 379593216
+			object[0].ypos = 33589504
+			break
+		case 108
+			object[0].xpos = 380641792
+			object[0].ypos = 33589504
+			break
+		case 109
+			object[0].xpos = 381690368
+			object[0].ypos = 33589504
+			break
+		case 110
+			object[0].xpos = 382738944
+			object[0].ypos = 34638080
+			break
+		case 111
+			object[0].xpos = 382738944
+			object[0].ypos = 35686656
+			break
+		case 112
+			object[0].xpos = 382738944
+			object[0].ypos = 36735232
+			break
+		case 113
+			object[0].xpos = 382738944
+			object[0].ypos = 37783808
+			break
+		case 114
+			object[0].xpos = 382738944
+			object[0].ypos = 38832384
+			break
+		case 115
+			object[0].xpos = 382738944
+			object[0].ypos = 39880960
+			break
+		case 116
+			object[0].xpos = 382738944
+			object[0].ypos = 40929536
+			break
+		case 117
+			object[0].xpos = 382738944
+			object[0].ypos = 41978112
+			break
+		case 118
+			object[0].xpos = 382738944
+			object[0].ypos = 42502400
+			break
+		case 119
+			object[0].xpos = 382439424
+			object[0].ypos = 43550976
+			break
+		case 120
+			object[0].xpos = 382139904
+			object[0].ypos = 44599552
+			break
+		case 121
+			object[0].xpos = 381840384
+			object[0].ypos = 45648128
+			break
+		case 122
+			object[0].xpos = 381709312
+			object[0].ypos = 46172416
+			break
+		case 123
+			object[0].xpos = 380660736
+			object[0].ypos = 46565632
+			break
+		case 124
+			object[0].xpos = 379612160
+			object[0].ypos = 46958848
+			break
+		case 125
+			object[0].xpos = 378563584
+			object[0].ypos = 47352064
+			break
+		case 126
+			object[0].xpos = 377515008
+			object[0].ypos = 47745280
+			break
+		case 127
+			object[0].xpos = 376466432
+			object[0].ypos = 47220992
+			break
+		case 128
+			object[0].xpos = 375417856
+			object[0].ypos = 46696704
+			break
+		case 129
+			object[0].xpos = 374369280
+			object[0].ypos = 46172416
+			break
+		case 130
+			object[0].xpos = 374369280
+			object[0].ypos = 45123840
+			break
+		case 131
+			object[0].xpos = 374369280
+			object[0].ypos = 44075264
+			break
+		case 132
+			object[0].xpos = 375417856
+			object[0].ypos = 43725824
+			break
+		case 133
+			object[0].xpos = 376466432
+			object[0].ypos = 43376384
+			break
+		case 134
+			object[0].xpos = 377515008
+			object[0].ypos = 43026944
+			break
+		case 135
+			object[0].xpos = 378563584
+			object[0].ypos = 43026944
+			break
+		case 136
+			object[0].xpos = 379612160
+			object[0].ypos = 43026944
+			break
+		case 137
+			object[0].xpos = 380660736
+			object[0].ypos = 43026944
+			break
+		case 138
+			object[0].xpos = 381709312
+			object[0].ypos = 43026944
+			break
+		case 139
+			object[0].xpos = 382757888
+			object[0].ypos = 43026944
+			break
+		case 140
+			object[0].xpos = 383806464
+			object[0].ypos = 43026944
+			break
+		case 141
+			object[0].xpos = 384855040
+			object[0].ypos = 43026944
+			break
+		case 142
+			object[0].xpos = 385903616
+			object[0].ypos = 43026944
+			break
+		case 143
+			object[0].xpos = 386952192
+			object[0].ypos = 43446272
+			break
+		case 144
+			object[0].xpos = 388000768
+			object[0].ypos = 43865600
+			break
+		case 145
+			object[0].xpos = 388525056
+			object[0].ypos = 44062208
+			break
+		case 146
+			object[0].xpos = 388525056
+			object[0].ypos = 45110784
+			break
+		case 147
+			object[0].xpos = 388525056
+			object[0].ypos = 46159360
+			break
+		case 148
+			object[0].xpos = 388525056
+			object[0].ypos = 47207936
+			break
+		case 149
+			object[0].xpos = 388525056
+			object[0].ypos = 48256512
+			break
+		case 150
+			object[0].xpos = 387476480
+			object[0].ypos = 48675840
+			break
+		case 151
+			object[0].xpos = 386427904
+			object[0].ypos = 49095168
+			break
+		case 152
+			object[0].xpos = 385903616
+			object[0].ypos = 49291776
+			break
+		case 153
+			object[0].xpos = 384855040
+			object[0].ypos = 48662528
+			break
+		case 154
+			object[0].xpos = 383818240
+			object[0].ypos = 48560384
+			break
+		case 155
+			object[0].visible = 1
+			object[0].tileCollisions = 1
+			object.state = 0
+			object.priority = 0
+			object[0].xvel = -786432
+			object[0].speed = -786432
+			object[0].state = 12
+			object[0].interaction = 1
+			if object[+1].type == 0
+				object[+1].type = TypeName[Tunnel Path]
+				PlaySfx(SfxName[Crumble], 0)
+			end if
+			break
+		end switch
+		if object.state > 0
+			object[0].speed -= object[0].xpos
+			FlipSign(object[0].speed)
+		end if
+	end if
+	if object.propertyValue == 0
+		foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+			if object[currentPlayer].state != Player_State_Static
+				BoxCollisionTest(C_TOUCH, object.entityPos, -16, -16, 16, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+				if checkResult == 1
+					object[currentPlayer].state = Player_State_Static
+					if object[currentPlayer].value8 > 0
+						object[currentPlayer].value7 = 0
+						object[currentPlayer].value8 = 0
+					end if
+					object[currentPlayer].tileCollisions = 0
+					object[currentPlayer].visible = 0
+					object.state = 1
+					object.value0 = 0
+					object.priority = 1
+					PlaySfx(SfxName[Release], 0)
+				end if
+			end if
+		next
+	end if
+end event
+
+
+event ObjectDraw
+	if object.propertyValue > 0
+		DrawSprite(0)
+	end if
+end event
+
+
+event ObjectStartup
+	if stage.playerListPos == 0
+		LoadSpriteSheet("R1/Objects.gif")
+		SpriteFrame(-16, -16, 32, 32, 34, 175)
+	else
+		LoadSpriteSheet("R1/Objects3.gif")
+		SpriteFrame(-14, -16, 29, 32, 115, 167)
+	end if
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

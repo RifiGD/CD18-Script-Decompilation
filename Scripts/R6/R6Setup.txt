@@ -1,0 +1,631 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: R6 Setup Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 40 : TYPE_R6SETUP
+
+// Function declarations
+reserve function R6Setup_Function83
+reserve function R6Setup_Function84
+reserve function R6Setup_Function85
+reserve function R6Setup_Function86
+
+
+public function R6Setup_Function83
+	switch object.state
+	case 0
+		if object.value0 < 480
+			object.value0++
+		else
+			PlaySfx(SfxName[Electricity], 0)
+			object.value0 = 0
+			object.state = 1
+		end if
+		break
+	case 1
+		if object.value0 < 90
+			object.value0++
+			object.frame++
+			object.frame &= 1
+		else
+			object.value0 = 0
+			object.frame = 2
+			object.state = 2
+		end if
+		break
+	case 2
+		if object.value0 < 120
+			object.value0++
+			object.frame++
+			if object.frame == 9
+				object.frame = 2
+			end if
+		else
+			object.value0 = 0
+			object.frame = 0
+			object.state = 0
+			object.direction++
+			object.direction %= 3
+		end if
+		break
+	end switch
+	switch object.value2
+	case 0
+		if object.value1 < 15
+			object.value1++
+		else
+			Copy16x16Tile(578, 801)
+			Copy16x16Tile(677, 801)
+			object.value1 = 0
+			object.value2++
+		end if
+		break
+	case 1
+		if object.value1 < 4
+			object.value1++
+		else
+			Copy16x16Tile(578, 802)
+			Copy16x16Tile(677, 802)
+			object.value1 = 0
+			object.value2++
+		end if
+		break
+	case 2
+		if object.value1 < 9
+			object.value1++
+		else
+			Copy16x16Tile(578, 803)
+			Copy16x16Tile(677, 803)
+			object.value1 = 0
+			object.value2++
+		end if
+		break
+	case 3
+		if object.value1 < 4
+			object.value1++
+		else
+			Copy16x16Tile(578, 800)
+			Copy16x16Tile(677, 800)
+			object.value1 = 0
+			object.value2 = 0
+		end if
+		break
+	end switch
+	temp0 = object.value3
+	temp0 &= 1
+	if temp0 == 0
+		temp0 = object.value3
+		temp0 >>= 1
+		temp0 += 804
+		Copy16x16Tile(579, temp0)
+	end if
+	object.value3++
+	object.value3 %= 24
+	temp0 = object.value4
+	temp0 %= 5
+	if temp0 == 0
+		temp0 = object.value4
+		temp0 /= 5
+		temp0 += 816
+		Copy16x16Tile(580, temp0)
+		temp0 += 3
+		Copy16x16Tile(581, temp0)
+	end if
+	object.value4++
+	object.value4 %= 15
+	if object.value5 < 32
+		object.value5++
+		object.value7 = 0
+	else
+		if object.value5 < 212
+			temp0 = object.value5
+			temp0 &= 1
+			if temp0 == 0
+				temp0 = object.value6
+				temp0 += 822
+				object.value6++
+				object.value6 %= 6
+				Copy16x16Tile(543, temp0)
+			end if
+			object.value5++
+			object.value7 = 1
+		else
+			object.value5 = 0
+			object.value7 = 0
+			Copy16x16Tile(543, 822)
+		end if
+	end if
+end function
+
+
+public function R6Setup_Function84
+	temp0 = object.value3
+	temp0 &= 1
+	if temp0 == 0
+		temp0 = object.value3
+		temp0 >>= 1
+		temp0 += 808
+		Copy16x16Tile(579, temp0)
+	end if
+	object.value3++
+	object.value3 %= 24
+	object.value0++
+	object.value0 %= 120
+	if object.value0 < 31
+		temp0 = object.value4
+		temp0 %= 5
+		if temp0 == 0
+			temp0 = object.value4
+			temp0 /= 5
+			temp0 += 820
+			Copy16x16Tile(580, temp0)
+			temp0 += 3
+			Copy16x16Tile(581, temp0)
+		end if
+		object.value4++
+		object.value4 %= 15
+	else
+		Copy16x16Tile(580, 832)
+		Copy16x16Tile(581, 832)
+	end if
+	temp0 = object.value5
+	temp0 &= 1
+	if temp0 == 0
+		temp0 = object.value6
+		temp0 += 826
+		object.value6++
+		object.value6 %= 6
+		Copy16x16Tile(543, temp0)
+	end if
+	object.value5++
+	object.value5 &= 511
+	object.value7 = 1
+end function
+
+
+public function R6Setup_Function85
+	switch object.state
+	case 0
+		if object.value0 < 240
+			object.value0++
+		else
+			PlaySfx(SfxName[Electricity], 0)
+			object.value0 = 0
+			object.state = 1
+		end if
+		break
+	case 1
+		if object.value0 < 90
+			object.value0++
+			object.frame++
+			object.frame &= 1
+		else
+			object.value0 = 0
+			object.frame = 2
+			object.state = 2
+		end if
+		break
+	case 2
+		if object.value0 < 120
+			object.value0++
+			object.frame++
+			if object.frame == 9
+				object.frame = 2
+			end if
+		else
+			object.value0 = 0
+			object.frame = 0
+			object.state = 0
+			object.direction++
+			object.direction %= 3
+		end if
+		break
+	end switch
+	switch object.value2
+	case 0
+		if object.value1 < 15
+			object.value1++
+		else
+			Copy16x16Tile(646, 841)
+			Copy16x16Tile(809, 841)
+			object.value1 = 0
+			object.value2++
+		end if
+		break
+	case 1
+		if object.value1 < 4
+			object.value1++
+		else
+			Copy16x16Tile(646, 842)
+			Copy16x16Tile(809, 842)
+			object.value1 = 0
+			object.value2++
+		end if
+		break
+	case 2
+		if object.value1 < 9
+			object.value1++
+		else
+			Copy16x16Tile(646, 843)
+			Copy16x16Tile(809, 843)
+			object.value1 = 0
+			object.value2++
+		end if
+		break
+	case 3
+		if object.value1 < 4
+			object.value1++
+		else
+			Copy16x16Tile(646, 840)
+			Copy16x16Tile(809, 840)
+			object.value1 = 0
+			object.value2 = 0
+		end if
+		break
+	end switch
+	temp0 = object.value3
+	temp0 &= 1
+	if temp0 == 0
+		temp0 = object.value3
+		temp0 >>= 1
+		temp0 += 844
+		Copy16x16Tile(647, temp0)
+	end if
+	object.value3++
+	object.value3 %= 24
+	temp0 = object.value4
+	temp0 %= 5
+	if temp0 == 0
+		temp0 = object.value4
+		temp0 /= 5
+		temp0 += 856
+		Copy16x16Tile(648, temp0)
+		temp0 += 3
+		Copy16x16Tile(649, temp0)
+	end if
+	object.value4++
+	object.value4 %= 15
+	temp0 = object.value5
+	temp0 &= 1
+	if temp0 == 0
+		temp0 = object.value6
+		temp0 += 862
+		object.value6++
+		object.value6 %= 6
+		Copy16x16Tile(543, temp0)
+	end if
+	object.value5++
+	object.value5 &= 511
+	object.value7 = 1
+end function
+
+
+public function R6Setup_Function86
+	switch object.value2
+	case 0
+		if object.value1 < 15
+			object.value1++
+		else
+			Copy16x16Tile(646, 841)
+			Copy16x16Tile(809, 841)
+			object.value1 = 0
+			object.value2++
+		end if
+		break
+	case 1
+		if object.value1 < 4
+			object.value1++
+		else
+			Copy16x16Tile(646, 842)
+			Copy16x16Tile(809, 842)
+			object.value1 = 0
+			object.value2++
+		end if
+		break
+	case 2
+		if object.value1 < 9
+			object.value1++
+		else
+			Copy16x16Tile(646, 843)
+			Copy16x16Tile(809, 843)
+			object.value1 = 0
+			object.value2++
+		end if
+		break
+	case 3
+		if object.value1 < 4
+			object.value1++
+		else
+			Copy16x16Tile(646, 840)
+			Copy16x16Tile(809, 840)
+			object.value1 = 0
+			object.value2 = 0
+		end if
+		break
+	end switch
+	temp0 = object.value3
+	temp0 &= 1
+	if temp0 == 0
+		temp0 = object.value3
+		temp0 >>= 1
+		temp0 += 844
+		Copy16x16Tile(647, temp0)
+	end if
+	object.value3++
+	object.value3 %= 24
+	temp0 = object.value4
+	temp0 %= 5
+	if temp0 == 0
+		temp0 = object.value4
+		temp0 /= 5
+		temp0 += 856
+		Copy16x16Tile(648, temp0)
+		temp0 += 3
+		Copy16x16Tile(649, temp0)
+	end if
+	object.value4++
+	object.value4 %= 15
+	temp0 = object.value5
+	temp0 &= 1
+	if temp0 == 0
+		temp0 = object.value6
+		temp0 += 862
+		object.value6++
+		object.value6 %= 6
+		Copy16x16Tile(543, temp0)
+	end if
+	object.value5++
+	object.value5 &= 511
+	object.value7 = 1
+end function
+
+
+event ObjectUpdate
+	CallFunction(object.value8)
+	temp0 = oscillation
+	temp0 &= 3
+	if temp0 == 0
+		RotatePalette(0, 161, 163, 0)
+	end if
+	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+		temp2 = object[currentPlayer].xpos
+		temp2 >>= 16
+		temp2 += object[currentPlayer].collisionRight
+		temp3 = object[currentPlayer].ypos
+		temp3 >>= 16
+		temp3 += object[currentPlayer].collisionBottom
+		temp3 += 2
+		Get16x16TileInfo(temp0, temp2, temp3, 8)
+		temp2 = object[currentPlayer].xpos
+		temp2 >>= 16
+		temp2 += object[currentPlayer].collisionLeft
+		Get16x16TileInfo(temp1, temp2, temp3, 8)
+		temp0 |= temp1
+		if temp0 == 1
+			if object.value7 == 1
+				if object[currentPlayer].yvel > -1
+					object[currentPlayer].animation = ANI_JUMPING
+					object[currentPlayer].gravity = 1
+					object[currentPlayer].value1 = 0
+					object[currentPlayer].yvel = -1441792
+					object[currentPlayer].state = Player_State_Air
+					PlaySfx(SfxName[Bounce Floor], 0)
+				end if
+			end if
+		end if
+		temp2 -= object[currentPlayer].collisionLeft
+		temp3 -= object[currentPlayer].collisionBottom
+		temp3 -= 2
+		Get16x16TileInfo(temp0, temp2, temp3, 8)
+		switch temp0
+		case 2
+			object.xpos = object[currentPlayer].xpos
+			if object[currentPlayer].direction == 1
+				object.xpos += 524288
+			else
+				object.xpos -= 524288
+			end if
+			CallFunction(Player_Hit)
+			break
+		case 5
+			if object.state == 2
+				object.xpos = object[currentPlayer].xpos
+				if object[currentPlayer].direction == 1
+					object.xpos += 524288
+				else
+					object.xpos -= 524288
+				end if
+				CallFunction(Player_Hit)
+			end if
+			break
+		case 6
+			if object.state == 2
+				if object.direction == 0
+					object.xpos = object[currentPlayer].xpos
+					if object[currentPlayer].direction == 1
+						object.xpos += 524288
+					else
+						object.xpos -= 524288
+					end if
+					CallFunction(Player_Hit)
+				end if
+			end if
+			break
+		case 7
+			if object.state == 2
+				if object.direction == 1
+					object.xpos = object[currentPlayer].xpos
+					if object[currentPlayer].direction == 1
+						object.xpos += 524288
+					else
+						object.xpos -= 524288
+					end if
+					CallFunction(Player_Hit)
+				end if
+			end if
+			break
+		case 8
+			if object.state == 2
+				if object.direction == 2
+					object.xpos = object[currentPlayer].xpos
+					if object[currentPlayer].direction == 1
+						object.xpos += 524288
+					else
+						object.xpos -= 524288
+					end if
+					CallFunction(Player_Hit)
+				end if
+			end if
+			break
+		end switch
+		temp3 -= 4
+		Get16x16TileInfo(temp0, temp2, temp3, 8)
+		switch temp0
+		case 2
+			object.xpos = object[currentPlayer].xpos
+			if object[currentPlayer].direction == 1
+				object.xpos += 524288
+			else
+				object.xpos -= 524288
+			end if
+			CallFunction(Player_Hit)
+			break
+		case 5
+			if object.state == 2
+				object.xpos = object[currentPlayer].xpos
+				if object[currentPlayer].direction == 1
+					object.xpos += 524288
+				else
+					object.xpos -= 524288
+				end if
+				CallFunction(Player_Hit)
+			end if
+			break
+		case 6
+			if object.state == 2
+				if object.direction == 0
+					object.xpos = object[currentPlayer].xpos
+					if object[currentPlayer].direction == 1
+						object.xpos += 524288
+					else
+						object.xpos -= 524288
+					end if
+					CallFunction(Player_Hit)
+				end if
+			end if
+			break
+		case 7
+			if object.state == 2
+				if object.direction == 1
+					object.xpos = object[currentPlayer].xpos
+					if object[currentPlayer].direction == 1
+						object.xpos += 524288
+					else
+						object.xpos -= 524288
+					end if
+					CallFunction(Player_Hit)
+				end if
+			end if
+			break
+		case 8
+			if object.state == 2
+				if object.direction == 2
+					object.xpos = object[currentPlayer].xpos
+					if object[currentPlayer].direction == 1
+						object.xpos += 524288
+					else
+						object.xpos -= 524288
+					end if
+					CallFunction(Player_Hit)
+				end if
+			end if
+			break
+		end switch
+		temp3 += 4
+		temp3 += object[currentPlayer].collisionTop
+		Get16x16TileInfo(temp0, temp2, temp3, 8)
+		if temp0 == 3
+			temp4 = temp3
+			temp4 &= 15
+			if temp4 < 8
+				if object[currentPlayer].state != Player_State_HangBar
+					object[currentPlayer].state = Player_State_HangBar
+					object[currentPlayer].yvel = 0
+					object[currentPlayer].animation = ANI_HANGING
+					temp3 &= 32752
+					temp3 += 4
+					temp3 -= object[currentPlayer].collisionTop
+					object[currentPlayer].iypos = temp3
+					PlaySfx(SfxName[Catch], 0)
+					screen[0].adjustCameraY = 0
+				end if
+			end if
+		end if
+	next
+end event
+
+
+event ObjectDraw
+	if object.state == 2
+		switch object.frame
+		case 2
+			DrawRect(0, 0, screen.xsize, screen.ysize, 128, 0, 64, 64)
+			break
+		case 3
+			DrawRect(0, 0, screen.xsize, screen.ysize, 128, 0, 64, 32)
+			break
+		case 4
+			DrawRect(0, 0, screen.xsize, screen.ysize, 255, 128, 255, 32)
+			break
+		case 5
+			DrawRect(0, 0, screen.xsize, screen.ysize, 128, 0, 64, 64)
+			break
+		case 6
+			DrawRect(0, 0, screen.xsize, screen.ysize, 128, 0, 64, 32)
+			break
+		case 7
+			DrawRect(0, 0, screen.xsize, screen.ysize, 255, 128, 255, 32)
+			break
+		case 8
+			DrawRect(0, 0, screen.xsize, screen.ysize, 128, 0, 64, 32)
+			break
+		end switch
+	end if
+end event
+
+
+event ObjectStartup
+	object[21].type = TypeName[R6 Setup]
+	object[21].priority = 1
+	object[21].drawOrder = 2
+	switch object[9].propertyValue
+	case 0
+	case 1
+		object[21].value8 = R6Setup_Function83 // 83
+		break
+	case 2
+		object[21].value8 = R6Setup_Function84 // 84
+		break
+	case 3
+		if stage.actNum == 3
+			object[21].value8 = R6Setup_Function86 // 86
+		else
+			object[21].value8 = R6Setup_Function85 // 85
+		end if
+		break
+	end switch
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

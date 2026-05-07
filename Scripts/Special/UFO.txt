@@ -1,0 +1,178 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: UFO Object
+// Script Author: Christian Whitehead
+// Unpacked by RifiGD's UnScriptR
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 5 : TYPE_UFO
+
+
+
+event ObjectUpdate
+	if object.value3 == 0
+		arrayPos0 = object.value0
+		if object[arrayPos0].type != 6
+			object.value0 = object.entityPos
+			object.value0++
+			arrayPos0 = object.value0
+		end if
+		object.xpos = object[arrayPos0].xpos
+		object.ypos = object[arrayPos0].ypos
+		object.value3 = object[arrayPos0].propertyValue
+		object.value3 *= 2
+		arrayPos0++
+		object.value0++
+		if object[arrayPos0].type != 6
+			object.value0 = object.entityPos
+			object.value0++
+			arrayPos0 = object.value0
+		end if
+		object.value1 = object[arrayPos0].xpos
+		object.value1 -= object.xpos
+		object.value1 /= object.value3
+		object.value2 = object[arrayPos0].ypos
+		object.value2 -= object.ypos
+		object.value2 /= object.value3
+	else
+		object.value3--
+		object.xpos += object.value1
+		object.ypos += object.value2
+	end if
+	temp0 = object.xpos
+	temp0 -= tileLayer[0].xpos
+	temp0 >>= 8
+	temp1 = object.ypos
+	temp1 -= tileLayer[0].zpos
+	temp1 >>= 8
+	Sin(temp2, tileLayer[0].angle)
+	temp2 *= temp1
+	Cos(temp3, tileLayer[0].angle)
+	temp3 *= temp0
+	object.value4 = temp2
+	object.value4 -= temp3
+	object.value4 >>= 9
+	Cos(temp2, tileLayer[0].angle)
+	temp2 *= temp1
+	Sin(temp3, tileLayer[0].angle)
+	temp3 *= temp0
+	object.value5 = temp2
+	object.value5 += temp3
+	object.value5 >>= 9
+	if object[2].ypos > 3538944
+		if object[2].ypos < 7995392
+			if object.value5 < 22728
+				if object.value5 > 20628
+					if object.value4 > -8192
+						if object.value4 < 8192
+							temp0 = object.value4
+							temp0 *= 192
+							temp0 /= object.value5
+							temp0 += screen.xcenter
+							temp0 <<= 16
+							temp1 = tileLayer[0].ypos
+							temp1 >>= 8
+							temp1 -= 26624
+							temp1 *= 96
+							temp1 /= object.value5
+							temp1 += 128
+							temp1 <<= 16
+							PlaySfx(SfxName[Ring L], 0)
+							switch object.propertyValue
+							case 0
+								object[4].value0--
+								if object[4].value4 == object.propertyValue
+									object[4].value3 <<= 1
+								else
+									object[4].value3 += 20
+								end if
+								break
+							case 1
+								object[4].value0--
+								object[4].value5 = 600
+								break
+							case 2
+								object[4].value1 += 30
+								break
+							end switch
+							object[4].value4 = object.propertyValue
+							CreateTempObject(TypeName[UFO Power Up], object.propertyValue, temp0, temp1)
+							Rand(object[tempObjectPos].value0, 100)
+							object[tempObjectPos].value1 = temp0
+							object[tempObjectPos].value2 = temp1
+							object[tempObjectPos].value4 = -262144
+							object[tempObjectPos].value5 = 22728
+							if object[4].value0 == 0
+								object[tempObjectPos].value7 = 1
+							end if
+							ResetObjectEntity(object.entityPos, TypeName[Blank Object], 0, 0, 0)
+						end if
+					end if
+				end if
+			end if
+		end if
+	end if
+end event
+
+
+event ObjectDraw
+	if object.value5 > 256
+		object.scale = 12582912
+		object.scale /= object.value5
+		temp0 = 768
+		temp0 -= object.scale
+		temp0 /= 6
+		temp1 = object.value5
+		temp1 >>= 12
+		if temp0 > 0
+			object.scale += temp0
+			object.scale -= temp1
+		end if
+		temp0 = object.value4
+		temp0 *= 192
+		temp0 /= object.value5
+		temp0 += screen.xcenter
+		temp1 = tileLayer[0].ypos
+		temp1 >>= 8
+		temp1 -= 26624
+		temp1 *= 96
+		temp1 /= object.value5
+		temp1 += 128
+		DrawSpriteScreenFX(object.propertyValue, FX_SCALE, temp0, temp1)
+		temp1 = tileLayer[0].ypos
+		temp1 >>= 8
+		temp1 *= 96
+		temp1 /= object.value5
+		temp1 += 128
+		DrawSpriteScreenFX(3, FX_SCALE, temp0, temp1)
+	end if
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("Special/Objects.gif")
+	SpriteFrame(-40, -28, 80, 56, 1, 1)
+	SpriteFrame(-40, -28, 80, 56, 82, 1)
+	SpriteFrame(-40, -28, 80, 56, 163, 1)
+	SpriteFrame(-40, -8, 80, 16, 1, 117)
+	foreach (TypeName[UFO], arrayPos0, ALL_ENTITIES)
+		object[arrayPos0].priority = 1
+		if object[arrayPos0].propertyValue < 2
+			object[4].value0++
+		else
+			object[arrayPos0].type = TypeName[Blank Object]
+			object[4].value6 = arrayPos0
+		end if
+	next
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

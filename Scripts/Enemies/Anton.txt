@@ -1,0 +1,181 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Anton Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 41 : TYPE_ANTON
+
+// Function declarations
+reserve function Anton_DebugDraw
+reserve function Anton_DebugSpawn
+
+// Static Values
+public value Anton_value13 = 0;
+
+
+public function Anton_DebugDraw
+	temp0 = object[0].value16
+	temp0 -= Anton_value13
+	DrawSprite(4)
+	if temp0 == 0
+		DrawSprite(0)
+	else
+		DrawSprite(2)
+	end if
+end function
+
+
+public function Anton_DebugSpawn
+	temp0 = object[0].value16
+	temp0 -= Anton_value13
+	CreateTempObject(TypeName[Anton], temp0, object.xpos, object.ypos)
+end function
+
+
+event ObjectUpdate
+	if object.propertyValue == 0
+		object.frame += 2
+		switch object.state
+		case 0
+			ObjectTileCollision(0, 0, 20, 0)
+			if checkResult == 1
+				object.state = 1
+			else
+				object.ypos += 131072
+			end if
+			break
+		case 1
+			object.xpos -= 65536
+			object.value0--
+			if object.value0 == -128
+				object.state = 2
+				object.direction = 1
+			end if
+			ObjectTileGrip(0, 0, 20, 0)
+			if checkResult == 0
+				object.state = 2
+				object.value0 = -128
+				object.direction = 1
+			end if
+			break
+		case 2
+			object.xpos += 65536
+			object.value0++
+			if object.value0 == 128
+				object.state = 1
+				object.direction = 0
+			end if
+			ObjectTileGrip(0, 0, 20, 0)
+			if checkResult == 0
+				object.state = 1
+				object.value0 = 128
+				object.direction = 0
+			end if
+			break
+		end switch
+	else
+		object.frame++
+		switch object.state
+		case 0
+			ObjectTileCollision(0, 0, 20, 0)
+			if checkResult == 1
+				object.state = 1
+			else
+				object.ypos += 131072
+			end if
+			break
+		case 1
+			object.xpos -= 32768
+			object.value0--
+			if object.value0 == -256
+				object.state = 2
+				object.direction = 1
+			end if
+			ObjectTileGrip(0, 0, 20, 0)
+			if checkResult == 0
+				object.state = 2
+				object.value0 = -256
+				object.direction = 1
+			end if
+			break
+		case 2
+			object.xpos += 32768
+			object.value0++
+			if object.value0 == 256
+				object.state = 1
+				object.direction = 0
+			end if
+			ObjectTileGrip(0, 0, 20, 0)
+			if checkResult == 0
+				object.state = 1
+				object.value0 = 256
+				object.direction = 0
+			end if
+			break
+		end switch
+	end if
+	object.frame &= 15
+	CallFunction(StageSetup_CheckGoodFuture)
+	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+		BoxCollisionTest(C_TOUCH, object.entityPos, -12, -18, 12, 20, currentPlayer, object[currentPlayer].value41, object[currentPlayer].value39, object[currentPlayer].value42, object[currentPlayer].value40)
+		if checkResult == 1
+			CallFunction(Player_BadnikBreak)
+		end if
+	next
+end event
+
+
+event ObjectDraw
+	temp0 = object.frame
+	temp0 >>= 3
+	if object.propertyValue == 0
+		temp0 += 4
+		DrawSpriteFX(temp0, FX_FLIP, object.xpos, object.ypos)
+		temp0 -= 4
+		DrawSpriteFX(temp0, FX_FLIP, object.xpos, object.ypos)
+		temp0 += 6
+		DrawSpriteFX(temp0, FX_FLIP, object.xpos, object.ypos)
+	else
+		temp0 += 4
+		DrawSpriteFX(temp0, FX_FLIP, object.xpos, object.ypos)
+		temp0 -= 2
+		DrawSpriteFX(temp0, FX_FLIP, object.xpos, object.ypos)
+		temp0 += 4
+		DrawSpriteFX(temp0, FX_FLIP, object.xpos, object.ypos)
+	end if
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R1/Objects.gif")
+	SpriteFrame(-12, -19, 24, 32, 1, 1)
+	SpriteFrame(-12, -20, 24, 32, 1, 1)
+	SpriteFrame(-12, -19, 24, 32, 26, 1)
+	SpriteFrame(-12, -20, 24, 32, 26, 1)
+	SpriteFrame(-8, 4, 16, 16, 1, 34)
+	SpriteFrame(-8, 4, 16, 16, 18, 34)
+	SpriteFrame(14, -4, 8, 8, 35, 34)
+	SpriteFrame(18, -5, 8, 8, 35, 34)
+	temp0 = 0
+	Anton_value13 = DebugMode_ObjCount
+	while temp0 < 2
+		SetTableValue(TypeName[Anton], DebugMode_ObjCount, DebugMode_TypesTable)
+		SetTableValue(Anton_DebugDraw, DebugMode_ObjCount, DebugMode_DrawTable)
+		SetTableValue(Anton_DebugSpawn, DebugMode_ObjCount, DebugMode_SpawnTable)
+		DebugMode_ObjCount++
+		temp0++
+	loop
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

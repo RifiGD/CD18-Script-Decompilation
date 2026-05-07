@@ -1,0 +1,147 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Rotating Log Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 57 : TYPE_ROTATINGLOG
+
+// Function declarations
+reserve function RotatingLog_DebugDraw
+reserve function RotatingLog_DebugSpawn
+
+
+public function RotatingLog_DebugDraw
+	DrawSprite(0)
+end function
+
+
+public function RotatingLog_DebugSpawn
+	CreateTempObject(TypeName[Rotating Log], 1, object.xpos, object.ypos)
+	object[tempObjectPos].angle = 504
+	object[tempObjectPos].priority = 4
+	CreateTempObject(TypeName[Rotating Log], 0, object.xpos, object.ypos)
+	object[tempObjectPos].angle = 8
+	object[tempObjectPos].priority = 4
+	CreateTempObject(TypeName[Rotating Log], 0, object.xpos, object.ypos)
+	object[tempObjectPos].angle = 120
+	object[tempObjectPos].priority = 4
+	CreateTempObject(TypeName[Rotating Log], 0, object.xpos, object.ypos)
+	object[tempObjectPos].angle = 136
+	object[tempObjectPos].priority = 4
+	CreateTempObject(TypeName[Rotating Log], 0, object.xpos, object.ypos)
+	object[tempObjectPos].angle = 248
+	object[tempObjectPos].priority = 4
+	CreateTempObject(TypeName[Rotating Log], 0, object.xpos, object.ypos)
+	object[tempObjectPos].angle = 264
+	object[tempObjectPos].priority = 4
+	CreateTempObject(TypeName[Rotating Log], 0, object.xpos, object.ypos)
+	object[tempObjectPos].angle = 376
+	object[tempObjectPos].priority = 4
+	CreateTempObject(TypeName[Rotating Log], 0, object.xpos, object.ypos)
+	object[tempObjectPos].angle = 392
+	object[tempObjectPos].priority = 4
+end function
+
+
+event ObjectUpdate
+	object.angle++
+	object.angle &= 511
+	temp1 = 96
+	Cos(object.value3, object.angle)
+	object.value3 *= temp1
+	object.value3 <<= 7
+	object.value3 += object.xpos
+	object.value3 &= -65536
+	object.value3 -= object.value1
+	Sin(object.value4, object.angle)
+	object.value4 *= temp1
+	object.value4 <<= 7
+	object.value4 += object.ypos
+	object.value4 &= -65536
+	object.value4 -= object.value2
+	temp0 = object.xpos
+	temp1 = object.ypos
+	object.xpos = object.value1
+	object.ypos = object.value2
+	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+		BoxCollisionTest(C_SOLID, object.entityPos, -8, -8, 8, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+		if checkResult == 1
+			object[currentPlayer].xpos += object.value3
+			object[currentPlayer].ypos += object.value4
+		end if
+	next
+	object.xpos = temp0
+	object.ypos = temp1
+end event
+
+
+event ObjectDraw
+	temp1 = 96
+	Cos(object.value1, object.angle)
+	object.value1 *= temp1
+	object.value1 <<= 7
+	object.value1 += object.xpos
+	object.value1 &= -65536
+	Sin(object.value2, object.angle)
+	object.value2 *= temp1
+	object.value2 <<= 7
+	object.value2 += object.ypos
+	object.value2 &= -65536
+	DrawSpriteXY(0, object.value1, object.value2)
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R5/Objects.gif")
+	switch object[9].propertyValue
+	case 0
+		SpriteFrame(-8, -8, 16, 16, 35, 1)
+		break
+	case 1
+		SpriteFrame(-8, -8, 16, 16, 67, 174)
+		break
+	case 2
+		SpriteFrame(-8, -8, 16, 16, 83, 174)
+		break
+	case 3
+		SpriteFrame(-8, -8, 16, 16, 83, 158)
+		break
+	end switch
+	foreach (TypeName[Rotating Log], arrayPos0, ALL_ENTITIES)
+		if object[arrayPos0].propertyValue == 1
+			arrayPos1 = arrayPos0
+			object[arrayPos1].angle = 504
+			arrayPos1++
+			object[arrayPos1].angle = 8
+			arrayPos1++
+			object[arrayPos1].angle = 120
+			arrayPos1++
+			object[arrayPos1].angle = 136
+			arrayPos1++
+			object[arrayPos1].angle = 248
+			arrayPos1++
+			object[arrayPos1].angle = 264
+			arrayPos1++
+			object[arrayPos1].angle = 376
+			arrayPos1++
+			object[arrayPos1].angle = 392
+		end if
+	next
+	SetTableValue(TypeName[Rotating Log], DebugMode_ObjCount, DebugMode_TypesTable)
+	SetTableValue(RotatingLog_DebugDraw, DebugMode_ObjCount, DebugMode_DrawTable)
+	SetTableValue(RotatingLog_DebugSpawn, DebugMode_ObjCount, DebugMode_SpawnTable)
+	DebugMode_ObjCount++
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

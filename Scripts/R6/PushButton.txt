@@ -1,0 +1,94 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Push Button Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 51 : TYPE_PUSHBUTTON
+
+// Function declarations
+reserve function PushButton_DebugDraw
+reserve function PushButton_DebugSpawn
+
+
+public function PushButton_DebugDraw
+	DrawSprite(0)
+end function
+
+
+public function PushButton_DebugSpawn
+	CreateTempObject(TypeName[Push Button], 0, object.xpos, object.ypos)
+end function
+
+
+event ObjectUpdate
+	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+		if object.propertyValue == 0
+			if object[currentPlayer].yvel >= 0
+				BoxCollisionTest(C_SOLID, object.entityPos, -16, -8, 16, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+				if checkResult == 1
+					object.propertyValue = 1
+					object[currentPlayer].ypos += 524288
+					PlaySfx(SfxName[Switch], 0)
+				else
+					object.propertyValue = 0
+				end if
+			else
+				object.propertyValue = 0
+			end if
+		else
+			BoxCollisionTest(C_TOUCH, object.entityPos, -16, -2, 16, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			if checkResult == 1
+				if object[currentPlayer].yvel > -1
+					object.propertyValue = 1
+					object[currentPlayer].gravity = 0
+					object[currentPlayer].yvel = 0
+					BoxCollisionTest(C_PLATFORM, object.entityPos, -16, -2, 16, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+					object[currentPlayer].ypos = object[currentPlayer].collisionBottom
+					FlipSign(object[currentPlayer].ypos)
+					object[currentPlayer].ypos <<= 16
+					object[currentPlayer].ypos += object.ypos
+				end if
+			else
+				object.propertyValue = 0
+				if object[currentPlayer].yvel > -1
+					object[currentPlayer].gravity = 0
+					object[currentPlayer].yvel = 0
+					object[currentPlayer].ypos = object[currentPlayer].collisionBottom
+					FlipSign(object[currentPlayer].ypos)
+					object[currentPlayer].ypos -= 8
+					object[currentPlayer].ypos <<= 16
+					object[currentPlayer].ypos += object.ypos
+				end if
+			end if
+		end if
+	next
+end event
+
+
+event ObjectDraw
+	DrawSprite(object.propertyValue)
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R6/Objects.gif")
+	SpriteFrame(-16, -8, 32, 16, 140, 1)
+	SpriteFrame(-16, 0, 32, 8, 140, 18)
+	SetTableValue(TypeName[Push Button], DebugMode_ObjCount, DebugMode_TypesTable)
+	SetTableValue(PushButton_DebugDraw, DebugMode_ObjCount, DebugMode_DrawTable)
+	SetTableValue(PushButton_DebugSpawn, DebugMode_ObjCount, DebugMode_SpawnTable)
+	DebugMode_ObjCount++
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

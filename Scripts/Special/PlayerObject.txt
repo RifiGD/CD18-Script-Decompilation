@@ -1,0 +1,1010 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Player Object Object
+// Script Author: Christian Whitehead
+// Unpacked by RifiGD's UnScriptR
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 1 : TYPE_PLAYEROBJECT
+
+public alias 256 : GROUP_PLAYERS
+public alias arrayPos6 : currentPlayer
+public alias arrayPos7 : playerCount
+
+// Function declarations
+reserve function SSPlayer_ProcessPlayer
+reserve function SSPlayer_HandleMovement
+reserve function SSPlayer_ProcessAnimation
+reserve function SSPlayer_HandleBumperInteraction
+reserve function SSPlayer_HandleTileInteractions
+
+//Unknown Variables
+// I... honestly don't know what to do with these values.
+// With how they're structured, they can't be a table.
+// But they're also not used anywhere afaik.
+private value value0 = 0;
+private value value1 = 0;
+private value value2 = 0;
+private value value3 = 0;
+private value value4 = 0;
+private value value5 = 0;
+private value value6 = 0;
+private value value7 = 0;
+private value value8 = 0;
+private value value9 = 0;
+private value value10 = 0;
+private value value11 = 0;
+
+
+public function SSPlayer_ProcessPlayer
+	if options.attractMode == false
+		// Assign all player.* input values to their corresponding Input.* values
+		ProcessObjectControl()
+	end if
+end function
+
+
+public function SSPlayer_HandleMovement
+	if object.left == 1
+		object.value7--
+		if object.value7 < -8
+			object.value7 = -8
+		end if
+	else
+		if object.right == 1
+			object.value7++
+			if object.value7 > 8
+				object.value7 = 8
+			end if
+		else
+			if object.value7 > 0
+				object.value7--
+			end if
+			if object.value7 < 0
+				object.value7++
+			end if
+		end if
+	end if
+	if object.left == 1
+		object.angle += 2
+	end if
+	if object.right == 1
+		object.angle -= 2
+	end if
+	if object.angle < 0
+		object.angle += 512
+	end if
+	object.angle &= 511
+	Sin(temp0, object.angle)
+	temp0 *= object.speed
+	temp0 >>= 9
+	object.xpos += temp0
+	Cos(temp0, object.angle)
+	temp0 *= object.speed
+	temp0 >>= 9
+	object.value0 += temp0
+end function
+
+
+public function SSPlayer_ProcessAnimation
+	object.value3 += object.animationSpeed
+	if object.value3 > 239
+		object.value3 -= 240
+		object.frame++
+		if object.frame > object.value2
+			object.frame = object.value1
+		end if
+	end if
+end function
+
+
+public function SSPlayer_HandleBumperInteraction
+	temp2 = 0
+	temp0 -= 8
+	temp1 -= 8
+	Get16x16TileInfo(checkResult, temp0, temp1, 6)
+	if checkResult == 3
+		SetBit(temp2, 0, 1)
+	end if
+	temp0 += 16
+	Get16x16TileInfo(checkResult, temp0, temp1, 6)
+	if checkResult == 3
+		SetBit(temp2, 1, 1)
+	end if
+	temp0 -= 16
+	temp1 += 16
+	Get16x16TileInfo(checkResult, temp0, temp1, 6)
+	if checkResult == 3
+		SetBit(temp2, 2, 1)
+	end if
+	temp0 += 16
+	Get16x16TileInfo(checkResult, temp0, temp1, 6)
+	if checkResult == 3
+		SetBit(temp2, 3, 1)
+	end if
+	if temp2 > 0
+		temp3 = object.speed
+		temp3 += 65536
+		if object.value6 != 32
+			PlaySfx(SfxName[Bumper 2], 0)
+		end if
+		object.value6 = 32
+		switch temp2
+		case 1
+			object.value9 = temp3
+			object.value10 = temp3
+			break
+		case 2
+			object.value9 = temp3
+			object.value10 = temp3
+			FlipSign(object.value9)
+			break
+		case 3
+			object.value9 = 0
+			object.value10 = temp3
+			break
+		case 4
+			object.value9 = temp3
+			object.value10 = temp3
+			FlipSign(object.value10)
+			break
+		case 5
+			object.value9 = temp3
+			object.value10 = 0
+			break
+		case 6
+		case 7
+			object.value9 = temp3
+			object.value10 = temp3
+			break
+		case 8
+		case 14
+		case 15
+			object.value9 = temp3
+			object.value10 = temp3
+			FlipSign(object.value9)
+			FlipSign(object.value10)
+			break
+		case 9
+		case 11
+			object.value9 = temp3
+			object.value10 = temp3
+			FlipSign(object.value9)
+			break
+		case 10
+			object.value9 = temp3
+			object.value10 = 0
+			FlipSign(object.value9)
+			break
+		case 12
+			object.value9 = 0
+			object.value10 = temp3
+			FlipSign(object.value10)
+			break
+		case 13
+			object.value9 = temp3
+			object.value10 = temp3
+			FlipSign(object.value10)
+			break
+		end switch
+	end if
+end function
+
+
+public function SSPlayer_HandleTileInteractions
+	temp0 = object.xpos
+	temp0 >>= 16
+	temp1 = object.value0
+	temp1 >>= 16
+	CallFunction(SSPlayer_HandleBumperInteraction)
+	temp0 = object.xpos
+	temp0 >>= 16
+	temp1 = object.value0
+	temp1 >>= 16
+	Get16x16TileInfo(checkResult, temp0, temp1, 6)
+	switch checkResult
+	case 1
+		object[3].type = TypeName[Dust Puff]
+		object[3].drawOrder = 4
+		if object[4].value5 == 0
+			if object.speed > 163840
+				object.speed = 163840
+			end if
+		else
+			if object.speed > 327680
+				object.speed = 327680
+			end if
+		end if
+		break
+	case 2
+		object[3].type = TypeName[Water Splash]
+		object[3].drawOrder = 4
+		object[3].value5 = 22526
+		if object[4].value5 > 0
+			if object.speed > 327680
+				object.speed = 327680
+			end if
+		end if
+		break
+	case 4
+		object.state = 6
+		object.value6 = 136
+		object.frame = 54
+		object.value1 = 54
+		object.value2 = 76
+		object.animationSpeed = 40
+		object.value3 = 0
+		object.speed = 65536
+		if object[4].value3 > 0
+			PlaySfx(SfxName[Lose Rings], 0)
+			temp0 = object[4].value3
+			object[4].value3 >>= 1
+			temp0 -= object[4].value3
+			if temp0 > 8
+				temp0 = 8
+			end if
+			if object[4].value3 == 0
+				object[4].value4 = -1
+			end if
+			while temp0 > 0
+				CreateTempObject(TypeName[Ring], 0, object.xpos, 0)
+				object[tempObjectPos].priority = 1
+				object[tempObjectPos].value0 = object.value0
+				Rand(temp1, 64)
+				temp1 -= 32
+				temp1 <<= 10
+				object[tempObjectPos].value1 = temp1
+				Sin(temp1, object.angle)
+				temp1 *= 96
+				object[tempObjectPos].value1 += temp1
+				Rand(temp1, 64)
+				temp1 += 32
+				temp1 <<= 12
+				object[tempObjectPos].value2 = temp1
+				Rand(temp1, 64)
+				temp1 -= 32
+				temp1 <<= 10
+				object[tempObjectPos].value3 = temp1
+				Cos(temp1, object.angle)
+				temp1 *= 96
+				object[tempObjectPos].value3 += temp1
+				temp0--
+			loop
+		end if
+		break
+	case 5
+		object.state = 11
+		object.value6 = 0
+		object.frame = 39
+		object.value1 = 39
+		object.value2 = 42
+		object.animationSpeed = 80
+		object.value3 = 0
+		object.yvel = 573440
+		PlaySfx(SfxName[Spring], 0)
+		break
+	case 6
+		object.state = 5
+		object.value6 = 0
+		object.frame = 48
+		object.value1 = 48
+		object.value2 = 53
+		object.animationSpeed = 24
+		object.value3 = 0
+		object.yvel = 163840
+		PlaySfx(SfxName[Fan], 0)
+		break
+	case 7
+		object.value6 = 40
+		object.value9 = -786432
+		object.value10 = 0
+		Get16x16TileInfo(checkResult, temp0, temp1, 1)
+		if checkResult == 1
+			FlipSign(object.value9)
+		else
+			if checkResult == 3
+				FlipSign(object.value9)
+			end if
+		end if
+		if object.state != 4
+			PlaySfx(SfxName[Large Booster], 0)
+		end if
+		object.state = 4
+		object.frame = 43
+		object.value1 = 43
+		object.value2 = 47
+		object.animationSpeed = 24
+		object.value3 = 0
+		break
+	case 8
+		object.value6 = 40
+		object.value9 = 786432
+		object.value10 = 0
+		Get16x16TileInfo(checkResult, temp0, temp1, 1)
+		if checkResult == 1
+			FlipSign(object.value9)
+		else
+			if checkResult == 3
+				FlipSign(object.value9)
+			end if
+		end if
+		if object.state != 4
+			PlaySfx(SfxName[Large Booster], 0)
+		end if
+		object.state = 4
+		object.frame = 43
+		object.value1 = 43
+		object.value2 = 47
+		object.animationSpeed = 24
+		object.value3 = 0
+		break
+	case 9
+		object.value6 = 40
+		object.value9 = 0
+		object.value10 = -786432
+		Get16x16TileInfo(checkResult, temp0, temp1, 1)
+		if checkResult == 2
+			FlipSign(object.value10)
+		else
+			if checkResult == 3
+				FlipSign(object.value10)
+			end if
+		end if
+		if object.state != 4
+			PlaySfx(SfxName[Large Booster], 0)
+		end if
+		object.state = 4
+		object.frame = 43
+		object.value1 = 43
+		object.value2 = 47
+		object.animationSpeed = 24
+		object.value3 = 0
+		break
+	case 10
+		object.value6 = 40
+		object.value9 = 0
+		object.value10 = 786432
+		Get16x16TileInfo(checkResult, temp0, temp1, 1)
+		if checkResult == 2
+			FlipSign(object.value10)
+		else
+			if checkResult == 3
+				FlipSign(object.value10)
+			end if
+		end if
+		if object.state != 4
+			PlaySfx(SfxName[Large Booster], 0)
+		end if
+		object.state = 4
+		object.frame = 43
+		object.value1 = 43
+		object.value2 = 47
+		object.animationSpeed = 24
+		object.value3 = 0
+		break
+	case 11
+		if object.value6 != 16
+			PlaySfx(SfxName[Small Booster], 0)
+		end if
+		object.value6 = 16
+		object.value9 = -524288
+		object.value10 = 0
+		Get16x16TileInfo(checkResult, temp0, temp1, 1)
+		if checkResult == 1
+			FlipSign(object.value9)
+		else
+			if checkResult == 3
+				FlipSign(object.value9)
+			end if
+		end if
+		break
+	case 12
+		if object.value6 != 16
+			PlaySfx(SfxName[Small Booster], 0)
+		end if
+		object.value6 = 16
+		object.value9 = 524288
+		object.value10 = 0
+		Get16x16TileInfo(checkResult, temp0, temp1, 1)
+		if checkResult == 1
+			FlipSign(object.value9)
+		else
+			if checkResult == 3
+				FlipSign(object.value9)
+			end if
+		end if
+		break
+	case 13
+		if object.value6 != 16
+			PlaySfx(SfxName[Small Booster], 0)
+		end if
+		object.value6 = 16
+		object.value9 = 0
+		object.value10 = -524288
+		Get16x16TileInfo(checkResult, temp0, temp1, 1)
+		if checkResult == 2
+			FlipSign(object.value10)
+		else
+			if checkResult == 3
+				FlipSign(object.value10)
+			end if
+		end if
+		break
+	case 14
+		if object.value6 != 16
+			PlaySfx(SfxName[Small Booster], 0)
+		end if
+		object.value6 = 16
+		object.value9 = 0
+		object.value10 = 524288
+		Get16x16TileInfo(checkResult, temp0, temp1, 1)
+		if checkResult == 2
+			FlipSign(object.value10)
+		else
+			if checkResult == 3
+				FlipSign(object.value10)
+			end if
+		end if
+		break
+	end switch
+end function
+
+
+event ObjectUpdate
+	if object[4].value5 > 0
+		object[4].value5--
+	end if
+	switch object.state
+	case 0
+		CallFunction(SSPlayer_ProcessAnimation)
+		object.value6++
+		if object.value6 == 120
+			object.value6 = 0
+			object.state = 1
+			object.frame = 2
+			object.value1 = 4
+			object.value2 = 4
+			object.value3 = 0
+			object.animationSpeed = 20
+		end if
+		break
+	case 1
+		CallFunction(SSPlayer_ProcessAnimation)
+		object.value6++
+		if object.value6 == 140
+			object.value6 = 0
+			object.state = 2
+			object.frame = 9
+			object.value1 = 9
+			object.value2 = 14
+			object.speed = 0
+		end if
+		break
+	case 2
+		CallFunction(SSPlayer_ProcessPlayer)
+		if object.speed < 327680
+			object.speed += 2048
+		else
+			object.speed = 327680
+		end if
+		if keyDown[0].down == 1
+			object.speed -= 3072
+			if object.speed < 122880
+				object.speed = 122880
+			end if
+		end if
+		object.animationSpeed = object.speed
+		object.animationSpeed *= 15
+		object.animationSpeed /= 81920
+		object.animationSpeed += 20
+		CallFunction(SSPlayer_HandleMovement)
+		CallFunction(SSPlayer_ProcessAnimation)
+		if object.value6 > 0
+			object.value6--
+			object.xpos += object.value9
+			object.value0 += object.value10
+		end if
+		CallFunction(SSPlayer_HandleTileInteractions)
+		if object.jumpPress == 1
+			object.state = 3
+			object.value6 = 0
+			object.frame = 39
+			object.value1 = 39
+			object.value2 = 42
+			object.value3 = 0
+			object.animationSpeed = 80
+			object.yvel = 360448
+			PlaySfx(SfxName[Jump], 0)
+		end if
+		break
+	case 3
+		CallFunction(SSPlayer_ProcessPlayer)
+		if object.speed < 327680
+			object.speed += 2048
+		end if
+		if keyDown[0].down == 1
+			object.speed -= 3072
+			if object.speed < 122880
+				object.speed = 122880
+			end if
+		end if
+		if object.jumpHold == 0
+			if object.yvel > 196608
+				object.yvel = 196608
+			end if
+		end if
+		CallFunction(SSPlayer_HandleMovement)
+		CallFunction(SSPlayer_ProcessAnimation)
+		object.yvel -= 10240
+		object.ypos += object.yvel
+		if object.ypos < 0
+			object.ypos = 0
+			if object[4].value0 > 0
+				if object[4].value5 == 0
+					object.state = 2
+					object.frame = 9
+					object.value1 = 9
+					object.value2 = 14
+					object.value3 = 0
+				else
+					object.state = 7
+					object.frame = 77
+					object.value1 = 77
+					object.value2 = 80
+					object.animationSpeed = 80
+					object.value3 = 0
+				end if
+			else
+				object.controlMode = -1
+				object.state = 8
+				stage.timeEnabled = 0
+			end if
+		end if
+		break
+	case 4
+		CallFunction(SSPlayer_ProcessPlayer)
+		if object.speed < 327680
+			object.speed += 2048
+		end if
+		if keyDown[0].down == 1
+			object.speed -= 3072
+			if object.speed < 122880
+				object.speed = 122880
+			end if
+		end if
+		CallFunction(SSPlayer_HandleMovement)
+		CallFunction(SSPlayer_ProcessAnimation)
+		if object.value6 > 0
+			object.value6--
+			object.xpos += object.value9
+			object.value0 += object.value10
+		else
+			if object[4].value5 == 0
+				object.state = 2
+				object.frame = 9
+				object.value1 = 9
+				object.value2 = 14
+				object.value3 = 0
+			else
+				object.state = 7
+				object.frame = 77
+				object.value1 = 77
+				object.value2 = 80
+				object.animationSpeed = 80
+				object.value3 = 0
+			end if
+		end if
+		CallFunction(SSPlayer_HandleTileInteractions)
+		if object.jumpPress == 1
+			object.state = 3
+			object.value6 = 0
+			object.frame = 39
+			object.value1 = 39
+			object.value2 = 42
+			object.animationSpeed = 80
+			object.yvel = 360448
+			PlaySfx(SfxName[Jump], 0)
+		end if
+		break
+	case 5
+		CallFunction(SSPlayer_ProcessPlayer)
+		if object.speed < 327680
+			object.speed += 2048
+		end if
+		CallFunction(SSPlayer_HandleMovement)
+		CallFunction(SSPlayer_ProcessAnimation)
+		object.yvel -= 2048
+		object.ypos += object.yvel
+		if object.ypos < 0
+			object.ypos = 0
+			if object[4].value0 > 0
+				if object[4].value5 == 0
+					object.state = 2
+					object.frame = 9
+					object.value1 = 9
+					object.value2 = 14
+					object.value3 = 0
+				else
+					object.state = 7
+					object.frame = 77
+					object.value1 = 77
+					object.value2 = 80
+					object.animationSpeed = 80
+					object.value3 = 0
+				end if
+			else
+				object.state = 8
+				object.controlMode = -1
+				stage.timeEnabled = 0
+			end if
+		end if
+		break
+	case 6
+		CallFunction(SSPlayer_ProcessPlayer)
+		object.left = 0
+		object.right = 0
+		CallFunction(SSPlayer_HandleMovement)
+		CallFunction(SSPlayer_ProcessAnimation)
+		temp0 = object.xpos
+		temp0 >>= 16
+		temp1 = object.value0
+		temp1 >>= 16
+		Get16x16TileInfo(checkResult, temp0, temp1, 6)
+		if checkResult == 3
+			object.state = 2
+			object.frame = 9
+			object.value1 = 9
+			object.value2 = 14
+			object.value3 = 0
+		end if
+		if object.value6 > 0
+			object.value6--
+		else
+			if object[4].value5 == 0
+				object.state = 2
+				object.frame = 9
+				object.value1 = 9
+				object.value2 = 14
+				object.value3 = 0
+			else
+				object.state = 7
+				object.frame = 77
+				object.value1 = 77
+				object.value2 = 80
+				object.animationSpeed = 80
+				object.value3 = 0
+			end if
+		end if
+		break
+	case 7
+		CallFunction(SSPlayer_ProcessPlayer)
+		if object.speed < 458752
+			object.speed += 4096
+		end if
+		if keyDown[0].down == 1
+			object.speed -= 3072
+			if object.speed < 122880
+				object.speed = 122880
+			end if
+		end if
+		CallFunction(SSPlayer_HandleMovement)
+		CallFunction(SSPlayer_ProcessAnimation)
+		if object.value6 > 0
+			object.value6--
+			object.xpos += object.value9
+			object.value0 += object.value10
+		end if
+		CallFunction(SSPlayer_HandleTileInteractions)
+		if object.jumpPress == 1
+			object.state = 3
+			object.value6 = 0
+			object.frame = 39
+			object.value1 = 39
+			object.value2 = 42
+			object.value3 = 0
+			object.animationSpeed = 80
+			object.yvel = 360448
+			PlaySfx(SfxName[Jump], 0)
+		end if
+		if object[4].value5 == 0
+			object.state = 2
+			object.frame = 9
+			object.value1 = 9
+			object.value2 = 14
+			object.value3 = 0
+		end if
+		break
+	case 8
+		object.frame = 1
+		object.value6 = 0
+		object.speed = 0
+		break
+	case 9
+		if object.value6 < 128
+			object.value6++
+			object.angle -= 2
+			if object.angle < 0
+				object.angle += 512
+			end if
+		else
+			if object[3].type == TypeName[Blank Object]
+				ResetObjectEntity(3, TypeName[Time Stone], 0, 0, -1572864)
+				object[3].ixpos = screen.xcenter
+				object[3].priority = 1
+			end if
+		end if
+		object.frame = object.value6
+		object.frame >>= 4
+		object.frame += 81
+		break
+	case 10
+		if object.value6 == 308
+			object[30].type = TypeName[Stage Finish]
+			object[30].propertyValue = 1
+		else
+			object.value6++
+		end if
+		break
+	case 11
+		CallFunction(SSPlayer_ProcessPlayer)
+		if object.speed < 327680
+			object.speed += 2048
+		end if
+		if keyDown[0].down == 1
+			object.speed -= 3072
+			if object.speed < 122880
+				object.speed = 122880
+			end if
+		end if
+		CallFunction(SSPlayer_HandleMovement)
+		CallFunction(SSPlayer_ProcessAnimation)
+		object.yvel -= 8192
+		object.ypos += object.yvel
+		if object.ypos < 0
+			object.ypos = 0
+			if object[4].value0 > 0
+				if object[4].value5 == 0
+					object.state = 2
+					object.frame = 9
+					object.value1 = 9
+					object.value2 = 14
+					object.value3 = 0
+				else
+					object.state = 7
+					object.frame = 77
+					object.value1 = 77
+					object.value2 = 80
+					object.animationSpeed = 80
+					object.value3 = 0
+				end if
+			else
+				object.controlMode = -1
+				object.state = 8
+			end if
+		end if
+		break
+	end switch
+	if object.xpos > stage.curXBoundary2
+		object.xpos = stage.curXBoundary2
+	end if
+	if object.xpos < stage.curXBoundary1
+		object.xpos = stage.curXBoundary1
+	end if
+	if object.value0 > stage.curYBoundary2
+		object.value0 = stage.curYBoundary2
+	end if
+	if object.value0 < stage.curYBoundary1
+		object.value0 = stage.curYBoundary1
+	end if
+	tileLayer[0].angle = object.angle
+	Sin(tileLayer[0].xpos, tileLayer[0].angle)
+	Cos(tileLayer[0].zpos, tileLayer[0].angle)
+	tileLayer[0].xpos *= -11264
+	tileLayer[0].zpos *= -11264
+	tileLayer[0].xpos += object.xpos
+	tileLayer[0].zpos += object.value0
+	tileLayer[0].ypos = object.ypos
+	tileLayer[0].ypos /= 3
+	tileLayer[0].ypos += 5767168
+end event
+
+
+event ObjectDraw
+	temp0 = tileLayer[0].ypos
+	temp0 >>= 8
+	temp0 *= 96
+	temp0 /= 22528
+	temp0 += 128
+	DrawSpriteScreenXY(0, screen.xcenter, temp0)
+	temp0 = tileLayer[0].ypos
+	temp0 -= object.ypos
+	temp0 >>= 8
+	temp0 *= 96
+	temp0 /= 22528
+	temp0 += 128
+	switch object.state
+	case 2
+		temp1 = object.frame
+		temp2 = object.value7
+		temp2 >>= 2
+		temp2 += 2
+		switch temp2
+		case 0
+			temp1 += 6
+			object.direction = 1
+			break
+		case 1
+			temp1 += 12
+			object.direction = 1
+			break
+		case 2
+			object.direction = 0
+			break
+		case 3
+			temp1 += 18
+			object.direction = 0
+			break
+		case 4
+			temp1 += 24
+			object.direction = 0
+			break
+		end switch
+		DrawSpriteScreenFX(temp1, FX_FLIP, screen.xcenter, temp0)
+		break
+	default
+		DrawSpriteScreenXY(object.frame, screen.xcenter, temp0)
+		break
+	end switch
+end event
+
+
+event ObjectStartup
+	if stage.playerListPos == 0
+		LoadSpriteSheet("Special/Sonic.gif")
+	else
+		LoadSpriteSheet("Special/Tails.gif")
+	end if
+	foreach (TypeName[Player Object], arrayPos0, ALL_ENTITIES)
+		object[2].xpos = object[arrayPos0].xpos
+		object[2].ypos = 0
+		object[2].value0 = object[arrayPos0].ypos
+		object[2].angle = object[arrayPos0].propertyValue
+		object[2].angle <<= 1
+		ResetObjectEntity(arrayPos0, TypeName[Blank Object], 0, 0, 0)
+	next
+	object[2].type = TypeName[Player Object]
+	object[2].priority = 1
+	object[2].value5 = 22528
+	object[2].frame = 5
+	object[2].value1 = 5
+	object[2].value2 = 8
+	object[2].animationSpeed = 30
+	SpriteFrame(-20, -4, 40, 8, 210, 377)
+	SpriteFrame(-20, -48, 40, 48, 1, 197)
+	SpriteFrame(-20, -48, 40, 48, 83, 197)
+	SpriteFrame(-20, -48, 40, 48, 42, 197)
+	SpriteFrame(-20, -48, 40, 48, 1, 197)
+	SpriteFrame(-20, -48, 40, 48, 1, 246)
+	SpriteFrame(-20, -48, 40, 48, 42, 246)
+	SpriteFrame(-20, -48, 40, 48, 83, 246)
+	SpriteFrame(-20, -48, 40, 48, 42, 246)
+	SpriteFrame(-20, -48, 40, 48, 1, 1)
+	SpriteFrame(-20, -48, 40, 48, 42, 1)
+	SpriteFrame(-20, -48, 40, 48, 83, 1)
+	SpriteFrame(-20, -48, 40, 48, 1, 50)
+	SpriteFrame(-20, -48, 40, 48, 42, 50)
+	SpriteFrame(-20, -48, 40, 48, 83, 50)
+	SpriteFrame(-20, -48, 40, 48, 1, 99)
+	SpriteFrame(-20, -48, 40, 48, 42, 99)
+	SpriteFrame(-20, -48, 40, 48, 83, 99)
+	SpriteFrame(-20, -48, 40, 48, 1, 148)
+	SpriteFrame(-20, -48, 40, 48, 42, 148)
+	SpriteFrame(-20, -48, 40, 48, 83, 148)
+	SpriteFrame(-20, -48, 40, 48, 124, 1)
+	SpriteFrame(-20, -48, 40, 48, 165, 1)
+	SpriteFrame(-20, -48, 40, 48, 206, 1)
+	SpriteFrame(-20, -48, 40, 48, 124, 50)
+	SpriteFrame(-20, -48, 40, 48, 165, 50)
+	SpriteFrame(-20, -48, 40, 48, 206, 50)
+	SpriteFrame(-20, -48, 40, 48, 124, 50)
+	SpriteFrame(-20, -48, 40, 48, 165, 50)
+	SpriteFrame(-20, -48, 40, 48, 206, 50)
+	SpriteFrame(-20, -48, 40, 48, 124, 1)
+	SpriteFrame(-20, -48, 40, 48, 165, 1)
+	SpriteFrame(-20, -48, 40, 48, 206, 1)
+	SpriteFrame(-20, -48, 40, 48, 1, 148)
+	SpriteFrame(-20, -48, 40, 48, 42, 148)
+	SpriteFrame(-20, -48, 40, 48, 83, 148)
+	SpriteFrame(-20, -48, 40, 48, 1, 99)
+	SpriteFrame(-20, -48, 40, 48, 42, 99)
+	SpriteFrame(-20, -48, 40, 48, 83, 99)
+	SpriteFrame(-20, -40, 40, 40, 165, 99)
+	SpriteFrame(-20, -40, 40, 40, 206, 99)
+	SpriteFrame(-20, -40, 40, 40, 124, 140)
+	SpriteFrame(-20, -40, 40, 40, 124, 99)
+	SpriteFrame(-20, -48, 40, 48, 51, 344)
+	SpriteFrame(-21, -48, 42, 48, 182, 295)
+	SpriteFrame(-25, -48, 49, 48, 1, 344)
+	if stage.playerListPos == 0
+		SpriteFrame(-21, -48, 42, 48, 135, 410)
+		SpriteFrame(-20, -48, 40, 48, 178, 410)
+	else
+		SpriteFrame(-21, -48, 42, 48, 135, 426)
+		SpriteFrame(-20, -48, 40, 48, 178, 426)
+	end if
+	SpriteFrame(-16, -32, 54, 32, 17, 442)
+	SpriteFrame(-26, -32, 52, 32, 78, 442)
+	SpriteFrame(-37, -32, 54, 32, 178, 475)
+	SpriteFrame(-32, -32, 48, 32, 1, 475)
+	SpriteFrame(-30, -32, 60, 32, 115, 475)
+	SpriteFrame(-16, -32, 48, 32, 208, 344)
+	SpriteFrame(-28, -48, 56, 48, 92, 344)
+	SpriteFrame(-30, -32, 60, 32, 54, 475)
+	if stage.playerListPos == 0
+		SpriteFrame(-29, -32, 58, 32, 149, 344)
+		SpriteFrame(-30, -32, 60, 32, 149, 377)
+		SpriteFrame(-30, -32, 60, 32, 149, 377)
+		SpriteFrame(-30, -32, 60, 32, 149, 377)
+		SpriteFrame(-30, -32, 60, 32, 149, 377)
+		SpriteFrame(-30, -32, 60, 32, 149, 377)
+		SpriteFrame(-30, -32, 60, 32, 149, 377)
+		SpriteFrame(-30, -32, 60, 32, 149, 377)
+		SpriteFrame(-30, -32, 60, 32, 149, 377)
+		SpriteFrame(-30, -32, 60, 32, 149, 377)
+		SpriteFrame(-30, -32, 60, 32, 149, 377)
+		SpriteFrame(-30, -32, 60, 32, 149, 377)
+		SpriteFrame(-30, -32, 60, 32, 149, 377)
+		SpriteFrame(-30, -32, 60, 32, 149, 377)
+		SpriteFrame(-30, -32, 60, 32, 149, 377)
+		SpriteFrame(-30, -32, 60, 32, 149, 377)
+		SpriteFrame(-30, -32, 60, 32, 149, 377)
+		SpriteFrame(-30, -32, 60, 32, 149, 377)
+	else
+		SpriteFrame(-29, -32, 58, 37, 149, 344)
+		SpriteFrame(-30, -32, 60, 32, 149, 382)
+		SpriteFrame(-30, -32, 60, 32, 149, 382)
+		SpriteFrame(-30, -32, 60, 32, 149, 382)
+		SpriteFrame(-30, -32, 60, 32, 149, 382)
+		SpriteFrame(-30, -32, 60, 32, 149, 382)
+		SpriteFrame(-30, -32, 60, 32, 149, 382)
+		SpriteFrame(-30, -32, 60, 32, 149, 382)
+		SpriteFrame(-30, -32, 60, 32, 149, 382)
+		SpriteFrame(-30, -32, 60, 32, 149, 382)
+		SpriteFrame(-30, -32, 60, 32, 149, 382)
+		SpriteFrame(-30, -32, 60, 32, 149, 382)
+		SpriteFrame(-30, -32, 60, 32, 149, 382)
+		SpriteFrame(-30, -32, 60, 32, 149, 382)
+		SpriteFrame(-30, -32, 60, 32, 149, 382)
+		SpriteFrame(-30, -32, 60, 32, 149, 382)
+		SpriteFrame(-30, -32, 60, 32, 149, 382)
+		SpriteFrame(-30, -32, 60, 32, 149, 382)
+	end if
+	SpriteFrame(-20, -48, 40, 48, 1, 393)
+	SpriteFrame(-20, -48, 40, 48, 42, 393)
+	SpriteFrame(-20, -48, 40, 48, 83, 393)
+	SpriteFrame(-20, -48, 40, 48, 165, 140)
+	SpriteFrame(-20, -48, 40, 48, 206, 140)
+	SpriteFrame(-20, -48, 40, 48, 165, 189)
+	SpriteFrame(-20, -48, 40, 48, 206, 189)
+	SpriteFrame(-20, -48, 40, 48, 1, 197)
+	SpriteFrame(-20, -48, 40, 48, 124, 246)
+	SpriteFrame(-20, -48, 40, 48, 165, 246)
+	SpriteFrame(-20, -48, 40, 48, 206, 246)
+	SpriteFrame(-20, -48, 40, 48, 1, 295)
+	SpriteFrame(-20, -48, 40, 48, 42, 295)
+	SpriteFrame(-16, -48, 32, 48, 83, 295)
+	SpriteFrame(-16, -48, 32, 48, 116, 295)
+	SpriteFrame(-16, -48, 32, 48, 116, 295)
+	SpriteFrame(-16, -48, 32, 48, 149, 295)
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

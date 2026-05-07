@@ -1,0 +1,445 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Eggman Mobile Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 65 : TYPE_EGGMANMOBILE
+
+// Function declarations
+reserve function EggmanMobile_Function99
+reserve function EggmanMobile_Function100
+reserve function EggmanMobile_Function101
+reserve function EggmanMobile_Function102
+reserve function EggmanMobile_Function103
+
+
+public function EggmanMobile_Function99
+	object.ypos += object.yvel
+	object.yvel -= 256
+	if object.ypos >= object.value1
+		object.ypos = object.value1
+		object.yvel = 0
+		object.value3 = 0
+		object.value4 = 0
+		object.state++
+	end if
+end function
+
+
+public function EggmanMobile_Function100
+	object.ypos += object.yvel
+	object.yvel -= 4096
+	if object.ypos <= object.value1
+		object.ypos = object.value1
+		object.yvel = 0
+		object.value3 = 0
+		object.value4 = 0
+		object.value5 = 0
+		object.animationTimer = 0
+		object.animationSpeed = 0
+		object.state++
+	end if
+end function
+
+
+public function EggmanMobile_Function101
+	temp0 = object.ypos
+	temp0 += 7864320
+	if object[0].ypos < temp0
+		if object[+1].state < 4
+			object[+1].state = 0
+			object[+1].value0 = 0
+			if object.propertyValue > 0
+				object.value0 = 1200
+			end if
+		else
+			if object[+1].value0 > 270
+				object[+1].state = 0
+				object[+1].value0 = 0
+			else
+				object.value0 &= 511
+			end if
+		end if
+		if object.value0 < 1200
+			if object.value0 == 0
+				object.value5 = 1
+				PlaySfx(SfxName[Buzzsaw], 0)
+			end if
+			object.value0 += 4
+			temp0 = object.value0
+			temp0 &= 511
+			Sin(object.ypos, temp0)
+			object.ypos <<= 9
+			object.ypos += object.value1
+		else
+			object.value0 = 0
+			object.yvel = -65536
+			object.value3 = 1
+			object.value4 = 0
+			object[+1].state = 1
+			object.state++
+		end if
+	end if
+end function
+
+
+public function EggmanMobile_Function102
+	temp0 = object.ypos
+	temp0 += 7864320
+	if object[0].ypos < temp0
+		object.scale = 1
+		if object[+1].state < 4
+			object[+1].state = 0
+			object[+1].value0 = 0
+			if object.propertyValue > 0
+				object.value0 = 1200
+			end if
+		else
+			if object[+1].value0 > 270
+				object[+1].state = 0
+				object[+1].value0 = 0
+			else
+				object.value0 &= 511
+			end if
+		end if
+		if object.value0 < 1200
+			if object.value0 == 0
+				object.value5 = 1
+				PlaySfx(SfxName[Buzzsaw], 0)
+			end if
+			object.value0 += 4
+			temp0 = object.value0
+			temp0 &= 511
+			Sin(object.ypos, temp0)
+			object.ypos <<= 9
+			object.ypos += object.value1
+		else
+			object.value0 = 0
+			object.yvel = -65536
+			object.value3 = 1
+			object.value4 = 0
+			object[+1].state = 1
+			object.scale = 0
+			object.state++
+		end if
+	else
+		if object.outOfBounds == 1
+			object.value5 = 0
+			object.animationTimer = 0
+			object.animationSpeed = 0
+		end if
+		if object[+1].state < 3
+			if object.scale == 1
+				object[+1].state = 3
+				object[+1].value0 = 0
+			end if
+		end if
+	end if
+end function
+
+
+public function EggmanMobile_Function103
+	if object.animationTimer == 0
+		PlaySfx(SfxName[Explosion], 0)
+	end if
+	if object.animationTimer < 12
+		CreateTempObject(TypeName[Steam Cloud], 0, object.xpos, object.ypos)
+		object[tempObjectPos].ypos -= 4718592
+		Rand(object[tempObjectPos].xvel, 512)
+		object[tempObjectPos].xvel -= 256
+		object[tempObjectPos].xvel <<= 10
+		Rand(object[tempObjectPos].yvel, 256)
+		object[tempObjectPos].yvel *= -1024
+	end if
+end function
+
+
+event ObjectUpdate
+	switch object.state
+	case 0
+		if object[0].xpos > object.xpos
+			object.state++
+			object.scale = 0
+		end if
+		break
+	case 1
+		object.value0++
+		if object.value0 == 120
+			object.value0 = 0
+			object.yvel = 196608
+			object.value1 = 102760448
+			object.value3 = 1
+			object.value4 = 0
+			object.state++
+		end if
+		break
+	case 2
+		CallFunction(EggmanMobile_Function99)
+		break
+	case 3
+		CallFunction(EggmanMobile_Function101)
+		if object.state > 3
+			object.value1 = 69730304
+		end if
+		break
+	case 4
+		CallFunction(EggmanMobile_Function100)
+		break
+	case 5
+		CallFunction(EggmanMobile_Function102)
+		if object.state > 5
+			object.value1 = 36175872
+		end if
+		break
+	case 6
+		CallFunction(EggmanMobile_Function100)
+		break
+	case 7
+		CallFunction(EggmanMobile_Function102)
+		if object.state > 7
+			object.value1 = 19922944
+		end if
+		break
+	case 8
+		CallFunction(EggmanMobile_Function100)
+		break
+	case 9
+		if object.value0 == 0
+			object.xpos += 131072
+		else
+			object.xpos -= 131072
+		end if
+		object.value0++
+		object.value0 &= 1
+		break
+	case 10
+		object.ypos += object.yvel
+		object.yvel += 4096
+		object[0].speed = 0
+		if object.value0 == 0
+			object.xpos += 131072
+		else
+			object.xpos -= 131072
+		end if
+		object.value0++
+		object.value0 &= 1
+		if object.ypos >= 44040192
+			object.ypos = 44040192
+			object.value0 = 0
+			object.yvel = 0
+			object.value6 = 3
+			SetTileLayerEntry(500, 0, 20, 5)
+			SetTileLayerEntry(501, 0, 21, 5)
+			SetTileLayerEntry(506, 0, 22, 5)
+			object.state++
+		end if
+		if object[0].xpos > object.value1
+			object[0].xpos = object.value1
+			object[0].xpos += 5242880
+		else
+			object[0].xpos = object.value1
+			object[0].xpos -= 5242880
+		end if
+		CallFunction(EggmanMobile_Function103)
+		break
+	case 11
+		object[0].speed = 0
+		if object[0].xpos > object.xpos
+			object[0].xpos = object.xpos
+			object[0].xpos += 5242880
+		else
+			object[0].xpos = object.xpos
+			object[0].xpos -= 5242880
+		end if
+		CallFunction(EggmanMobile_Function103)
+		object.value0++
+		if object.value0 == 180
+			object[-1].state = 2
+		end if
+		if object.value0 == 240
+			object.state++
+			object.value5 = 3
+			CreateTempObject(TypeName[Fade Screen], 0, object.xpos, object.ypos)
+			object[tempObjectPos].value1 = object.entityPos
+		end if
+		break
+	case 12
+		object[0].speed = 0
+		if object[0].xpos > object.xpos
+			object[0].xpos = object.xpos
+			object[0].xpos += 5242880
+		else
+			object[0].xpos = object.xpos
+			object[0].xpos -= 5242880
+		end if
+		break
+	end switch
+	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+		BoxCollisionTest(C_TOUCH, object.entityPos, -22, 40, 22, 64, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+		if checkResult == 1
+			CallFunction(Player_Hit)
+		end if
+		if object[currentPlayer].animation != ANI_HURT
+			if object.propertyValue == 0
+				BoxCollisionTest(C_TOUCH, object.entityPos, -64, -48, 64, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+				temp0 = checkResult
+				BoxCollisionTest(C_TOUCH, object.entityPos, -32, 16, 32, 32, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+				temp0 |= checkResult
+				if temp0 == 1
+					if object[currentPlayer].animation == ANI_JUMPING
+						object.propertyValue = 120
+						FlipSign(object[currentPlayer].speed)
+						object[currentPlayer].speed >>= 1
+						FlipSign(object[currentPlayer].yvel)
+						object[currentPlayer].yvel >>= 1
+						object[currentPlayer].xvel = object[currentPlayer].speed
+						if object.state < 9
+							PlaySfx(SfxName[Boss Hit], 0)
+							object.value6 = 1
+							object.frame = 0
+						else
+							object.state = 10
+							object.value5 = 2
+							object.animationTimer = 0
+							object.value6 = 2
+							object.value7 = 0
+							object.frame = 0
+							object.value1 = object.xpos
+							object[+1].type = TypeName[Blank Object]
+							Copy16x16Tile(810, 863)
+							PlaySfx(SfxName[Explosion], 0)
+						end if
+					else
+						CallFunction(Player_Hit)
+					end if
+				end if
+			end if
+		end if
+	next
+end event
+
+
+event ObjectDraw
+	DrawSprite(0)
+	switch object.value6
+	case 0
+		temp0 = object.value7
+		temp0 /= 10
+		temp0 += 2
+		object.value7++
+		object.value7 %= 20
+		object.direction = object.frame
+		object.direction /= 25
+		object.frame++
+		object.frame %= 50
+		DrawSpriteFX(temp0, FX_FLIP, object.xpos, object.ypos)
+		break
+	case 1
+		object.direction = object.frame
+		object.direction /= 10
+		object.frame++
+		object.frame %= 20
+		DrawSpriteFX(4, FX_FLIP, object.xpos, object.ypos)
+		if object.propertyValue > 0
+			object.propertyValue--
+		else
+			object.value6 = 0
+			object.value7 = 0
+			object.frame = 0
+		end if
+		break
+	case 2
+		DrawSprite(5)
+		break
+	case 3
+		object.direction = object.frame
+		object.direction /= 25
+		object.frame++
+		object.frame %= 50
+		DrawSpriteFX(6, FX_FLIP, object.xpos, object.ypos)
+		break
+	end switch
+	switch object.value5
+	case 0
+		DrawSprite(7)
+		break
+	case 1
+		temp0 = object.animationTimer
+		temp0 >>= 7
+		temp0 += 7
+		DrawSprite(temp0)
+		object.animationTimer += object.animationSpeed
+		object.animationTimer &= 511
+		if object.animationSpeed < 128
+			object.animationSpeed++
+		end if
+		break
+	case 2
+		temp0 = object.animationTimer
+		temp0 /= 3
+		if temp0 < 4
+			temp0 += 11
+			DrawSprite(temp0)
+		end if
+		object.animationTimer++
+		object.animationTimer %= 30
+		break
+	end switch
+	switch object.value3
+	case 0
+		temp0 = object.value4
+		temp0 >>= 1
+		temp0 += 19
+		DrawSprite(temp0)
+		object.value4++
+		object.value4 &= 3
+		break
+	case 1
+		temp0 = object.value4
+		temp0 /= 3
+		temp0 += 15
+		DrawSprite(temp0)
+		object.value4++
+		object.value4 %= 12
+		break
+	end switch
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R6/Objects2.gif")
+	SpriteFrame(-64, -48, 128, 96, 66, 1)
+	SpriteFrame(-64, -16, 128, 32, 66, 98)
+	SpriteFrame(-24, -21, 48, 24, 116, 131)
+	SpriteFrame(-24, -21, 48, 24, 116, 156)
+	SpriteFrame(-24, -21, 48, 24, 116, 181)
+	SpriteFrame(-28, -37, 48, 40, 124, 215)
+	SpriteFrame(-24, -29, 48, 32, 1, 219)
+	SpriteFrame(-16, -80, 32, 32, 195, 1)
+	SpriteFrame(-16, -80, 32, 32, 195, 34)
+	SpriteFrame(-16, -80, 32, 32, 195, 67)
+	SpriteFrame(-16, -80, 32, 32, 195, 100)
+	SpriteFrame(-12, -80, 24, 32, 228, 51)
+	SpriteFrame(-12, -80, 24, 32, 228, 84)
+	SpriteFrame(-12, -80, 24, 32, 231, 117)
+	SpriteFrame(-12, -80, 24, 32, 231, 150)
+	SpriteFrame(-16, 48, 32, 32, 198, 133)
+	SpriteFrame(-16, 48, 32, 24, 206, 199)
+	SpriteFrame(-16, 48, 32, 32, 198, 166)
+	SpriteFrame(-16, 48, 32, 24, 206, 224)
+	SpriteFrame(-16, 48, 32, 24, 206, 199)
+	SpriteFrame(-16, 48, 32, 24, 206, 224)
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

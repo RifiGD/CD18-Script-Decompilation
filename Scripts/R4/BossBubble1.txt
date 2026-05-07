@@ -1,0 +1,140 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Boss Bubble 1 Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 55 : TYPE_BOSSBUBBLE1
+
+
+
+event ObjectUpdate
+	if object.state == 0
+		if object.frame < 4
+			object.value0++
+			if object.value0 > 9
+				if object.frame < 3
+					object.value0 = 0
+				end if
+				object.frame++
+			end if
+		end if
+		object.ypos -= 98304
+		Sin(object.xpos, object.angle)
+		object.xpos <<= object.value3
+		object.xpos += object.value1
+		object.angle += 4
+		object.angle &= 511
+		if object.value5 != 0
+			arrayPos0 = object.value4
+			temp0 = object[arrayPos0].ypos
+			temp0 += object.value5
+			if object.ypos < temp0
+				temp0 = object.xpos
+				temp0 -= object[arrayPos0].xpos
+				if temp0 < 0
+					FlipSign(temp0)
+				end if
+				temp0 >>= 19
+				switch temp0
+				case 0
+					object.speed = 4
+					break
+				case 1
+					object.speed = 5
+					break
+				case 2
+					object.speed = 6
+					break
+				case 3
+					object.speed = 7
+					break
+				case 4
+				case 5
+				case 6
+					object.speed = 8
+					break
+				end switch
+				object.state = 1
+				object.angle = 0
+				object.value1 = object.xpos
+				object.value2 = object.ypos
+			end if
+		end if
+		if object.outOfBounds == 1
+			object.type = TypeName[Blank Object]
+		end if
+	else
+		arrayPos0 = object.value4
+		temp0 = object.value1
+		temp0 -= object[arrayPos0].xpos
+		if temp0 < -1703936
+			temp0 += 65536
+			object.value1 += 65536
+		end if
+		if temp0 > 1703936
+			temp0 -= 65536
+			object.value1 -= 65536
+		end if
+		temp0 >>= 8
+		temp1 = object.value2
+		temp1 -= object[arrayPos0].ypos
+		if temp1 < -1703936
+			temp1 += 65536
+			object.value2 += 65536
+		end if
+		if temp1 > 1703936
+			temp1 -= 65536
+			object.value2 -= 65536
+		end if
+		temp1 >>= 8
+		Sin(temp2, object.angle)
+		temp2 *= temp1
+		Cos(temp3, object.angle)
+		temp3 *= temp0
+		object.xpos = temp2
+		object.xpos += temp3
+		object.xpos >>= 1
+		object.xpos += object[arrayPos0].xpos
+		Cos(temp2, object.angle)
+		temp2 *= temp1
+		Sin(temp3, object.angle)
+		temp3 *= temp0
+		object.ypos = temp2
+		object.ypos -= temp3
+		object.ypos >>= 1
+		object.ypos += object[arrayPos0].ypos
+		object.angle += object.speed
+		object.angle &= 511
+		if object[arrayPos0].state == 4
+			object.type = TypeName[Blank Object]
+		end if
+	end if
+end event
+
+
+event ObjectDraw
+	DrawSprite(object.frame)
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R4/Objects.gif")
+	SpriteFrame(-4, -4, 8, 8, 212, 61)
+	SpriteFrame(-4, -4, 8, 8, 212, 70)
+	SpriteFrame(-4, -4, 8, 8, 246, 18)
+	SpriteFrame(-8, -8, 16, 16, 116, 181)
+	SpriteFrame(-8, -8, 16, 16, 116, 198)
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

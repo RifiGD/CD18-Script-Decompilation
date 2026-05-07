@@ -1,0 +1,252 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: R5 Setup Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 40 : TYPE_R5SETUP
+
+// Function declarations
+reserve function R5Setup_Function83
+reserve function R5Setup_Function84
+reserve function R5Setup_Function85
+reserve function R5Setup_Function86
+
+// Static Values
+public value R5Setup_value13 = 0;
+public value R5Setup_value14 = 0;
+public value R5Setup_value15 = 0;
+public value R5Setup_value16 = 0;
+
+
+public function R5Setup_Function83
+	if stage[0].activeLayer == 1
+		temp0 = object.value0
+		temp0 /= 6
+		switch temp0
+		case 0
+			CopyPalette(1, 0, 0, 176, 16)
+			break
+		case 1
+			CopyPalette(1, 0, 0, 176, 16)
+			break
+		case 2
+			CopyPalette(1, 0, 0, 176, 16)
+			break
+		case 3
+			CopyPalette(1, 0, 0, 176, 16)
+			break
+		case 4
+		case 8
+			CopyPalette(1, 16, 0, 176, 16)
+			break
+		case 5
+		case 7
+			CopyPalette(1, 32, 0, 176, 16)
+			break
+		case 6
+			CopyPalette(1, 48, 0, 176, 16)
+			break
+		end switch
+		object.value0++
+		object.value0 %= 54
+	end if
+	CopyPalette(3, temp0, 0, 192, 16)
+end function
+
+
+public function R5Setup_Function84
+end function
+
+
+public function R5Setup_Function85
+end function
+
+
+public function R5Setup_Function86
+	object.value0++
+	if object.value0 > 3
+		object.value0 = 0
+		object.frame++
+		object.frame &= 3
+		switch object.frame
+		case 0
+			Copy16x16Tile(792, 940)
+			Copy16x16Tile(793, 944)
+			Copy16x16Tile(794, 948)
+			Copy16x16Tile(845, 952)
+			Copy16x16Tile(846, 956)
+			Copy16x16Tile(852, 960)
+			Copy16x16Tile(853, 964)
+			Copy16x16Tile(862, 968)
+			Copy16x16Tile(863, 972)
+			Copy16x16Tile(868, 976)
+			Copy16x16Tile(869, 980)
+			Copy16x16Tile(894, 984)
+			Copy16x16Tile(895, 988)
+			Copy16x16Tile(912, 992)
+			Copy16x16Tile(913, 996)
+			Copy16x16Tile(923, 1000)
+			break
+		case 1
+			Copy16x16Tile(792, 941)
+			Copy16x16Tile(793, 945)
+			Copy16x16Tile(794, 949)
+			Copy16x16Tile(845, 953)
+			Copy16x16Tile(846, 957)
+			Copy16x16Tile(852, 961)
+			Copy16x16Tile(853, 965)
+			Copy16x16Tile(862, 969)
+			Copy16x16Tile(863, 973)
+			Copy16x16Tile(868, 977)
+			Copy16x16Tile(869, 981)
+			Copy16x16Tile(894, 985)
+			Copy16x16Tile(895, 989)
+			Copy16x16Tile(912, 993)
+			Copy16x16Tile(913, 997)
+			Copy16x16Tile(923, 1001)
+			break
+		case 2
+			Copy16x16Tile(792, 942)
+			Copy16x16Tile(793, 946)
+			Copy16x16Tile(794, 950)
+			Copy16x16Tile(845, 954)
+			Copy16x16Tile(846, 958)
+			Copy16x16Tile(852, 962)
+			Copy16x16Tile(853, 966)
+			Copy16x16Tile(862, 970)
+			Copy16x16Tile(863, 974)
+			Copy16x16Tile(868, 978)
+			Copy16x16Tile(869, 982)
+			Copy16x16Tile(894, 986)
+			Copy16x16Tile(895, 990)
+			Copy16x16Tile(912, 994)
+			Copy16x16Tile(913, 998)
+			Copy16x16Tile(923, 1002)
+			break
+		case 3
+			Copy16x16Tile(792, 943)
+			Copy16x16Tile(793, 947)
+			Copy16x16Tile(794, 951)
+			Copy16x16Tile(845, 955)
+			Copy16x16Tile(846, 959)
+			Copy16x16Tile(852, 963)
+			Copy16x16Tile(853, 967)
+			Copy16x16Tile(862, 971)
+			Copy16x16Tile(863, 975)
+			Copy16x16Tile(868, 979)
+			Copy16x16Tile(869, 983)
+			Copy16x16Tile(894, 987)
+			Copy16x16Tile(895, 991)
+			Copy16x16Tile(912, 995)
+			Copy16x16Tile(913, 999)
+			Copy16x16Tile(923, 1003)
+			break
+		end switch
+	end if
+end function
+
+
+event ObjectUpdate
+	if R5Setup_value13 == 1
+		foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+			if object[currentPlayer].gravity == 0
+				if object[currentPlayer].state != Player_State_TubeRoll
+					object.value2 = object[currentPlayer].xpos
+					object.value2 >>= 16
+					object.value2 += object[currentPlayer].collisionRight
+					object.value3 = object[currentPlayer].ypos
+					object.value3 >>= 16
+					object.value3 += object[currentPlayer].collisionBottom
+					object.value3 += 2
+					Get16x16TileInfo(temp0, object.value2, object.value3, 8)
+					if temp0 == 1
+						if R5Setup_value14 == 0
+							object[currentPlayer].xpos += R5Setup_value16
+						else
+							object[currentPlayer].xpos -= R5Setup_value16
+						end if
+					else
+						object.value2 = object[currentPlayer].xpos
+						object.value2 >>= 16
+						object.value2 += object[currentPlayer].collisionLeft
+						Get16x16TileInfo(temp0, object.value2, object.value3, 8)
+						if temp0 == 1
+							if R5Setup_value14 == 0
+								object[currentPlayer].xpos += R5Setup_value16
+							else
+								object[currentPlayer].xpos -= R5Setup_value16
+							end if
+						end if
+					end if
+				end if
+			end if
+		next
+		object.value4++
+		if object.value4 == 5
+			object.value4 = 0
+			object.value5++
+			object.value5 %= 3
+		end if
+	end if
+	temp0 = object.value5
+	temp0 += R5Setup_value14
+	temp0 <<= 4
+	CopyPalette(2, temp0, 0, 160, 16)
+	CallFunction(object.value6)
+end event
+
+
+event ObjectStartup
+	object[21].type = TypeName[R5 Setup]
+	object[21].priority = 1
+	R5Setup_value13 = 1
+	R5Setup_value14 = 0
+	R5Setup_value15 = 0
+	switch object[9].propertyValue
+	case 0
+		R5Setup_value16 = 65536
+		temp0 = 0
+		temp1 = 0
+		temp2 = 16
+		while temp0 < 96
+			LoadPalette("R5A_PalCycle.act", 2, temp0, temp1, temp2)
+			temp1 += 16
+			temp2 += 16
+			LoadPalette("R5A_PalCycle.act", 3, temp0, temp1, temp2)
+			temp1 += 16
+			temp2 += 16
+			temp0 += 16
+		loop
+		object[21].value6 = R5Setup_Function83 // 83
+		LoadPalette("R5A_GlowEffect.act", 1, 0, 0, 80)
+		break
+	case 1
+		R5Setup_value16 = 32768
+		LoadPalette("R5B_PalCycle.act", 2, 0, 0, 96)
+		object[21].value6 = R5Setup_Function84 // 84
+		break
+	case 2
+		R5Setup_value16 = 131072
+		LoadPalette("R5C_PalCycle.act", 2, 0, 0, 96)
+		object[21].value6 = R5Setup_Function85 // 85
+		break
+	case 3
+		R5Setup_value16 = 131072
+		LoadPalette("R5D_PalCycle.act", 2, 0, 0, 96)
+		object[21].value6 = R5Setup_Function86 // 86
+		break
+	end switch
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

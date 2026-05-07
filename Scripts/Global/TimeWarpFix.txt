@@ -1,0 +1,70 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Time Warp Fix Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 73 : TYPE_TIMEWARPFIX
+
+
+
+event ObjectUpdate
+	switch object.propertyValue
+	case 0
+		BoxCollisionTest(C_TOUCH, object.entityPos, -16, -16, 16, 16, 0, C_BOX, C_BOX, C_BOX, C_BOX)
+		if checkResult == 1
+			if warp.destination > 0
+				if warp.timer > 99
+					if warp.timer < 220
+						warp.destination = 0
+					end if
+				end if
+				warp.timer = 0
+			end if
+		end if
+		break
+	case 1
+		if object[0].xpos < object.xpos
+			warp.destination = 0
+			warp.timer = 0
+		end if
+		break
+	case 2
+		BoxCollisionTest(C_TOUCH, object.entityPos, -48, -48, 48, 48, 0, C_BOX, C_BOX, C_BOX, C_BOX)
+		if checkResult == 1
+			object.type = TypeName[Blank Object]
+			object[0].xpos = object[+1].xpos
+			object[0].ypos = object[+1].ypos
+		end if
+		object.value0++
+		if object.value0 == 2
+			object.type = TypeName[Blank Object]
+		end if
+		break
+	case 3
+		BoxCollisionTest(C_TOUCH, object.entityPos, -96, -96, 96, 96, 0, C_BOX, C_BOX, C_BOX, C_BOX)
+		if checkResult == 1
+			object.type = TypeName[Blank Object]
+			object[0].xpos = object[+1].xpos
+			object[0].ypos = object[+1].ypos
+			object[0].gravity = 1
+		end if
+		object.value0++
+		if object.value0 == 2
+			object.type = TypeName[Blank Object]
+		end if
+		break
+	end switch
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

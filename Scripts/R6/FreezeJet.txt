@@ -1,0 +1,163 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Freeze Jet Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 48 : TYPE_FREEZEJET
+
+
+
+event ObjectUpdate
+	switch object.state
+	case 0
+		if object.value0 < 120
+			object.value0++
+			object.frame = 2
+		else
+			object.value0 = 0
+			object.state++
+			object.frame = 1
+		end if
+		break
+		if object.value0 < 8
+			temp0 = object.value0
+			temp0 &= 1
+			if temp0 == 0
+				object.frame++
+			end if
+			if object.frame > 2
+				object.frame = 1
+				object.direction++
+				object.direction &= 1
+			end if
+			object.value0++
+		else
+			object.value0 = 0
+			object.state++
+			object.frame = 3
+		end if
+		break
+	case 1
+		if object.value0 < 160
+			temp0 = object.value0
+			temp0 &= 1
+			if temp0 == 0
+				object.frame++
+			end if
+			if object.frame > 6
+				object.frame = 3
+				object.direction++
+				object.direction &= 1
+			end if
+			object.value0++
+		else
+			object.value0 = 0
+			object.state++
+			object.frame = 7
+		end if
+		break
+	case 2
+		if object.value0 < 24
+			temp0 = object.value0
+			temp0 &= 3
+			if temp0 == 0
+				object.frame++
+			end if
+			if object.frame > 12
+				object.frame = 7
+				object.direction++
+				object.direction &= 1
+			end if
+			object.value0++
+		else
+			object.value0 = 0
+			object.value1 = 7
+			object.state++
+		end if
+		break
+	case 3
+		if object.value0 < 120
+			temp0 = object.value0
+			temp0 &= object.value1
+			if temp0 == 0
+				object.frame++
+				object.value1++
+				object.value1 <<= 1
+				object.value1--
+			end if
+			if object.frame > 12
+				object.frame = 7
+				object.direction++
+				object.direction &= 1
+			end if
+			object.value0++
+		else
+			object.value0 = 0
+			object.state = 1
+			object.frame = 1
+		end if
+		break
+	end switch
+	if object.state == 1
+		foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+			BoxCollisionTest(C_TOUCH, object.entityPos, -16, 0, 16, 60, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			if checkResult == 1
+				if object[currentPlayer].value7 == 0
+					if warp.destination > 0
+						if warp.timer > 99
+							if warp.timer < 220
+								warp.destination = 0
+							end if
+						end if
+						warp.timer = 0
+					end if
+					object[currentPlayer].state = Player_State_Static
+					object[currentPlayer].visible = 0
+					object[currentPlayer].interaction = 0
+					object[currentPlayer].speed = 0
+					object[currentPlayer].xvel = 0
+					object[currentPlayer].yvel = 0
+					CreateTempObject(TypeName[Ice Block], 0, object[currentPlayer].xpos, object[currentPlayer].ypos)
+					object[tempObjectPos].drawOrder = 4
+				end if
+			end if
+		next
+	end if
+end event
+
+
+event ObjectDraw
+	DrawSpriteFX(object.frame, FX_FLIP, object.xpos, object.ypos)
+	DrawSprite(0)
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R6/Objects.gif")
+	SpriteFrame(-32, -8, 64, 16, 1, 1)
+	SpriteFrame(-16, 0, 32, 36, 1, 46)
+	SpriteFrame(-16, 0, 0, 0, 1, 46)
+	SpriteFrame(-16, 0, 0, 0, 1, 46)
+	SpriteFrame(-16, 0, 32, 60, 1, 22)
+	SpriteFrame(-16, 0, 0, 0, 1, 46)
+	SpriteFrame(-16, 4, 32, 64, 1, 18)
+	SpriteFrame(-16, 0, 0, 0, 1, 46)
+	SpriteFrame(-16, 0, 0, 0, 1, 46)
+	SpriteFrame(-16, 0, 32, 60, 1, 22)
+	SpriteFrame(-16, 0, 0, 0, 1, 46)
+	SpriteFrame(-16, 0, 0, 0, 1, 46)
+	SpriteFrame(-16, 4, 32, 64, 1, 18)
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

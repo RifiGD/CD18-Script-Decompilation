@@ -1,0 +1,103 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Static Rock Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 42 : TYPE_STATICROCK
+
+// Function declarations
+reserve function StaticRock_DebugDraw
+reserve function StaticRock_DebugSpawn
+
+
+public function StaticRock_DebugDraw
+	DrawSprite(0)
+end function
+
+
+public function StaticRock_DebugSpawn
+	CreateTempObject(TypeName[Static Rock], 0, object.xpos, object.ypos)
+end function
+
+
+event ObjectUpdate
+	switch object.propertyValue
+	case 0
+		foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+			BoxCollisionTest(C_SOLID, object.entityPos, -16, -16, 16, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+		next
+		break
+	case 1
+		foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+			BoxCollisionTest(C_TOUCH, object.entityPos, -16, -14, 16, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			if checkResult == 1
+				if object[currentPlayer].xpos < object.xpos
+					object[currentPlayer].xpos = object[currentPlayer].collisionLeft
+					object[currentPlayer].xpos <<= 16
+					object[currentPlayer].xpos += object.xpos
+					object[currentPlayer].xpos -= 1048576
+				else
+					object[currentPlayer].xpos = object[currentPlayer].collisionRight
+					object[currentPlayer].xpos <<= 16
+					object[currentPlayer].xpos += object.xpos
+					object[currentPlayer].xpos += 1048576
+				end if
+			end if
+		next
+		break
+	case 2
+		foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+			if object[currentPlayer].collisionMode == 1
+				BoxCollisionTest(C_TOUCH, object.entityPos, -16, -16, 16, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+				if checkResult == 1
+					object[currentPlayer].ypos = object[currentPlayer].collisionBottom
+					object[currentPlayer].ypos <<= 16
+					object[currentPlayer].ypos += object.ypos
+					object[currentPlayer].ypos += 1048576
+					object[currentPlayer].speed = 0
+				end if
+			end if
+			if object[currentPlayer].collisionMode == 3
+				BoxCollisionTest(C_TOUCH, object.entityPos, -16, -16, 16, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+				if checkResult == 1
+					object[currentPlayer].ypos = object[currentPlayer].collisionBottom
+					object[currentPlayer].ypos <<= 16
+					object[currentPlayer].ypos += object.ypos
+					object[currentPlayer].ypos += 1048576
+					object[currentPlayer].speed = 0
+				end if
+			end if
+		next
+		break
+	end switch
+end event
+
+
+event ObjectDraw
+	DrawSprite(object.propertyValue)
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R5/Objects.gif")
+	SpriteFrame(-16, -16, 32, 32, 92, 18)
+	SpriteFrame(0, 0, 0, 0, 1, 1)
+	SpriteFrame(0, 0, 0, 0, 1, 1)
+	SetTableValue(TypeName[Static Rock], DebugMode_ObjCount, DebugMode_TypesTable)
+	SetTableValue(StaticRock_DebugDraw, DebugMode_ObjCount, DebugMode_DrawTable)
+	SetTableValue(StaticRock_DebugSpawn, DebugMode_ObjCount, DebugMode_SpawnTable)
+	DebugMode_ObjCount++
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

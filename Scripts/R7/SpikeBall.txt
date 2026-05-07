@@ -1,0 +1,155 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Spike Ball Object
+// Script Author: Christian Whitehead
+// Unpacked by RifiGD's UnScriptR
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 48 : TYPE_SPIKEBALL
+
+
+
+event ObjectUpdate
+	switch object.state
+	case 0
+		if object.value1 < object.value4
+			object.value1++
+			object.xpos += object.value2
+		else
+			object.state++
+		end if
+		break
+	case 1
+		if object.value0 < object.value6
+			object.value0++
+		else
+			object.value0 = 0
+			object.state++
+		end if
+		break
+	case 2
+		if object.value1 > object.value5
+			object.value1--
+			object.xpos -= object.value2
+		else
+			object.state++
+		end if
+		break
+	case 3
+		if object.value0 < object.value6
+			object.value0++
+		else
+			object.value0 = 0
+			object.state = 0
+		end if
+		break
+	case 4
+		if object.value1 < object.value4
+			object.value1++
+			object.ypos += object.value2
+		else
+			object.state++
+		end if
+		break
+	case 5
+		if object.value0 < object.value6
+			object.value0++
+		else
+			object.value0 = 0
+			object.state++
+		end if
+		break
+	case 6
+		if object.value1 > object.value5
+			object.value1--
+			object.ypos -= object.value2
+		else
+			object.state++
+		end if
+		break
+	case 7
+		if object.value0 < object.value6
+			object.value0++
+		else
+			object.value0 = 0
+			object.state = 4
+		end if
+		break
+	end switch
+	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+		BoxCollisionTest(C_TOUCH, object.entityPos, -12, -12, 12, 12, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+		if checkResult == 1
+			CallFunction(Player_Hit)
+		end if
+	next
+end event
+
+
+event ObjectDraw
+	DrawSprite(0)
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R7/Objects.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 199)
+	foreach (TypeName[Spike Ball], arrayPos0, ALL_ENTITIES)
+		if object[arrayPos0].propertyValue == 1
+			object[arrayPos0].state = 4
+			switch object[9].propertyValue
+			case 0
+				object[arrayPos0].value2 = 131072
+				object[arrayPos0].value4 = 16
+				object[arrayPos0].value5 = -16
+				object[arrayPos0].value6 = 40
+				break
+			case 1
+				object[arrayPos0].value2 = 262144
+				object[arrayPos0].value4 = 8
+				object[arrayPos0].value5 = -8
+				object[arrayPos0].value6 = 60
+				break
+			case 2
+			case 3
+				object[arrayPos0].value2 = 65536
+				object[arrayPos0].value4 = 32
+				object[arrayPos0].value5 = -32
+				object[arrayPos0].value6 = 20
+				break
+			end switch
+		else
+			switch object[9].propertyValue
+			case 0
+				object[arrayPos0].value2 = 131072
+				object[arrayPos0].value4 = 24
+				object[arrayPos0].value5 = -24
+				object[arrayPos0].value6 = 40
+				break
+			case 1
+				object[arrayPos0].value2 = 262144
+				object[arrayPos0].value4 = 12
+				object[arrayPos0].value5 = -12
+				object[arrayPos0].value6 = 60
+				break
+			case 2
+			case 3
+				object[arrayPos0].value2 = 65536
+				object[arrayPos0].value4 = 48
+				object[arrayPos0].value5 = -48
+				object[arrayPos0].value6 = 20
+				break
+			end switch
+		end if
+	next
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

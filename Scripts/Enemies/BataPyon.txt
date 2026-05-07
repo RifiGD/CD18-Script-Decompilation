@@ -1,0 +1,218 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Bata Pyon Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 53 : TYPE_BATAPYON
+
+// Function declarations
+reserve function BataPyon_DebugDraw
+reserve function BataPyon_DebugSpawn
+
+// Static Values
+public value BataPyon_value13 = 0;
+
+
+public function BataPyon_DebugDraw
+	temp0 = object[0].value16
+	temp0 -= BataPyon_value13
+	if temp0 == 0
+		DrawSprite(0)
+	else
+		DrawSprite(2)
+	end if
+end function
+
+
+public function BataPyon_DebugSpawn
+	temp0 = object[0].value16
+	temp0 -= BataPyon_value13
+	CreateTempObject(TypeName[Bata Pyon], temp0, object.xpos, object.ypos)
+end function
+
+
+event ObjectUpdate
+	if object.outOfBounds == 1
+		object.state = 7
+		object.direction = 0
+		object.xpos = object.value3
+		object.ypos = object.value4
+		object.value1 = -40960
+		object.value2 = 524288
+		object.value5 = 0
+	end if
+	switch object.state
+	case 0
+		object.xpos += object.value1
+		object.ypos += object.value2
+		object.value2 += 8192
+		ObjectTileCollision(3, 0, -18, 0)
+		if checkResult == 1
+			object.value2 = 0
+		end if
+		if object.value2 > 0
+			ObjectTileCollision(0, 0, 20, 0)
+			if checkResult == 1
+				if object.propertyValue == 0
+					object.state = 1
+					object.priority = 1
+					object.value5++
+					if object.value5 == 8
+						object.value5 = 0
+						object.direction++
+						object.direction &= 1
+						FlipSign(object.value1)
+					end if
+				else
+					object.state = 2
+					object.priority = 1
+					object.value5++
+					if object.value5 == 4
+						object.value5 = 0
+						object.direction++
+						object.direction &= 1
+						FlipSign(object.value1)
+					end if
+				end if
+			end if
+		end if
+		if object.value1 > 0
+			ObjectTileCollision(1, 16, 0, 0)
+			if checkResult == 1
+				object.value5 = 0
+				object.direction = 0
+				FlipSign(object.value1)
+			end if
+		else
+			ObjectTileCollision(2, -16, 0, 0)
+			if checkResult == 1
+				object.value5 = 0
+				object.direction = 1
+				FlipSign(object.value1)
+			end if
+		end if
+		object.frame = object.propertyValue
+		object.frame <<= 1
+		if object.value2 < 0
+			object.frame++
+		end if
+		break
+	case 1
+		object.xpos += object.value1
+		object.ypos -= 1179648
+		object.value2 = -393216
+		object.state = 0
+		object.frame = object.propertyValue
+		object.frame <<= 1
+		if object.value2 < 0
+			object.frame++
+		end if
+		break
+	case 2
+		if object.value0 < 3
+			object.value0++
+		else
+			object.state++
+			object.frame = 3
+			object.ypos -= 1179648
+		end if
+		break
+	case 3
+		if object.value0 < 6
+			object.value0++
+		else
+			object.state++
+			object.frame = 2
+			object.ypos += 1179648
+		end if
+		break
+	case 4
+		if object.value0 < 10
+			object.value0++
+		else
+			object.state++
+			object.frame = 3
+			object.ypos -= 1179648
+		end if
+		break
+	case 5
+		if object.value0 < 15
+			object.value0++
+		else
+			object.state++
+			object.frame = 2
+			object.ypos += 1179648
+		end if
+		break
+	case 6
+		if object.value0 < 20
+			object.value0++
+		else
+			object.value0 = 0
+			object.frame = 3
+			object.ypos -= 1179648
+			object.value2 = -327680
+			object.state = 0
+		end if
+		break
+	case 7
+		if object.outOfBounds == 1
+			object.state = 0
+			object.priority = 0
+		end if
+		break
+	end switch
+	CallFunction(StageSetup_CheckGoodFuture)
+	if object.state < 7
+		foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+			BoxCollisionTest(C_TOUCH, object.entityPos, -14, -12, 14, 12, currentPlayer, object[currentPlayer].value41, object[currentPlayer].value39, object[currentPlayer].value42, object[currentPlayer].value40)
+			if checkResult == 1
+				CallFunction(Player_BadnikBreak)
+			end if
+		next
+	end if
+end event
+
+
+event ObjectDraw
+	if object.state < 7
+		DrawSpriteFX(object.frame, FX_FLIP, object.xpos, object.ypos)
+	end if
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R6/Objects.gif")
+	SpriteFrame(-16, -18, 32, 40, 34, 134)
+	SpriteFrame(-16, -18, 32, 56, 67, 167)
+	SpriteFrame(-16, -18, 32, 40, 34, 175)
+	SpriteFrame(-16, -18, 32, 56, 100, 167)
+	foreach (TypeName[Bata Pyon], arrayPos0, ALL_ENTITIES)
+		object[arrayPos0].value3 = object[arrayPos0].xpos
+		object[arrayPos0].value4 = object[arrayPos0].ypos
+		object[arrayPos0].value1 = -40960
+		object[arrayPos0].value2 = 524288
+	next
+	temp0 = 0
+	BataPyon_value13 = DebugMode_ObjCount
+	while temp0 < 2
+		SetTableValue(TypeName[Bata Pyon], DebugMode_ObjCount, DebugMode_TypesTable)
+		SetTableValue(BataPyon_DebugDraw, DebugMode_ObjCount, DebugMode_DrawTable)
+		SetTableValue(BataPyon_DebugSpawn, DebugMode_ObjCount, DebugMode_SpawnTable)
+		DebugMode_ObjCount++
+		temp0++
+	loop
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

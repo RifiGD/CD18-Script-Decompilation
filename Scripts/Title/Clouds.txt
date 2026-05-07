@@ -1,0 +1,107 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Clouds Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 5 : TYPE_CLOUDS
+
+
+
+event ObjectDraw
+	object.value0 += 8
+	object.value0 &= 2047
+	temp0 = object.value0
+	FlipSign(temp0)
+	MatrixTranslateXYZ(MAT_WORLD, -512, 720, temp0)
+	Draw3DScene()
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("Title/Clouds.gif")
+	scene3D.vertexCount = 0
+	scene3D.faceCount = 0
+	arrayPos0 = scene3D.vertexCount
+	arrayPos1 = scene3D.faceCount
+	MatrixTranslateXYZ(MAT_WORLD, 0, 0, 0)
+	MatrixRotateXYZ(MAT_WORLD, 0, 0, 0)
+	MatrixRotateXYZ(MAT_VIEW, 8, 0, 0)
+	arrayPos0 = 0
+	arrayPos1 = 0
+	temp2 = 0
+	temp3 = 0
+	temp4 = 0
+	temp5 = 0
+	while temp3 < 10
+		temp0 = 0
+		temp1 = -8192
+		temp4 = 0
+		while temp0 < 16
+			vertexBuffer[arrayPos0].x = temp1
+			vertexBuffer[arrayPos0].y = 0
+			vertexBuffer[arrayPos0].z = temp2
+			vertexBuffer[arrayPos0].u = temp4
+			vertexBuffer[arrayPos0].v = temp5
+			arrayPos0++
+			temp2 += 512
+			vertexBuffer[arrayPos0].x = temp1
+			vertexBuffer[arrayPos0].y = 0
+			vertexBuffer[arrayPos0].z = temp2
+			vertexBuffer[arrayPos0].u = temp4
+			vertexBuffer[arrayPos0].v = temp5
+			vertexBuffer[arrayPos0].v += 63
+			arrayPos0++
+			temp2 -= 512
+			temp1 += 1024
+			vertexBuffer[arrayPos0].x = temp1
+			vertexBuffer[arrayPos0].y = 0
+			vertexBuffer[arrayPos0].z = temp2
+			vertexBuffer[arrayPos0].u = temp4
+			vertexBuffer[arrayPos0].u += 63
+			vertexBuffer[arrayPos0].v = temp5
+			arrayPos0++
+			temp2 += 512
+			vertexBuffer[arrayPos0].x = temp1
+			vertexBuffer[arrayPos0].y = 0
+			vertexBuffer[arrayPos0].z = temp2
+			vertexBuffer[arrayPos0].u = temp4
+			vertexBuffer[arrayPos0].u += 63
+			vertexBuffer[arrayPos0].v = temp5
+			vertexBuffer[arrayPos0].v += 63
+			temp4 += 64
+			temp4 &= 255
+			temp2 -= 512
+			arrayPos0 -= 3
+			faceBuffer[arrayPos1].a = arrayPos0
+			faceBuffer[arrayPos1].b = arrayPos0
+			faceBuffer[arrayPos1].b += 2
+			faceBuffer[arrayPos1].c = arrayPos0
+			faceBuffer[arrayPos1].c += 1
+			faceBuffer[arrayPos1].d = arrayPos0
+			faceBuffer[arrayPos1].d += 3
+			faceBuffer[arrayPos1].flag = 0
+			arrayPos0 += 4
+			arrayPos1++
+			temp0++
+			scene3D.vertexCount += 4
+			scene3D.faceCount++
+		loop
+		temp5 += 64
+		temp5 &= 255
+		temp2 += 512
+		temp3++
+	loop
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

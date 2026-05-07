@@ -1,0 +1,227 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Attract Mode Object
+// Script Author: Christian Whitehead
+// Unpacked by RifiGD's UnScriptR
+// ----------------------------------
+
+//-------Aliases-------//
+private alias 73 : TYPE_ATTRACTMODE
+
+//---Object Values---//
+private alias object.value0 : 	object.setupTimer // wows
+private alias object.value1	:	object.demoTime
+private alias object.value2	:	object.demoLength
+private alias object.value3	:	object.demoInput
+
+//---Priority Aliases---//
+private alias 0 : PRIORITY_BOUNDS         // Object updates within 128 pixels of the screen border left/right and 256 pixels up/down
+private alias 1 : PRIORITY_ACTIVE         // Object will always update, unless paused/frozen
+private alias 2 : PRIORITY_ALWAYS         // Object will always update
+private alias 3 : PRIORITY_XBOUNDS        // Object updates within 128 pixels of the screen border left/right
+private alias 4 : PRIORITY_BOUNDS_DESTROY // Object updates within 128 pixels of the screen border left/right, object will be set to Blank Object if the check fails
+private alias 5 : PRIORITY_INACTIVE       // Object never updates
+private alias 6 : PRIORITY_BOUNDS_SMALL   // Object updates within 32 pixels of the screen border left/right and 128 pixels up/down
+private alias 7 : PRIORITY_ACTIVE_SMALL   // Object will always update, unless paused/frozen. The bounds ofobject.outOfBounds are much smaller
+
+//---States---//
+private alias 0	:	ATTRACTMODE_SETUP
+private alias 1	:	ATTRACTMODE_HANDLE_INPUT
+
+//---Demos---//
+private alias 0 : DEMO_R11A
+private alias 1 : DEMO_SS1
+private alias 2 : DEMO_R43C
+private alias 3 : DEMO_SS6
+private alias 4 : DEMO_R82A
+
+//---TextInfo aliases---//
+private alias 0 : TEXTINFO_TEXTDATA
+private alias 1 : TEXTINFO_TEXTSIZE
+private alias 2 : TEXTINFO_ROWCOUNT
+
+//---Presentation Stages---//
+private alias 0 : STAGE_P_TITLE
+
+
+event ObjectUpdate
+	switch object.state
+	case ATTRACTMODE_SETUP
+		if object.setupTimer == 0
+			if object[0].controlMode == 0
+				object.state++
+				object.demoInput = object.demoLength
+				object.demoInput -= 60
+			end if
+		else
+			object.setupTimer--
+		end if
+		break
+
+	case ATTRACTMODE_HANDLE_INPUT
+
+		// Gets the inputs for the current frame
+		GetTextInfo(temp0, MENU_1, TEXTINFO_TEXTDATA, 0, object.demoTime)
+
+		// This else block is the only thing that exists in the original script.
+		// I ended up adding the first if block due to Special Stage attract mode not working.
+		// Technically not original code, but I'm not going to add a platform marker to this
+		
+		// Set all the input stuff as needed
+		if stage.activeList != REGULAR_STAGE
+			// Handle Special Stage inputs.
+			GetBit(object[2].up, temp0, 0)
+			GetBit(object[2].down, temp0, 1)
+			GetBit(object[2].left, temp0, 2)
+			GetBit(object[2].right, temp0, 3)
+			GetBit(object[2].jumpPress, temp0, 4)
+			GetBit(object[2].jumpHold, temp0, 5)
+		else
+			// Handle Regular Stage inputs.
+			GetBit(object[0].up, temp0, 0)
+			GetBit(object[0].down, temp0, 1)
+			GetBit(object[0].left, temp0, 2)
+			GetBit(object[0].right, temp0, 3)
+			GetBit(object[0].jumpPress, temp0, 4)
+			GetBit(object[0].jumpHold, temp0, 5)
+		end if
+
+		// CD18 Exclusive: It uses the score as the timer?
+		// -> Must be a debug leftover.
+		player.score = object.demoTime
+
+		if object.demoTime < object.demoLength
+			object.demoTime++
+		else
+			StopMusic()
+			options.attractMode 	= false
+			stage.activeList 		= PRESENTATION_STAGE
+			stage.listPos 			= STAGE_P_TITLE
+			generator.destroyed 	= false
+			metalSonic.destroyed 	= false
+			goodFuture.enabled 		= false
+			LoadStage()
+			lampPostID = 0
+
+			// the Haptics check here was removed
+		end if
+		if object.demoTime >= object.demoInput
+			// Fade outOfBounds
+
+			music.volume -= 2
+
+			screen[0].cameraEnabled = false
+
+			temp0 = object.demoTime
+			temp0 -= object.demoInput
+			temp0 <<= 3
+			if temp0 > 255
+				temp0 = 255
+			end if
+			SetScreenFade(0, 0, 0, temp0)
+		else
+			if keyPress[0].buttonA == true
+				object.demoTime = object.demoInput
+			end if
+			if keyPress[0].buttonB == true
+				object.demoTime = object.demoInput
+			end if
+			if keyPress[0].buttonC == true
+				object.demoTime = object.demoInput
+			end if
+			if keyPress[0].start == true
+				object.demoTime = object.demoInput
+			end if
+
+			// the MOBILE code is missing here, for obvious reasons...
+
+		end if
+		break
+	end switch
+end event
+
+event ObjectStartup
+	arrayPos0 = 32
+	while arrayPos0 < 1056
+		if object[arrayPos0].type == TypeName[Attract Mode]
+			if options.attractMode == true
+				// Make the Object always active, regardless of where it's located in the stage
+				object[arrayPos0].priority = PRIORITY_ACTIVE
+
+				// Give it a high Draw Order as well... though nothing's ever really drawn by this Object
+				object[arrayPos0].drawOrder = 6
+
+				switch object[arrayPos0].propertyValue
+				case DEMO_R11A
+					// Palmtree Panic Act 1, Present
+					LoadTextFile(MENU_1, "Data/Game/Demos/Key11a.bin", 0)
+
+					// Make the player wait 16 frames before making an input.
+					object[arrayPos0].setupTimer = 16
+
+					lampPostID = 0
+					break
+				case DEMO_SS1
+					// Special Stage 1
+					LoadTextFile(MENU_1, "Data/Game/Demos/Special1.bin", 0)
+
+					lampPostID = 0
+					break
+				case DEMO_R43C
+					// Tidal Tempest Act 3, Good Future
+					LoadTextFile(MENU_1, "Data/Game/Demos/Key43c.bin", 0)
+
+					// Move the Player to where the Attract Mode object is placed
+					object[0].xpos = object[arrayPos0].xpos
+					object[0].ypos = object[arrayPos0].ypos
+					screen[0].cameraX = object[arrayPos0].ixpos
+					screen[0].cameraY = object[arrayPos0].iypos
+
+					// Make the player wait 16 frames before making an input.
+					object[arrayPos0].setupTimer = 16
+
+					lampPostID = 33
+					break
+				case DEMO_SS6
+					// Special Stage 6
+					LoadTextFile(MENU_1, "Data/Game/Demos/Special6.bin", 0)
+					
+					lampPostID = 0
+					break
+				case DEMO_R82A
+					// Metallic Madness Act 2, Present
+					LoadTextFile(MENU_1, "Data/Game/Demos/Key82a.bin", 0)
+					
+					// Move the Player to where the Attract Mode object is placed
+					object[0].xpos = object[arrayPos0].xpos
+					object[0].ypos = object[arrayPos0].ypos
+					screen[0].cameraX = object[arrayPos0].ixpos
+					screen[0].cameraY = object[arrayPos0].iypos
+
+					// Make the player wait 16 frames before making an input.
+					object[arrayPos0].setupTimer = 16
+					
+					lampPostID = 33
+					break
+				end switch
+
+				// Get how long the Demo is, and store it in the Attract Mode Object
+				GetTextInfo(object[arrayPos0].value2, MENU_1, TEXTINFO_TEXTSIZE, 0, 0)
+			else
+
+				// If Attract Mode isn't active, then remove the Object
+				object[arrayPos0].type = TypeName[Blank Object]
+			end if
+		end if
+		arrayPos0++
+	loop
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

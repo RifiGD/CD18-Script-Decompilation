@@ -1,0 +1,74 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Dr Eggman Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 9 : TYPE_DREGGMAN
+
+
+
+event ObjectUpdate
+	if object.direction == 1
+		object.xpos += 32768
+	else
+		object.xpos -= 32768
+	end if
+	switch object.state
+	case 0
+		object.value1 = object.ypos
+		object.state++
+		break
+	case 1
+		object.angle += object.propertyValue
+		object.angle &= 511
+		Sin(object.ypos, object.angle)
+		object.ypos <<= 11
+		object.ypos += object.value1
+		object.value1 -= 16384
+		break
+	end switch
+	if object.outOfBounds == 1
+		object.type = TypeName[Blank Object]
+	end if
+end event
+
+
+event ObjectDraw
+	temp0 = object.animationTimer
+	temp0 >>= 1
+	temp0 += 2
+	DrawSpriteFX(temp0, FX_FLIP, object.xpos, object.ypos)
+	object.animationTimer++
+	object.animationTimer %= 12
+	temp0 = object.animationSpeed
+	temp0 >>= 5
+	DrawSpriteFX(temp0, FX_FLIP, object.xpos, object.ypos)
+	object.animationSpeed++
+	object.animationSpeed &= 63
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("DAGarden/Objects.gif")
+	SpriteFrame(-24, -20, 48, 40, 267, 705)
+	SpriteFrame(-24, -20, 48, 40, 316, 705)
+	SpriteFrame(8, 0, 24, 24, 265, 746)
+	SpriteFrame(8, 0, 24, 24, 290, 746)
+	SpriteFrame(8, 0, 24, 24, 315, 746)
+	SpriteFrame(8, 0, 24, 24, 340, 746)
+	SpriteFrame(8, 0, 0, 0, 265, 746)
+	SpriteFrame(8, 0, 0, 0, 265, 746)
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

@@ -1,0 +1,182 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Solid Block Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 47 : TYPE_SOLIDBLOCK
+
+// Function declarations
+reserve function SolidBlock_DebugDraw
+reserve function SolidBlock_DebugSpawn
+
+// Static Values
+public value SolidBlock_value16 = 0;
+
+
+public function SolidBlock_DebugDraw
+	temp0 = object[0].value16
+	temp0 -= SolidBlock_value16
+	switch temp0
+	case 0
+	case 1
+		DrawSprite(temp0)
+		break
+	case 2
+		DrawSprite(2)
+		DrawSprite(3)
+		break
+	case 3
+		DrawSprite(4)
+		DrawSprite(5)
+		break
+	case 4
+		DrawSprite(6)
+		DrawSprite(7)
+		DrawSprite(8)
+		DrawSprite(9)
+		break
+	case 5
+		DrawSprite(2)
+		DrawSprite(10)
+		DrawSprite(11)
+		DrawSprite(3)
+		break
+	end switch
+end function
+
+
+public function SolidBlock_DebugSpawn
+	temp0 = object[0].value16
+	temp0 -= SolidBlock_value16
+	CreateTempObject(TypeName[Solid Block], temp0, object.xpos, object.ypos)
+	object[tempObjectPos].drawOrder = 4
+end function
+
+
+event ObjectUpdate
+	switch object.propertyValue
+	case 0
+	case 1
+		foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+			BoxCollisionTest(C_SOLID, object.entityPos, -16, -16, 16, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+		next
+		break
+	case 2
+		foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+			BoxCollisionTest(C_SOLID, object.entityPos, -32, -16, 32, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+		next
+		break
+	case 3
+		foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+			BoxCollisionTest(C_SOLID, object.entityPos, -16, -32, 16, 32, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+		next
+		break
+	case 4
+		foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+			BoxCollisionTest(C_SOLID, object.entityPos, -32, -32, 32, 32, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+		next
+		break
+	case 5
+		foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+			BoxCollisionTest(C_SOLID, object.entityPos, -64, -16, 64, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+		next
+		break
+	end switch
+end event
+
+
+event ObjectDraw
+	switch object.propertyValue
+	case 0
+	case 1
+		DrawSprite(object.propertyValue)
+		break
+	case 2
+		DrawSprite(2)
+		DrawSprite(3)
+		break
+	case 3
+		DrawSprite(4)
+		DrawSprite(5)
+		break
+	case 4
+		DrawSprite(6)
+		DrawSprite(7)
+		DrawSprite(8)
+		DrawSprite(9)
+		break
+	case 5
+		DrawSprite(2)
+		DrawSprite(10)
+		DrawSprite(11)
+		DrawSprite(3)
+		break
+	end switch
+end event
+
+
+event ObjectStartup
+	switch object[9].propertyValue
+	case 0
+		LoadSpriteSheet("R4/Objects.gif")
+		temp0 = 163
+		temp1 = 1
+		temp2 = 196
+		break
+	case 1
+		LoadSpriteSheet("R4/Objects2.gif")
+		temp0 = 1
+		temp1 = 157
+		temp2 = 34
+		break
+	case 2
+		LoadSpriteSheet("R4/Objects2.gif")
+		temp0 = 1
+		temp1 = 190
+		temp2 = 34
+		break
+	case 3
+		LoadSpriteSheet("R4/Objects2.gif")
+		temp0 = 1
+		temp1 = 223
+		temp2 = 34
+		break
+	end switch
+	SpriteFrame(-16, -16, 32, 32, temp0, temp1)
+	SpriteFrame(-16, -16, 32, 32, temp2, temp1)
+	SpriteFrame(-32, -16, 32, 32, temp0, temp1)
+	SpriteFrame(0, -16, 32, 32, temp2, temp1)
+	SpriteFrame(-16, -32, 32, 32, temp0, temp1)
+	SpriteFrame(-16, 0, 32, 32, temp2, temp1)
+	SpriteFrame(-32, -32, 32, 32, temp0, temp1)
+	SpriteFrame(0, -32, 32, 32, temp2, temp1)
+	SpriteFrame(-32, 0, 32, 32, temp2, temp1)
+	SpriteFrame(0, 0, 32, 32, temp0, temp1)
+	SpriteFrame(-64, -16, 32, 32, temp0, temp1)
+	SpriteFrame(32, -16, 32, 32, temp2, temp1)
+	foreach (TypeName[Solid Block], arrayPos0, ALL_ENTITIES)
+		object[arrayPos0].drawOrder = 4
+	next
+	temp0 = 0
+	SolidBlock_value16 = DebugMode_ObjCount
+	while temp0 < 6
+		SetTableValue(TypeName[Solid Block], DebugMode_ObjCount, DebugMode_TypesTable)
+		SetTableValue(SolidBlock_DebugDraw, DebugMode_ObjCount, DebugMode_DrawTable)
+		SetTableValue(SolidBlock_DebugSpawn, DebugMode_ObjCount, DebugMode_SpawnTable)
+		DebugMode_ObjCount++
+		temp0++
+	loop
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

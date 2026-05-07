@@ -1,0 +1,55 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Rock Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 40 : TYPE_ROCK
+
+// Function declarations
+reserve function Rock_DebugDraw
+reserve function Rock_DebugSpawn
+
+
+public function Rock_DebugDraw
+	DrawSprite(0)
+end function
+
+
+public function Rock_DebugSpawn
+	CreateTempObject(TypeName[Rock], 0, object.xpos, object.ypos)
+end function
+
+
+event ObjectUpdate
+	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+		BoxCollisionTest(C_SOLID, object.entityPos, -14, -15, 14, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+	next
+end event
+
+
+event ObjectDraw
+	DrawSprite(0)
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R1/Objects.gif")
+	SpriteFrame(-20, -16, 40, 32, 216, 1)
+	SetTableValue(TypeName[Rock], DebugMode_ObjCount, DebugMode_TypesTable)
+	SetTableValue(Rock_DebugDraw, DebugMode_ObjCount, DebugMode_DrawTable)
+	SetTableValue(Rock_DebugSpawn, DebugMode_ObjCount, DebugMode_SpawnTable)
+	DebugMode_ObjCount++
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

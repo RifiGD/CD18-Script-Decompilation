@@ -1,0 +1,76 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Tails Biplane Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 7 : TYPE_TAILSBIPLANE
+
+
+
+event ObjectUpdate
+	if object.direction == 0
+		object.xpos += 65536
+	else
+		object.xpos -= 65536
+	end if
+	switch object.state
+	case 0
+	case 3
+		object.frame = 0
+		break
+	case 1
+		object.ypos += 32768
+		object.frame = 3
+		break
+	case 2
+		object.ypos -= 32768
+		object.frame = 6
+		break
+	end switch
+	if object.value0 > 0
+		object.value0--
+	else
+		Rand(object.state, 3)
+		Rand(object.value0, 90)
+	end if
+	if object.outOfBounds == 1
+		object.type = TypeName[Blank Object]
+	end if
+end event
+
+
+event ObjectDraw
+	temp0 = object.animationSpeed
+	temp0 >>= 1
+	temp0 += object.frame
+	DrawSpriteFX(temp0, FX_FLIP, object.xpos, object.ypos)
+	object.animationSpeed++
+	object.animationSpeed %= 6
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("DAGarden/Objects.gif")
+	SpriteFrame(-24, -16, 48, 32, 365, 705)
+	SpriteFrame(-24, -16, 48, 32, 414, 705)
+	SpriteFrame(-24, -16, 48, 32, 463, 705)
+	SpriteFrame(-24, -16, 48, 32, 365, 738)
+	SpriteFrame(-24, -16, 48, 32, 414, 738)
+	SpriteFrame(-24, -16, 48, 32, 463, 738)
+	SpriteFrame(-24, -16, 48, 32, 365, 771)
+	SpriteFrame(-24, -16, 48, 32, 414, 771)
+	SpriteFrame(-24, -16, 48, 32, 463, 771)
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

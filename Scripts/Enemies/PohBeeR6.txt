@@ -1,0 +1,283 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Poh Bee Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 54 : TYPE_POHBEE
+
+// Function declarations
+reserve function PohBee_DebugDraw
+reserve function PohBee_DebugSpawn
+
+// Static Values
+public value PohBee_value14 = 0;
+
+
+public function PohBee_DebugDraw
+	temp0 = object[0].value16
+	temp0 -= PohBee_value14
+	if temp0 == 0
+		DrawSprite(0)
+	else
+		DrawSprite(2)
+	end if
+end function
+
+
+public function PohBee_DebugSpawn
+	temp0 = object[0].value16
+	temp0 -= PohBee_value14
+	CreateTempObject(TypeName[Poh Bee], temp0, object.xpos, object.ypos)
+end function
+
+
+event ObjectUpdate
+	if object.outOfBounds == 1
+		object.state = 6
+		object.value0 = 0
+		object.direction = 0
+		object.xpos = object.value1
+		object.value2 = 0
+		object.value3 = 0
+		object.value4 = 0
+	end if
+	if object.propertyValue == 0
+		switch object.state
+		case 0
+			object.priority = 1
+			if object.value3 > 0
+				object.value3--
+			end if
+			if object.value0 < 512
+				object.value0++
+				object.xpos -= 65536
+			else
+				object.state = 1
+				object.value0 = 0
+			end if
+			break
+		case 1
+			object.priority = 1
+			if object.value3 > 0
+				object.value3--
+			end if
+			if object.value0 < 60
+				if object.value0 == 30
+					object.direction = 1
+				end if
+				object.value0++
+			else
+				object.state = 2
+			end if
+			break
+		case 2
+			object.priority = 1
+			if object.value3 > 0
+				object.value3--
+			end if
+			if object.value0 < 512
+				object.value0++
+				object.xpos += 65536
+			else
+				object.state = 3
+				object.value0 = 0
+			end if
+			break
+		case 3
+			object.priority = 1
+			if object.value3 > 0
+				object.value3--
+			end if
+			if object.value0 < 60
+				if object.value0 == 30
+					object.direction = 0
+				end if
+				object.value0++
+			else
+				object.state = 0
+			end if
+			break
+		case 4
+			object.priority = 1
+			if object.value3 < 92
+				object.value3++
+				if object.value3 == 30
+					object.value4 = 4
+				end if
+				if object.value3 == 64
+					CreateTempObject(TypeName[Poh Bee Shot], 0, object.xpos, object.ypos)
+					object[tempObjectPos].xpos -= 983040
+					object[tempObjectPos].ypos += 1769472
+					object[tempObjectPos].xvel = -131072
+					object[tempObjectPos].yvel = 131072
+					PlaySfx(SfxName[Shot], 0)
+				end if
+			else
+				object.state = 0
+				object.value4 = 0
+				object.value3 = 60
+			end if
+			break
+		case 5
+			object.priority = 1
+			if object.value3 < 92
+				object.value3++
+				if object.value3 == 30
+					object.value4 = 4
+				end if
+				if object.value3 == 64
+					CreateTempObject(TypeName[Blank Object], 0, object.xpos, object.ypos)
+					object[tempObjectPos].direction = 1
+					object[tempObjectPos].xpos += 983040
+					object[tempObjectPos].ypos += 1769472
+					object[tempObjectPos].xvel = 131072
+					object[tempObjectPos].yvel = 131072
+					PlaySfx(SfxName[Shot], 0)
+				end if
+			else
+				object.state = 2
+				object.value4 = 0
+				object.value3 = 60
+			end if
+			break
+		case 6
+			if object.outOfBounds == 1
+				object.state = 0
+				object.priority = 0
+			end if
+			break
+		end switch
+	else
+		switch object.state
+		case 0
+			object.priority = 1
+			if object.value0 < 1024
+				object.value0++
+				object.xpos -= 32768
+			else
+				object.state = 1
+				object.value0 = 0
+			end if
+			break
+		case 1
+			object.priority = 1
+			if object.value0 < 60
+				if object.value0 == 30
+					object.direction = 1
+				end if
+				object.value0++
+			else
+				object.state = 2
+			end if
+			break
+		case 2
+			object.priority = 1
+			if object.value0 < 1024
+				object.value0++
+				object.xpos += 32768
+			else
+				object.state = 3
+				object.value0 = 0
+			end if
+			break
+		case 3
+			object.priority = 1
+			if object.value0 < 60
+				if object.value0 == 30
+					object.direction = 0
+				end if
+				object.value0++
+			else
+				object.state = 0
+			end if
+			break
+		case 6
+			if object.outOfBounds == 1
+				object.state = 0
+				object.priority = 0
+			end if
+			break
+		end switch
+	end if
+	CallFunction(StageSetup_CheckGoodFuture)
+	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+		if object.propertyValue == 0
+			if object.state < 4
+				if object.value3 == 0
+					BoxCollisionTest(C_TOUCH, object.entityPos, -96, -64, 96, 64, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+					if checkResult == 1
+						if object.xpos > object[currentPlayer].xpos
+							object.direction = 0
+							object.state = 4
+						else
+							object.direction = 1
+							object.state = 5
+						end if
+					end if
+				end if
+			end if
+		end if
+		if object.state < 6
+			BoxCollisionTest(C_TOUCH, object.entityPos, -20, -16, 20, 14, currentPlayer, object[currentPlayer].value41, object[currentPlayer].value39, object[currentPlayer].value42, object[currentPlayer].value40)
+			if checkResult == 1
+				CallFunction(Player_BadnikBreak)
+			end if
+		end if
+	next
+end event
+
+
+event ObjectDraw
+	if object.state < 6
+		if object.propertyValue == 0
+			object.value2++
+			object.value2 &= 3
+			object.frame = object.value2
+			object.frame >>= 1
+			object.frame += object.value4
+		else
+			object.value2++
+			object.value2 &= 3
+			object.frame = object.value2
+			object.frame >>= 1
+			object.frame += 2
+		end if
+		DrawSpriteFX(object.frame, FX_FLIP, object.xpos, object.ypos)
+	end if
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R6/Objects.gif")
+	SpriteFrame(-24, -20, 48, 32, 148, 75)
+	SpriteFrame(-24, -16, 48, 28, 148, 108)
+	SpriteFrame(-24, -20, 48, 32, 99, 133)
+	SpriteFrame(-24, -16, 48, 28, 148, 137)
+	SpriteFrame(-24, -20, 48, 40, 197, 91)
+	SpriteFrame(-24, -16, 48, 36, 197, 132)
+	foreach (TypeName[Poh Bee], arrayPos0, ALL_ENTITIES)
+		object[arrayPos0].value1 = object[arrayPos0].xpos
+	next
+	temp0 = 0
+	PohBee_value14 = DebugMode_ObjCount
+	while temp0 < 2
+		SetTableValue(TypeName[Poh Bee], DebugMode_ObjCount, DebugMode_TypesTable)
+		SetTableValue(PohBee_DebugDraw, DebugMode_ObjCount, DebugMode_DrawTable)
+		SetTableValue(PohBee_DebugSpawn, DebugMode_ObjCount, DebugMode_SpawnTable)
+		DebugMode_ObjCount++
+		temp0++
+	loop
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

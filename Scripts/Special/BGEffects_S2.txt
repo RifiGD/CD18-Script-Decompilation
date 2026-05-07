@@ -1,0 +1,131 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: BG Effects Object
+// Script Author: Christian Whitehead
+// Unpacked by RifiGD's UnScriptR
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 14 : TYPE_BGEFFECTS
+
+
+
+event ObjectDraw
+	object.value3++
+	if object.value3 > 2
+		object.value3 = 0
+		object.value5++
+		object.value5 %= 3
+		switch object.value5
+		case 0
+			Copy16x16Tile(122, 428)
+			Copy16x16Tile(123, 429)
+			Copy16x16Tile(124, 430)
+			Copy16x16Tile(125, 431)
+			Copy16x16Tile(126, 432)
+			Copy16x16Tile(127, 433)
+			Copy16x16Tile(128, 434)
+			Copy16x16Tile(129, 435)
+			break
+		case 1
+			Copy16x16Tile(122, 436)
+			Copy16x16Tile(123, 437)
+			Copy16x16Tile(124, 438)
+			Copy16x16Tile(125, 439)
+			Copy16x16Tile(126, 440)
+			Copy16x16Tile(127, 441)
+			Copy16x16Tile(128, 442)
+			Copy16x16Tile(129, 443)
+			break
+		case 2
+			Copy16x16Tile(122, 444)
+			Copy16x16Tile(123, 445)
+			Copy16x16Tile(124, 446)
+			Copy16x16Tile(125, 447)
+			Copy16x16Tile(126, 448)
+			Copy16x16Tile(127, 449)
+			Copy16x16Tile(128, 450)
+			Copy16x16Tile(129, 451)
+			break
+		end switch
+	end if
+	object.value4++
+	if object.value4 > 5
+		object.value4 = 0
+		object.value6++
+		object.value6 &= 3
+		switch object.value6
+		case 0
+			Copy16x16Tile(157, 452)
+			Copy16x16Tile(158, 453)
+			Copy16x16Tile(159, 456)
+			Copy16x16Tile(160, 457)
+			break
+		case 1
+			Copy16x16Tile(157, 454)
+			Copy16x16Tile(158, 455)
+			Copy16x16Tile(159, 458)
+			Copy16x16Tile(160, 459)
+			break
+		case 2
+			Copy16x16Tile(157, 460)
+			Copy16x16Tile(158, 461)
+			Copy16x16Tile(159, 464)
+			Copy16x16Tile(160, 465)
+			break
+		case 3
+			Copy16x16Tile(157, 462)
+			Copy16x16Tile(158, 463)
+			Copy16x16Tile(159, 466)
+			Copy16x16Tile(160, 467)
+			break
+		end switch
+	end if
+	temp1 = object.value2
+	temp2 = tileLayer[0].angle
+	if temp1 < temp2
+		temp3 = temp2
+		temp3 -= temp1
+		if temp3 > 256
+			temp1 += 512
+		end if
+	else
+		temp3 = temp1
+		temp3 -= temp2
+		if temp3 > 256
+			temp2 += 512
+		end if
+	end if
+	temp0 = temp1
+	temp0 -= temp2
+	object.value2 = tileLayer[0].angle
+	temp1 = 131072
+	temp2 = 65536
+	temp1 *= temp0
+	temp2 *= temp0
+	hParallax[0].scrollPos += temp1
+	hParallax[1].scrollPos += temp2
+end event
+
+
+event ObjectStartup
+	stage.curXBoundary1 = 58720256
+	stage.curXBoundary2 = 209715200
+	stage.curYBoundary1 = 58720256
+	stage.curYBoundary2 = 209715200
+	foreach (TypeName[BG Effects], arrayPos0, ALL_ENTITIES)
+		object[arrayPos0].priority = 1
+		object[arrayPos0].drawOrder = 0
+		object[arrayPos0].value2 = 368
+	next
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

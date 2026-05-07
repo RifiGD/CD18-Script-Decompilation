@@ -1,0 +1,82 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Poh Bee Shot Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 55 : TYPE_POHBEESHOT
+
+
+
+event ObjectUpdate
+	switch object.state
+	case 0
+		if object.value0 < 4
+			object.value0++
+		else
+			object.value0 = 0
+			object.state++
+			object.frame = 1
+		end if
+		break
+	case 1
+		object.xpos += object.xvel
+		object.ypos += object.yvel
+		if object.value0 < 12
+			object.value0++
+		else
+			object.value0 = 0
+			object.state++
+			object.frame = 2
+		end if
+		break
+	case 2
+		object.xpos += object.xvel
+		object.ypos += object.yvel
+		if object.value0 > 1
+			object.frame = 3
+		else
+			object.frame = 2
+		end if
+		object.value0++
+		object.value0 &= 3
+		break
+	end switch
+	if object.outOfBounds == 1
+		object.type = TypeName[Blank Object]
+	end if
+	if object.state > 0
+		foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+			BoxCollisionTest(C_TOUCH, object.entityPos, -6, -6, 6, 6, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			if checkResult == 1
+				CallFunction(Player_Hit)
+			end if
+		next
+	end if
+end event
+
+
+event ObjectDraw
+	DrawSpriteFX(object.frame, FX_FLIP, object.xpos, object.ypos)
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R6/Objects.gif")
+	SpriteFrame(-8, -8, 16, 16, 197, 68)
+	SpriteFrame(-8, -8, 16, 16, 69, 117)
+	SpriteFrame(-8, -8, 16, 16, 1, 134)
+	SpriteFrame(-8, -8, 16, 16, 17, 134)
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

@@ -1,0 +1,123 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Metal Sonic Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 10 : TYPE_METALSONIC
+
+
+
+event ObjectUpdate
+	switch object.state
+	case 0
+		object.value3 = screen.xcenter
+		object.value3 <<= 16
+		if object.xpos < object.value3
+			object.direction = 0
+		else
+			object.direction = 1
+		end if
+		object.state++
+		break
+	case 1
+		temp0 = object.value3
+		temp0 -= object.xpos
+		temp0 >>= 5
+		temp1 = 7864320
+		temp1 -= object.ypos
+		temp1 >>= 5
+		object.xpos += temp0
+		object.ypos += temp1
+		object.value0++
+		if object.value0 == 120
+			object.value0 = 0
+			object.value1 = object.ypos
+			object.state++
+		end if
+		object.animationTimer++
+		object.animationTimer &= 7
+		break
+	case 2
+		object.angle += 8
+		object.angle &= 511
+		Sin(object.ypos, object.angle)
+		object.ypos <<= 9
+		object.ypos += object.value1
+		object.value0++
+		if object.value0 == 100
+			object.value0 = 0
+			object.value1 = object.ypos
+			object.direction++
+			object.direction &= 1
+			object.state++
+		end if
+		object.animationTimer++
+		object.animationTimer &= 7
+		break
+	case 3
+		object.angle += 64
+		object.angle &= 511
+		Sin(object.ypos, object.angle)
+		object.ypos <<= 7
+		object.ypos += object.value1
+		if object.direction == 1
+			object.xpos += 32768
+		else
+			object.xpos -= 32768
+		end if
+		object.value0++
+		if object.value0 == 90
+			object.value0 = 0
+			object.xvel = 65536
+			object.state++
+		end if
+		object.animationTimer++
+		object.animationTimer &= 7
+		break
+	case 4
+		if object.direction == 0
+			object.xpos += object.xvel
+		else
+			object.xpos -= object.xvel
+		end if
+		object.xvel += 12288
+		object.animationTimer += 2
+		object.animationTimer %= 5
+		break
+	end switch
+	if object.outOfBounds == 1
+		object.type = TypeName[Blank Object]
+	end if
+end event
+
+
+event ObjectDraw
+	temp0 = object.animationTimer
+	temp0 >>= 1
+	temp0++
+	DrawSpriteFX(temp0, FX_FLIP, object.xpos, object.ypos)
+	DrawSpriteFX(0, FX_FLIP, object.xpos, object.ypos)
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("DAGarden/Objects.gif")
+	SpriteFrame(-16, -24, 32, 48, 429, 804)
+	SpriteFrame(-24, -12, 24, 24, 462, 804)
+	SpriteFrame(-24, -12, 24, 24, 487, 804)
+	SpriteFrame(-24, -12, 0, 0, 462, 804)
+	SpriteFrame(-24, -12, 0, 0, 487, 804)
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

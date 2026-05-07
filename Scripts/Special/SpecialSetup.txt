@@ -1,0 +1,152 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Special Setup Object
+// Script Author: Christian Whitehead
+// Unpacked by RifiGD's UnScriptR
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 2 : TYPE_SPECIALSETUP
+
+// TextInfo aliases
+private alias 0 : TILELAYER_NOSCROLL
+private alias 1 : TILELAYER_HSCROLL
+private alias 2 : TILELAYER_VSCROLL
+private alias 3 : TILELAYER_3DFLOOR
+private alias 4 : TILELAYER_3DSKY
+
+
+event ObjectUpdate
+	scene3D.vertexCount = 0
+	scene3D.faceCount = 0
+	oscillation++
+	if oscillation == 512
+		oscillation = 0
+	end if
+	if object[4].value0 > 0
+		if stage.timeEnabled == 0
+			object[4].value2++
+			if object[4].value2 == 60
+				object[4].value2 = 0
+				if object[4].value1 > 0
+					if object[4].value1 < 6
+						PlaySfx(SfxName[Drown Alert], 0)
+					end if
+					object[4].value1--
+					if object[4].value1 < 20
+						arrayPos0 = object[4].value6
+						if object[arrayPos0].type != 5
+							PlaySfx(SfxName[Time UFO], 0)
+							arrayPos1 = arrayPos0
+							arrayPos1++
+							object[arrayPos0].type = TypeName[UFO]
+							object[arrayPos0].priority = 1
+							object[arrayPos0].propertyValue = 2
+							object[arrayPos0].xpos = object[arrayPos1].xpos
+							object[arrayPos0].ypos = object[arrayPos1].ypos
+						end if
+					end if
+				else
+					object[30].type = TypeName[Stage Finish]
+					if stage.actNum == 8
+						object[30].state = 9
+						object[30].drawOrder = 7
+					end if
+					object[2].controlMode = -1
+				end if
+			end if
+			if object[4].value7 > 0
+				if object[4].value7 > 1
+					if object[4].value7 > 20
+						temp0 = object[4].value2
+						temp0 &= 1
+						if object[4].value1 > 0
+							object[4].value1 -= temp0
+						else
+							object[30].type = TypeName[Stage Finish]
+							if stage.actNum == 8
+								object[30].state = 9
+								object[30].drawOrder = 7
+							end if
+							object[2].controlMode = -1
+						end if
+					else
+						if object[3].type != 9
+							object[4].value7 = 0
+						end if
+					end if
+					object[4].value7--
+				else
+					if object[3].type != 9
+						object[4].value7 = 0
+					else
+						temp0 = object[4].value2
+						temp0 &= 1
+						if object[4].value1 > 0
+							object[4].value1 -= temp0
+						else
+							object[30].type = TypeName[Stage Finish]
+							if stage.actNum == 8
+								object[30].state = 9
+								object[30].drawOrder = 7
+							end if
+							object[2].controlMode = -1
+						end if
+					end if
+				end if
+			end if
+		end if
+	end if
+end event
+
+
+event ObjectDraw
+	temp0 = 0
+	temp1 = screen[3].drawListSize
+	while temp0 < temp1
+		temp2 = temp1
+		temp2--
+		while temp2 > temp0
+			temp3 = temp2
+			temp2--
+			GetDrawListEntityRef(arrayPos0, 3, temp3)
+			GetDrawListEntityRef(arrayPos1, 3, temp2)
+			if object[arrayPos0].value5 > object[arrayPos1].value5
+				SetDrawListEntityRef(arrayPos0, 3, temp2)
+				SetDrawListEntityRef(arrayPos1, 3, temp3)
+			end if
+		loop
+		temp0++
+	loop
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("Special/Objects.gif")
+	tileLayer[0].type = TILELAYER_3DSKY
+	if options.soundtrack == 0
+		SetMusicTrack("JP/Specialstage.ogg", 0, 1)
+		SetMusicTrack("JP/ZoneComplete.ogg", 1, 0)
+	else
+		SetMusicTrack("US/Specialstage.ogg", 0, 270972)
+		SetMusicTrack("US/ZoneComplete.ogg", 1, 0)
+	end if
+	stage.pauseEnabled = true
+	stage.timeEnabled = 0
+	foreach (TypeName[Special Setup], arrayPos0, ALL_ENTITIES)
+		ResetObjectEntity(arrayPos0, TypeName[Blank Object], 0, 0, 0)
+	next
+	object[23].type = TypeName[Special Setup]
+	object[23].priority = 1
+	object[23].drawOrder = 2
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

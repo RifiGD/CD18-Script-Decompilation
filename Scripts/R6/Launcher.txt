@@ -1,0 +1,121 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Launcher Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 53 : TYPE_LAUNCHER
+
+
+
+event ObjectUpdate
+	if object.state > 0
+		currentPlayer = object.value2
+		if object[currentPlayer].state != Player_State_Static
+			object.state = 0
+			object.value0 = 0
+		end if
+	end if
+	switch object.state
+	case 0
+		foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+			BoxCollisionTest(C_SOLID, object.entityPos, -24, -26, -18, 4, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			BoxCollisionTest(C_TOUCH, object.entityPos, -20, -16, 20, 4, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			if checkResult == 1
+				object.state = 1
+				object.value2 = currentPlayer
+				object[currentPlayer].state = Player_State_Static
+				object[currentPlayer].animation = ANI_LAUNCHER
+				object[currentPlayer].direction = 0
+				object[currentPlayer].xpos = object.xpos
+				object[currentPlayer].iypos = object[currentPlayer].collisionBottom
+				FlipSign(object[currentPlayer].ypos)
+				object[currentPlayer].ypos -= 196608
+				object[currentPlayer].ypos += object.ypos
+				object[currentPlayer].yvel = 0
+				object.priority = 1
+				object[currentPlayer].scrollTracking = 0
+				object[currentPlayer].gravity = 1
+				PlaySfx(SfxName[Launcher], 0)
+			end if
+		next
+		break
+	case 1
+		object.xpos += 786432
+		object[currentPlayer].xpos = object.xpos
+		object[currentPlayer].iypos = object[currentPlayer].collisionBottom
+		FlipSign(object[currentPlayer].ypos)
+		object[currentPlayer].ypos -= 196608
+		object[currentPlayer].ypos += object.ypos
+		ObjectTileGrip(0, 32, 4, 0)
+		if checkResult == 0
+			object.state++
+		end if
+		break
+	case 2
+		object[currentPlayer].xpos += 786432
+		object[currentPlayer].iypos = object[currentPlayer].collisionBottom
+		FlipSign(object[currentPlayer].ypos)
+		object[currentPlayer].ypos -= 196608
+		object[currentPlayer].ypos += object.ypos
+		object.state++
+		break
+	case 3
+		if object.value0 == 0
+			object[currentPlayer].xpos += 786432
+		end if
+		object[currentPlayer].state = Player_State_Air
+		object[currentPlayer].animation = ANI_WALKING
+		object[currentPlayer].speed = 794624
+		object[currentPlayer].xvel = 794624
+		object[currentPlayer].iypos = object[currentPlayer].collisionBottom
+		FlipSign(object[currentPlayer].ypos)
+		object[currentPlayer].ypos -= 196608
+		object[currentPlayer].ypos += object.ypos
+		if object.value0 < 2
+			object.value0++
+		else
+			object.state++
+		end if
+	case 4
+		object.xpos -= 262144
+		if object.xpos < object.value1
+			object.xpos = object.value1
+			object.priority = 0
+			object.state = 0
+		end if
+		if object.outOfBounds == 1
+			object.xpos = object.value1
+			object.priority = 0
+			object.state = 0
+		end if
+		break
+	end switch
+end event
+
+
+event ObjectDraw
+	DrawSprite(0)
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R6/Objects.gif")
+	SpriteFrame(-28, -28, 56, 32, 83, 1)
+	foreach (TypeName[Launcher], arrayPos0, ALL_ENTITIES)
+		object[arrayPos0].value1 = object[arrayPos0].xpos
+		object[arrayPos0].drawOrder = 4
+	next
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

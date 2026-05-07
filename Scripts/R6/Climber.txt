@@ -1,0 +1,256 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Climber Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 54 : TYPE_CLIMBER
+
+
+
+event ObjectUpdate
+	if object.state == 0
+		if object.value2 == 1
+			if object.frame > 0
+				object.ypos -= 786432
+				object.frame--
+			else
+				if object.value5 < 120
+					object.value5++
+					if object.value5 == 60
+						object.value4 = 1
+					end if
+				else
+					object.value5 = 0
+					object.state = 1
+					object.value4 = 2
+				end if
+			end if
+		else
+			if object.frame < 4
+				object.frame++
+				object.ypos -= 786432
+			else
+				if object.value5 < 120
+					object.value5++
+					if object.value5 == 60
+						object.value4 = 1
+					end if
+				else
+					object.value5 = 0
+					object.state = 1
+					object.value4 = 2
+				end if
+			end if
+		end if
+	else
+		object.ypos += 65536
+		if object.value2 == 0
+			ObjectTileCollision(0, -25, 32, 0)
+		else
+			ObjectTileCollision(0, 25, 32, 0)
+		end if
+	end if
+	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+		switch object.frame
+		case 0
+			BoxCollisionTest(C_PLATFORM, object.entityPos, -56, -33, -24, -16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			if checkResult == 1
+				object[currentPlayer].ypos += 65536
+				if object.value2 == 1
+					object.value2 = 0
+					object.state = 0
+					object.value4 = 0
+					object.value5 = 0
+				end if
+			end if
+			BoxCollisionTest(C_PLATFORM, object.entityPos, 24, 15, 56, 32, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			if checkResult == 1
+				object[currentPlayer].ypos += 65536
+				if object.value2 == 0
+					object.value2 = 1
+					object.state = 0
+					object.value4 = 0
+					object.value5 = 0
+				end if
+			end if
+			break
+		case 1
+			BoxCollisionTest(C_PLATFORM, object.entityPos, -56, -21, -24, -4, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			if checkResult == 1
+				object[currentPlayer].ypos += 65536
+				if object.value2 == 1
+					object.value2 = 0
+					object.state = 0
+					object.value4 = 0
+					object.value5 = 0
+				end if
+			end if
+			BoxCollisionTest(C_PLATFORM, object.entityPos, 24, 3, 56, 20, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			if checkResult == 1
+				object[currentPlayer].ypos += 65536
+				if object.value2 == 0
+					object.value2 = 1
+					object.state = 0
+					object.value4 = 0
+					object.value5 = 0
+				end if
+			end if
+			break
+		case 2
+			BoxCollisionTest(C_PLATFORM, object.entityPos, -56, -9, -24, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			if checkResult == 1
+				object[currentPlayer].ypos += 65536
+				if object.value2 == 1
+					object.value2 = 0
+					object.state = 0
+					object.value4 = 0
+					object.value5 = 0
+				end if
+			end if
+			BoxCollisionTest(C_PLATFORM, object.entityPos, 24, -9, 56, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			if checkResult == 1
+				object[currentPlayer].ypos += 65536
+				if object.value2 == 0
+					object.value2 = 1
+					object.state = 0
+					object.value4 = 0
+					object.value5 = 0
+				end if
+			end if
+			break
+		case 3
+			BoxCollisionTest(C_PLATFORM, object.entityPos, -56, 3, -24, 20, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			if checkResult == 1
+				object[currentPlayer].ypos += 65536
+				if object.value2 == 1
+					object.value2 = 0
+					object.state = 0
+					object.value4 = 0
+					object.value5 = 0
+				end if
+			end if
+			BoxCollisionTest(C_PLATFORM, object.entityPos, 24, -21, 56, -4, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			if checkResult == 1
+				object[currentPlayer].ypos += 65536
+				if object.value2 == 0
+					object.value2 = 1
+					object.state = 0
+					object.value4 = 0
+					object.value5 = 0
+				end if
+			end if
+			break
+		case 4
+			BoxCollisionTest(C_PLATFORM, object.entityPos, -56, 15, -24, 32, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			if checkResult == 1
+				object[currentPlayer].ypos += 65536
+				if object.value2 == 1
+					object.value2 = 0
+					object.state = 0
+					object.value4 = 0
+					object.value5 = 0
+				end if
+			end if
+			BoxCollisionTest(C_PLATFORM, object.entityPos, 24, -33, 56, -16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			if checkResult == 1
+				object[currentPlayer].ypos += 65536
+				if object.value2 == 0
+					object.value2 = 1
+					object.state = 0
+					object.value4 = 0
+					object.value5 = 0
+				end if
+			end if
+			break
+		end switch
+	next
+end event
+
+
+event ObjectDraw
+	switch object.frame
+	case 0
+		DrawSprite(0)
+		DrawSprite(3)
+		DrawSpriteFX(7, FX_FLIP, object.xpos, object.ypos)
+		break
+	case 1
+		DrawSprite(1)
+		DrawSprite(4)
+		DrawSpriteFX(6, FX_FLIP, object.xpos, object.ypos)
+		break
+	case 2
+		DrawSprite(2)
+		DrawSprite(5)
+		DrawSpriteFX(5, FX_FLIP, object.xpos, object.ypos)
+		break
+	case 3
+		DrawSpriteFX(1, FX_FLIP, object.xpos, object.ypos)
+		DrawSprite(6)
+		DrawSpriteFX(4, FX_FLIP, object.xpos, object.ypos)
+		break
+	case 4
+		DrawSpriteFX(0, FX_FLIP, object.xpos, object.ypos)
+		DrawSprite(7)
+		DrawSpriteFX(3, FX_FLIP, object.xpos, object.ypos)
+		break
+	end switch
+	switch object.value4
+	case 0
+		temp0 = object.value3
+		temp0 /= 3
+		temp0 += 8
+		object.value3++
+		object.value3 %= 6
+		break
+	case 1
+		temp0 = object.value3
+		temp0 /= 3
+		temp0 += 8
+		object.value3++
+		object.value3 %= 12
+		break
+	case 2
+		temp0 = object.value3
+		temp0 /= 3
+		temp0 += 10
+		object.value3++
+		object.value3 %= 6
+		break
+	end switch
+	DrawSprite(temp0)
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R6/Objects3.gif")
+	SpriteFrame(-24, -24, 48, 48, 1, 52)
+	SpriteFrame(-24, -16, 48, 32, 174, 220)
+	SpriteFrame(-24, -8, 48, 23, 122, 181)
+	SpriteFrame(-56, -32, 32, 16, 223, 233)
+	SpriteFrame(-56, -20, 32, 16, 223, 233)
+	SpriteFrame(-56, -8, 32, 16, 223, 233)
+	SpriteFrame(-56, 4, 32, 16, 223, 233)
+	SpriteFrame(-56, 16, 32, 16, 223, 233)
+	SpriteFrame(-6, 15, 12, 9, 197, 200)
+	SpriteFrame(-6, 15, 12, 9, 210, 200)
+	SpriteFrame(-6, 15, 12, 9, 197, 210)
+	SpriteFrame(-6, 15, 12, 9, 210, 210)
+	foreach (TypeName[Climber], arrayPos0, ALL_ENTITIES)
+		object[arrayPos0].value1 = object[arrayPos0].ypos
+		object[arrayPos0].direction = 1
+	next
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

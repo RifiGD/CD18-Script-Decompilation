@@ -1,0 +1,125 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Eggman Statue Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 70 : TYPE_EGGMANSTATUE
+
+// Function declarations
+reserve function EggmanStatue_Function102
+
+
+public function EggmanStatue_Function102
+	temp2 = object.ypos
+	temp2 += 2490368
+	CreateTempObject(TypeName[Statue Bomb], 0, object.xpos, object.ypos)
+	object[tempObjectPos].xpos -= 1572864
+	object[tempObjectPos].ypos -= 14680064
+	object[tempObjectPos].value2 = temp2
+	CreateTempObject(TypeName[Statue Bomb], 0, object.xpos, object.ypos)
+	object[tempObjectPos].xpos -= 524288
+	object[tempObjectPos].ypos -= 6291456
+	object[tempObjectPos].value2 = temp2
+	CreateTempObject(TypeName[Statue Bomb], 0, object.xpos, object.ypos)
+	object[tempObjectPos].xpos += 524288
+	object[tempObjectPos].ypos -= 10485760
+	object[tempObjectPos].value2 = temp2
+	CreateTempObject(TypeName[Statue Bomb], 0, object.xpos, object.ypos)
+	object[tempObjectPos].xpos += 1572864
+	object[tempObjectPos].ypos -= 18874368
+	object[tempObjectPos].value2 = temp2
+	CreateTempObject(TypeName[Statue Bomb], 0, object.xpos, object.ypos)
+	object[tempObjectPos].xpos += 2621440
+	object[tempObjectPos].ypos -= 18874368
+	object[tempObjectPos].value2 = temp2
+	CreateTempObject(TypeName[Statue Bomb], 0, object.xpos, object.ypos)
+	object[tempObjectPos].xpos += 3670016
+	object[tempObjectPos].ypos -= 6291456
+	object[tempObjectPos].value2 = temp2
+	CreateTempObject(TypeName[Statue Bomb], 0, object.xpos, object.ypos)
+	object[tempObjectPos].xpos += 4718592
+	object[tempObjectPos].ypos -= 6291456
+	object[tempObjectPos].value2 = temp2
+	CreateTempObject(TypeName[Statue Bomb], 0, object.xpos, object.ypos)
+	object[tempObjectPos].xpos += 5767168
+	object[tempObjectPos].ypos -= 18874368
+	object[tempObjectPos].value2 = temp2
+	CreateTempObject(TypeName[Statue Bomb], 0, object.xpos, object.ypos)
+	object[tempObjectPos].xpos += 6815744
+	object[tempObjectPos].ypos -= 6291456
+	object[tempObjectPos].value2 = temp2
+	CreateTempObject(TypeName[Statue Bomb], 0, object.xpos, object.ypos)
+	object[tempObjectPos].xpos += 7864320
+	object[tempObjectPos].ypos -= 14680064
+	object[tempObjectPos].value2 = temp2
+end function
+
+
+event ObjectUpdate
+	switch object.state
+	case 1
+		temp0 = object.value0
+		temp0 &= 3
+		if temp0 == 0
+			Rand(temp0, 32)
+			temp0 -= 16
+			temp0 <<= 16
+			temp0 += object.xpos
+			Rand(temp1, 48)
+			temp1 -= 24
+			temp1 <<= 16
+			temp1 += object.ypos
+			CreateTempObject(TypeName[Explosion], 0, temp0, temp1)
+			PlaySfx(SfxName[Explosion], 0)
+		end if
+		object.value0++
+		if object.value0 == 40
+			object.value0 = 0
+			object.state++
+		end if
+		break
+	case 2
+		object.value0++
+		if object.value0 == 60
+			object.value0 = 0
+			CallFunction(EggmanStatue_Function102)
+			object.type = TypeName[Blank Object]
+		end if
+		break
+	end switch
+	if object.state == 0
+		foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+			if object[currentPlayer].animation == ANI_JUMPING
+				BoxCollisionTest(C_TOUCH, object.entityPos, -16, -24, 16, 24, currentPlayer, object[currentPlayer].value41, object[currentPlayer].value39, object[currentPlayer].value42, object[currentPlayer].value40)
+				if checkResult == 1
+					object.state = 1
+				end if
+			end if
+		next
+end event
+
+
+event ObjectDraw
+	if object.state < 2
+		DrawSprite(0)
+	end if
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R6/Objects3.gif")
+	SpriteFrame(-20, -28, 40, 56, 81, 181)
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

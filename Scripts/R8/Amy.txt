@@ -1,0 +1,109 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Amy Rose Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 66 : TYPE_AMYROSE
+
+
+
+event ObjectUpdate
+	switch object.state
+	case 0
+		object.frame = object.value0
+		object.frame >>= 2
+		object.value0++
+		object.value0 %= 24
+		object.xpos += 81920
+		ObjectTileGrip(0, 0, 19, 0)
+		temp0 = object[-1].xpos
+		temp0 -= 6291456
+		if object.xpos > temp0
+			object.frame = 6
+			object.xpos = temp0
+			object.yvel = -196608
+			object.state++
+		end if
+		break
+	case 1
+		object.yvel += 16384
+		object.ypos += object.yvel
+		ObjectTileCollision(0, 0, 19, 0)
+		if object.yvel > 0
+			object.frame = 7
+		end if
+		if checkResult == 1
+			object.frame = 6
+			object.yvel = -196608
+			object.state++
+		end if
+		break
+	case 2
+		object.yvel += 16384
+		object.ypos += object.yvel
+		ObjectTileCollision(0, 0, 19, 0)
+		if object.yvel > 0
+			object.frame = 7
+		end if
+		if checkResult == 1
+			object.yvel = 0
+			object.state++
+		end if
+		break
+	case 3
+		object.frame = object.value0
+		object.frame >>= 2
+		object.value0++
+		object.value0 %= 24
+		object.xpos += 81920
+		ObjectTileGrip(0, 0, 19, 0)
+		temp0 = object[-1].xpos
+		temp0 -= 1048576
+		if object.xpos > temp0
+			object[+1].type = TypeName[Fade Screen]
+			object.state++
+		end if
+		break
+	case 4
+		object.frame = object.value0
+		object.frame >>= 2
+		object.value0++
+		object.value0 %= 24
+		object.xpos += 81920
+		ObjectTileGrip(0, 0, 19, 0)
+		break
+	end switch
+end event
+
+
+event ObjectDraw
+	if stage.playerListPos == 0
+		DrawSpriteFX(object.frame, FX_FLIP, object.xpos, object.ypos)
+	end if
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R8/Objects3.gif")
+	SpriteFrame(-16, -20, 32, 40, 124, 174)
+	SpriteFrame(-16, -20, 32, 40, 157, 174)
+	SpriteFrame(-16, -20, 32, 40, 190, 174)
+	SpriteFrame(-16, -20, 32, 40, 223, 174)
+	SpriteFrame(-16, -20, 32, 40, 138, 215)
+	SpriteFrame(-16, -20, 32, 40, 171, 215)
+	SpriteFrame(-13, -20, 26, 40, 204, 215)
+	SpriteFrame(-12, -20, 24, 40, 231, 215)
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

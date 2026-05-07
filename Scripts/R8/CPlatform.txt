@@ -1,0 +1,184 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: CPlatform Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 44 : TYPE_CPLATFORM
+
+
+
+event ObjectUpdate
+	switch object.state
+	case 1
+		if object.value2 > 0
+			object.value2--
+		else
+			PlaySfx(SfxName[Crumble], 0)
+			object.state = 4
+		end if
+		break
+	case 2
+		if object.value2 > 0
+			object.value2--
+		else
+			PlaySfx(SfxName[Crumble], 0)
+			object.state = 3
+		end if
+		break
+	case 3
+		object.value2++
+		if object.value2 == 10
+			object.value2 = 0
+			if object.value0 < object.value1
+				object.value3--
+				object.value0 += 16
+				temp0 = object.value0
+				temp0 -= 8
+				temp0 <<= 16
+				temp0 += object.xpos
+				temp1 = object.ypos
+				temp1 -= 524288
+				CreateTempObject(TypeName[CPlatform], 0, temp0, temp1)
+				object[tempObjectPos].state = 6
+				object[tempObjectPos].yvel = -65536
+				object[tempObjectPos].propertyValue = 1
+				temp1 += 1048576
+				CreateTempObject(TypeName[CPlatform], 0, temp0, temp1)
+				object[tempObjectPos].state = 6
+				object[tempObjectPos].propertyValue = 2
+			else
+				ResetObjectEntity(object.entityPos, TypeName[Blank Object], 0, 0, 0)
+			end if
+		end if
+		break
+	case 4
+		object.value2++
+		if object.value2 == 10
+			object.value2 = 0
+			if object.value1 > object.value0
+				object.value3--
+				object.value1 -= 16
+				temp0 = object.value1
+				temp0 += 8
+				temp0 <<= 16
+				temp0 += object.xpos
+				temp1 = object.ypos
+				temp1 -= 524288
+				CreateTempObject(TypeName[CPlatform], 0, temp0, temp1)
+				object[tempObjectPos].state = 6
+				object[tempObjectPos].yvel = -65536
+				object[tempObjectPos].propertyValue = 1
+				temp1 += 1048576
+				CreateTempObject(TypeName[CPlatform], 0, temp0, temp1)
+				object[tempObjectPos].state = 6
+				object[tempObjectPos].propertyValue = 2
+			else
+				ResetObjectEntity(object.entityPos, TypeName[Blank Object], 0, 0, 0)
+			end if
+		end if
+		break
+	case 5
+		if object.outOfBounds == 1
+			object.state = 0
+			object.value3 = object.propertyValue
+			object.value0 = object.propertyValue
+			object.value0 <<= 3
+			object.value1 = object.value0
+			FlipSign(object.value0)
+			object.priority = 0
+			object.value2 = 0
+		end if
+		break
+	case 6
+		object.yvel += 16384
+		if object.yvel > 0
+			object.ypos += object.yvel
+		end if
+		if object.outOfBounds == 1
+			object.type = TypeName[Blank Object]
+		end if
+		break
+	end switch
+	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+		if object.state == 0
+			BoxCollisionTest(C_PLATFORM, object.entityPos, object.value0, -16, object.value1, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			if object.propertyValue > 1
+				if checkResult == 1
+					object.value2 = 1
+					object.priority = 1
+					if object[currentPlayer].xpos > object.xpos
+						object.state = 1
+					else
+						object.state = 2
+					end if
+				end if
+			end if
+		else
+			BoxCollisionTest(C_PLATFORM, object.entityPos, object.value0, -16, object.value1, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+		end if
+	next
+end event
+
+
+event ObjectDraw
+	switch object.state
+	case 0
+	case 1
+	case 2
+	case 4
+		temp0 = 0
+		temp1 = object.value0
+		temp1 <<= 16
+		temp1 += 524288
+		temp1 += object.xpos
+		while temp0 < object.value3
+			DrawSpriteXY(0, temp1, object.ypos)
+			temp0++
+			temp1 += 1048576
+		loop
+		break
+	case 3
+		temp0 = 0
+		temp1 = object.value1
+		temp1 <<= 16
+		temp1 -= 524288
+		temp1 += object.xpos
+		while temp0 < object.value3
+			DrawSpriteXY(0, temp1, object.ypos)
+			temp0++
+			temp1 -= 1048576
+		loop
+		break
+	case 6
+		DrawSprite(object.propertyValue)
+		break
+	end switch
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R8/Objects.gif")
+	foreach (TypeName[CPlatform], arrayPos0, ALL_ENTITIES)
+		object[arrayPos0].value3 = object[arrayPos0].propertyValue
+		object[arrayPos0].value0 = object[arrayPos0].propertyValue
+		object[arrayPos0].value0 <<= 3
+		object[arrayPos0].value1 = object[arrayPos0].value0
+		FlipSign(object[arrayPos0].value0)
+	next
+	SpriteFrame(-8, -16, 16, 32, 222, 212)
+	SpriteFrame(-8, -8, 16, 16, 222, 212)
+	SpriteFrame(-8, -8, 16, 16, 222, 228)
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

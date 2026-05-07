@@ -1,0 +1,1921 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Egg Mobile Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 62 : TYPE_EGGMOBILE
+
+//---Helper 1 Aliases---//
+private alias object[+1].value3  :  helper1.controllerDisabled
+
+//---Helper 2 States---//
+private alias 0	:	HELPER2_PREPARE_DETACH
+private alias 1	:	HELPER2_CENTER_WINGS
+private alias 2	:	HELPER2_DETACH_WINGS
+private alias 3	:	HELPER2_PREPARE_THROW
+private alias 4	:	HELPER2_THROW_WINGS
+
+//---Helper 2 Aliases---///
+private alias object[+2].value1	:	helper2.stopTimer		// How much time eggman will stop moving during the intro/ground spin attack
+
+// Boss Wing States
+private alias 1	:	BOSSWING_DETACH
+private alias 2	:	BOSSWING_FALL_VERTICAL
+private alias 5	:	BOSSWING_FALL_DIAGONAL
+
+
+//---Object Values---//
+private alias object.value0 : object.timer
+
+// Function declarations
+reserve function EggMobile_StopMovement
+reserve function EggMobile_MoveToLeft
+reserve function EggMobile_MoveToRight
+reserve function EggMobile_GroundSpinAscend
+reserve function EggMobile_GroundSpinDescend
+reserve function EggMobile_MoveLeftToCenter
+reserve function EggMobile_MoveRightToCenter
+reserve function EggMobile_GroundSpinLeft
+reserve function EggMobile_GroundSpinRight
+reserve function EggMobile_HandleWingThrowATK
+reserve function EggMobile_WingThrowVertical
+reserve function EggMobile_WingThrowDiagonal
+reserve function EggMobile_RestoreWings
+reserve function EggMobile_SetTargetDestiny
+reserve function EggMobile_ApproachPlayer
+reserve function EggMobile_ExtendWings
+reserve function EggMobile_RetractWings
+reserve function EggMobile_Hit
+reserve function EggMobile_PreparePogoAttack
+reserve function EggMobile_PogoAttackDescend
+reserve function EggMobile_PogoAttackAscend
+reserve function EggMobile_PogoAttackMoveLeft
+reserve function EggMobile_PogoAttackMoveRight
+reserve function Helper1Controller_FourWings
+reserve function Helper1Controller_ThreeWings
+reserve function Helper1Controller_TwoWings
+reserve function Helper1Controller_OneWing
+reserve function EggMobile_Destroyed
+reserve function EggMobile_Destroyed_FinalFever
+reserve function EggMobile_HandleWingRotation
+reserve function EggMobile_DropDamagedWing
+reserve function EggMobile_HandleAnimations
+
+
+public function EggMobile_StopMovement
+	object.timer++
+	if object.timer == helper2.stopTimer
+		object.timer = 0
+		helper1.controllerDisabled = false
+	end if
+end function
+
+
+public function EggMobile_MoveToLeft
+	object.xpos -= object.xvel
+	if object.xpos <= object[+1].value4
+		helper1.controllerDisabled = false
+	end if
+end function
+
+
+public function EggMobile_MoveToRight
+	object.xpos += object.xvel
+	if object.xpos >= object[+1].value5
+		helper1.controllerDisabled = 0
+	end if
+end function
+
+
+public function EggMobile_GroundSpinAscend
+	object.ypos -= object.yvel
+	if object.ypos <= object[+1].value7
+		object.ypos = object[+1].value7
+		helper1.controllerDisabled = 0
+	end if
+end function
+
+
+public function EggMobile_GroundSpinDescend
+	object.ypos += object.yvel
+	if object.ypos >= object[+1].value7
+		object.ypos = object[+1].value7
+		helper1.controllerDisabled = 0
+	end if
+	if object.value6 != 0
+		if object[+1].value0 < 4
+			temp0 = object.angle
+			temp0 >>= 6
+			if temp0 == object[+2].value4
+				object.value6 = 0
+				object.angle = temp0
+				object.angle <<= 6
+			end if
+		else
+			temp0 = object.angle
+			temp0 %= 1280
+			if temp0 == 0
+				object.value6 = 0
+			end if
+		end if
+	end if
+end function
+
+
+public function EggMobile_MoveLeftToCenter
+	object.xpos -= object.xvel
+	if object.xpos <= object[+1].value6
+		object.xpos = object[+1].value6
+		helper1.controllerDisabled = 0
+	end if
+end function
+
+
+public function EggMobile_MoveRightToCenter
+	object.xpos += object.xvel
+	if object.xpos >= object[+1].value6
+		object.xpos = object[+1].value6
+		helper1.controllerDisabled = 0
+	end if
+end function
+
+
+public function EggMobile_GroundSpinLeft
+	object.xpos -= 85196
+	if object.xpos <= object[+1].value7
+		object.xpos = object[+1].value7
+		object.value6 = 0
+		helper1.controllerDisabled = 0
+	end if
+	temp0 = object.rotation
+	temp0 <<= 1
+	temp0 &= 511
+	Sin(temp1, temp0)
+	if temp1 < 0
+		FlipSign(temp1)
+	end if
+	temp1 >>= 7
+	temp1 += 64
+	ObjectTileGrip(0, 0, temp1, 0)
+end function
+
+
+public function EggMobile_GroundSpinRight
+	object.xpos += 85196
+	if object.xpos >= object[+1].value7
+		object.xpos = object[+1].value7
+		object.value6 = 0
+		helper1.controllerDisabled = 0
+	end if
+	temp0 = object.rotation
+	temp0 <<= 1
+	temp0 &= 511
+	Sin(temp1, temp0)
+	if temp1 < 0
+		FlipSign(temp1)
+	end if
+	temp1 >>= 7
+	temp1 += 64
+	ObjectTileGrip(0, 0, temp1, 0)
+end function
+
+
+public function EggMobile_HandleWingThrowATK
+	switch object[+2].value0
+	case HELPER2_PREPARE_DETACH
+		object.timer++
+		if object.timer == 20
+			object.timer = 0
+			object[+2].value0++
+		end if
+		break
+	case HELPER2_CENTER_WINGS
+		if object.value6 != 0
+			temp0 = object.angle
+			temp0 >>= 7
+			if temp0 == 0
+				temp0 <<= 7
+				object.angle = temp0
+				object.value6 = 0
+				object[+2].value0++
+			end if
+		end if
+		break
+	case HELPER2_DETACH_WINGS
+		object.timer++
+		object.value4 += 128
+		if object.timer == 22
+			object[-4].frame = 1
+			object[-3].frame = 1
+			object[-2].frame = 1
+			object[-1].frame = 1
+		end if
+		if object.timer == 26
+			object[-4].frame = 2
+			object[-3].frame = 2
+			object[-2].frame = 2
+			object[-1].frame = 2
+		end if
+		if object.timer == 36
+			object.timer = 0
+			object[+2].value0++
+		end if
+		break
+	case HELPER2_PREPARE_THROW
+		object.timer++
+		if object.timer == 10
+			object.timer = 0
+			object[+2].value0++
+			object.value6 = -64
+			object[+1].value7 = object[+3].ypos
+			object[+1].value7 -= 4456448
+		end if
+		break
+	case HELPER2_THROW_WINGS
+		temp0 = 0
+		arrayPos0 = object.entityPos
+		arrayPos0 -= 4
+		while temp0 < 4
+			if object[arrayPos0].value5 == 1
+				temp0 = object[arrayPos0].rotation
+				temp0 >>= 4
+				if temp0 == 0
+					object[arrayPos0].rotation = 0
+					object[arrayPos0].value5 = 0
+					object[arrayPos0].state = BOSSWING_DETACH
+					object[arrayPos0].yvel = 163840
+				end if
+			end if
+			arrayPos0++
+			temp0++
+		loop
+		if object.ypos <= object[+1].value7
+			object.ypos = object[+1].value7
+			object.timer++
+			if object.timer == 60
+				object.timer = 0
+				object.value6 = 0
+				object.angle = 0
+				helper1.controllerDisabled = 0
+			end if
+		else
+			object.ypos -= 81920
+		end if
+		break
+	end switch
+end function
+
+
+public function EggMobile_WingThrowVertical
+	if object[+2].value2 < object[+1].value0
+		if object.timer == 0
+			arrayPos0 = object.entityPos
+			arrayPos0 -= 4
+			arrayPos0 += object[+2].value2
+			object[arrayPos0].type = TypeName[Boss Wing]
+			object[arrayPos0].state = BOSSWING_FALL_VERTICAL
+			object[arrayPos0].rotation = 0
+			object[arrayPos0].value0 = 0
+			if object[+1].value0 > 2
+				object[arrayPos0].frame = 4
+			else
+				object[arrayPos0].frame = 3
+			end if
+			object[arrayPos0].ypos = object[+3].ypos
+			object[arrayPos0].ypos -= 8388608
+			object[arrayPos0].xvel = 0
+			object[arrayPos0].yvel = 229376
+			switch object[+2].value3
+			case 0
+				object[arrayPos0].xpos = -4194304
+				break
+			case 1
+				object[arrayPos0].xpos = 4194304
+				break
+			case 2
+				object[arrayPos0].xpos = 8388608
+				break
+			case 3
+				object[arrayPos0].xpos = -8388608
+				break
+			case 4
+				object[arrayPos0].xpos = -8388608
+				break
+			case 5
+				object[arrayPos0].xpos = -4194304
+				break
+			case 6
+				object[arrayPos0].xpos = 0
+				break
+			case 7
+				object[arrayPos0].xpos = 4194304
+				break
+			case 8
+				object[arrayPos0].xpos = 8388608
+				break
+			case 9
+				object[arrayPos0].xpos = 4194304
+				break
+			case 10
+				object[arrayPos0].xpos = 0
+				break
+			case 11
+				object[arrayPos0].xpos = -8388608
+				break
+			case 12
+				object[arrayPos0].xpos = -5242880
+				break
+			case 13
+				object[arrayPos0].xpos = 5242880
+				break
+			case 14
+				object[arrayPos0].xpos = -3145728
+				break
+			case 15
+				object[arrayPos0].xpos = 655360
+				break
+			end switch
+			object[arrayPos0].xpos += object[+3].xpos
+			object.timer++
+		else
+			if object.timer < 30
+				object.timer++
+			else
+				object.timer = 0
+				object[+2].value2++
+				object[+2].value3++
+			end if
+		end if
+	else
+		if object[-4].type == TypeName[Blank Object]
+			if object[-3].type == TypeName[Blank Object]
+				if object[-2].type == TypeName[Blank Object]
+					if object[-1].type == TypeName[Blank Object]
+						helper1.controllerDisabled = 0
+					end if
+				end if
+			end if
+		end if
+	end if
+end function
+
+
+public function EggMobile_WingThrowDiagonal
+	if object[+2].value2 < 1
+		object[-1].type = TypeName[Boss Wing]
+		object[-1].state = BOSSWING_FALL_VERTICAL
+		object[-1].value0 = 0
+		object[-1].frame = 3
+		if object[0].xpos < object[+3].xpos
+			object[-1].ypos = object[+3].ixpos
+			object[-1].ypos += 248
+			temp0 = object[0].xpos
+			temp0 >>= 16
+			object[-1].ypos -= temp0
+			object[-1].ypos *= -27146
+			object[-1].ypos >>= 16
+			object[-1].ypos &= 65535
+			object[-1].ypos <<= 16
+			object[-1].ypos += object[+3].ypos
+			object[-1].ypos += 6291456
+			object[-1].xpos = object[+3].xpos
+			object[-1].xpos += 13107200
+			object[-1].rotation = 96
+			object[-1].xvel = -211898
+			object[-1].yvel = 87759
+		else
+			object[-1].ypos = object[0].xpos
+			object[-1].ypos >>= 16
+			temp0 = object[+3].ixpos
+			temp0 -= 248
+			object[-1].ypos -= temp0
+			object[-1].ypos *= -27146
+			object[-1].ypos >>= 16
+			object[-1].ypos &= 65535
+			object[-1].ypos <<= 16
+			object[-1].ypos += object[+3].ypos
+			object[-1].ypos += 6291456
+			object[-1].xpos = object[+3].xpos
+			object[-1].xpos -= 13107200
+			object[-1].rotation = 416
+			object[-1].xvel = 211898
+			object[-1].yvel = 87759
+		end if
+		object[+2].value2++
+	else
+		if object[-4].type == TypeName[Blank Object]
+			if object[-3].type == TypeName[Blank Object]
+				if object[-2].type == TypeName[Blank Object]
+					if object[-1].type == TypeName[Blank Object]
+						helper1.controllerDisabled = 0
+					end if
+				end if
+			end if
+		end if
+	end if
+end function
+
+
+public function EggMobile_RestoreWings
+	if object.timer == 0
+		switch object[+1].value0
+		case 1
+			object[-2].type = TypeName[Boss Wing]
+			object[-2].frame = 0
+			object[-2].value5 = 1
+			break
+		case 2
+			object[-2].type = TypeName[Boss Wing]
+			object[-2].frame = 0
+			object[-2].value5 = 1
+			object[-1].type = TypeName[Boss Wing]
+			object[-1].frame = 0
+			object[-1].value5 = 1
+			break
+		case 3
+			object[-3].type = TypeName[Boss Wing]
+			object[-3].frame = 0
+			object[-3].value5 = 1
+			object[-2].type = TypeName[Boss Wing]
+			object[-2].frame = 0
+			object[-2].value5 = 1
+			object[-1].type = TypeName[Boss Wing]
+			object[-1].frame = 0
+			object[-1].value5 = 1
+			break
+		case 4
+			object[-4].type = TypeName[Boss Wing]
+			object[-4].frame = 0
+			object[-4].value5 = 1
+			object[-3].type = TypeName[Boss Wing]
+			object[-3].frame = 0
+			object[-3].value5 = 1
+			object[-2].type = TypeName[Boss Wing]
+			object[-2].frame = 0
+			object[-2].value5 = 1
+			object[-1].type = TypeName[Boss Wing]
+			object[-1].frame = 0
+			object[-1].value5 = 1
+			break
+		end switch
+		object.value4 = 0
+		object.timer++
+	else
+		object.timer++
+		if object.timer < 120
+			object.value4 += 112
+			if object.value4 >= 4096
+				object.value4 = 4096
+			end if
+		else
+			object.timer = 0
+			helper1.controllerDisabled = 0
+		end if
+	end if
+end function
+
+
+public function EggMobile_SetTargetDestiny
+	object.xvel = object[0].xpos
+	object.xvel -= object.xpos
+	object.xvel >>= 16
+	temp0 = object.xvel
+	if temp0 < 0
+		FlipSign(temp0)
+	end if
+	if temp0 < 64
+		object.xvel <<= 4
+		object.xvel /= 90
+		object.xvel <<= 12
+		object.yvel = object[+3].ypos
+		object.yvel -= 262144
+		object[+1].value7 = object.yvel
+		object.yvel -= object.ypos
+		object.yvel >>= 16
+		object.yvel <<= 4
+		object.yvel /= 90
+		object.yvel <<= 12
+		if object[+1].value0 == 2
+			object[+2].value4 = 4480
+		else
+			object[+2].value4 = 3840
+		end if
+	else
+		if object.xvel >= 0
+			object.xvel -= 16
+		else
+			object.xvel += 16
+		end if
+		object.xvel <<= 4
+		object.xvel /= 90
+		object.xvel <<= 12
+		object.yvel = object[+3].ypos
+		object.yvel += 655360
+		object[+1].value7 = object.yvel
+		object.yvel -= object.ypos
+		object.yvel >>= 16
+		object.yvel <<= 4
+		object.yvel /= 90
+		object.yvel <<= 12
+		if object[+1].value0 == 2
+			object[+2].value4 = 4480
+		else
+			object[+2].value4 = 3200
+		end if
+	end if
+end function
+
+
+public function EggMobile_ApproachPlayer
+	object.xpos += object.xvel
+	object.ypos += object.yvel
+	if object.timer > 10
+		if object.angle == object[+2].value4
+			object.value6 = 0
+		end if
+	else
+		object.timer++
+	end if
+	if object.ypos >= object[+1].value7
+		object.timer = 0
+		object.ypos = object[+1].value7
+		object[+1].value7 = object[+3].ypos
+		object[+1].value7 -= 4456448
+		FlipSign(object.xvel)
+		FlipSign(object.yvel)
+		helper1.controllerDisabled = 0
+		PlaySfx(SfxName[MS Charge], 0)
+	end if
+end function
+
+
+public function EggMobile_ExtendWings
+	object.value4 += 288
+	if object.value4 > 8704
+		object.value4 = 8704
+	end if
+	object.timer++
+	if object.timer == 120
+		object.timer = 0
+		helper1.controllerDisabled = 0
+	end if
+end function
+
+
+public function EggMobile_RetractWings
+	object.xpos += object.xvel
+	object.ypos += object.yvel
+	object.value4 -= 128
+	if object.value4 < 4096
+		object.value4 = 4096
+	end if
+	if object.ypos <= object[+1].value7
+		object.ypos = object[+1].value7
+		helper1.controllerDisabled = 0
+	end if
+end function
+
+
+public function EggMobile_Hit
+	object.value4 -= 128
+	if object.value4 < 4096
+		object.value4 = 4096
+	end if
+	object.ypos -= object.yvel
+	temp0 = object[+3].ypos
+	temp0 -= 4456448
+	if object.ypos <= temp0
+		object.ypos = temp0
+		helper1.controllerDisabled = 0
+	end if
+end function
+
+
+public function EggMobile_PreparePogoAttack
+	if object.timer < 20
+		object.timer++
+	else
+		temp0 = object.angle
+		temp0 >>= 7
+		if temp0 == 0
+			object.timer = 0
+			object[-2].rotation = 256
+			object.angle = 0
+			object.value6 = 0
+			helper1.controllerDisabled = 0
+		end if
+	end if
+end function
+
+
+public function EggMobile_PogoAttackDescend
+	temp0 = object.timer
+	temp0 <<= 8
+	temp0 /= 60
+	Sin(object.ypos, temp0)
+	object.ypos *= -12800
+	object.ypos += object[+3].ypos
+	object.ypos += 2097152
+	object.timer++
+	if object.timer > 29
+		object.timer = 0
+		object.ypos = object[+3].ypos
+		object.ypos -= 4456448
+		helper1.controllerDisabled = 0
+	end if
+end function
+
+
+public function EggMobile_PogoAttackAscend
+	temp0 = object.timer
+	temp0 += 30
+	temp0 <<= 8
+	temp0 /= 60
+	Sin(object.ypos, temp0)
+	object.ypos *= -12800
+	object.ypos += object[+3].ypos
+	object.ypos += 2097152
+	object.timer++
+	if object.timer > 29
+		object.timer = 0
+		helper1.controllerDisabled = 0
+		PlaySfx(SfxName[Impact 1], 0)
+	end if
+end function
+
+
+public function EggMobile_PogoAttackMoveLeft
+	temp0 = object.timer
+	temp0 <<= 8
+	temp0 /= 60
+	Cos(object.xpos, temp0)
+	object.xpos *= 5248
+	object.xpos += object[+1].value7
+	Sin(object.ypos, temp0)
+	object.ypos *= -13312
+	object.ypos += object[+3].ypos
+	object.ypos += 2097152
+	temp0 = object[+3].ypos
+	temp0 += 2097152
+	temp0 -= object.ypos
+	temp0 >>= 9
+	object.value4 = 4096
+	object.value4 += temp0
+	if object.value4 > 8704
+		object.value4 = 8704
+	end if
+	object.timer++
+	if object.timer > 59
+		object.timer = 0
+		helper1.controllerDisabled = 0
+		PlaySfx(SfxName[Impact 1], 0)
+	end if
+end function
+
+
+public function EggMobile_PogoAttackMoveRight
+	temp0 = object.timer
+	temp0 <<= 8
+	temp0 /= 60
+	Cos(object.xpos, temp0)
+	object.xpos *= -5248
+	object.xpos += object[+1].value7
+	Sin(object.ypos, temp0)
+	object.ypos *= -13312
+	object.ypos += object[+3].ypos
+	object.ypos += 2097152
+	temp0 = object[+3].ypos
+	temp0 += 2097152
+	temp0 -= object.ypos
+	temp0 >>= 9
+	object.value4 = 4096
+	object.value4 += temp0
+	if object.value4 > 8704
+		object.value4 = 8704
+	end if
+	object.timer++
+	if object.timer > 59
+		object.timer = 0
+		helper1.controllerDisabled = 0
+		PlaySfx(SfxName[Impact 1], 0)
+	end if
+end function
+
+
+public function Helper1Controller_FourWings
+	switch object[+1].value2
+	case 0
+		object.state = EggMobile_StopMovement // 90
+		helper2.stopTimer = 120 // 120
+		object[+2].state = 1
+		break
+	case 1
+		object.state = EggMobile_MoveToRight // 92
+		object.value6 = -64
+		object.xvel = 90112
+		object[+2].state = 1
+		break
+	case 2
+		object.state = EggMobile_MoveToLeft // 91
+		break
+	case 3
+		object.state = EggMobile_MoveRightToCenter // 96
+		break
+	case 4
+		object.state = EggMobile_GroundSpinDescend // 94
+		object.yvel = 40960
+		object[+1].value7 = object[+3].ypos
+		object[+1].value7 += 2097152
+		object[+2].state = 0
+		break
+	case 5
+		object.state = EggMobile_StopMovement // 90
+		helper2.stopTimer = 20
+		break
+	case 6
+		if object[0].xpos > object.xpos
+			object.direction = 1
+			object.state = EggMobile_GroundSpinRight // 98
+			object[+1].value7 = object[+1].value6
+			object[+1].value7 += 6815744
+			object.value6 = 16
+		else
+			object.direction = 0
+			object.state = EggMobile_GroundSpinLeft // 97
+			object[+1].value7 = object[+1].value6
+			object[+1].value7 -= 6815744
+			object.value6 = -16
+		end if
+		object[+2].value7 = 1
+		object[+2].animationSpeed = 0
+		object[+2].animationTimer = 0
+		break
+	case 7
+		object.state = EggMobile_StopMovement // 90
+		helper2.stopTimer = 60
+		object.value6 = 0
+		break
+	case 8
+		if object.xpos < object[+3].xpos
+			object.state = EggMobile_GroundSpinRight // 98
+			object[+1].value7 = object[+1].value6
+			object[+1].value7 += 6815744
+			object.value6 = 16
+		else
+			object.state = EggMobile_GroundSpinLeft // 97
+			object[+1].value7 = object[+1].value6
+			object[+1].value7 -= 6815744
+			object.value6 = -16
+		end if
+		object[+2].animationTimer = 0
+		break
+	case 9
+		object.state = EggMobile_StopMovement // 90
+		helper2.stopTimer = 60
+		object.value6 = 0
+		object[+2].value7 = 0
+		object[+2].animationTimer = 0
+		break
+	case 10
+		object.state = EggMobile_GroundSpinAscend // 93
+		object.value6 = -64
+		object[+1].value7 = object[+3].ypos
+		object[+1].value7 -= 2359296
+		break
+	case 11
+		object.state = EggMobile_StopMovement // 90
+		helper2.stopTimer = 90
+		break
+	case 12
+		if object.direction == 0
+			object.state = EggMobile_MoveToLeft // 91
+		else
+			object.state = EggMobile_MoveToRight // 92
+		end if
+		break
+	case 13
+		if object.direction == 0
+			object.state = EggMobile_MoveToRight // 92
+		else
+			object.state = EggMobile_MoveToLeft // 91
+		end if
+		break
+	case 14
+		if object.direction == 0
+			object.state = EggMobile_MoveLeftToCenter // 95
+		else
+			object.state = EggMobile_MoveRightToCenter // 96
+		end if
+		break
+	case 15
+		object.state = EggMobile_HandleWingThrowATK // 99
+		object[+2].value0 = 0
+		object[+2].state = 1
+		break
+	case 16
+		object.state = EggMobile_WingThrowVertical // 100
+		object[+2].value2 = 0
+		object[+2].value3 = object[0].xpos
+		object[+2].value3 >>= 16
+		object[+2].value3 &= 3
+		object[+2].value3 <<= 2
+		object[-4].type = TypeName[Blank Object]
+		object[-3].type = TypeName[Blank Object]
+		object[-2].type = TypeName[Blank Object]
+		object[-1].type = TypeName[Blank Object]
+		object[+2].state = 1
+		break
+	case 17
+		object.state = EggMobile_RestoreWings // 102
+		object[+2].state = 1
+		break
+	case 18
+		CallFunction(EggMobile_SetTargetDestiny)
+		object.state = EggMobile_ApproachPlayer // 104
+		object.value6 = -64
+		object[+2].state = 0
+		break
+	case 19
+		object.state = EggMobile_ExtendWings // 105
+		break
+	case 20
+		object.state = EggMobile_RetractWings // 106
+		break
+	case 21
+		CallFunction(EggMobile_SetTargetDestiny)
+		object.state = EggMobile_ApproachPlayer // 104
+		object.value6 = -64
+		break
+	case 22
+		object.state = EggMobile_ExtendWings // 105
+		break
+	case 23
+		object.state = EggMobile_RetractWings // 106
+		break
+	end switch
+	if object[+1].value2 < 23
+		object[+1].value2++
+	else
+		object[+1].value2 = 1
+	end if
+	helper1.controllerDisabled = 1
+end function
+
+
+public function Helper1Controller_ThreeWings
+	switch object[+1].value2
+	case 0
+		object.state = EggMobile_MoveToRight // 92
+		object.value6 = -80
+		object.xvel = 98304
+		object[+2].state = 1
+		break
+	case 1
+		object.state = EggMobile_MoveToLeft // 91
+		break
+	case 2
+		object.state = EggMobile_MoveRightToCenter // 96
+		break
+	case 3
+		if object[0].xpos > object.xpos
+			object.state = EggMobile_MoveToLeft // 91
+			object.direction = 1
+		else
+			object.state = EggMobile_MoveToRight // 92
+			object.direction = 0
+		end if
+		break
+	case 4
+		object.angle /= 160
+		object.angle *= 160
+		object.state = EggMobile_GroundSpinDescend // 94
+		object.yvel = 49152
+		object[+1].value7 = object[+3].ypos
+		object[+1].value7 += 2097152
+		object[+2].state = 0
+		temp0 = 4
+		arrayPos0 = object.entityPos
+		arrayPos0 -= 4
+		while temp0 > 0
+			if object[arrayPos0].value5 == 0
+				object[+2].value4 = temp0
+				if object.direction == 1
+					object[+2].value4 += 3
+				else
+					object[+2].value4++
+				end if
+				object[+2].value4 *= 20
+				object[+2].value4 %= 80
+				temp0 = 0
+			end if
+			arrayPos0++
+			temp0--
+		loop
+		break
+	case 5
+		object.state = EggMobile_StopMovement // 90
+		helper2.stopTimer = 20
+		break
+	case 6
+		if object.xpos < object[+3].xpos
+			object.state = EggMobile_GroundSpinRight // 98
+			object[+1].value7 = object[+3].xpos
+			object[+1].value7 -= 1310720
+			object.value6 = 16
+		else
+			object.state = EggMobile_GroundSpinLeft // 97
+			object[+1].value7 = object[+3].xpos
+			object[+1].value7 += 1310720
+			object.value6 = -16
+		end if
+		object[+2].value7 = 1
+		object[+2].animationSpeed = 0
+		object[+2].animationTimer = 0
+		break
+	case 7
+		object.state = EggMobile_StopMovement // 90
+		helper2.stopTimer = 60
+		object.value6 = 0
+		break
+	case 8
+		if object.xpos < object[+1].value6
+			object.direction = 1
+			object.state = EggMobile_GroundSpinLeft // 97
+			object[+1].value7 = object[+1].value4
+			object.value6 = -16
+		else
+			object.direction = 0
+			object.state = EggMobile_GroundSpinRight // 98
+			object[+1].value7 = object[+1].value5
+			object.value6 = 16
+		end if
+		object[+2].animationTimer = 0
+		break
+	case 9
+		object.state = EggMobile_StopMovement // 90
+		helper2.stopTimer = 60
+		object.value6 = 0
+		object[+2].value7 = 2
+		object[+2].animationTimer = 0
+		break
+	case 10
+		object.state = EggMobile_GroundSpinAscend // 93
+		object.value6 = -80
+		object[+1].value7 = object[+3].ypos
+		object[+1].value7 -= 2359296
+		break
+	case 11
+		object.state = EggMobile_StopMovement // 90
+		helper2.stopTimer = 90
+		break
+	case 12
+		if object.direction == 0
+			object.state = EggMobile_MoveToLeft // 91
+		else
+			object.state = EggMobile_MoveToRight // 92
+		end if
+		break
+	case 13
+		if object.direction == 0
+			object.state = EggMobile_MoveToRight // 92
+		else
+			object.state = EggMobile_MoveToLeft // 91
+		end if
+		break
+	case 14
+		if object.direction == 0
+			object.state = EggMobile_MoveLeftToCenter // 95
+		else
+			object.state = EggMobile_MoveRightToCenter // 96
+		end if
+		break
+	case 15
+		object.state = EggMobile_HandleWingThrowATK // 99
+		object[+2].value0 = 0
+		object[+2].state = 1
+		break
+	case 16
+		object.state = EggMobile_WingThrowVertical // 100
+		object[+2].value2 = 0
+		object[+2].value3 = object[0].xpos
+		object[+2].value3 >>= 16
+		object[+2].value3 &= 3
+		object[+2].value3 <<= 2
+		object[-4].type = TypeName[Blank Object]
+		object[-3].type = TypeName[Blank Object]
+		object[-2].type = TypeName[Blank Object]
+		object[-1].type = TypeName[Blank Object]
+		object[+2].state = 1
+		break
+	case 17
+		object.state = EggMobile_RestoreWings // 102
+		object[+2].state = 1
+		break
+	case 18
+		CallFunction(EggMobile_SetTargetDestiny)
+		object.state = EggMobile_ApproachPlayer // 104
+		object.value6 = -64
+		object[+2].state = 0
+		break
+	case 19
+		object.state = EggMobile_ExtendWings // 105
+		break
+	case 20
+		object.state = EggMobile_RetractWings // 106
+		break
+	case 21
+		CallFunction(EggMobile_SetTargetDestiny)
+		object.state = EggMobile_ApproachPlayer // 104
+		object.value6 = -64
+		break
+	case 22
+		object.state = EggMobile_ExtendWings // 105
+		break
+	case 23
+		object.state = EggMobile_RetractWings // 106
+		break
+	end switch
+	if object[+1].value2 < 23
+		object[+1].value2++
+	else
+		object[+1].value2 = 0
+	end if
+	helper1.controllerDisabled = 1
+end function
+
+
+public function Helper1Controller_TwoWings
+	switch object[+1].value2
+	case 0
+		object.state = EggMobile_MoveToRight // 92
+		object.value6 = -106
+		object.xvel = 106496
+		object[+2].state = 1
+		break
+	case 1
+		object.state = EggMobile_MoveToLeft // 91
+		break
+	case 2
+		object.state = EggMobile_MoveRightToCenter // 96
+		break
+	case 3
+		object.state = EggMobile_HandleWingThrowATK // 99
+		object[+2].value0 = 0
+		break
+	case 4
+		object.state = EggMobile_WingThrowVertical // 100
+		object[+2].value2 = 0
+		object[+2].value3 = object[0].xpos
+		object[+2].value3 >>= 16
+		object[+2].value3 &= 3
+		object[+2].value3 <<= 2
+		object[-4].type = TypeName[Blank Object]
+		object[-3].type = TypeName[Blank Object]
+		object[-2].type = TypeName[Blank Object]
+		object[-1].type = TypeName[Blank Object]
+		object[+2].state = 1
+		break
+	case 5
+		object.state = EggMobile_RestoreWings // 102
+		object[+2].state = 1
+		break
+	case 6
+		CallFunction(EggMobile_SetTargetDestiny)
+		object.state = EggMobile_ApproachPlayer // 104
+		object.value6 = -64
+		object[+2].state = 0
+		break
+	case 7
+		object.state = EggMobile_ExtendWings // 105
+		break
+	case 8
+		object.state = EggMobile_RetractWings // 106
+		break
+	case 9
+		CallFunction(EggMobile_SetTargetDestiny)
+		object.state = EggMobile_ApproachPlayer // 104
+		object.value6 = -64
+		break
+	case 10
+		object.state = EggMobile_ExtendWings // 105
+		break
+	case 11
+		object.state = EggMobile_RetractWings // 106
+		break
+	end switch
+	if object[+1].value2 < 11
+		object[+1].value2++
+	else
+		object[+1].value2 = 0
+	end if
+	helper1.controllerDisabled = 1
+end function
+
+
+public function Helper1Controller_OneWing
+	switch object[+1].value2
+	case 0
+		object.state = EggMobile_MoveToRight // 92
+		object.value6 = -160
+		object.xvel = 106496
+		object[+2].state = 1
+		break
+	case 1
+		object.state = EggMobile_MoveToLeft // 91
+		break
+	case 2
+		object.state = EggMobile_MoveRightToCenter // 96
+		break
+	case 3
+		object.state = EggMobile_HandleWingThrowATK // 99
+		object[+2].value0 = 4
+		object.angle >>= 6
+		object.angle <<= 6
+		object.timer = 0
+		object[+1].value7 = object[+3].ypos
+		object[+1].value7 -= 4456448
+		break
+	case 4
+		object.state = EggMobile_WingThrowDiagonal // 101
+		object[+2].value2 = 0
+		object[-4].type = TypeName[Blank Object]
+		object[-3].type = TypeName[Blank Object]
+		object[-2].type = TypeName[Blank Object]
+		object[-1].type = TypeName[Blank Object]
+		object.timer = 0
+		object.value4 = 0
+		break
+	case 5
+		object.state = EggMobile_RestoreWings // 102
+		break
+	case 6
+		object.state = EggMobile_MoveToRight // 92
+		object.value6 = -160
+		break
+	case 7
+		object.state = EggMobile_MoveToLeft // 91
+		break
+	case 8
+		object.state = EggMobile_MoveRightToCenter // 96
+		break
+	case 9
+		if object[0].xpos > object.xpos
+			object.state = EggMobile_MoveToLeft // 91
+			object.direction = 1
+		else
+			object.state = EggMobile_MoveToRight // 92
+			object.direction = 0
+		end if
+		break
+	case 10
+		object.state = EggMobile_PreparePogoAttack // 108
+		break
+	case 11
+		object.state = EggMobile_PogoAttackAscend // 110
+		object[+2].state = 0
+		break
+	case 12
+		if object.direction == 0
+			object.state = EggMobile_PogoAttackMoveLeft // 111
+			object[+1].value7 = object.xpos
+			object[+1].value7 -= 2686976
+		else
+			object.state = EggMobile_PogoAttackMoveRight // 112
+			object[+1].value7 = object.xpos
+			object[+1].value7 += 2686976
+		end if
+		break
+	case 13
+		if object.direction == 0
+			object.state = EggMobile_PogoAttackMoveLeft // 111
+			object[+1].value7 -= 5373952
+		else
+			object.state = EggMobile_PogoAttackMoveRight // 112
+			object[+1].value7 += 5373952
+		end if
+		break
+	case 14
+		if object.direction == 0
+			object.state = EggMobile_PogoAttackMoveLeft // 111
+			object[+1].value7 -= 5373952
+		else
+			object.state = EggMobile_PogoAttackMoveRight // 112
+			object[+1].value7 += 5373952
+		end if
+		break
+	case 15
+		if object.direction == 0
+			object.state = EggMobile_PogoAttackMoveRight // 112
+		else
+			object.state = EggMobile_PogoAttackMoveLeft // 111
+		end if
+		break
+	case 16
+		if object.direction == 0
+			object.state = EggMobile_PogoAttackMoveRight // 112
+			object[+1].value7 += 5373952
+		else
+			object.state = EggMobile_PogoAttackMoveLeft // 111
+			object[+1].value7 -= 5373952
+		end if
+		break
+	case 17
+		if object.direction == 0
+			object.state = EggMobile_PogoAttackMoveRight // 112
+			object[+1].value7 += 5373952
+		else
+			object.state = EggMobile_PogoAttackMoveLeft // 111
+			object[+1].value7 -= 5373952
+		end if
+		break
+	case 18
+		object.state = EggMobile_PogoAttackDescend // 109
+		break
+	end switch
+	if object[+1].value2 < 18
+		object[+1].value2++
+	else
+		object[+1].value2 = 0
+	end if
+	helper1.controllerDisabled = 1
+end function
+
+
+public function EggMobile_Destroyed
+	switch object[+2].value0
+	case 0
+		object.timer++
+		if object.timer == 90
+			object.timer = 0
+			object.xvel = 81920
+			object[+1].value7 = object.ypos
+			object[0].controlMode = -1
+			object[0].jumpHold = 0
+			object[0].right = 1
+			object[0].left = 0
+			object[0].up = 0
+			object[0].down = 0
+			object[+2].value0++
+			if stage.playerListPos == 0
+				if stage.debugMode == 0
+				end if
+			end if
+		end if
+		break
+	case 1
+		object.xpos += object.xvel
+		Sin(object.ypos, object.timer)
+		object.ypos <<= 9
+		object.ypos += object[+1].value7
+		object[+1].value7 += 16384
+		object.timer += 4
+		object.timer &= 511
+		temp0 = object[+1].value5
+		temp0 += 8388608
+		if object.xpos > temp0
+			object.timer = 0
+			object[+4].type = TypeName[Amy Rose]
+			object[+2].value0++
+		end if
+		if object[0].right == 1
+			temp0 = object[0].collisionRight
+			temp0 <<= 16
+			temp0 += object[0].xpos
+			temp1 = object[+2].value6
+			temp1 <<= 16
+			if temp0 > temp1
+				object[0].left = 1
+				object[0].right = 0
+			end if
+		else
+			temp0 = object[+1].value6
+			temp0 += 4194304
+			if object[0].xpos < temp0
+				object[0].xpos = temp0
+				object[0].speed = 0
+				object[0].left = 0
+			end if
+		end if
+		break
+	case 2
+		temp0 = object[+1].value6
+		temp0 += 4194304
+		if object[0].xpos < temp0
+			object[0].xpos = temp0
+			object[0].speed = 0
+			object[0].left = 0
+		end if
+		break
+	end switch
+	temp0 = object.animationTimer
+	temp0 &= 1
+	if temp0 == 0
+		if object[+2].value0 > 0
+			screen.shakeY = 2
+		end if
+		Rand(temp0, 300)
+		temp0 -= 150
+		temp0 <<= 16
+		temp0 += object[+3].xpos
+		Rand(temp1, 200)
+		temp1 -= 100
+		temp1 <<= 16
+		temp1 += object[+3].ypos
+		CreateTempObject(TypeName[Explosion], 0, temp0, temp1)
+		if object.animationTimer == 0
+			if object[+5].type == TypeName[Blank Object]
+				PlaySfx(SfxName[Explosion], 0)
+			end if
+		end if
+	end if
+	object.animationTimer++
+	object.animationTimer &= 7
+end function
+
+
+public function EggMobile_Destroyed_FinalFever
+	switch object[+2].value0
+	case 0
+		object.timer++
+		if object.timer == 30
+			object.timer = 0
+			object.xvel = 131072
+			object[+1].value7 = object.ypos
+			object[+2].value0++
+		end if
+		break
+	case 1
+		object.xpos += object.xvel
+		Sin(object.ypos, object.timer)
+		object.ypos <<= 9
+		object.ypos += object[+1].value7
+		object[+1].value7 += 16384
+		object.timer += 4
+		object.timer &= 511
+		temp0 = object[+1].value5
+		temp0 += 5767168
+		if object.xpos > temp0
+			object[+2].value0++
+			object.timer = 0
+			object[+2].value6 += 64
+			object[0].controlMode = -1
+			object[0].jumpHold = 0
+			object[0].right = 1
+			object[0].left = 0
+			object[0].up = 0
+			object[0].down = 0
+		end if
+		break
+	case 2
+		object[0].right = 1
+		object.timer++
+		if object.timer == 120
+			object[+5].type = TypeName[Fade Screen]
+			object[+5].propertyValue = 1
+		end if
+		break
+	end switch
+	temp0 = object.animationTimer
+	temp0 &= 3
+	if temp0 == 0
+		Rand(temp0, 64)
+		temp0 -= 32
+		temp0 <<= 16
+		temp0 += object.xpos
+		Rand(temp1, 64)
+		temp1 -= 32
+		temp1 <<= 16
+		temp1 += object.ypos
+		CreateTempObject(TypeName[Explosion], 0, temp0, temp1)
+		if object.animationTimer == 0
+			if object[+5].type == TypeName[Blank Object]
+				PlaySfx(SfxName[Explosion], 0)
+			end if
+		end if
+	end if
+	object.animationTimer++
+	object.animationTimer &= 7
+end function
+
+
+public function EggMobile_HandleWingRotation
+	arrayPos0 = object.entityPos
+	arrayPos0 -= 4
+	temp0 = 0
+	temp1 = object.rotation
+	while temp0 < 4
+		if object[arrayPos0].value5 == 1
+			object[arrayPos0].rotation = temp1
+			Sin(object[arrayPos0].xpos, temp1)
+			object[arrayPos0].xpos *= object.value4
+			object[arrayPos0].xpos &= -65536
+			object[arrayPos0].xpos += object.xpos
+			Cos(object[arrayPos0].ypos, temp1)
+			temp2 = object.value4
+			FlipSign(temp2)
+			object[arrayPos0].ypos *= temp2
+			object[arrayPos0].ypos &= -65536
+			object[arrayPos0].ypos += object.ypos
+		end if
+		temp1 += 128
+		temp1 &= 511
+		arrayPos0++
+		temp0++
+	loop
+end function
+
+
+public function EggMobile_DropDamagedWing
+	temp6 = object[arrayPos0].xpos
+	temp6 -= object.xpos
+	temp6 -= 1572864
+	if temp0 < 0
+		FlipSign(temp6)
+	end if
+	temp7 = object[arrayPos0].ypos
+	temp7 -= object.ypos
+	temp7 -= 4456448
+	if temp7 < 0
+		FlipSign(temp7)
+	end if
+	temp6 += temp7
+	temp6 >>= 16
+end function
+
+
+public function EggMobile_HandleAnimations
+	temp0 = object[+1].animationTimer
+	temp0 >>= 2
+	temp0 &= 1
+	if temp0 == 1
+		temp0 = object[+1].animationTimer
+		temp0 >>= 3
+		temp0 += 11
+		DrawSprite(temp0)
+		temp0 += 5
+		DrawSprite(temp0)
+		temp0 += 5
+		DrawSprite(temp0)
+		temp0 += 5
+		DrawSprite(temp0)
+		temp0 += 5
+		DrawSprite(temp0)
+		temp0 += 5
+		DrawSprite(temp0)
+		temp0 += 5
+		DrawSprite(temp0)
+	end if
+	object[+1].animationTimer++
+	object[+1].animationTimer %= 40
+end function
+
+
+event ObjectUpdate
+	object.angle += object.value6
+	if object.angle < 0
+		object.angle += 5120
+	end if
+	object.angle %= 5120
+	object.rotation = object.angle
+	object.rotation /= 10
+	if helper1.controllerDisabled == 0
+#platform: USE_DECOMP
+		// This is such a bad fix it's not even funny.
+		// Not original code, but fixed the issue I guess...
+		if object[+1].value0 == 4
+			object[+1].value1 = Helper1Controller_FourWings
+		end if
+#endplatform
+		CallFunction(object[+1].value1)
+	end if
+	CallFunction(object.state)
+	CallFunction(EggMobile_HandleWingRotation)
+	if object.value7 > 0
+		if object.value7 > 20
+			temp0 = object.value7
+			temp0 &= 15
+			if temp0 == 0
+				Rand(temp0, 48)
+				temp0 -= 24
+				temp0 <<= 16
+				temp0 += object.xpos
+				Rand(temp1, 48)
+				temp1 -= 32
+				temp1 <<= 16
+				temp1 += object.ypos
+				CreateTempObject(TypeName[Boss Spark], 0, temp0, temp1)
+				object[tempObjectPos].inkEffect = 0
+				object[tempObjectPos].alpha = 248
+				Rand(temp0, 48)
+				temp0 -= 24
+				temp0 <<= 16
+				temp0 += object.xpos
+				Rand(temp1, 48)
+				temp1 -= 32
+				temp1 <<= 16
+				temp1 += object.ypos
+				CreateTempObject(TypeName[Boss Spark], 0, temp0, temp1)
+				object[tempObjectPos].inkEffect = 0
+				object[tempObjectPos].alpha = 248
+			end if
+		end if
+		object.value7--
+	end if
+	if object.value6 != 0
+		switch object[+2].value7
+		case 0
+			object[+2].animationTimer += 6
+			if object[+2].animationTimer == 42
+				PlaySfx(SfxName[Wing Rotate], 0)
+			end if
+			if object[+2].animationTimer > 59
+				object[+2].animationTimer -= 60
+				PlaySfx(SfxName[Wing Rotate], 0)
+			end if
+			break
+		case 1
+			object[+2].animationTimer += 3
+			if object[+2].animationTimer > 59
+				object[+2].animationTimer -= 60
+				if object[+2].animationSpeed == 0
+					PlaySfx(SfxName[Wing Rotate], 0)
+					object[+2].animationSpeed = 1
+				else
+					PlaySfx(SfxName[Mech Step], 0)
+					object[+2].animationSpeed = 0
+				end if
+			end if
+			break
+		case 2
+			object[+2].animationTimer += 8
+			if object[+2].animationTimer > 59
+				object[+2].animationTimer -= 60
+				PlaySfx(SfxName[Wing Rotate], 0)
+			end if
+			break
+		case 3
+			object[+2].animationTimer += 10
+			if object[+2].animationTimer > 59
+				object[+2].animationTimer -= 60
+				PlaySfx(SfxName[Wing Rotate], 0)
+			end if
+			break
+		case 4
+			object[+2].animationTimer += 16
+			if object[+2].animationTimer > 59
+				object[+2].animationTimer -= 60
+				PlaySfx(SfxName[Wing Rotate], 0)
+			end if
+			break
+		end switch
+	end if
+	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+		if object[+2].state == 0
+			if object.value7 == 0
+				BoxCollisionTest(C_TOUCH, object.entityPos, -24, -24, 24, 24, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+				if checkResult == 1
+					if object[currentPlayer].animation != ANI_JUMPING
+						CallFunction(Player_Hit)
+						if object[currentPlayer].state == Player_State_GotHit
+							object.animation = 2
+						end if
+					else
+						object.angle >>= 5
+						object.angle <<= 5
+						FlipSign(object[currentPlayer].speed)
+						FlipSign(object[currentPlayer].xvel)
+						FlipSign(object[currentPlayer].yvel)
+						temp0 = 0
+						arrayPos0 = object.entityPos
+						arrayPos0--
+						temp1 = 65536
+						while temp0 < 4
+							if object[arrayPos0].value5 == 1
+								CallFunction(EggMobile_DropDamagedWing)
+								if temp6 < temp1
+									arrayPos1 = arrayPos0
+									temp1 = temp6
+								end if
+							end if
+							arrayPos0--
+							temp0++
+						loop
+						if temp1 < 65536
+							object[arrayPos1].value5 = 0
+							object[arrayPos1].state = BOSSWING_FALL_DIAGONAL
+							object[arrayPos1].priority = 1
+							if object[arrayPos1].xpos > object.xpos
+								object[arrayPos1].xvel = 65536
+							else
+								object[arrayPos1].xvel = -65536
+							end if
+							object[arrayPos1].yvel = -196608
+						end if
+						object[+1].value0--
+						switch object[+1].value0
+						case 0
+							stage.timeEnabled = 0
+							player.score += 1000
+							object[+2].state = 1
+							object.animation = 3
+							object.timer = 0
+							
+							// This check is still here lmao
+							if object[24].propertyValue == 3
+								object.state = EggMobile_Destroyed // 117
+							else
+								object.state = EggMobile_Destroyed // 117
+							end if
+
+							object[+3].state++
+							object[+3].alpha >>= 1
+							object[+3].alpha <<= 1
+							object[+2].value0 = 0
+							object.animationTimer = 0
+							helper1.controllerDisabled = 1
+							object[+2].value7 = 5
+							break
+						case 1
+							object.value7 = 120
+							object[+1].value2 = 0
+							helper1.controllerDisabled = 1
+							object.state = EggMobile_Hit // 107
+							object.yvel = 65536
+							object[+1].value1 = Helper1Controller_OneWing // 116
+							object.timer = 0
+							object.animation = 1
+							object[+2].value7 = 4
+							PlaySfx(SfxName[Boss Hit], 0)
+							break
+						case 2
+							object.value7 = 120
+							object[+1].value2 = 0
+							helper1.controllerDisabled = 1
+							object.state = EggMobile_Hit // 107
+							object.yvel = 57344
+							object[+1].value1 = Helper1Controller_TwoWings // 115
+							object.timer = 0
+							object.animation = 1
+							object[+2].value7 = 3
+							PlaySfx(SfxName[Boss Hit], 0)
+							break
+						case 3
+							object.value7 = 120
+							object[+1].value2 = 0
+							helper1.controllerDisabled = 1
+							object.state = EggMobile_Hit // 107
+							object.yvel = 49152
+							object[+1].value1 = Helper1Controller_ThreeWings // 114
+							object.timer = 0
+							object.animation = 1
+							object[+2].value7 = 2
+							PlaySfx(SfxName[Boss Hit], 0)
+							break
+						end switch
+					end if
+				end if
+			end if
+		end if
+		temp0 = object[currentPlayer].collisionRight
+		temp0 <<= 16
+		temp0 += object[currentPlayer].xpos
+		temp1 = object[+2].value6
+		temp1 <<= 16
+		if temp0 > temp1
+			object[currentPlayer].xvel = 0
+			object[currentPlayer].speed = 0
+			object[currentPlayer].xpos = temp1
+			temp0 = object[currentPlayer].collisionRight
+			temp0 <<= 16
+			object[currentPlayer].xpos -= temp0
+		end if
+	next
+end event
+
+
+event ObjectDraw
+	temp0 = object.value7
+	temp0 &= 1
+	if temp0 == 0
+		switch object.animation
+		case 0
+			DrawSprite(0)
+			CallFunction(EggMobile_HandleAnimations)
+			if object.value6 != 0
+				temp0 = oscillation
+				temp0 &= 7
+				temp0 >>= 2
+				temp0 += 2
+				DrawSprite(temp0)
+			end if
+			DrawSprite(6)
+			DrawSprite(10)
+			break
+		case 1
+			DrawSprite(0)
+			CallFunction(EggMobile_HandleAnimations)
+			if object.value6 != 0
+				temp0 = oscillation
+				temp0 &= 7
+				temp0 >>= 2
+				temp0 += 2
+				DrawSprite(temp0)
+			end if
+			DrawSprite(9)
+			DrawSprite(10)
+			if object.animationTimer < 120
+				object.animationTimer++
+			else
+				object.animationTimer = 0
+				object.animation = 0
+			end if
+			break
+		case 2
+			DrawSprite(0)
+			CallFunction(EggMobile_HandleAnimations)
+			if object.value6 != 0
+				temp0 = oscillation
+				temp0 &= 7
+				temp0 >>= 2
+				temp0 += 2
+				DrawSprite(temp0)
+			end if
+			temp0 = object.animationTimer
+			temp0 &= 15
+			temp0 >>= 3
+			temp0 += 6
+			DrawSprite(temp0)
+			if object.animationTimer < 120
+				object.animationTimer++
+			else
+				object.animationTimer = 0
+				object.animation = 0
+			end if
+			DrawSprite(10)
+			break
+		case 3
+			DrawSprite(1)
+			DrawSprite(8)
+			break
+		end switch
+	end if
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R8/Objects3.gif")
+	SpriteFrame(-36, -60, 88, 112, 1, 1)
+	SpriteFrame(-36, -36, 72, 72, 1, 114)
+	SpriteFrame(-36, -36, 32, 16, 90, 1)
+	SpriteFrame(-36, -36, 32, 16, 123, 1)
+	SpriteFrame(-18, -28, 36, 32, 90, 67)
+	SpriteFrame(-18, -28, 36, 32, 127, 67)
+	SpriteFrame(-18, -28, 36, 32, 164, 67)
+	SpriteFrame(-18, -28, 36, 32, 201, 67)
+	SpriteFrame(-22, -28, 44, 32, 166, 100)
+	SpriteFrame(-22, -28, 44, 32, 211, 100)
+	SpriteFrame(-12, -28, 32, 32, 133, 100)
+	SpriteFrame(-8, 28, 25, 17, 26, 237)
+	SpriteFrame(-8, 28, 25, 17, 52, 237)
+	SpriteFrame(-8, 28, 25, 17, 78, 237)
+	SpriteFrame(-8, 28, 25, 17, 104, 237)
+	SpriteFrame(-8, 28, 25, 17, 112, 219)
+	SpriteFrame(-30, 23, 12, 11, 42, 225)
+	SpriteFrame(-30, 23, 12, 11, 55, 225)
+	SpriteFrame(-30, 23, 12, 11, 68, 225)
+	SpriteFrame(-30, 23, 12, 11, 81, 225)
+	SpriteFrame(-30, 23, 12, 11, 94, 225)
+	SpriteFrame(49, -9, 2, 2, 27, 247)
+	SpriteFrame(49, -9, 2, 2, 53, 247)
+	SpriteFrame(49, -9, 2, 2, 79, 247)
+	SpriteFrame(49, -9, 2, 2, 105, 247)
+	SpriteFrame(49, -9, 2, 2, 113, 229)
+	SpriteFrame(-19, -19, 8, 20, 42, 204)
+	SpriteFrame(-19, -19, 8, 20, 51, 204)
+	SpriteFrame(-19, -19, 8, 20, 60, 204)
+	SpriteFrame(-19, -19, 8, 20, 69, 204)
+	SpriteFrame(-19, -19, 8, 20, 78, 204)
+	SpriteFrame(17, -13, 4, 10, 87, 206)
+	SpriteFrame(17, -13, 4, 10, 92, 206)
+	SpriteFrame(17, -13, 4, 10, 97, 206)
+	SpriteFrame(17, -13, 4, 10, 102, 206)
+	SpriteFrame(17, -13, 4, 10, 107, 206)
+	SpriteFrame(14, -59, 4, 3, 107, 217)
+	SpriteFrame(14, -59, 4, 3, 107, 221)
+	SpriteFrame(14, -59, 4, 3, 107, 225)
+	SpriteFrame(14, -59, 4, 3, 107, 229)
+	SpriteFrame(14, -59, 4, 3, 107, 233)
+	SpriteFrame(32, -47, 5, 3, 112, 215)
+	SpriteFrame(32, -47, 5, 3, 117, 215)
+	SpriteFrame(32, -47, 5, 3, 122, 215)
+	SpriteFrame(32, -47, 5, 3, 127, 215)
+	SpriteFrame(32, -47, 5, 3, 132, 215)
+	arrayPos0 = 32
+	while arrayPos0 < 1056
+		if object[arrayPos0].type == TypeName[Egg Mobile]
+			object[arrayPos0].drawOrder = 2
+			object[arrayPos0].type = TypeName[Blank Object]
+			arrayPos0--
+
+			object[arrayPos0].type = TypeName[Blank Object]
+			object[arrayPos0].value5 = 1
+			object[arrayPos0].drawOrder = 2
+			arrayPos0--
+
+			object[arrayPos0].type = TypeName[Blank Object]
+			object[arrayPos0].value5 = 1
+			object[arrayPos0].drawOrder = 2
+			arrayPos0--
+
+			object[arrayPos0].type = TypeName[Blank Object]
+			object[arrayPos0].value5 = 1
+			object[arrayPos0].drawOrder = 2
+			arrayPos0--
+			
+			object[arrayPos0].type = TypeName[Blank Object]
+			object[arrayPos0].value5 = 1
+			object[arrayPos0].drawOrder = 2
+			arrayPos0 += 4
+		end if
+		arrayPos0++
+	loop
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+	DrawSprite(2)
+	DrawSprite(6)
+	DrawSprite(10)
+	DrawSprite(11)
+	DrawSprite(16)
+	DrawSprite(21)
+	DrawSprite(26)
+	DrawSprite(31)
+	DrawSprite(36)
+	DrawSprite(41)
+end event
+
+
+event RSDKLoad
+	LoadSpriteSheet("R8/Objects3.gif")
+	SpriteFrame(-36, -60, 88, 112, 1, 1)	// #0  - Egg Spinner
+	SpriteFrame(-36, -36, 72, 72, 1, 114)	// #1  - Egg Spinner Destroyed
+	SpriteFrame(-36, -36, 32, 16, 90, 1)	// #2  - Egg Spinner Details frame 0
+	SpriteFrame(-36, -36, 32, 16, 123, 1)	// #3  - Egg Spinner Details frame 1
+
+	SpriteFrame(-18, -28, 36, 32, 90, 67)	// #4  - Eggman Reveal frame 0
+	SpriteFrame(-18, -28, 36, 32, 127, 67)	// #5  - Eggman Reveal frame 1
+	SpriteFrame(-18, -28, 36, 32, 164, 67)	// #6  - Eggman Idle frame 0
+	SpriteFrame(-18, -28, 36, 32, 201, 67)	// #7  - Eggman Idle frame 1
+	SpriteFrame(-22, -28, 44, 32, 166, 100)	// #8  - Eggman Hurt frame 0
+	SpriteFrame(-22, -28, 44, 32, 211, 100)	// #9  - Eggman Hurt frame 1
+	SpriteFrame(-12, -28, 32, 32, 133, 100)	// #10 - Egg Spinner Cockpit
+
+	SpriteFrame(-8, 28, 25, 17, 26, 237)	// #11 - Egg Spinner Bottom Lights frame 0
+	SpriteFrame(-8, 28, 25, 17, 52, 237)	// #12 - Egg Spinner Bottom Lights frame 1
+	SpriteFrame(-8, 28, 25, 17, 78, 237)	// #13 - Egg Spinner Bottom Lights frame 2
+	SpriteFrame(-8, 28, 25, 17, 104, 237)	// #14 - Egg Spinner Bottom Lights frame 3
+	SpriteFrame(-8, 28, 25, 17, 112, 219)	// #15 - Egg Spinner Bottom Lights frame 4
+
+	SpriteFrame(-30, 23, 12, 11, 42, 225)	// #16 - Egg Spinner Bottom Left Lights frame 0
+	SpriteFrame(-30, 23, 12, 11, 55, 225)	// #17 - Egg Spinner Bottom Left Lights frame 1
+	SpriteFrame(-30, 23, 12, 11, 68, 225)	// #18 - Egg Spinner Bottom Left Lights frame 2
+	SpriteFrame(-30, 23, 12, 11, 81, 225)	// #19 - Egg Spinner Bottom Left Lights frame 3
+	SpriteFrame(-30, 23, 12, 11, 94, 225)	// #20 - Egg Spinner Bottom Left Lights frame 4
+
+	SpriteFrame(49, -9, 2, 2, 27, 247)		// #21 - Egg Spinner Right Lights frame 0
+	SpriteFrame(49, -9, 2, 2, 53, 247)		// #22 - Egg Spinner Right Lights frame 1
+	SpriteFrame(49, -9, 2, 2, 79, 247)		// #23 - Egg Spinner Right Lights frame 2
+	SpriteFrame(49, -9, 2, 2, 105, 247)		// #24 - Egg Spinner Right Lights frame 3
+	SpriteFrame(49, -9, 2, 2, 113, 229)		// #25 - Egg Spinner Right Lights frame 4
+
+	SpriteFrame(-19, -19, 8, 20, 42, 204)	// #26 - Egg Spinner Cockpit Left Lights frame 0
+	SpriteFrame(-19, -19, 8, 20, 51, 204)	// #27 - Egg Spinner Cockpit Left Lights frame 1
+	SpriteFrame(-19, -19, 8, 20, 60, 204)	// #28 - Egg Spinner Cockpit Left Lights frame 2
+	SpriteFrame(-19, -19, 8, 20, 69, 204)	// #29 - Egg Spinner Cockpit Left Lights frame 3
+	SpriteFrame(-19, -19, 8, 20, 78, 204)	// #30 - Egg Spinner Cockpit Left Lights frame 4
+
+	SpriteFrame(17, -13, 4, 10, 87, 206)	// #31 - Egg Spinner Cockpit Right Lights frame 0
+	SpriteFrame(17, -13, 4, 10, 92, 206)	// #32 - Egg Spinner Cockpit Right Lights frame 1
+	SpriteFrame(17, -13, 4, 10, 97, 206)	// #33 - Egg Spinner Cockpit Right Lights frame 2
+	SpriteFrame(17, -13, 4, 10, 102, 206)	// #34 - Egg Spinner Cockpit Right Lights frame 3
+	SpriteFrame(17, -13, 4, 10, 107, 206)	// #35 - Egg Spinner Cockpit Right Lights frame 4
+
+	SpriteFrame(14, -59, 4, 3, 107, 217)	// #36 - Egg Spinner Top Lights frame 0
+	SpriteFrame(14, -59, 4, 3, 107, 221)	// #37 - Egg Spinner Top Lights frame 1
+	SpriteFrame(14, -59, 4, 3, 107, 225)	// #38 - Egg Spinner Top Lights frame 2
+	SpriteFrame(14, -59, 4, 3, 107, 229)	// #39 - Egg Spinner Top Lights frame 3
+	SpriteFrame(14, -59, 4, 3, 107, 233)	// #40 - Egg Spinner Top Lights frame 4
+
+	SpriteFrame(32, -47, 5, 3, 112, 215)	// #41 - Egg Spinner Top Right Lights frame 0
+	SpriteFrame(32, -47, 5, 3, 117, 215)	// #42 - Egg Spinner Top Right Lights frame 1
+	SpriteFrame(32, -47, 5, 3, 122, 215)	// #43 - Egg Spinner Top Right Lights frame 2
+	SpriteFrame(32, -47, 5, 3, 127, 215)	// #44 - Egg Spinner Top Right Lights frame 3
+	SpriteFrame(32, -47, 5, 3, 132, 215)	// #45 - Egg Spinner Top Right Lights frame 4
+
+	SetVariableAlias(ALIAS_VAR_PROPVAL, "unused")
+end event

@@ -1,0 +1,84 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Stream Change Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 82 : TYPE_STREAMCHANGE
+
+
+
+event ObjectUpdate
+	if object[-2].propertyValue == 1
+		if object.propertyValue != object.value1
+			arrayPos0 = object.entityPos
+			object[arrayPos0].value1 = object.propertyValue
+			if object.propertyValue == 0
+				arrayPos0++
+				while object[arrayPos0].type != TypeName[Stream Change]
+					if object[arrayPos0].type == TypeName[Water Stream L]
+						object[arrayPos0].type = TypeName[Water Stream R]
+					else
+						if object[arrayPos0].type == TypeName[Water Stream R]
+							object[arrayPos0].type = TypeName[Water Stream L]
+						end if
+					end if
+					if object[arrayPos0].type == TypeName[Water Stream U]
+						object[arrayPos0].type = TypeName[Water Stream D]
+					else
+						if object[arrayPos0].type == TypeName[Water Stream U]
+							object[arrayPos0].type = TypeName[Water Stream U]
+						end if
+					end if
+					if object[arrayPos0].type == TypeName[Water Stream C]
+						if object[arrayPos0].value1 == 64
+							object[arrayPos0].value1 = 192
+						else
+							object[arrayPos0].value1 = 64
+						end if
+					end if
+					arrayPos0++
+				loop
+			else
+				arrayPos0--
+				while object[arrayPos0].type != TypeName[Stream Change]
+					if object[arrayPos0].type == TypeName[Water Stream L]
+						object[arrayPos0].type = TypeName[Water Stream R]
+					else
+						if object[arrayPos0].type == TypeName[Water Stream R]
+							object[arrayPos0].type = TypeName[Water Stream L]
+						end if
+					end if
+					if object[arrayPos0].type == TypeName[Water Stream U]
+						object[arrayPos0].type = TypeName[Water Stream D]
+					else
+						if object[arrayPos0].type == TypeName[Water Stream D]
+							object[arrayPos0].type = TypeName[Water Stream U]
+						end if
+					end if
+					if object[arrayPos0].type == TypeName[Water Stream C]
+						if object[arrayPos0].value1 == 64
+							object[arrayPos0].value1 = 192
+						else
+							object[arrayPos0].value1 = 64
+						end if
+					end if
+					arrayPos0--
+				loop
+			end if
+			object[arrayPos0].value1 = object.propertyValue
+		end if
+	end if
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

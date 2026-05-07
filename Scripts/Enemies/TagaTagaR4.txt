@@ -1,0 +1,274 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Taga Taga Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 60 : TYPE_TAGATAGA
+
+// Function declarations
+reserve function TagaTaga_DebugDraw
+reserve function TagaTaga_DebugSpawn
+
+// Static Values
+public value TagaTaga_value20 = 0;
+
+
+public function TagaTaga_DebugDraw
+	temp0 = object[0].value16
+	temp0 -= TagaTaga_value20
+	DrawSprite(0)
+	if temp0 == 0
+		DrawSprite(2)
+		DrawSprite(3)
+		DrawSprite(4)
+	end if
+end function
+
+
+public function TagaTaga_DebugSpawn
+	temp0 = object[0].value16
+	temp0 -= TagaTaga_value20
+	CreateTempObject(TypeName[Taga Taga], temp0, object.xpos, object.ypos)
+	object[tempObjectPos].value1 = object.xpos
+end function
+
+
+event ObjectUpdate
+	if object.propertyValue == 0
+		switch object.state
+		case 0
+			if object.value0 == 0
+				object.state = 1
+				object.direction = 1
+				object.value0 = 192
+			else
+				object.value0--
+				object.xpos -= 65536
+			end if
+			foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+				BoxCollisionTest(C_TOUCH, object.entityPos, -128, -32, 0, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+				if checkResult == 1
+					object.state = 2
+					object.value0 = 0
+					object.priority = 1
+				end if
+			next
+			break
+		case 1
+			if object.value0 == 0
+				object.state = 0
+				object.direction = 0
+				object.value0 = 192
+			else
+				object.value0--
+				object.xpos += 65536
+			end if
+			foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+				BoxCollisionTest(C_TOUCH, object.entityPos, 0, -32, 128, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+				if checkResult == 1
+					object.state = 3
+					object.value0 = 0
+					object.priority = 1
+				end if
+			next
+			break
+		case 2
+			if object.value0 < 120
+				object.value0++
+				if object.value0 == 60
+					CreateTempObject(TypeName[Taga Spike], 0, object.xpos, object.ypos)
+					object[tempObjectPos].xpos -= 65536
+					object[tempObjectPos].ypos -= 655360
+					object[tempObjectPos].xvel = -131072
+					object[tempObjectPos].yvel = -196608
+					CreateTempObject(TypeName[Taga Spike], 0, object.xpos, object.ypos)
+					object[tempObjectPos].xpos += 196608
+					object[tempObjectPos].ypos -= 655360
+					object[tempObjectPos].xvel = 65536
+					object[tempObjectPos].yvel = -196608
+					CreateTempObject(TypeName[Taga Spike], 0, object.xpos, object.ypos)
+					object[tempObjectPos].xpos += 458752
+					object[tempObjectPos].ypos -= 589824
+					object[tempObjectPos].xvel += 131072
+					object[tempObjectPos].yvel = -196608
+					PlaySfx(SfxName[Shot 2], 0)
+				end if
+			else
+				object.xpos -= 262144
+				if object.outOfBounds == 1
+					object.state = 4
+					object.xpos = object.value1
+				end if
+			end if
+			break
+		case 3
+			if object.value0 < 120
+				object.value0++
+				if object.value0 == 60
+					CreateTempObject(TypeName[Taga Spike], 0, object.xpos, object.ypos)
+					object[tempObjectPos].xpos += 65536
+					object[tempObjectPos].ypos -= 655360
+					object[tempObjectPos].xvel = 131072
+					object[tempObjectPos].yvel = -196608
+					CreateTempObject(TypeName[Taga Spike], 0, object.xpos, object.ypos)
+					object[tempObjectPos].xpos -= 196608
+					object[tempObjectPos].ypos -= 655360
+					object[tempObjectPos].xvel = -65536
+					object[tempObjectPos].yvel = -196608
+					CreateTempObject(TypeName[Taga Spike], 0, object.xpos, object.ypos)
+					object[tempObjectPos].xpos -= 458752
+					object[tempObjectPos].ypos -= 589824
+					object[tempObjectPos].xvel = -131072
+					object[tempObjectPos].yvel = -196608
+					PlaySfx(SfxName[Shot 2], 0)
+				end if
+			else
+				object.xpos += 262144
+				if object.outOfBounds == 1
+					object.state = 4
+					object.xpos = object.value1
+				end if
+			end if
+			break
+		case 4
+			if object.outOfBounds == 1
+				object.state = 0
+				object.value0 = 0
+				object.direction = 0
+				object.xpos = object.value1
+			end if
+			break
+		end switch
+	else
+		switch object.state
+		case 0
+			if object.value0 == 0
+				object.state = 1
+				object.direction = 1
+				object.value0 = 384
+			else
+				object.value0--
+				object.xpos -= 32768
+			end if
+			break
+		case 1
+			if object.value0 == 0
+				object.state = 0
+				object.direction = 0
+				object.value0 = 384
+			else
+				object.value0--
+				object.xpos += 32768
+			end if
+			break
+		case 2
+			if object.value0 < 120
+				object.value0++
+			else
+				object.xpos -= 98304
+				if object.outOfBounds == 1
+					object.state = 4
+					object.xpos = object.value1
+				end if
+			end if
+			break
+		case 3
+			if object.value0 < 120
+				object.value0++
+			else
+				object.xpos += 98304
+				if object.outOfBounds == 1
+					object.state = 4
+					object.xpos = object.value1
+				end if
+			end if
+			break
+		case 4
+			if object.outOfBounds == 1
+				object.state = 0
+				object.value0 = 0
+				object.direction = 0
+				object.xpos = object.value1
+			end if
+			break
+		end switch
+	end if
+	if object.state < 4
+		foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+			BoxCollisionTest(C_TOUCH, object.entityPos, -12, -8, 12, 8, currentPlayer, object[currentPlayer].value41, object[currentPlayer].value39, object[currentPlayer].value42, object[currentPlayer].value40)
+			if checkResult == 1
+				CallFunction(Player_BadnikBreak)
+			end if
+		next
+	end if
+	CallFunction(StageSetup_CheckGoodFuture)
+end event
+
+
+event ObjectDraw
+	if object.propertyValue == 0
+		if object.state < 4
+			temp0 = object.frame
+			temp0 >>= 5
+			DrawSpriteFX(temp0, FX_FLIP, object.xpos, object.ypos)
+		end if
+		if object.state < 2
+			DrawSpriteFX(2, FX_FLIP, object.xpos, object.ypos)
+			DrawSpriteFX(3, FX_FLIP, object.xpos, object.ypos)
+			DrawSpriteFX(4, FX_FLIP, object.xpos, object.ypos)
+			object.frame++
+			object.frame &= 63
+		else
+			if object.value0 < 60
+				DrawSpriteFX(2, FX_FLIP, object.xpos, object.ypos)
+				DrawSpriteFX(3, FX_FLIP, object.xpos, object.ypos)
+				DrawSpriteFX(4, FX_FLIP, object.xpos, object.ypos)
+			end if
+		end if
+	else
+		if object.state < 4
+			temp0 = object.frame
+			temp0 >>= 5
+			DrawSpriteFX(temp0, FX_FLIP, object.xpos, object.ypos)
+		end if
+		if object.state < 2
+			object.frame++
+			object.frame &= 63
+		end if
+	end if
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R4/Objects.gif")
+	foreach (TypeName[Taga Taga], arrayPos0, ALL_ENTITIES)
+		object[arrayPos0].value1 = object[arrayPos0].xpos
+	next
+	SpriteFrame(-20, -12, 40, 24, 215, 86)
+	SpriteFrame(-20, -12, 40, 24, 215, 111)
+	SpriteFrame(-1, -10, 8, 8, 206, 52)
+	SpriteFrame(3, -10, 8, 8, 206, 52)
+	SpriteFrame(7, -9, 8, 8, 206, 52)
+	temp0 = 0
+	TagaTaga_value20 = DebugMode_ObjCount
+	while temp0 < 2
+		SetTableValue(TypeName[Taga Taga], DebugMode_ObjCount, DebugMode_TypesTable)
+		SetTableValue(TagaTaga_DebugDraw, DebugMode_ObjCount, DebugMode_DrawTable)
+		SetTableValue(TagaTaga_DebugSpawn, DebugMode_ObjCount, DebugMode_SpawnTable)
+		DebugMode_ObjCount++
+		temp0++
+	loop
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

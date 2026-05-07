@@ -1,0 +1,135 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: BG Animation Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 1 : TYPE_BGANIMATION
+
+public alias 256 : GROUP_PLAYERS
+public alias arrayPos6 : currentPlayer
+public alias arrayPos7 : playerCount
+
+
+
+event ObjectUpdate
+	object.value1--
+	if object.value1 < -31
+		object.value1 += 32
+	end if
+	object.value2++
+	if object.value2 > -1
+		object.value2 -= 32
+	end if
+	object.value3++
+	if object.value3 > -1
+		object.value3 -= 96
+	end if
+end event
+
+
+event ObjectDraw
+	if object.drawOrder == 3
+		DrawRect(0, 0, 2, screen.ysize, 0, 0, 0, 255)
+		temp0 = screen.xcenter
+		temp0 -= 32
+		DrawRect(0, 160, temp0, 2, 0, 0, 0, 255)
+		temp0 += 48
+		switch object[0].state
+		case 0
+		case 1
+		case 2
+		case 3
+		case 4
+		case 5
+		case 14
+		case 16
+		case 17
+		case 18
+		case 19
+			DrawRect(temp0, 0, screen.xcenter, screen.ysize, 224, 0, 0, 255)
+			DrawRect(temp0, 175, screen.xcenter, 38, 0, 0, 96, 255)
+			DrawRect(temp0, 31, screen.xcenter, 9, 0, 0, 0, 255)
+			break
+		case 6
+		case 7
+		case 8
+		case 9
+		case 10
+		case 11
+		case 12
+		case 13
+		case 15
+			DrawRect(temp0, 0, screen.xcenter, 32, 224, 0, 0, 255)
+			DrawRect(temp0, 226, screen.xcenter, 14, 224, 0, 0, 255)
+			DrawRect(temp0, 31, screen.xcenter, 2, 0, 0, 0, 255)
+			break
+		end switch
+		temp0 -= 50
+		DrawRect(2, 0, temp0, 160, 160, 160, 64, 255)
+		DrawRect(2, 162, temp0, 78, 0, 128, 0, 255)
+		temp1 = object.value3
+		temp1 >>= 1
+		DrawSpriteScreenXY(3, temp1, 226)
+		DrawSpriteScreenXY(4, temp1, 226)
+		temp0 += 2
+		temp1 = object.value1
+		temp1 >>= 1
+		DrawSpriteScreenXY(1, temp0, temp1)
+		temp1 = object.value2
+		temp1 >>= 1
+		DrawSpriteScreenXY(2, temp0, temp1)
+		SetDrawListEntityRef(object.entityPos, 4, screen[4].drawListSize)
+		screen[4].drawListSize++
+		object.drawOrder = 4
+	else
+		DrawRect(0, 213, screen.xsize, 13, 0, 0, 0, 255)
+		DrawSpriteScreenXY(0, 24, 195)
+		temp0 = screen.xcenter
+		temp0 += 19
+		DrawSpriteScreenXY(5, temp0, 213)
+		if object[0].value7 == 1
+			temp0 = screen.xsize
+			temp0 -= 64
+			temp1 = object[40].xpos
+			temp1 -= -4718592
+			temp1 >>= 17
+			temp0 += temp1
+			if object[0].value3 == 8
+				DrawSpriteScreenXY(7, temp0, 197)
+			else
+				DrawSpriteScreenXY(6, temp0, 197)
+			end if
+		end if
+		object.drawOrder = 3
+	end if
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("TAttack/TimeAttack.gif")
+	LoadPalette("TimeAttack.act", 0, 0, 0, 256)
+	MatrixTranslateXYZ(MAT_WORLD, 0, 0, 0)
+	MatrixRotateXYZ(MAT_VIEW, 0, 0, 0)
+	SpriteFrame(0, 0, 152, 30, 70, 666)
+	SpriteFrame(0, 0, 24, 256, 463, 577)
+	SpriteFrame(24, 0, 24, 256, 487, 577)
+	SpriteFrame(0, 0, 448, 14, 1, 701)
+	SpriteFrame(448, 0, 448, 14, 1, 701)
+	SpriteFrame(0, 0, 104, 13, 358, 687)
+	SpriteFrame(-16, 0, 80, 16, 326, 798)
+	SpriteFrame(-16, 0, 80, 16, 326, 815)
+	object[31].type = TypeName[BG Animation]
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

@@ -1,0 +1,338 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Boss Leg Joint Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 55 : TYPE_BOSSLEGJOINT
+
+// Function declarations
+reserve function BossLegJoint_Function105
+reserve function BossLegJoint_Function106
+reserve function BossLegJoint_Function107
+
+
+public function BossLegJoint_Function105
+	arrayPos0 = object.value0
+	object.xpos = object[arrayPos0].xpos
+	object.xpos += 786432
+	object.xpos += temp7
+	if object.drawOrder == 2
+		object.xpos -= 655360
+	end if
+	object.ypos = object[arrayPos0].ypos
+	object.ypos += 1310720
+	object.ypos += temp6
+end function
+
+
+public function BossLegJoint_Function106
+	Sin256(temp6, object.angle)
+	temp6 <<= 12
+	Cos256(temp7, object.angle)
+	temp7 <<= 12
+	GetBit(temp0, object.value4, 4)
+	if temp0 == 0
+		SetBit(object.value4, 1, 0)
+		CallFunction(BossLegJoint_Function105)
+	else
+		GetBit(temp0, object.value4, 5)
+		if temp0 == 0
+			CallFunction(BossLegJoint_Function105)
+		else
+			GetBit(temp0, object.value4, 1)
+			if temp0 == 0
+				SetBit(object.value4, 1, 1)
+				object.value6 = temp6
+				object.value7 = temp7
+			else
+				arrayPos0 = object.value0
+				arrayPos1 = object[arrayPos0].value0
+				temp0 = temp7
+				temp0 -= object.value7
+				object.value7 = temp7
+				object[arrayPos0].xpos -= temp0
+				object[arrayPos1].xpos -= temp0
+				temp0 = temp6
+				temp0 -= object.value6
+				object.value6 = temp6
+				object[arrayPos0].ypos -= temp0
+				object[arrayPos1].ypos -= temp0
+			end if
+		end if
+	end if
+end function
+
+
+public function BossLegJoint_Function107
+	arrayPos0 = object.value1
+	arrayPos1 = object[arrayPos0].value1
+	if object[arrayPos1].state == 2
+		if object.angle >= 88
+			GetBit(temp0, object[arrayPos1].value4, 0)
+			if temp0 == 1
+				SetBit(object[arrayPos1].value4, 0, 0)
+				SetBit(object.value4, 0, 1)
+			end if
+			CallFunction(BossLegJoint_Function106)
+		end if
+	else
+		object[arrayPos1].state = 1
+		if object.angle < 88
+			object.angle += object.value5
+		end if
+		CallFunction(BossLegJoint_Function106)
+	end if
+end function
+
+
+event ObjectUpdate
+	switch object.state
+	case 0
+		object.angle = 88
+		object.value5 = 2
+		object.state = 6
+		break
+	case 1
+		arrayPos0 = object.value1
+		arrayPos1 = object[arrayPos0].value1
+		if object[arrayPos1].state != 3
+			if object[arrayPos1].state != 4
+				SetBit(object[arrayPos1].value4, 0, 0)
+				object[arrayPos1].state = 3
+			end if
+		end if
+		temp0 = 0
+		if object.angle > 0
+			object.angle -= object.value5
+			if object.angle > 0
+				CallFunction(BossLegJoint_Function106)
+				temp0 = 1
+			end if
+		end if
+		if temp0 == 0
+			object.angle = 0
+			if object[arrayPos1].state != 4
+				GetBit(temp0, object[arrayPos1].value4, 0)
+				if temp0 == 0
+					CallFunction(BossLegJoint_Function106)
+				else
+					SetBit(object[arrayPos1].value4, 0, 0)
+					object.state = 2
+					CallFunction(BossLegJoint_Function106)
+				end if
+			else
+				object.state = 2
+				CallFunction(BossLegJoint_Function106)
+			end if
+		end if
+		break
+	case 2
+		arrayPos0 = object.value1
+		arrayPos1 = object[arrayPos0].value1
+		object.angle += object.value5
+		if object.angle >= 88
+			object.angle = 88
+			object.state = 3
+			object[arrayPos1].state = 1
+		end if
+		CallFunction(BossLegJoint_Function106)
+		break
+	case 3
+		arrayPos0 = object.value1
+		arrayPos1 = object[arrayPos0].value1
+		GetBit(temp0, object[arrayPos1].value4, 4)
+		if temp0 == 1
+			SetBit(object.value4, 0, 1)
+		end if
+		CallFunction(BossLegJoint_Function106)
+		break
+	case 4
+		GetBit(temp0, object.value4, 0)
+		if temp0 == 0
+			object.angle -= object.value5
+			if object.angle < 24
+				object.angle = 24
+				SetBit(object.value4, 0, 1)
+			end if
+		end if
+		CallFunction(BossLegJoint_Function106)
+		break
+	case 5
+		arrayPos0 = object.value1
+		arrayPos1 = object[arrayPos0].value1
+		if object[arrayPos1].state == 4
+			if object.angle == 0
+				GetBit(temp0, object[arrayPos1].value4, 0)
+				if temp0 == 1
+					SetBit(object[arrayPos1].value4, 0, 0)
+					SetBit(object.value4, 0, 1)
+				end if
+				CallFunction(BossLegJoint_Function106)
+			else
+				if object.angle != 0
+					object.angle -= object.value5
+				end if
+				CallFunction(BossLegJoint_Function106)
+			end if
+		else
+			object[arrayPos1].state = 3
+			if object.angle != 0
+				object.angle -= object.value5
+			end if
+			CallFunction(BossLegJoint_Function106)
+		end if
+		break
+	case 6
+		CallFunction(BossLegJoint_Function107)
+		break
+	case 7
+		if object.angle < 24
+			object.angle += object.value5
+			arrayPos0 = object.value1
+			arrayPos1 = object[arrayPos0].value1
+			SetBit(object[arrayPos1].value4, 7, 1)
+			arrayPos0 = object.value0
+			arrayPos1 = object[arrayPos0].value2
+			arrayPos0 = object[arrayPos1].value1
+			arrayPos1 = object[arrayPos0].value1
+			SetBit(object[arrayPos1].value4, 7, 1)
+			CallFunction(BossLegJoint_Function107)
+		else
+			if object.angle > 24
+				object.angle -= object.value5
+				arrayPos0 = object.value1
+				arrayPos1 = object[arrayPos0].value1
+				if object[arrayPos1].state == 4
+					if object.angle == 0
+						GetBit(temp0, object[arrayPos1].value4, 0)
+						if temp0 == 1
+							SetBit(object[arrayPos1].value4, 0, 0)
+							SetBit(object.value4, 0, 1)
+						end if
+						CallFunction(BossLegJoint_Function106)
+					else
+						if object.angle != 0
+							object.angle -= object.value5
+						end if
+						CallFunction(BossLegJoint_Function106)
+					end if
+				else
+					object[arrayPos1].state = 3
+					if object.angle != 0
+						object.angle -= object.value5
+					end if
+					CallFunction(BossLegJoint_Function106)
+				end if
+			else
+				arrayPos0 = object.value1
+				arrayPos1 = object[arrayPos0].value1
+				GetBit(temp0, object[arrayPos1].value4, 0)
+				if temp0 == 1
+					SetBit(object.value4, 0, 1)
+				end if
+				CallFunction(BossLegJoint_Function106)
+			end if
+		end if
+		break
+	case 8
+		arrayPos0 = object.value0
+		arrayPos1 = object[arrayPos0].value1
+		object.xpos = object[arrayPos1].xpos
+		object.xpos -= 655360
+		object.ypos = object[arrayPos1].ypos
+		object.angle = object[arrayPos1].angle
+		break
+	case 9
+		arrayPos0 = object.value1
+		arrayPos1 = object[arrayPos0].value1
+		temp1 = 0
+		if object[arrayPos1].state != 3
+			if object[arrayPos1].state != 4
+				SetBit(object[arrayPos1].value4, 0, 0)
+				object[arrayPos1].state = 3
+			else
+				if object.angle != 32
+					object.angle -= object.value5
+					if object.angle > 0
+						temp1 = 1
+					end if
+				end if
+				if temp1 == 0
+					object.angle = 32
+					SetBit(object[arrayPos1].value4, 0, 0)
+					object.state = 10
+				end if
+			end if
+		end if
+		CallFunction(BossLegJoint_Function106)
+		break
+	case 10
+		arrayPos0 = object.value1
+		arrayPos1 = object[arrayPos0].value1
+		object.angle += object.value5
+		if object.angle >= 48
+			object.angle = 48
+			object.state = 3
+			object[arrayPos1].state = 1
+		end if
+		CallFunction(BossLegJoint_Function106)
+		break
+	case 11
+		GetBit(temp0, object.value4, 0)
+		if temp0 == 0
+			arrayPos0 = object.value1
+			arrayPos1 = object[arrayPos0].value1
+			if object[arrayPos1].state != 1
+				if object[arrayPos1].state != 2
+					object[arrayPos1].state = 1
+				else
+					object.angle += object.value5
+					if object.angle >= 80
+						SetBit(object.value4, 0, 1)
+					end if
+				end if
+			end if
+		end if
+		CallFunction(BossLegJoint_Function106)
+		break
+	case 12
+		GetBit(temp0, object.value4, 4)
+		if temp0 == 0
+			object.xvel -= 1536
+		else
+			object.xvel += 1536
+		end if
+		object.yvel += 6240
+		object.xpos += object.xvel
+		object.ypos += object.yvel
+		if object.outOfBounds == 1
+			object.type = TypeName[Blank Object]
+			object.priority = 0
+		end if
+		break
+	end switch
+end event
+
+
+event ObjectDraw
+	DrawSprite(0)
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R1/Objects3.gif")
+	SpriteFrame(-8, -8, 16, 16, 74, 42)
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

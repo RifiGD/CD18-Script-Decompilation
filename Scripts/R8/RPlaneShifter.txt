@@ -1,0 +1,270 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: R Plane Shifter Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 52 : TYPE_RPLANESHIFTER
+
+
+
+event ObjectUpdate
+	if object[0].interaction == 1
+		if object.propertyValue == 0
+			switch object.state
+			case 1
+				if object.angle < 256
+					object.angle += 8
+				else
+					object.state = 0
+					object[0].state = 12
+					object[0].frame = 0
+					object[0].drawOrder = 2
+					object[0].collisionPlane = 1
+				end if
+				temp0 = object.angle
+				temp0 >>= 6
+				switch temp0
+				case 0
+					object[0].frame = 1
+					break
+				case 1
+					object[0].frame = 2
+					break
+				case 2
+					object[0].frame = 3
+					break
+				case 3
+					object[0].frame = 0
+					object[0].direction = 1
+					break
+				end switch
+				object.animationTimer++
+				object.animationTimer %= 6
+				break
+			case 2
+				if object.angle > 0
+					object.angle -= 8
+				else
+					object.state = 0
+					object[0].state = 12
+					object[0].frame = 0
+					object[0].drawOrder = 4
+					object[0].collisionPlane = 0
+				end if
+				temp0 = object.angle
+				temp0 >>= 6
+				switch temp0
+				case 0
+					object[0].frame = 0
+					object[0].direction = 1
+					break
+				case 1
+					object[0].frame = 4
+					break
+				case 2
+					object[0].frame = 0
+					break
+				case 3
+					object[0].frame = 1
+					break
+				end switch
+				object.animationTimer++
+				object.animationTimer %= 6
+				break
+			case 3
+				if object.angle > 256
+					object.angle -= 8
+				else
+					object.state = 0
+					object[0].state = 12
+					object[0].frame = 0
+					object[0].drawOrder = 2
+					object[0].collisionPlane = 1
+				end if
+				temp0 = 512
+				temp0 -= object.angle
+				temp0 >>= 6
+				switch temp0
+				case 0
+					object[0].frame = 1
+					break
+				case 1
+					object[0].frame = 2
+					break
+				case 2
+					object[0].frame = 3
+					break
+				case 3
+					object[0].frame = 0
+					object[0].direction = 0
+					break
+				end switch
+				object.animationTimer++
+				object.animationTimer %= 6
+				break
+			case 4
+				if object.angle < 512
+					object.angle += 8
+				else
+					object.angle = 0
+					object.state = 0
+					object[0].state = 12
+					object[0].frame = 0
+					object[0].drawOrder = 4
+					object[0].collisionPlane = 0
+				end if
+				temp0 = 512
+				temp0 -= object.angle
+				temp0 >>= 6
+				switch temp0
+				case 0
+					object[0].frame = 0
+					object[0].direction = 0
+					break
+				case 1
+					object[0].frame = 4
+					break
+				case 2
+					object[0].frame = 0
+					break
+				case 3
+					object[0].frame = 1
+					break
+				end switch
+				object.animationTimer++
+				object.animationTimer %= 6
+				break
+			end switch
+			Sin(object[+1].xpos, object.angle)
+			object[+1].xpos *= 3072
+			object[+1].xpos += object.xpos
+			object[+1].ypos = object.ypos
+			if object.angle > 128
+				if object.angle < 384
+					object[+1].drawOrder = 1
+				else
+					object[+1].drawOrder = 4
+				end if
+			else
+				object[+1].drawOrder = 4
+			end if
+			temp0 = object.angle
+			temp0 += 170
+			temp0 &= 511
+			Sin(object[+2].xpos, temp0)
+			object[+2].xpos *= 3072
+			object[+2].xpos += object.xpos
+			object[+2].ypos = object.ypos
+			if temp0 > 128
+				if temp0 < 384
+					object[+2].drawOrder = 1
+				else
+					object[+2].drawOrder = 4
+				end if
+			else
+				object[+2].drawOrder = 4
+			end if
+			temp0 = object.angle
+			temp0 += 341
+			temp0 &= 511
+			Sin(object[+3].xpos, temp0)
+			object[+3].xpos *= 3072
+			object[+3].xpos += object.xpos
+			object[+3].ypos = object.ypos
+			if temp0 > 128
+				if temp0 < 384
+					object[+3].drawOrder = 1
+				else
+					object[+3].drawOrder = 4
+				end if
+			else
+				object[+3].drawOrder = 4
+			end if
+		end if
+	end if
+	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+		if object.propertyValue == 0
+			BoxCollisionTest(C_PLATFORM, object.entityPos, -40, -8, 40, 24, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			temp1 = checkResult
+			BoxCollisionTest(C_SOLID, object.entityPos, -40, -184, 40, -168, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			BoxCollisionTest(C_TOUCH, object.entityPos, -4, -48, 4, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			if checkResult == 1
+				if object.value2 == 0
+					if temp1 == 1
+						object.value2 = 1
+						object[currentPlayer].state = Player_State_Static
+						object[currentPlayer].animation = ANI_STOPPED
+						object[currentPlayer].xpos = object.xpos
+						object[currentPlayer].speed = 0
+						object[currentPlayer].xvel = 0
+						object[currentPlayer].yvel = 0
+						object[currentPlayer].scrollTracking = 0
+						if object[currentPlayer].direction == 0
+							if object[currentPlayer].collisionPlane == 0
+								object.state = 1
+								object.angle = 0
+							else
+								object.state = 2
+								object.angle = 256
+							end if
+						else
+							if object[currentPlayer].collisionPlane == 0
+								object.state = 3
+								object.angle = 512
+							else
+								object.state = 4
+								object.angle = 256
+							end if
+						end if
+					end if
+				end if
+			else
+				object.value2 = 0
+			end if
+		end if
+	next
+end event
+
+
+event ObjectDraw
+	if object.propertyValue == 0
+		temp0 = object.animationTimer
+		temp0 /= 3
+		DrawSprite(temp0)
+		temp0 += 2
+		DrawSprite(temp0)
+	else
+		DrawSprite(4)
+		DrawSprite(5)
+		DrawSprite(6)
+		DrawSprite(7)
+		DrawSprite(8)
+	end if
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R8/Objects2.gif")
+	SpriteFrame(-40, -8, 80, 16, 1, 200)
+	SpriteFrame(-40, -8, 80, 16, 1, 217)
+	SpriteFrame(-40, -184, 80, 16, 1, 200)
+	SpriteFrame(-40, -184, 80, 16, 1, 217)
+	SpriteFrame(-4, -40, 8, 32, 100, 35)
+	SpriteFrame(-4, -72, 8, 32, 100, 35)
+	SpriteFrame(-4, -104, 8, 32, 100, 35)
+	SpriteFrame(-4, -136, 8, 32, 100, 35)
+	SpriteFrame(-4, -168, 8, 32, 100, 35)
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

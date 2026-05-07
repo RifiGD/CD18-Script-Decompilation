@@ -1,0 +1,841 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Hotaru Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 58 : TYPE_HOTARU
+
+// Function declarations
+reserve function Hotaru_DebugDraw
+reserve function Hotaru_DebugSpawn
+reserve function Hotaru_Function98
+
+// Static Values
+public value Hotaru_value18 = 0;
+
+
+public function Hotaru_DebugDraw
+	temp0 = object[0].value16
+	temp0 -= Hotaru_value18
+	if temp0 == 0
+		DrawSprite(0)
+	else
+		DrawSprite(2)
+	end if
+end function
+
+
+public function Hotaru_DebugSpawn
+	temp0 = object[0].value16
+	temp0 -= Hotaru_value18
+	CreateTempObject(TypeName[Hotaru], temp0, object.xpos, object.ypos)
+end function
+
+
+public function Hotaru_Function98
+	CheckEqual(object[currentPlayer].animation, ANI_JUMPING)
+	temp0 = checkResult
+	CheckEqual(object[currentPlayer].animation, ANI_SPINDASH)
+	temp0 |= checkResult
+	if object[currentPlayer].animation == ANI_FLYING
+		CheckGreater(object[currentPlayer].ypos, object.ypos)
+		temp0 |= checkResult
+	end if
+	if temp0 == 1
+		ResetObjectEntity(arrayPos1, flowerType, 0, object.xpos, object.ypos)
+		object[arrayPos1].drawOrder = 4
+		CreateTempObject(TypeName[Smoke Puff], 0, object.xpos, object.ypos)
+		object[tempObjectPos].drawOrder = 4
+		CreateTempObject(TypeName[Object Score], object[26].value0, object.xpos, object.ypos)
+		object[tempObjectPos].drawOrder = 4
+		PlaySfx(SfxName[Destroy], 0)
+		if object[currentPlayer].yvel > 0
+			FlipSign(object[currentPlayer].yvel)
+		else
+			object[currentPlayer].yvel += 49152
+		end if
+		switch object[26].value0
+		case 0
+			player.score += 100
+			break
+		case 1
+			player.score += 200
+			break
+		case 2
+			player.score += 500
+			break
+		case 3
+			player.score += 1000
+			break
+		end switch
+	else
+		arrayPos0 = object[currentPlayer].entityPos
+		arrayPos0 += 2
+		if object[arrayPos0].type == TypeName[Hotaru]
+			ResetObjectEntity(arrayPos1, flowerType, 0, object.xpos, object.ypos)
+			object[arrayPos1].drawOrder = 4
+			CreateTempObject(TypeName[Smoke Puff], 0, object.xpos, object.ypos)
+			object[tempObjectPos].drawOrder = 4
+			CreateTempObject(TypeName[Object Score], object[26].value0, object.xpos, object.ypos)
+			object[tempObjectPos].drawOrder = 4
+			PlaySfx(SfxName[Destroy], 0)
+			if object[currentPlayer].yvel > 0
+				FlipSign(object[currentPlayer].yvel)
+			end if
+			switch object[26].value0
+			case 0
+				player.score += 100
+				break
+			case 1
+				player.score += 200
+				break
+			case 2
+				player.score += 500
+				break
+			case 3
+				player.score += 1000
+				break
+			end switch
+		else
+			if object.state > 9
+				if object[currentPlayer].value7 == 0
+					object[currentPlayer].state = Player_State_GotHit
+					if object[currentPlayer].xpos > object.xpos
+						object[currentPlayer].speed = 131072
+					else
+						object[currentPlayer].speed = -131072
+					end if
+				end if
+			end if
+		end if
+	end if
+end function
+
+
+event ObjectUpdate
+	if object.outOfBounds == 1
+		object.state = 12
+		object.value0 = 0
+		object.xpos = object.value1
+		object.ypos = object.value2
+		object.value3 = -2293760
+		object.value4 = 2293760
+		object.value6 = 0
+	end if
+	if object.propertyValue == 0
+		switch object.state
+		case 0
+			object.priority = 1
+			if object.value3 < 2818048
+				object.value3 += 65536
+				object.value4 -= 65536
+			else
+				object.state = 1
+			end if
+			break
+		case 1
+			if object.value3 > -7536640
+				object.value3 -= 65536
+				object.value4 += 65536
+			else
+				object.state = 0
+			end if
+			break
+		case 2
+			temp0 = screen.xoffset
+			temp0 += screen.xcenter
+			temp0 <<= 16
+			temp1 = 0
+			if object.xpos < temp0
+				object.xpos += 131072
+				if object.xpos >= temp0
+					object.xpos = temp0
+					temp1 = 1
+				end if
+			else
+				object.xpos -= 131072
+				if object.xpos <= temp0
+					object.xpos = temp0
+					temp1 = 1
+				end if
+			end if
+			temp0 = screen.yoffset
+			temp0 += 104
+			temp0 <<= 16
+			if object.ypos < temp0
+				object.ypos += 131072
+				if object.ypos >= temp0
+					object.ypos = temp0
+					if temp1 == 1
+						object.state++
+					end if
+				end if
+			else
+				object.ypos -= 131072
+				if object.ypos <= temp0
+					object.ypos = temp0
+					if temp1 == 1
+						object.state++
+					end if
+				end if
+			end if
+			break
+		case 3
+			if object.value0 < 100
+				object.value0++
+			else
+				object.value0 = 0
+				object.state++
+			end if
+			object.frame = object.value0
+			object.frame %= 20
+			object.frame /= 10
+			object.frame++
+			break
+		case 4
+			if object.value0 < 4
+				object.value0++
+			else
+				object.value0 = 0
+				object.state++
+			end if
+			break
+		case 5
+			if object.value0 < 12
+				object.value0++
+			else
+				object.value0 = 0
+				object.state++
+			end if
+			break
+		case 6
+			if object.value0 < 8
+				object.value0++
+			else
+				object.value0 = 0
+				object.state++
+			end if
+			break
+		case 7
+			if object.value0 < 8
+				object.value0++
+			else
+				object.value0 = 0
+				object.state++
+			end if
+			break
+		case 8
+			if object.value0 < 12
+				object.value0++
+			else
+				object.value0 = 0
+				object.state++
+			end if
+			break
+		case 9
+			if object.value0 < 4
+				object.value0++
+			else
+				object.value0 = 0
+				object.animationTimer = 0
+				object.state++
+			end if
+			break
+		case 10
+			if object.value0 < 100
+				object.value0++
+			else
+				object.value0 = 0
+				object.state++
+			end if
+			object.frame = object.value0
+			object.frame %= 20
+			object.frame /= 10
+			object.frame++
+			break
+		case 11
+			object.ypos -= 131072
+			object.value0++
+			object.value0 %= 20
+			object.frame = object.value0
+			object.frame /= 10
+			object.frame++
+			if object.outOfBounds == 1
+				object.state = 12
+				object.value0 = 0
+				object.xpos = object.value1
+				object.ypos = object.value2
+				object.value3 = -2293760
+				object.value4 = 2293760
+			end if
+			break
+		case 12
+			if object.outOfBounds == 1
+				object.state = 0
+				object.priority = 0
+				object.frame = 0
+			end if
+			break
+		end switch
+	else
+		switch object.state
+		case 0
+			object.priority = 1
+			object.frame = 3
+			if object.value3 < 2818048
+				object.value3 += 32768
+				object.value4 -= 32768
+			else
+				object.state = 1
+			end if
+			break
+		case 1
+			if object.value3 > -7536640
+				object.value3 -= 32768
+				object.value4 += 32768
+			else
+				object.state = 0
+			end if
+			break
+		case 2
+			temp0 = screen.xoffset
+			temp0 += screen.xcenter
+			temp0 <<= 16
+			temp1 = 0
+			if object.xpos < temp0
+				object.xpos += 65536
+				if object.xpos >= temp0
+					object.xpos = temp0
+					temp1 = 1
+				end if
+			else
+				object.xpos -= 65536
+				if object.xpos <= temp0
+					object.xpos = temp0
+					temp1 = 1
+				end if
+			end if
+			temp0 = screen.yoffset
+			temp0 += 104
+			temp0 <<= 16
+			if object.ypos < temp0
+				object.ypos += 65536
+				if object.ypos >= temp0
+					object.ypos = temp0
+					if temp1 == 1
+						object.state++
+					end if
+				end if
+			else
+				object.ypos -= 65536
+				if object.ypos <= temp0
+					object.ypos = temp0
+					if temp1 == 1
+						object.state++
+					end if
+				end if
+			end if
+			break
+		case 3
+			if object.value0 < 100
+				object.value0++
+			else
+				object.value0 = 0
+				object.state++
+			end if
+			object.frame = object.value0
+			object.frame %= 40
+			object.frame /= 20
+			object.frame += 4
+			break
+		case 4
+			if object.value0 < 10
+				object.value0++
+			else
+				object.value0 = 0
+				object.state++
+			end if
+			break
+		case 5
+			if object.value0 < 30
+				object.value0++
+			else
+				object.value0 = 0
+				object.state++
+			end if
+			break
+		case 6
+			if object.value0 < 20
+				object.value0++
+			else
+				object.value0 = 0
+				object.state++
+			end if
+			break
+		case 7
+			if object.value0 < 20
+				object.value0++
+			else
+				object.value0 = 0
+				object.state++
+			end if
+			break
+		case 8
+			if object.value0 < 30
+				object.value0++
+			else
+				object.value0 = 0
+				object.state++
+			end if
+			break
+		case 9
+			if object.value0 < 10
+				object.value0++
+			else
+				object.value0 = 0
+				object.animationTimer = 0
+				object.state++
+			end if
+			break
+		case 10
+			if object.value0 < 200
+				object.value0++
+			else
+				object.value0 = 0
+				object.state++
+			end if
+			object.frame = object.value0
+			object.frame %= 40
+			object.frame /= 20
+			object.frame += 4
+			break
+		case 11
+			object.ypos -= 131072
+			object.value0++
+			object.value0 %= 40
+			object.frame = object.value0
+			object.frame /= 20
+			object.frame += 4
+			if object.outOfBounds == 1
+				object.state = 12
+				object.value0 = 0
+				object.xpos = object.value1
+				object.ypos = object.value2
+				object.value3 = -2293760
+				object.value4 = 2293760
+			end if
+			break
+		case 12
+			if object.outOfBounds == 1
+				object.state = 0
+				object.priority = 0
+				object.frame = 0
+			end if
+			break
+		end switch
+	end if
+	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+		switch object.state
+		case 0
+		case 1
+			BoxCollisionTest(C_TOUCH, object.entityPos, -64, -64, 64, 64, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			if checkResult == 1
+				object.state = 2
+			end if
+			break
+		case 6
+		case 7
+		case 8
+		case 9
+			if object.propertyValue == 0
+				if object.value3 < 0
+					temp0 = object.value3
+					temp0 >>= 16
+					temp1 = object.value4
+					temp1 >>= 16
+				else
+					temp0 = object.value4
+					temp0 >>= 16
+					temp1 = object.value3
+					temp1 >>= 16
+				end if
+				temp0 += 8
+				temp1 -= 8
+				BoxCollisionTest(C_TOUCH, object.entityPos, temp0, -60, temp1, 60, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+				if checkResult == 1
+					object.value6 = 1
+				end if
+			end if
+		end switch
+		if object.state < 12
+			temp6 = object.xpos
+			temp7 = object.ypos
+			GetBit(temp1, object.value5, 0)
+			if temp1 == 1
+				object.xpos += object.value3
+				object.ypos -= object.value7
+				BoxCollisionTest(C_TOUCH, object.entityPos, -8, -8, 8, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+				if checkResult == 1
+					arrayPos1 = object.entityPos
+					arrayPos1++
+					CallFunction(Hotaru_Function98)
+					if object[+1].type == flowerType
+						SetBit(object.value5, 0, 0)
+					end if
+				end if
+				object.xpos = temp6
+				object.ypos = temp7
+			end if
+			GetBit(temp1, object.value5, 1)
+			if temp1 == 1
+				object.xpos += object.value4
+				object.ypos += object.value7
+				BoxCollisionTest(C_TOUCH, object.entityPos, -8, -8, 8, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+				if checkResult == 1
+					arrayPos1 = object.entityPos
+					arrayPos1 += 2
+					CallFunction(Hotaru_Function98)
+					if object[+2].type == flowerType
+						SetBit(object.value5, 1, 0)
+					end if
+				end if
+			end if
+			if object.state == 10
+				if object.value6 == 1
+					if object.value5 == 3
+						object.xpos = temp6
+						object.ypos = temp7
+						BoxCollisionTest(C_TOUCH, object.entityPos, -12, -12, 12, 12, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+						if checkResult == 1
+							CallFunction(Player_Hit)
+						end if
+						object.xpos = temp6
+						object.xpos >>= 1
+						temp1 = temp6
+						temp1 += object.value3
+						temp1 >>= 1
+						object.xpos += temp1
+						object.ypos = temp7
+						object.ypos >>= 1
+						temp1 = temp7
+						temp1 -= object.value7
+						temp1 >>= 1
+						object.ypos += temp1
+						BoxCollisionTest(C_TOUCH, object.entityPos, -12, -12, 12, 12, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+						if checkResult == 1
+							CallFunction(Player_Hit)
+						end if
+						object.xpos = temp6
+						object.xpos >>= 1
+						temp1 = temp6
+						temp1 += object.value4
+						temp1 >>= 1
+						object.xpos += temp1
+						object.ypos = temp7
+						object.ypos >>= 1
+						temp1 = temp7
+						temp1 += object.value7
+						temp1 >>= 1
+						object.ypos += temp1
+						BoxCollisionTest(C_TOUCH, object.entityPos, -12, -12, 12, 12, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+						if checkResult == 1
+							CallFunction(Player_Hit)
+						end if
+					end if
+				end if
+			end if
+			object.xpos = temp6
+			object.ypos = temp7
+		end if
+	next
+	CallFunction(StageSetup_CheckGoodFuture)
+	if object.value5 == 0
+		ResetObjectEntity(object.entityPos, TypeName[Blank Object], 0, 0, 0)
+	end if
+end event
+
+
+event ObjectDraw
+	switch object.state
+	case 0
+		GetBit(checkResult, object.value5, 0)
+		if checkResult == 1
+			temp0 = object.value3
+			temp0 += object.xpos
+			temp1 = object.ypos
+			temp1 -= object.value7
+			object.direction = 1
+			DrawSpriteFX(object.frame, FX_FLIP, temp0, temp1)
+		end if
+		GetBit(checkResult, object.value5, 1)
+		if checkResult == 1
+			temp0 = object.value4
+			temp0 += object.xpos
+			temp1 = object.ypos
+			temp1 += object.value7
+			object.direction = 0
+			DrawSpriteFX(object.frame, FX_FLIP, temp0, temp1)
+		end if
+		break
+	case 1
+		GetBit(checkResult, object.value5, 0)
+		if checkResult == 1
+			temp0 = object.value3
+			temp0 += object.xpos
+			temp1 = object.ypos
+			temp1 -= object.value7
+			object.direction = 0
+			DrawSpriteFX(object.frame, FX_FLIP, temp0, temp1)
+		end if
+		GetBit(checkResult, object.value5, 1)
+		if checkResult == 1
+			temp0 = object.value4
+			temp0 += object.xpos
+			temp1 = object.ypos
+			temp1 += object.value7
+			object.direction = 1
+			DrawSpriteFX(object.frame, FX_FLIP, temp0, temp1)
+		end if
+		break
+	case 2
+		if object[0].xpos < object.xpos
+			object.direction = 0
+		else
+			object.direction = 1
+		end if
+		GetBit(checkResult, object.value5, 0)
+		if checkResult == 1
+			temp0 = object.value3
+			temp0 += object.xpos
+			temp1 = object.ypos
+			temp1 -= object.value7
+			DrawSpriteFX(object.frame, FX_FLIP, temp0, temp1)
+		end if
+		GetBit(checkResult, object.value5, 1)
+		if checkResult == 1
+			temp0 = object.value4
+			temp0 += object.xpos
+			temp1 = object.ypos
+			temp1 += object.value7
+			DrawSpriteFX(object.frame, FX_FLIP, temp0, temp1)
+		end if
+		break
+	case 3
+		object.xpos = screen.xoffset
+		object.xpos += screen.xcenter
+		object.xpos <<= 16
+		object.ypos = screen.yoffset
+		object.ypos += 104
+		object.ypos <<= 16
+		GetBit(checkResult, object.value5, 0)
+		if checkResult == 1
+			temp0 = object.value3
+			temp0 += object.xpos
+			temp1 = object.ypos
+			temp1 -= object.value7
+			DrawSpriteFX(object.frame, FX_FLIP, temp0, temp1)
+		end if
+		GetBit(checkResult, object.value5, 1)
+		if checkResult == 1
+			temp0 = object.value4
+			temp0 += object.xpos
+			temp1 = object.ypos
+			temp1 += object.value7
+			DrawSpriteFX(object.frame, FX_FLIP, temp0, temp1)
+		end if
+		break
+	case 4
+	case 6
+	case 8
+	case 11
+		GetBit(checkResult, object.value5, 0)
+		if checkResult == 1
+			temp0 = object.value3
+			temp0 += object.xpos
+			temp1 = object.ypos
+			temp1 -= object.value7
+			DrawSpriteFX(6, FX_FLIP, temp0, temp1)
+			DrawSpriteFX(object.frame, FX_FLIP, temp0, temp1)
+		end if
+		GetBit(checkResult, object.value5, 1)
+		if checkResult == 1
+			temp0 = object.value4
+			temp0 += object.xpos
+			temp1 = object.ypos
+			temp1 += object.value7
+			DrawSpriteFX(6, FX_FLIP, temp0, temp1)
+			DrawSpriteFX(object.frame, FX_FLIP, temp0, temp1)
+		end if
+		break
+	case 5
+	case 7
+	case 9
+		GetBit(checkResult, object.value5, 0)
+		if checkResult == 1
+			temp0 = object.value3
+			temp0 += object.xpos
+			temp1 = object.ypos
+			temp1 -= object.value7
+			DrawSpriteFX(object.frame, FX_FLIP, temp0, temp1)
+		end if
+		GetBit(checkResult, object.value5, 1)
+		if checkResult == 1
+			temp0 = object.value4
+			temp0 += object.xpos
+			temp1 = object.ypos
+			temp1 += object.value7
+			DrawSpriteFX(object.frame, FX_FLIP, temp0, temp1)
+		end if
+		break
+	case 10
+		GetBit(checkResult, object.value5, 0)
+		if checkResult == 1
+			temp0 = object.value3
+			temp0 += object.xpos
+			temp1 = object.ypos
+			temp1 -= object.value7
+			DrawSpriteFX(6, FX_FLIP, temp0, temp1)
+			DrawSpriteFX(object.frame, FX_FLIP, temp0, temp1)
+		end if
+		GetBit(checkResult, object.value5, 1)
+		if checkResult == 1
+			temp0 = object.value4
+			temp0 += object.xpos
+			temp1 = object.ypos
+			temp1 += object.value7
+			DrawSpriteFX(6, FX_FLIP, temp0, temp1)
+			DrawSpriteFX(object.frame, FX_FLIP, temp0, temp1)
+		end if
+		if object.value6 == 1
+			if object.value5 == 3
+				temp0 = object.animationTimer
+				temp0 >>= 1
+				temp0 += 7
+				DrawSprite(temp0)
+				temp1 = object.xpos
+				temp1 >>= 1
+				temp3 = object.xpos
+				temp3 += object.value3
+				temp3 >>= 1
+				temp1 += temp3
+				temp2 = object.ypos
+				temp2 >>= 1
+				temp3 = object.ypos
+				temp3 -= object.value7
+				temp3 >>= 1
+				temp2 += temp3
+				DrawSpriteXY(temp0, temp1, temp2)
+				temp1 = object.xpos
+				temp1 >>= 1
+				temp3 = object.xpos
+				temp3 += object.value4
+				temp3 >>= 1
+				temp1 += temp3
+				temp2 = object.ypos
+				temp2 >>= 1
+				temp3 = object.ypos
+				temp3 += object.value7
+				temp3 >>= 1
+				temp2 += temp3
+				DrawSpriteXY(temp0, temp1, temp2)
+				object.animationTimer++
+				object.animationTimer %= 6
+			end if
+		end if
+		break
+	end switch
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R7/Objects.gif")
+	SpriteFrame(-20, -12, 40, 24, 182, 121)
+	SpriteFrame(-12, -20, 24, 40, 231, 119)
+	SpriteFrame(-12, -20, 24, 40, 231, 160)
+	SpriteFrame(-20, -12, 40, 24, 182, 146)
+	SpriteFrame(-12, -20, 24, 40, 231, 201)
+	SpriteFrame(-12, -20, 24, 40, 206, 215)
+	SpriteFrame(-11, -7, 24, 24, 175, 196)
+	SpriteFrame(-12, -12, 24, 24, 150, 171)
+	SpriteFrame(-12, -12, 24, 24, 175, 171)
+	SpriteFrame(-12, -12, 24, 24, 150, 196)
+	foreach (TypeName[Hotaru], arrayPos0, ALL_ENTITIES)
+		object[arrayPos0].value1 = object[arrayPos0].xpos
+		object[arrayPos0].value2 = object[arrayPos0].ypos
+		object[arrayPos0].drawOrder = 5
+		switch object[arrayPos0].propertyValue
+		case 0
+			object[arrayPos0].value7 = 3932160
+			object[arrayPos0].propertyValue = 0
+			object[arrayPos0].value3 = -2293760
+			object[arrayPos0].value4 = 2293760
+			break
+		case 1
+			object[arrayPos0].value7 = 3932160
+			object[arrayPos0].propertyValue = 1
+			object[arrayPos0].value3 = -2293760
+			object[arrayPos0].value4 = 2293760
+			break
+		case 4
+			object[arrayPos0].value7 = 4456448
+			object[arrayPos0].propertyValue = 0
+			object[arrayPos0].value3 = -3276800
+			object[arrayPos0].value4 = 3276800
+			break
+		case 5
+			object[arrayPos0].value7 = 4456448
+			object[arrayPos0].propertyValue = 1
+			object[arrayPos0].value3 = -3276800
+			object[arrayPos0].value4 = 3276800
+			break
+		case 8
+			object[arrayPos0].value7 = 3670016
+			object[arrayPos0].propertyValue = 0
+			object[arrayPos0].value3 = -4587520
+			object[arrayPos0].value4 = 4587520
+			break
+		case 9
+			object[arrayPos0].value7 = 3670016
+			object[arrayPos0].propertyValue = 1
+			object[arrayPos0].value3 = -4587520
+			object[arrayPos0].value4 = 4587520
+			break
+		case 12
+			object[arrayPos0].value7 = 1179648
+			object[arrayPos0].propertyValue = 0
+			object[arrayPos0].value3 = -6291456
+			object[arrayPos0].value4 = 6291456
+			break
+		case 13
+			object[arrayPos0].value7 = 1179648
+			object[arrayPos0].propertyValue = 1
+			object[arrayPos0].value3 = -6291456
+			object[arrayPos0].value4 = 6291456
+			break
+		end switch
+		SetBit(object[arrayPos0].value5, 0, 1)
+		SetBit(object[arrayPos0].value5, 1, 1)
+	next
+	temp0 = 0
+	Hotaru_value18 = DebugMode_ObjCount
+	while temp0 < 2
+		SetTableValue(TypeName[Hotaru], DebugMode_ObjCount, DebugMode_TypesTable)
+		SetTableValue(Hotaru_DebugDraw, DebugMode_ObjCount, DebugMode_DrawTable)
+		SetTableValue(Hotaru_DebugSpawn, DebugMode_ObjCount, DebugMode_SpawnTable)
+		DebugMode_ObjCount++
+		temp0++
+	loop
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

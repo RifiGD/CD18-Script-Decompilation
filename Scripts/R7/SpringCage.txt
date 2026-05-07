@@ -1,0 +1,214 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Spring Cage Object
+// Script Author: Christian Whitehead
+// Unpacked by RifiGD's UnScriptR
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 50 : TYPE_SPRINGCAGE
+
+
+
+event ObjectUpdate
+	if object.state == 0
+		if object.propertyValue == 0
+			object.value0++
+			object.value0 %= 48
+			object.angle = object.value0
+			object.angle /= 6
+		end if
+		switch object.angle
+		case 0
+			object[+1].propertyValue = 1
+			break
+		case 1
+		case 7
+			object[+1].propertyValue = 4
+			break
+		case 2
+		case 6
+			object[+1].propertyValue = 0
+			break
+		case 3
+		case 5
+			object[+1].propertyValue = 5
+			break
+		case 4
+			object[+1].propertyValue = 2
+			break
+		end switch
+	else
+		if object.value1 < 90
+			if object[0].state != 26
+				object.value1++
+				if object.value1 == 60
+					PlaySfx(SfxName[Large Booster], 0)
+					object[0].state = 13
+					object[0].gravity = 1
+					object[0].value1 = 0
+					object[+1].value0 = 1
+					switch object.angle
+					case 0
+						object[0].speed = 1048576
+						object[0].xvel = 1048576
+						object[0].yvel = 0
+						break
+					case 1
+					case 7
+						object[0].speed = 786432
+						object[0].xvel = 786432
+						object[0].yvel = -720896
+						break
+					case 2
+					case 6
+						object[0].speed = 0
+						object[0].xvel = 0
+						object[0].yvel = -1048576
+						break
+					case 3
+					case 5
+						object[0].speed = -786432
+						object[0].xvel = -786432
+						object[0].yvel = -720896
+						break
+					case 4
+						object[0].speed = -1048576
+						object[0].xvel = -1048576
+						object[0].yvel = 0
+						break
+					end switch
+				end if
+			else
+				object.state = 0
+				object.value1 = 0
+			end if
+		else
+			object.state = 0
+			object.value1 = 0
+		end if
+	end if
+	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+		if object.state == 0
+			BoxCollisionTest(C_TOUCH, object.entityPos, -28, -32, 28, 24, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			if checkResult == 1
+				object.state = 1
+				object[currentPlayer].xpos = object.xpos
+				object[currentPlayer].ypos = object.ypos
+				object[currentPlayer].state = Player_State_Static
+				object[currentPlayer].animation = ANI_JUMPING
+				object[currentPlayer].speed = 0
+				object[currentPlayer].xvel = 0
+				object[currentPlayer].yvel = 0
+				switch object.angle
+				case 0
+					object[currentPlayer].xpos += 2097152
+					break
+				case 1
+				case 7
+					object[currentPlayer].xpos += 1572864
+					object[currentPlayer].ypos -= 1572864
+					break
+				case 2
+				case 6
+					object[currentPlayer].ypos -= 2097152
+					break
+				case 3
+				case 5
+					object[currentPlayer].xpos -= 1572864
+					object[currentPlayer].ypos -= 1572864
+					break
+				case 4
+					object[currentPlayer].xpos -= 2097152
+					break
+				end switch
+			end if
+		end if
+	next
+end event
+
+
+event ObjectDraw
+	switch object.angle
+	case 0
+		DrawSprite(1)
+		object.direction = 2
+		DrawSpriteFX(1, FX_FLIP, object.xpos, object.ypos)
+		break
+	case 1
+	case 7
+		DrawSprite(2)
+		object.direction = 3
+		DrawSpriteFX(3, FX_FLIP, object.xpos, object.ypos)
+		break
+	case 2
+	case 6
+		DrawSprite(4)
+		object.direction = 1
+		DrawSpriteFX(4, FX_FLIP, object.xpos, object.ypos)
+		break
+	case 3
+	case 5
+		object.direction = 1
+		DrawSpriteFX(2, FX_FLIP, object.xpos, object.ypos)
+		object.direction = 2
+		DrawSpriteFX(3, FX_FLIP, object.xpos, object.ypos)
+		break
+	case 4
+		DrawSprite(5)
+		object.direction = 2
+		DrawSpriteFX(5, FX_FLIP, object.xpos, object.ypos)
+		break
+	end switch
+	DrawSprite(0)
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R7/Objects.gif")
+	SpriteFrame(-8, -8, 16, 16, 90, 52)
+	SpriteFrame(-8, -28, 64, 24, 34, 96)
+	SpriteFrame(-24, -56, 56, 56, 59, 121)
+	SpriteFrame(-56, -24, 56, 56, 59, 121)
+	SpriteFrame(-28, -56, 24, 64, 34, 121)
+	SpriteFrame(-56, -28, 64, 24, 34, 96)
+	foreach (TypeName[Spring Cage], arrayPos0, ALL_ENTITIES)
+		arrayPos1 = arrayPos0
+		arrayPos1++
+		switch object[arrayPos0].propertyValue
+		case 1
+			object[arrayPos0].angle = 4
+			object[arrayPos1].propertyValue = 2
+			break
+		case 3
+			object[arrayPos0].angle = 1
+			object[arrayPos1].propertyValue = 1
+			break
+		case 4
+			object[arrayPos0].angle = 2
+			object[arrayPos1].propertyValue = 4
+			break
+		case 5
+			object[arrayPos0].angle = 3
+			object[arrayPos1].propertyValue = 5
+			break
+		case 6
+			object[arrayPos0].angle = 0
+			object[arrayPos1].propertyValue = 2
+			break
+		end switch
+		object[arrayPos0].drawOrder = 4
+		object[arrayPos1].xpos = object[arrayPos0].xpos
+		object[arrayPos1].ypos = object[arrayPos0].ypos
+	next
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

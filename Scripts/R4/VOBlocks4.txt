@@ -1,0 +1,100 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: VOBlocks4 Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 78 : TYPE_VOBLOCKS4
+
+
+
+event ObjectUpdate
+	object.angle = oscillation
+	object.angle += object.propertyValue
+	object.angle <<= 1
+	Sin(object.value1, object.angle)
+	object.value1 <<= 13
+	object.value1 += object.ypos
+	object.value1 &= -65536
+	object.value1 -= object.value0
+	temp0 = object.ypos
+	object.ypos = object.value0
+	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+		BoxCollisionTest(C_SOLID, object.entityPos, -16, -64, 16, 62, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+		if checkResult == 4
+			if object[currentPlayer].gravity == 1
+				CallFunction(Player_Hit)
+			else
+				CallFunction(Player_Kill)
+			end if
+		end if
+	next
+	object.ypos = temp0
+end event
+
+
+event ObjectDraw
+	Sin(object.value0, object.angle)
+	object.value0 <<= 13
+	object.value0 += object.ypos
+	object.value0 &= -65536
+	object.spriteSheet = object.value2
+	DrawSpriteXY(0, object.xpos, object.value0)
+	DrawSpriteXY(1, object.xpos, object.value0)
+	DrawSpriteXY(2, object.xpos, object.value0)
+	object.spriteSheet = object.value3
+	DrawSpriteXY(3, object.xpos, object.value0)
+end event
+
+
+event ObjectStartup
+	switch object[9].propertyValue
+	case 0
+		LoadSpriteSheet("R4/Objects.gif")
+		temp0 = 163
+		temp1 = 1
+		temp2 = 196
+		break
+	case 1
+		LoadSpriteSheet("R4/Objects2.gif")
+		temp0 = 1
+		temp1 = 157
+		temp2 = 34
+		break
+	case 2
+		LoadSpriteSheet("R4/Objects2.gif")
+		temp0 = 1
+		temp1 = 190
+		temp2 = 34
+		break
+	case 3
+		LoadSpriteSheet("R4/Objects2.gif")
+		temp0 = 1
+		temp1 = 223
+		temp2 = 34
+		break
+	end switch
+	SpriteFrame(-16, -64, 32, 32, temp0, temp1)
+	SpriteFrame(-16, -32, 32, 32, temp0, temp1)
+	SpriteFrame(-16, 0, 32, 32, temp2, temp1)
+	temp0 = object.spriteSheet
+	LoadSpriteSheet("Global/Items3.gif")
+	temp1 = object.spriteSheet
+	SpriteFrame(-16, 32, 32, 32, 50, 100)
+	foreach (TypeName[VOBlocks4], arrayPos0, ALL_ENTITIES)
+		object[arrayPos0].value2 = temp0
+		object[arrayPos0].value3 = temp1
+	next
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

@@ -1,0 +1,211 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Rotating Drum Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 64 : TYPE_ROTATINGDRUM
+
+
+
+event ObjectUpdate
+	switch object.state
+	case 0
+		object.frame = 0
+		object.direction = 0
+		object.drawOrder = 3
+		object.value2 = 65536
+		break
+	case 1
+		object.frame = 1
+		object.direction = 0
+		object.drawOrder = 3
+		object.value2 = 327680
+		break
+	case 2
+		object.frame = 2
+		object.direction = 0
+		object.drawOrder = 3
+		object.value2 = 393216
+		break
+	case 3
+		object.frame = 3
+		object.direction = 0
+		object.drawOrder = 3
+		object.value2 = 524288
+		break
+	case 4
+		object.frame = 4
+		object.direction = 0
+		object.drawOrder = 3
+		object.value2 = 524288
+		break
+	case 5
+		object.frame = 5
+		object.direction = 2
+		object.drawOrder = 3
+		object.value2 = 524288
+		break
+	case 6
+		object.frame = 6
+		object.direction = 2
+		object.drawOrder = 3
+		object.value2 = 393216
+		break
+	case 7
+		object.frame = 7
+		object.direction = 2
+		object.drawOrder = 3
+		object.value2 = 327680
+		break
+	case 8
+		object.frame = 8
+		object.direction = 2
+		object.drawOrder = 3
+		object.value2 = 65536
+		break
+	case 9
+		object.frame = 9
+		object.direction = 2
+		object.drawOrder = 2
+		object.value2 = -65536
+		break
+	case 10
+		object.frame = 9
+		object.direction = 2
+		object.drawOrder = 2
+		object.value2 = -327680
+		break
+	case 11
+		object.frame = 9
+		object.direction = 2
+		object.drawOrder = 2
+		object.value2 = -393216
+		break
+	case 12
+		object.frame = 9
+		object.direction = 2
+		object.drawOrder = 2
+		object.value2 = -524288
+		break
+	case 13
+		object.frame = 9
+		object.direction = 2
+		object.drawOrder = 2
+		object.value2 = -524288
+		break
+	case 14
+		object.frame = 9
+		object.direction = 0
+		object.drawOrder = 2
+		object.value2 = -524288
+		break
+	case 15
+		object.frame = 9
+		object.direction = 0
+		object.drawOrder = 2
+		object.value2 = -393216
+		break
+	case 16
+		object.frame = 9
+		object.direction = 0
+		object.drawOrder = 2
+		object.value2 = -327680
+		break
+	case 17
+		object.frame = 9
+		object.direction = 0
+		object.drawOrder = 2
+		object.value2 = -65536
+		break
+	end switch
+	temp0 = R3Setup_value13
+	temp0 %= 10
+	if temp0 == 0
+		object.value1++
+		if object.value1 > 3
+			object.value1 = 0
+			object.state++
+			object.state %= 18
+		end if
+	else
+		object.value2 = 0
+	end if
+	object.priority = 1
+	temp0 = object.ixpos
+	temp0 -= screen.xoffset
+	temp0 -= screen.xsize
+	if temp0 > 128
+		object.ypos = object.value3
+		object.state = object.propertyValue
+		object.value1 = 0
+		object.value2 = 0
+		object.priority = 3
+	end if
+	temp0 = object.ixpos
+	temp0 -= screen.xoffset
+	if temp0 < -128
+		object.ypos = object.value3
+		object.state = object.propertyValue
+		object.value1 = 0
+		object.value2 = 0
+		object.priority = 3
+	end if
+	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+		switch object.state
+		case 2
+			BoxCollisionTest(C_PLATFORM, object.entityPos, -24, -8, 24, 12, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			if checkResult == 1
+				object[currentPlayer].ypos += object.value2
+			end if
+			break
+		case 3
+		case 4
+		case 5
+		case 6
+			BoxCollisionTest(C_PLATFORM, object.entityPos, -24, -4, 24, 12, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			if checkResult == 1
+				object[currentPlayer].ypos += object.value2
+			end if
+			break
+		end switch
+	next
+	object.ypos += object.value2
+end event
+
+
+event ObjectDraw
+	DrawSpriteFX(object.frame, FX_FLIP, object.xpos, object.ypos)
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R3/Objects.gif")
+	SpriteFrame(-24, -16, 48, 16, 67, 34)
+	SpriteFrame(-24, -12, 48, 16, 116, 34)
+	SpriteFrame(-24, -8, 48, 16, 165, 34)
+	SpriteFrame(-24, -4, 48, 16, 67, 51)
+	SpriteFrame(-24, -4, 48, 16, 116, 51)
+	SpriteFrame(-24, -12, 48, 16, 67, 51)
+	SpriteFrame(-24, -12, 48, 16, 165, 34)
+	SpriteFrame(-24, -12, 48, 16, 116, 34)
+	SpriteFrame(-24, -16, 48, 16, 67, 34)
+	SpriteFrame(-24, -8, 48, 8, 165, 18)
+	foreach (TypeName[Rotating Drum], arrayPos0, ALL_ENTITIES)
+		object[arrayPos0].priority = 3
+		object[arrayPos0].value3 = object[arrayPos0].ypos
+		object[arrayPos0].state = object[arrayPos0].propertyValue
+	next
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

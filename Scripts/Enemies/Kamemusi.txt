@@ -1,0 +1,241 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Kamemusi Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 44 : TYPE_KAMEMUSI
+
+// Function declarations
+reserve function Kamemusi_DebugDraw
+reserve function Kamemusi_DebugSpawn
+
+// Static Values
+public value Kamemusi_value16 = 0;
+
+
+public function Kamemusi_DebugDraw
+	DrawSprite(0)
+end function
+
+
+public function Kamemusi_DebugSpawn
+	temp0 = object[0].value16
+	temp0 -= Kamemusi_value16
+	CreateTempObject(TypeName[Kamemusi], temp0, object.xpos, object.ypos)
+end function
+
+
+event ObjectUpdate
+	if object.propertyValue == 0
+		switch object.state
+		case 0
+			ObjectTileCollision(0, 0, 14, 0)
+			if checkResult == 1
+				object.state = 1
+			else
+				object.ypos += 131072
+			end if
+			break
+		case 1
+			object.frame++
+			object.frame %= 60
+			object.xpos -= 43690
+			object.value0--
+			if object.value0 == -192
+				object.state = 2
+				object.direction = 1
+			end if
+			ObjectTileGrip(0, 0, 14, 0)
+			if checkResult == 0
+				object.state = 2
+				object.value0 = -192
+				object.direction = 1
+			end if
+			if object.value1 > -1
+				foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+					BoxCollisionTest(C_TOUCH, object.entityPos, -64, -64, 64, 64, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+					if checkResult == 1
+						object.state = 3
+						object.drawOrder = 4
+					end if
+				next
+			else
+				object.value1++
+			end if
+			break
+		case 2
+			object.frame++
+			object.frame %= 60
+			object.xpos += 43690
+			object.value0++
+			if object.value0 == 192
+				object.state = 1
+				object.direction = 0
+			end if
+			ObjectTileGrip(0, 0, 14, 0)
+			if checkResult == 0
+				object.state = 1
+				object.value0 = 192
+				object.direction = 0
+			end if
+			if object.value1 > -1
+				foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+					BoxCollisionTest(C_TOUCH, object.entityPos, -64, -64, 64, 64, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+					if checkResult == 1
+						object.state = 3
+						object.drawOrder = 4
+					end if
+				next
+			else
+				object.value1++
+			end if
+			break
+		case 3
+			if object.value1 == 60
+				CreateTempObject(TypeName[Kamemusi Shot], 0, object.xpos, object.ypos)
+				object[tempObjectPos].xvel = -131072
+				object[tempObjectPos].yvel = -327680
+			end if
+			if object.value1 == 62
+				CreateTempObject(TypeName[Kamemusi Shot], 0, object.xpos, object.ypos)
+				object[tempObjectPos].xvel = 131072
+				object[tempObjectPos].yvel = -327680
+				PlaySfx(SfxName[Shot], 0)
+			end if
+			if object.value1 == 64
+				object.state = object.direction
+				object.state += 1
+				object.value1 = -120
+				object.drawOrder = 3
+			else
+				object.value1++
+			end if
+			break
+		end switch
+	else
+		switch object.state
+		case 0
+			ObjectTileCollision(0, 0, 14, 0)
+			if checkResult == 1
+				object.state = 1
+			else
+				object.ypos += 131072
+			end if
+			break
+		case 1
+			object.frame++
+			object.frame %= 12
+			object.xpos -= 14336
+			object.value0--
+			if object.value0 == -384
+				object.state = 2
+				object.direction = 1
+			end if
+			ObjectTileGrip(0, 0, 14, 0)
+			if checkResult == 0
+				object.state = 2
+				object.value0 = -384
+				object.direction = 1
+			end if
+			if object.value1 == 82
+				object.state = 3
+				object.value1 = 0
+			else
+				object.value1++
+			end if
+			break
+		case 2
+			object.frame++
+			object.frame %= 12
+			object.xpos += 14336
+			object.value0++
+			if object.value0 == 384
+				object.state = 1
+				object.direction = 0
+			end if
+			ObjectTileGrip(0, 0, 14, 0)
+			if checkResult == 0
+				object.state = 1
+				object.value0 = 384
+				object.direction = 0
+			end if
+			if object.value1 == 82
+				object.state = 3
+				object.value1 = 0
+			else
+				object.value1++
+			end if
+			break
+		case 3
+			if object.value1 == 14
+				object.state = object.direction
+				object.state += 1
+				object.value1 = 0
+			else
+				object.value1++
+			end if
+			break
+		end switch
+	end if
+	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+		BoxCollisionTest(C_TOUCH, object.entityPos, -16, -14, 16, 14, currentPlayer, object[currentPlayer].value41, object[currentPlayer].value39, object[currentPlayer].value42, object[currentPlayer].value40)
+		if checkResult == 1
+			CallFunction(Player_BadnikBreak)
+		end if
+	next
+	CallFunction(StageSetup_CheckGoodFuture)
+end event
+
+
+event ObjectDraw
+	if object.propertyValue == 0
+		if object.state < 3
+			temp0 = object.frame
+			temp0 /= 30
+			DrawSpriteFX(temp0, FX_FLIP, object.xpos, object.ypos)
+		else
+			DrawSpriteFX(4, FX_FLIP, object.xpos, object.ypos)
+		end if
+	else
+		if object.state < 3
+			temp0 = object.frame
+			temp0 /= 6
+			temp0 += 2
+			DrawSpriteFX(temp0, FX_FLIP, object.xpos, object.ypos)
+		else
+			DrawSpriteFX(4, FX_FLIP, object.xpos, object.ypos)
+		end if
+	end if
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R1/Objects.gif")
+	SpriteFrame(-16, -15, 32, 29, 223, 34)
+	SpriteFrame(-16, -14, 32, 28, 223, 93)
+	SpriteFrame(-16, -15, 32, 29, 223, 34)
+	SpriteFrame(-16, -14, 32, 28, 223, 64)
+	SpriteFrame(-16, -17, 32, 31, 223, 122)
+	temp0 = 0
+	Kamemusi_value16 = DebugMode_ObjCount
+	while temp0 < 2
+		SetTableValue(TypeName[Kamemusi], DebugMode_ObjCount, DebugMode_TypesTable)
+		SetTableValue(Kamemusi_DebugDraw, DebugMode_ObjCount, DebugMode_DrawTable)
+		SetTableValue(Kamemusi_DebugSpawn, DebugMode_ObjCount, DebugMode_SpawnTable)
+		DebugMode_ObjCount++
+		temp0++
+	loop
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

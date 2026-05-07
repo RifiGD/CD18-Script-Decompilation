@@ -1,0 +1,194 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Semi Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 56 : TYPE_SEMI
+
+// Function declarations
+reserve function Semi_DebugDraw
+reserve function Semi_DebugSpawn
+
+// Static Values
+public value Semi_value15 = 0;
+
+
+public function Semi_DebugDraw
+	temp0 = object[0].value16
+	temp0 -= Semi_value15
+	if temp0 == 0
+		DrawSprite(0)
+	else
+		DrawSprite(2)
+	end if
+end function
+
+
+public function Semi_DebugSpawn
+	temp0 = object[0].value16
+	temp0 -= Semi_value15
+
+#platform: USE_ORIGINAL_CODE
+	CreateTempObject(TypeName[Poh Bee], temp0, object.xpos, object.ypos)
+#endplatform
+
+#platform: USE_DECOMP
+	CreateTempObject(TypeName[Semi], temp0, object.xpos, object.ypos)
+#endplatform
+
+end function
+
+
+event ObjectUpdate
+	if object.outOfBounds == 1
+		object.state = 3
+		object.value0 = 0
+		object.xpos = object.value3
+		object.ypos = object.value4
+	end if
+	switch object.state
+	case 1
+		object.priority = 1
+		object.xpos += object.value1
+		object.ypos += object.value2
+		if object.value0 < 96
+			object.value0++
+		else
+			object.value0 = 0
+			object.state++
+		end if
+		break
+	case 2
+		object.xpos += object.value1
+		if object.propertyValue == 0
+			if object.value0 == 0
+				object.value0 = 60
+				CreateTempObject(TypeName[Semi Bomb], 0, object.xpos, object.ypos)
+				object[tempObjectPos].ypos += 786432
+			else
+				object.value0--
+			end if
+		end if
+		break
+	case 3
+		if object.outOfBounds == 1
+			object.state = 0
+			object.priority = 0
+		end if
+		break
+	end switch
+	CallFunction(StageSetup_CheckGoodFuture)
+	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+		switch object.state
+		case 0
+			BoxCollisionTest(C_TOUCH, object.entityPos, -96, -128, 96, 128, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			if checkResult == 1
+				object.state = 1
+				if object.xpos > object[currentPlayer].xpos
+					if object.propertyValue == 0
+						object.value1 = 65536
+						object.value2 = -32768
+					else
+						object.value1 = 49152
+						object.value2 = 24576
+					end if
+				else
+					if object.propertyValue == 0
+						object.value1 = -65536
+						object.value2 = -32768
+					else
+						object.value1 = -49152
+						object.value2 = 24576
+					end if
+				end if
+			end if
+			break
+		case 1
+		case 2
+			BoxCollisionTest(C_TOUCH, object.entityPos, -14, -12, 14, 12, currentPlayer, object[currentPlayer].value41, object[currentPlayer].value39, object[currentPlayer].value42, object[currentPlayer].value40)
+			if checkResult == 1
+				CallFunction(Player_BadnikBreak)
+			end if
+			break
+		end switch
+	next
+end event
+
+
+event ObjectDraw
+	switch object.state
+	case 0
+		DrawSprite(object.propertyValue)
+		break
+	case 1
+	case 2
+		temp0 = object.frame
+		temp0 >>= 2
+		if object.propertyValue == 0
+			temp0 += 2
+		else
+			temp0 += 6
+		end if
+		if object.frame > 7
+			object.direction = 1
+		else
+			object.direction = 0
+		end if
+		DrawSpriteFX(temp0, FX_FLIP, object.xpos, object.ypos)
+		object.frame++
+		object.frame &= 15
+		break
+	end switch
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R6/Objects.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 224)
+	SpriteFrame(-16, -16, 32, 32, 158, 166)
+	SpriteFrame(-16, -16, 32, 32, 34, 224)
+	SpriteFrame(-20, -16, 40, 32, 67, 224)
+	SpriteFrame(-16, -16, 32, 32, 34, 224)
+	SpriteFrame(-20, -16, 40, 32, 67, 224)
+	SpriteFrame(-16, -16, 32, 32, 108, 224)
+	SpriteFrame(-20, -16, 40, 32, 141, 224)
+	SpriteFrame(-16, -16, 32, 32, 108, 224)
+	SpriteFrame(-20, -16, 40, 32, 141, 224)
+	foreach (TypeName[Semi], arrayPos0, ALL_ENTITIES)
+		object[arrayPos0].value3 = object[arrayPos0].xpos
+		object[arrayPos0].value4 = object[arrayPos0].ypos
+		object[arrayPos0].drawOrder = 5
+	next
+	temp0 = 0
+	Semi_value15 = DebugMode_ObjCount
+	while temp0 < 2
+
+#platform: USE_ORIGINAL_CODE
+		SetTableValue(TypeName[Poh Bee], DebugMode_ObjCount, DebugMode_TypesTable)
+		SetTableValue(PohBee_DebugDraw, DebugMode_ObjCount, DebugMode_DrawTable)
+		SetTableValue(PohBee_DebugSpawn, DebugMode_ObjCount, DebugMode_SpawnTable)
+#endplatform
+
+#platform: USE_DECOMP
+		SetTableValue(TypeName[Semi], DebugMode_ObjCount, DebugMode_TypesTable)
+		SetTableValue(Semi_DebugDraw, DebugMode_ObjCount, DebugMode_DrawTable)
+		SetTableValue(Semi_DebugSpawn, DebugMode_ObjCount, DebugMode_SpawnTable)
+#endplatform
+
+		DebugMode_ObjCount++
+		temp0++
+	loop
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("R6/Objects.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 224)
+end event

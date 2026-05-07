@@ -1,0 +1,73 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Red Fish Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 62 : TYPE_REDFISH
+
+
+
+event ObjectUpdate
+	switch object.state
+	case 0
+		if object.angle < 512
+			object.angle += 2
+			object.xpos += 65536
+		else
+			object.state = 1
+			object.direction = 1
+		end if
+		break
+	case 1
+		if object.angle > 0
+			object.angle -= 2
+			object.xpos -= 65536
+		else
+			object.state = 0
+			object.direction = 0
+		end if
+		break
+	end switch
+	object.value0++
+	if object.value0 > 19
+		object.value0 = 0
+		object.frame++
+		object.frame &= 1
+	end if
+end event
+
+
+event ObjectDraw
+	if metalSonic.destroyed == 1
+		Sin(temp1, object.angle)
+		temp1 <<= 12
+		temp1 += object.ypos
+		DrawSpriteFX(object.frame, FX_FLIP, object.xpos, temp1)
+	end if
+	if object[9].propertyValue == 2
+		Sin(temp1, object.angle)
+		temp1 <<= 12
+		temp1 += object.ypos
+		DrawSpriteFX(object.frame, FX_FLIP, object.xpos, temp1)
+	end if
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R4/Objects3.gif")
+	SpriteFrame(-8, -12, 16, 24, 1, 67)
+	SpriteFrame(-8, -12, 16, 24, 18, 67)
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

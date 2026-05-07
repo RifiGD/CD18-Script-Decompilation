@@ -1,0 +1,700 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Tunnel Path 8 Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 67 : TYPE_TUNNELPATH8
+
+
+
+event ObjectUpdate
+	if object.state == 0
+		if object.propertyValue == 0
+			foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+				if object[currentPlayer].state != Player_State_Static
+					BoxCollisionTest(C_TOUCH, object.entityPos, -16, -16, 16, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+					if checkResult == 1
+						object[currentPlayer].state = Player_State_Static
+						object[currentPlayer].interaction = 0
+						if object[currentPlayer].value8 > 0
+							object[currentPlayer].value7 = 0
+							object[currentPlayer].value8 = 0
+						end if
+						object[currentPlayer].visible = 0
+						object.state = 1
+						object.value0 = -1
+						object.priority = 1
+						object.value1 = currentPlayer
+						PlaySfx(SfxName[Release], 0)
+					end if
+				end if
+			next
+		end if
+	else
+		currentPlayer = object.value1
+		if object[currentPlayer].state == Player_State_Death
+			object.state = 0
+		end if
+		object.value0++
+		object[currentPlayer].speed = object[currentPlayer].xpos
+		object[currentPlayer].animation = ANI_JUMPING
+		object[currentPlayer].animationSpeed = 240
+		switch object.value0
+		case 0
+			object[currentPlayer].xpos = 0
+			object[currentPlayer].ypos = 32000
+			break
+		case 1
+			object[currentPlayer].xpos = 524288
+			object[currentPlayer].ypos = 32000
+			break
+		case 2
+			object[currentPlayer].xpos = 1048576
+			object[currentPlayer].ypos = 32000
+			break
+		case 3
+			object[currentPlayer].xpos = 1572864
+			object[currentPlayer].ypos = 32000
+			break
+		case 4
+			object[currentPlayer].xpos = 2097152
+			object[currentPlayer].ypos = 32000
+			break
+		case 5
+			object[currentPlayer].xpos = 2621440
+			object[currentPlayer].ypos = 32000
+			break
+		case 6
+			object[currentPlayer].xpos = 3145728
+			object[currentPlayer].ypos = 32000
+			break
+		case 7
+			object[currentPlayer].xpos = 3670016
+			object[currentPlayer].ypos = 32000
+			break
+		case 8
+			object[currentPlayer].xpos = 4194304
+			object[currentPlayer].ypos = 32000
+			break
+		case 9
+			object[currentPlayer].xpos = 4718592
+			object[currentPlayer].ypos = 32000
+			break
+		case 10
+			object[currentPlayer].xpos = 5242880
+			object[currentPlayer].ypos = 32000
+			break
+		case 11
+			object[currentPlayer].xpos = 5767168
+			object[currentPlayer].ypos = 32000
+			break
+		case 12
+			object[currentPlayer].xpos = 6291456
+			object[currentPlayer].ypos = 32000
+			break
+		case 13
+			object[currentPlayer].xpos = 6815744
+			object[currentPlayer].ypos = 32000
+			break
+		case 14
+			object[currentPlayer].xpos = 7340032
+			object[currentPlayer].ypos = 32000
+			break
+		case 15
+			object[currentPlayer].xpos = 7864320
+			object[currentPlayer].ypos = 32000
+			break
+		case 16
+			object[currentPlayer].xpos = 8388608
+			object[currentPlayer].ypos = 32000
+			break
+		case 17
+			object[currentPlayer].xpos = 8912896
+			object[currentPlayer].ypos = 32000
+			break
+		case 18
+			object[currentPlayer].xpos = 9437184
+			object[currentPlayer].ypos = 32000
+			break
+		case 19
+			object[currentPlayer].xpos = 9961472
+			object[currentPlayer].ypos = 32000
+			break
+		case 20
+			object[currentPlayer].xpos = 10485760
+			object[currentPlayer].ypos = 32000
+			break
+		case 21
+			object[currentPlayer].xpos = 11010048
+			object[currentPlayer].ypos = 32000
+			break
+		case 22
+			object[currentPlayer].xpos = 11534336
+			object[currentPlayer].ypos = 32000
+			break
+		case 23
+			object[currentPlayer].xpos = 12058624
+			object[currentPlayer].ypos = 32000
+			break
+		case 24
+			object[currentPlayer].xpos = 12582912
+			object[currentPlayer].ypos = 32000
+			break
+		case 25
+			object[currentPlayer].xpos = 13107200
+			object[currentPlayer].ypos = 32000
+			break
+		case 26
+			object[currentPlayer].xpos = 13631488
+			object[currentPlayer].ypos = 32000
+			break
+		case 27
+			object[currentPlayer].xpos = 14155776
+			object[currentPlayer].ypos = 32000
+			break
+		case 28
+			object[currentPlayer].xpos = 14680064
+			object[currentPlayer].ypos = 32000
+			break
+		case 29
+			object[currentPlayer].xpos = 15204352
+			object[currentPlayer].ypos = 32000
+			break
+		case 30
+			object[currentPlayer].xpos = 15728640
+			object[currentPlayer].ypos = 32000
+			break
+		case 31
+			object[currentPlayer].xpos = 16252928
+			object[currentPlayer].ypos = 32000
+			break
+		case 32
+			object[currentPlayer].xpos = 16777216
+			object[currentPlayer].ypos = 32000
+			break
+		case 33
+			object[currentPlayer].xpos = 17301504
+			object[currentPlayer].ypos = 32000
+			break
+		case 34
+			object[currentPlayer].xpos = 17825792
+			object[currentPlayer].ypos = 32000
+			break
+		case 35
+			object[currentPlayer].xpos = 18350080
+			object[currentPlayer].ypos = 32000
+			break
+		case 36
+			object[currentPlayer].xpos = 18874368
+			object[currentPlayer].ypos = 32000
+			break
+		case 37
+			object[currentPlayer].xpos = 19398656
+			object[currentPlayer].ypos = 32000
+			break
+		case 38
+			object[currentPlayer].xpos = 19922944
+			object[currentPlayer].ypos = 32000
+			break
+		case 39
+			object[currentPlayer].xpos = 20447232
+			object[currentPlayer].ypos = 32000
+			break
+		case 40
+			object[currentPlayer].xpos = 20971520
+			object[currentPlayer].ypos = 32000
+			break
+		case 41
+			object[currentPlayer].xpos = 21495808
+			object[currentPlayer].ypos = 32000
+			break
+		case 42
+			object[currentPlayer].xpos = 22020096
+			object[currentPlayer].ypos = 32000
+			break
+		case 43
+			object[currentPlayer].xpos = 22544384
+			object[currentPlayer].ypos = 32000
+			break
+		case 44
+			object[currentPlayer].xpos = 23068672
+			object[currentPlayer].ypos = 32000
+			break
+		case 45
+			object[currentPlayer].xpos = 23592960
+			object[currentPlayer].ypos = 32000
+			break
+		case 46
+			object[currentPlayer].xpos = 24117248
+			object[currentPlayer].ypos = 32000
+			break
+		case 47
+			object[currentPlayer].xpos = 24641536
+			object[currentPlayer].ypos = 32000
+			break
+		case 48
+			object[currentPlayer].xpos = 25165824
+			object[currentPlayer].ypos = 32000
+			break
+		case 49
+			object[currentPlayer].xpos = 25690112
+			object[currentPlayer].ypos = 32000
+			break
+		case 50
+			object[currentPlayer].xpos = 26214400
+			object[currentPlayer].ypos = 32000
+			break
+		case 51
+			object[currentPlayer].xpos = 26738688
+			object[currentPlayer].ypos = 32000
+			break
+		case 52
+			object[currentPlayer].xpos = 27262976
+			object[currentPlayer].ypos = 32000
+			break
+		case 53
+			object[currentPlayer].xpos = 27787264
+			object[currentPlayer].ypos = 32000
+			break
+		case 54
+			object[currentPlayer].xpos = 28311552
+			object[currentPlayer].ypos = 32000
+			break
+		case 55
+			object[currentPlayer].xpos = 28311552
+			object[currentPlayer].ypos = 556288
+			break
+		case 56
+			object[currentPlayer].xpos = 28311552
+			object[currentPlayer].ypos = 1080576
+			break
+		case 57
+			object[currentPlayer].xpos = 28311552
+			object[currentPlayer].ypos = 1604864
+			break
+		case 58
+			object[currentPlayer].xpos = 28311552
+			object[currentPlayer].ypos = 2129152
+			break
+		case 59
+			object[currentPlayer].xpos = 28311552
+			object[currentPlayer].ypos = 2653440
+			break
+		case 60
+			object[currentPlayer].xpos = 28311552
+			object[currentPlayer].ypos = 3177728
+			break
+		case 61
+			object[currentPlayer].xpos = 28311552
+			object[currentPlayer].ypos = 3702016
+			break
+		case 62
+			object[currentPlayer].xpos = 28311552
+			object[currentPlayer].ypos = 4226304
+			break
+		case 63
+			object[currentPlayer].xpos = 28311552
+			object[currentPlayer].ypos = 4750592
+			break
+		case 64
+			object[currentPlayer].xpos = 28311552
+			object[currentPlayer].ypos = 5274880
+			break
+		case 65
+			object[currentPlayer].xpos = 28311552
+			object[currentPlayer].ypos = 5799168
+			break
+		case 66
+			object[currentPlayer].xpos = 28311552
+			object[currentPlayer].ypos = 6323456
+			break
+		case 67
+			object[currentPlayer].xpos = 28311552
+			object[currentPlayer].ypos = 6847744
+			break
+		case 68
+			object[currentPlayer].xpos = 28311552
+			object[currentPlayer].ypos = 7372032
+			break
+		case 69
+			object[currentPlayer].xpos = 28311552
+			object[currentPlayer].ypos = 7896320
+			break
+		case 70
+			object[currentPlayer].xpos = 28311552
+			object[currentPlayer].ypos = 8420608
+			break
+		case 71
+			object[currentPlayer].xpos = 28311552
+			object[currentPlayer].ypos = 8944896
+			break
+		case 72
+			object[currentPlayer].xpos = 28311552
+			object[currentPlayer].ypos = 9469184
+			break
+		case 73
+			object[currentPlayer].xpos = 28311552
+			object[currentPlayer].ypos = 9993472
+			break
+		case 74
+			object[currentPlayer].xpos = 28311552
+			object[currentPlayer].ypos = 10517760
+			break
+		case 75
+			object[currentPlayer].xpos = 28311552
+			object[currentPlayer].ypos = 11042048
+			break
+		case 76
+			object[currentPlayer].xpos = 28311552
+			object[currentPlayer].ypos = 11566336
+			break
+		case 77
+			object[currentPlayer].xpos = 28311552
+			object[currentPlayer].ypos = 12090624
+			break
+		case 78
+			object[currentPlayer].xpos = 28311552
+			object[currentPlayer].ypos = 12614912
+			break
+		case 79
+			object[currentPlayer].xpos = 28311552
+			object[currentPlayer].ypos = 13139200
+			break
+		case 80
+			object[currentPlayer].xpos = 28311552
+			object[currentPlayer].ypos = 13663488
+			break
+		case 81
+			object[currentPlayer].xpos = 28311552
+			object[currentPlayer].ypos = 14187776
+			break
+		case 82
+			object[currentPlayer].xpos = 28311552
+			object[currentPlayer].ypos = 14712064
+			break
+		case 83
+			object[currentPlayer].xpos = 28311552
+			object[currentPlayer].ypos = 15236352
+			break
+		case 84
+			object[currentPlayer].xpos = 28311552
+			object[currentPlayer].ypos = 15760640
+			break
+		case 85
+			object[currentPlayer].xpos = 28311552
+			object[currentPlayer].ypos = 16284928
+			break
+		case 86
+			object[currentPlayer].xpos = 28311552
+			object[currentPlayer].ypos = 16809216
+			break
+		case 87
+			object[currentPlayer].xpos = 28835840
+			object[currentPlayer].ypos = 16809216
+			break
+		case 88
+			object[currentPlayer].xpos = 29360128
+			object[currentPlayer].ypos = 16809216
+			break
+		case 89
+			object[currentPlayer].xpos = 29884416
+			object[currentPlayer].ypos = 16809216
+			break
+		case 90
+			object[currentPlayer].xpos = 30408704
+			object[currentPlayer].ypos = 16809216
+			break
+		case 91
+			object[currentPlayer].xpos = 30932992
+			object[currentPlayer].ypos = 16809216
+			break
+		case 92
+			object[currentPlayer].xpos = 31457280
+			object[currentPlayer].ypos = 16809216
+			break
+		case 93
+			object[currentPlayer].xpos = 31981568
+			object[currentPlayer].ypos = 16809216
+			break
+		case 94
+			object[currentPlayer].xpos = 32505856
+			object[currentPlayer].ypos = 16809216
+			break
+		case 95
+			object[currentPlayer].xpos = 33030144
+			object[currentPlayer].ypos = 16809216
+			break
+		case 96
+			object[currentPlayer].xpos = 33554432
+			object[currentPlayer].ypos = 16809216
+			break
+		case 97
+			object[currentPlayer].xpos = 34078720
+			object[currentPlayer].ypos = 16809216
+			break
+		case 98
+			object[currentPlayer].xpos = 34603008
+			object[currentPlayer].ypos = 16809216
+			break
+		case 99
+			object[currentPlayer].xpos = 35127296
+			object[currentPlayer].ypos = 16809216
+			break
+		case 100
+			object[currentPlayer].xpos = 35651584
+			object[currentPlayer].ypos = 16809216
+			break
+		case 101
+			object[currentPlayer].xpos = 36175872
+			object[currentPlayer].ypos = 16809216
+			break
+		case 102
+			object[currentPlayer].xpos = 36700160
+			object[currentPlayer].ypos = 16809216
+			break
+		case 103
+			object[currentPlayer].xpos = 37224448
+			object[currentPlayer].ypos = 16809216
+			break
+		case 104
+			object[currentPlayer].xpos = 37748736
+			object[currentPlayer].ypos = 16809216
+			break
+		case 105
+			object[currentPlayer].xpos = 38273024
+			object[currentPlayer].ypos = 16809216
+			break
+		case 106
+			object[currentPlayer].xpos = 38797312
+			object[currentPlayer].ypos = 16809216
+			break
+		case 107
+			object[currentPlayer].xpos = 39321600
+			object[currentPlayer].ypos = 16809216
+			break
+		case 108
+			object[currentPlayer].xpos = 39845888
+			object[currentPlayer].ypos = 16809216
+			break
+		case 109
+			object[currentPlayer].xpos = 40370176
+			object[currentPlayer].ypos = 16809216
+			break
+		case 110
+			object[currentPlayer].xpos = 40894464
+			object[currentPlayer].ypos = 16809216
+			break
+		case 111
+			object[currentPlayer].xpos = 41418752
+			object[currentPlayer].ypos = 16809216
+			break
+		case 112
+			object[currentPlayer].xpos = 41943040
+			object[currentPlayer].ypos = 16809216
+			break
+		case 113
+			object[currentPlayer].xpos = 42467328
+			object[currentPlayer].ypos = 16809216
+			break
+		case 114
+			object[currentPlayer].xpos = 42991616
+			object[currentPlayer].ypos = 16809216
+			break
+		case 115
+			object[currentPlayer].xpos = 43515904
+			object[currentPlayer].ypos = 16809216
+			break
+		case 116
+			object[currentPlayer].xpos = 44040192
+			object[currentPlayer].ypos = 16809216
+			break
+		case 117
+			object[currentPlayer].xpos = 44564480
+			object[currentPlayer].ypos = 16809216
+			break
+		case 118
+			object[currentPlayer].xpos = 45088768
+			object[currentPlayer].ypos = 16809216
+			break
+		case 119
+			object[currentPlayer].xpos = 45613056
+			object[currentPlayer].ypos = 16809216
+			break
+		case 120
+			object[currentPlayer].xpos = 46137344
+			object[currentPlayer].ypos = 16809216
+			break
+		case 121
+			object[currentPlayer].xpos = 46661632
+			object[currentPlayer].ypos = 16809216
+			break
+		case 122
+			object[currentPlayer].xpos = 47185920
+			object[currentPlayer].ypos = 16809216
+			break
+		case 123
+			object[currentPlayer].xpos = 47710208
+			object[currentPlayer].ypos = 16809216
+			break
+		case 124
+			object[currentPlayer].xpos = 48234496
+			object[currentPlayer].ypos = 16809216
+			break
+		case 125
+			object[currentPlayer].xpos = 48758784
+			object[currentPlayer].ypos = 16809216
+			break
+		case 126
+			object[currentPlayer].xpos = 49283072
+			object[currentPlayer].ypos = 16809216
+			break
+		case 127
+			object[currentPlayer].xpos = 49807360
+			object[currentPlayer].ypos = 16809216
+			break
+		case 128
+			object[currentPlayer].xpos = 50331648
+			object[currentPlayer].ypos = 16809216
+			break
+		case 129
+			object[currentPlayer].xpos = 50855936
+			object[currentPlayer].ypos = 16809216
+			break
+		case 130
+			object[currentPlayer].xpos = 51380224
+			object[currentPlayer].ypos = 16809216
+			break
+		case 131
+			object[currentPlayer].xpos = 51904512
+			object[currentPlayer].ypos = 16809216
+			break
+		case 132
+			object[currentPlayer].xpos = 52428800
+			object[currentPlayer].ypos = 16809216
+			break
+		case 133
+			object[currentPlayer].xpos = 52953088
+			object[currentPlayer].ypos = 16809216
+			break
+		case 134
+			object[currentPlayer].xpos = 53477376
+			object[currentPlayer].ypos = 16809216
+			break
+		case 135
+			object[currentPlayer].xpos = 54001664
+			object[currentPlayer].ypos = 16809216
+			break
+		case 136
+			object[currentPlayer].xpos = 54525952
+			object[currentPlayer].ypos = 16809216
+			break
+		case 137
+			object[currentPlayer].xpos = 55050240
+			object[currentPlayer].ypos = 16809216
+			break
+		case 138
+			object[currentPlayer].xpos = 55574528
+			object[currentPlayer].ypos = 16809216
+			break
+		case 139
+			object[currentPlayer].xpos = 56098816
+			object[currentPlayer].ypos = 16809216
+			break
+		case 140
+			object[currentPlayer].xpos = 56623104
+			object[currentPlayer].ypos = 16809216
+			break
+		case 141
+			object[currentPlayer].xpos = 57147392
+			object[currentPlayer].ypos = 16809216
+			break
+		case 142
+			object[currentPlayer].xpos = 57671680
+			object[currentPlayer].ypos = 16809216
+			break
+		case 143
+			object[currentPlayer].xpos = 58195968
+			object[currentPlayer].ypos = 16809216
+			break
+		case 144
+			object[currentPlayer].xpos = 58720256
+			object[currentPlayer].ypos = 16809216
+			break
+		case 145
+			object[currentPlayer].xpos = 59244544
+			object[currentPlayer].ypos = 16809216
+			break
+		case 146
+			object[currentPlayer].xpos = 59768832
+			object[currentPlayer].ypos = 16809216
+			break
+		case 147
+			object[currentPlayer].xpos = 60293120
+			object[currentPlayer].ypos = 16809216
+			break
+		case 148
+			object[currentPlayer].xpos = 60817408
+			object[currentPlayer].ypos = 16809216
+			break
+		case 149
+			object[currentPlayer].xpos = 61341696
+			object[currentPlayer].ypos = 16809216
+			break
+		case 150
+			object[currentPlayer].xpos = 61865984
+			object[currentPlayer].ypos = 16809216
+			break
+		case 151
+			object[currentPlayer].xpos = 62390272
+			object[currentPlayer].ypos = 16809216
+			break
+		case 152
+			object[currentPlayer].xpos = 62914560
+			object[currentPlayer].ypos = 16809216
+			break
+		case 153
+			object[currentPlayer].xpos = 63438848
+			object[currentPlayer].ypos = 16809216
+			break
+		case 154
+			object[currentPlayer].xpos = 63963136
+			object[currentPlayer].ypos = 16809216
+			break
+		case 155
+			object[currentPlayer].xpos = 64487424
+			object[currentPlayer].ypos = 16809216
+			break
+		case 156
+			object[currentPlayer].xpos = 65011712
+			object[currentPlayer].ypos = 16809216
+			object.state = 0
+			object.priority = 0
+			object[currentPlayer].xvel = 655360
+			object[currentPlayer].speed = 655360
+			object[currentPlayer].yvel = 0
+			object[currentPlayer].state = Player_State_Air
+			object[currentPlayer].interaction = 1
+			object[currentPlayer].visible = 1
+			break
+		end switch
+		object[currentPlayer].xpos += object.xpos
+		object[currentPlayer].ypos += object.ypos
+		if object.state > 0
+			object[currentPlayer].speed -= object[currentPlayer].xpos
+			FlipSign(object[currentPlayer].speed)
+		end if
+	end if
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

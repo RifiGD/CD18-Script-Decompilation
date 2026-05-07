@@ -1,0 +1,345 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Red Spring Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 13 : TYPE_REDSPRING
+
+// Function declarations
+reserve function RedSpring_DebugDraw
+reserve function RedSpring_DebugSpawn
+
+// Static Values
+public value RedSpring_value7 = 0;
+
+
+public function RedSpring_DebugDraw
+	temp0 = object[0].value16
+	temp0 -= RedSpring_value7
+	temp1 = object.direction
+	if temp0 >= 6
+		object.direction = 2
+	end if
+	DrawSpriteFX(temp0, FX_FLIP, object.xpos, object.ypos)
+	object.direction = temp1
+end function
+
+
+public function RedSpring_DebugSpawn
+	temp0 = object[0].value16
+	temp0 -= RedSpring_value7
+	CreateTempObject(TypeName[Red Spring], temp0, object.xpos, object.ypos)
+	if temp0 >= 6
+		object[tempObjectPos].direction = 2
+	end if
+end function
+
+
+event ObjectUpdate
+	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+		switch object.propertyValue
+		case 0
+			temp0 = 0
+			if object[currentPlayer].gravity == 1
+				temp0 = 1
+			end if
+			if object[currentPlayer].collisionMode > 0
+				if object[currentPlayer].yvel < 0
+					temp0 = 1
+				end if
+			end if
+			if temp0 == 0
+				BoxCollisionTest(C_SOLID, object.entityPos, -16, -8, 16, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+				BoxCollisionTest(C_TOUCH, object.entityPos, -16, -10, 16, -6, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+				if checkResult == 1
+					object[currentPlayer].value9 = ANI_WALKING
+					if object[currentPlayer].animation == ANI_RUNNING
+						object[currentPlayer].value9 = ANI_RUNNING
+					end if
+					if object[currentPlayer].animation == ANI_PEELOUT
+						object[currentPlayer].value9 = ANI_PEELOUT
+					end if
+					object.animationTimer = 2
+					object[currentPlayer].state = Player_State_Air
+					object[currentPlayer].gravity = 1
+					object[currentPlayer].yvel = -1048576
+					object[currentPlayer].yvel -= object[currentPlayer].value24
+					object[currentPlayer].animation = 11
+					object[currentPlayer].value1 = 0
+					PlaySfx(SfxName[Spring], 0)
+				end if
+			else
+				if object[currentPlayer].yvel >= 0
+					BoxCollisionTest(C_PLATFORM, object.entityPos, -16, -8, 16, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+					BoxCollisionTest(C_TOUCH, object.entityPos, -16, -10, 16, -6, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+					if checkResult == 1
+						object[currentPlayer].value9 = ANI_WALKING
+						if object[currentPlayer].animation == ANI_RUNNING
+							object[currentPlayer].value9 = ANI_RUNNING
+						end if
+						if object[currentPlayer].animation == ANI_PEELOUT
+							object[currentPlayer].value9 = ANI_PEELOUT
+						end if
+						object.animationTimer = 2
+						object[currentPlayer].state = Player_State_Air
+						object[currentPlayer].gravity = 1
+						object[currentPlayer].yvel = -1048576
+						object[currentPlayer].animation = 11
+						object[currentPlayer].value1 = 0
+						PlaySfx(SfxName[Spring], 0)
+					end if
+				end if
+			end if
+			break
+		case 1
+			BoxCollisionTest(C_SOLID, object.entityPos, -8, -16, 8, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			if object[currentPlayer].gravity == 0
+				BoxCollisionTest(C_TOUCH, object.entityPos, 6, -15, 11, 15, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+				if checkResult == 1
+					object.animationTimer = 2
+					object[currentPlayer].angle = 0
+					object[currentPlayer].speed = 1048576
+					object[currentPlayer].collisionMode = 0
+					object[currentPlayer].pushing = 0
+					object[currentPlayer].direction = 0
+					object[currentPlayer].controlLock = 16
+					PlaySfx(SfxName[Spring], 0)
+				end if
+			else
+				if object.value7 == 1
+					BoxCollisionTest(C_TOUCH, object.entityPos, 6, -15, 11, 15, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+					if checkResult == 1
+						object.animationTimer = 2
+						object[currentPlayer].angle = 0
+						object[currentPlayer].speed = 1048576
+						object[currentPlayer].collisionMode = 0
+						object[currentPlayer].pushing = 0
+						object[currentPlayer].direction = 0
+						object[currentPlayer].controlLock = 16
+						PlaySfx(SfxName[Spring], 0)
+					end if
+				end if
+			end if
+			break
+		case 2
+			BoxCollisionTest(C_SOLID, object.entityPos, -8, -16, 8, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			if object[currentPlayer].gravity == 0
+				BoxCollisionTest(C_TOUCH, object.entityPos, -10, -15, -6, 15, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+				if checkResult == 1
+					object.animationTimer = 2
+					object[currentPlayer].speed = -1048576
+					object[currentPlayer].collisionMode = 0
+					object[currentPlayer].pushing = 0
+					object[currentPlayer].direction = 1
+					object[currentPlayer].controlLock = 16
+					PlaySfx(SfxName[Spring], 0)
+				end if
+			else
+				if object.value7 == 1
+					BoxCollisionTest(C_TOUCH, object.entityPos, -10, -15, -6, 15, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+					if checkResult == 1
+						object.animationTimer = 2
+						object[currentPlayer].speed = -1048576
+						object[currentPlayer].yvel = 131072
+						object[currentPlayer].collisionMode = 0
+						object[currentPlayer].pushing = 0
+						object[currentPlayer].direction = 1
+						object[currentPlayer].controlLock = 16
+						PlaySfx(SfxName[Spring], 0)
+					end if
+				end if
+			end if
+			break
+		case 3
+			BoxCollisionTest(C_SOLID, object.entityPos, -16, -8, 16, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			BoxCollisionTest(C_TOUCH, object.entityPos, -15, 6, 15, 10, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			if checkResult == 1
+				if object[currentPlayer].collisionMode == 2
+					FlipSign(object[currentPlayer].speed)
+					FlipSign(object[currentPlayer].xvel)
+				end if
+				object.animationTimer = 2
+				object[currentPlayer].state = Player_State_Air
+				object[currentPlayer].gravity = 1
+				object[currentPlayer].yvel = 1048576
+				object[currentPlayer].value1 = 0
+				PlaySfx(SfxName[Spring], 0)
+			end if
+			break
+		case 4
+			BoxCollisionTest(C_TOUCH, object.entityPos, -12, -16, 12, 12, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			if checkResult == 1
+				if object[currentPlayer].gravity == 0
+					object.animationTimer = 2
+					object[currentPlayer].state = Player_State_Air
+					object[currentPlayer].gravity = 1
+					object[currentPlayer].speed = 737280
+					object[currentPlayer].yvel = -737280
+					object[currentPlayer].animation = 5
+					object[currentPlayer].direction = 0
+					object[currentPlayer].value1 = 0
+					PlaySfx(SfxName[Spring], 0)
+				end if
+				if object[currentPlayer].yvel >= 0
+					object.animationTimer = 2
+					object[currentPlayer].state = Player_State_Air
+					object[currentPlayer].gravity = 1
+					object[currentPlayer].speed = 737280
+					object[currentPlayer].yvel = -737280
+					object[currentPlayer].animation = 5
+					object[currentPlayer].direction = 0
+					object[currentPlayer].value1 = 0
+					PlaySfx(SfxName[Spring], 0)
+				end if
+			end if
+			break
+		case 5
+			BoxCollisionTest(C_TOUCH, object.entityPos, -12, -16, 12, 12, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			if checkResult == 1
+				if object[currentPlayer].yvel >= 0
+					object.animationTimer = 2
+					object[currentPlayer].state = Player_State_Air
+					object[currentPlayer].gravity = 1
+					object[currentPlayer].speed = -737280
+					object[currentPlayer].yvel = -737280
+					object[currentPlayer].animation = 5
+					object[currentPlayer].direction = 1
+					object[currentPlayer].value1 = 0
+					PlaySfx(SfxName[Spring], 0)
+				end if
+				if object[currentPlayer].gravity == 0
+					object.animationTimer = 2
+					object[currentPlayer].state = Player_State_Air
+					object[currentPlayer].gravity = 1
+					object[currentPlayer].speed = -737280
+					object[currentPlayer].yvel = -737280
+					object[currentPlayer].animation = 5
+					object[currentPlayer].direction = 1
+					object[currentPlayer].value1 = 0
+					PlaySfx(SfxName[Spring], 0)
+				end if
+			end if
+			break
+		case 6
+			BoxCollisionTest(C_TOUCH, object.entityPos, -12, -12, 12, 12, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			if checkResult == 1
+				object.animationTimer = 2
+				object[currentPlayer].state = Player_State_Air
+				object[currentPlayer].gravity = 1
+				object[currentPlayer].speed = 737280
+				object[currentPlayer].yvel = 737280
+				object[currentPlayer].value1 = 0
+				PlaySfx(SfxName[Spring], 0)
+			end if
+			break
+		case 7
+			BoxCollisionTest(C_TOUCH, object.entityPos, -12, -12, 12, 12, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			if checkResult == 1
+				object.animationTimer = 2
+				object[currentPlayer].state = Player_State_Air
+				object[currentPlayer].gravity = 1
+				object[currentPlayer].speed = -737280
+				object[currentPlayer].yvel = 737280
+				object[currentPlayer].value1 = 0
+				PlaySfx(SfxName[Spring], 0)
+			end if
+			break
+		end switch
+	next
+end event
+
+
+event ObjectDraw
+	if object.animationTimer == 0
+		DrawSpriteFX(object.propertyValue, FX_FLIP, object.xpos, object.ypos)
+	else
+		object.animationTimer++
+		temp0 = object.animationTimer
+		temp0 >>= 1
+		switch temp0
+		case 0
+			DrawSpriteFX(object.propertyValue, FX_FLIP, object.xpos, object.ypos)
+			break
+		case 1
+		case 5
+			temp1 = object.propertyValue
+			temp1 += 8
+			DrawSpriteFX(temp1, FX_FLIP, object.xpos, object.ypos)
+			break
+		case 2
+		case 3
+		case 4
+			temp1 = object.propertyValue
+			temp1 += 16
+			DrawSpriteFX(temp1, FX_FLIP, object.xpos, object.ypos)
+			break
+		end switch
+		if object.animationTimer > 10
+			object.animationTimer = 0
+		end if
+	end if
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("Global/Items.gif")
+	arrayPos0 = 32
+	while arrayPos0 < 1056
+		if object[arrayPos0].type == TypeName[Red Spring]
+			if object[arrayPos0].propertyValue > 7
+				object[arrayPos0].propertyValue -= 8
+				object[arrayPos0].value7 = 1
+			end if
+			if object[arrayPos0].propertyValue > 5
+				object[arrayPos0].direction = 2
+			end if
+		end if
+		arrayPos0++
+	loop
+	SpriteFrame(-16, -8, 32, 16, 84, 1)
+	SpriteFrame(-8, -16, 16, 32, 117, 1)
+	SpriteFrame(-8, -16, 16, 32, 175, 1)
+	SpriteFrame(-16, -8, 32, 16, 84, 59)
+	SpriteFrame(-16, -16, 32, 32, 84, 117)
+	SpriteFrame(-16, -16, 32, 32, 117, 165)
+	SpriteFrame(-16, -16, 32, 32, 84, 117)
+	SpriteFrame(-16, -16, 32, 32, 117, 165)
+	SpriteFrame(-16, 0, 32, 8, 84, 1)
+	SpriteFrame(-8, -16, 8, 32, 125, 1)
+	SpriteFrame(0, -16, 8, 32, 175, 1)
+	SpriteFrame(-16, -8, 32, 8, 84, 67)
+	SpriteFrame(-16, -16, 32, 32, 84, 150)
+	SpriteFrame(-16, -16, 32, 32, 150, 165)
+	SpriteFrame(-16, -16, 32, 32, 84, 150)
+	SpriteFrame(-16, -16, 32, 32, 150, 165)
+	SpriteFrame(-16, -32, 32, 40, 84, 18)
+	SpriteFrame(-8, -16, 40, 32, 134, 1)
+	SpriteFrame(-16, -16, 40, 32, 192, 1)
+	SpriteFrame(-16, -8, 32, 40, 84, 76)
+	SpriteFrame(-16, -32, 48, 48, 117, 34)
+	SpriteFrame(-32, -32, 48, 48, 166, 34)
+	SpriteFrame(-16, -32, 48, 48, 117, 34)
+	SpriteFrame(-32, -32, 48, 48, 166, 34)
+	temp0 = 0
+	RedSpring_value7 = DebugMode_ObjCount
+	while temp0 < 8
+		SetTableValue(TypeName[Red Spring], DebugMode_ObjCount, DebugMode_TypesTable)
+		SetTableValue(RedSpring_DebugDraw, DebugMode_ObjCount, DebugMode_DrawTable)
+		SetTableValue(RedSpring_DebugSpawn, DebugMode_ObjCount, DebugMode_SpawnTable)
+		DebugMode_ObjCount++
+		temp0++
+	loop
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

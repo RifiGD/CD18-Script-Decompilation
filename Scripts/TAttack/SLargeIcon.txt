@@ -1,0 +1,84 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: S Large Icon Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 7 : TYPE_SLARGEICON
+
+
+
+event ObjectUpdate
+	switch object.state
+	case 1
+		temp0 = screen.xcenter
+		temp0 -= 72
+		temp0 <<= 16
+		if object.xpos < temp0
+			object.xpos += 1048576
+			if object.xpos > temp0
+				object.xpos = temp0
+			end if
+		else
+			object.state = 0
+		end if
+		break
+	case 2
+		if object.xpos > -4718592
+			object.xpos -= 1048576
+			if object.xpos < -4718592
+				object.xpos = -4718592
+			end if
+		else
+			object.state = 0
+		end if
+		break
+	end switch
+end event
+
+
+event ObjectDraw
+	DrawSprite(8)
+	DrawSprite(object.propertyValue)
+	temp0 = screen.xcenter
+	temp0 -= 72
+	temp0 <<= 16
+	temp0 -= object.xpos
+	temp0 >>= 16
+	temp0 += screen.xcenter
+	temp0 += 20
+	temp1 = temp0
+	temp1 += 68
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("TAttack/TimeAttack.gif")
+	SpriteFrame(-64, -72, 128, 144, 0, 288)
+	SpriteFrame(-64, -72, 128, 144, 128, 288)
+	SpriteFrame(-64, -72, 128, 144, 256, 288)
+	SpriteFrame(-64, -72, 128, 144, 384, 288)
+	SpriteFrame(-64, -72, 128, 144, 0, 432)
+	SpriteFrame(-64, -72, 128, 144, 128, 432)
+	SpriteFrame(-64, -72, 128, 144, 256, 432)
+	SpriteFrame(-64, -72, 128, 144, 384, 432)
+	SpriteFrame(-67, -75, 134, 150, 306, 873)
+	SpriteFrame(-67, -95, 64, 20, 280, 680)
+	SpriteFrame(-67, -95, 64, 20, 135, 617)
+	SpriteFrame(0, 0, 64, 20, 280, 659)
+	SpriteFrame(0, 0, 64, 20, 200, 617)
+	SpriteFrame(0, 0, 64, 20, 345, 659)
+	SpriteFrame(0, 0, 64, 20, 265, 617)
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

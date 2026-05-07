@@ -1,0 +1,192 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Boss Leg Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 56 : TYPE_BOSSLEG
+
+// Function declarations
+reserve function BossLeg_Function108
+reserve function BossLeg_Function109
+
+
+public function BossLeg_Function108
+	GetBit(temp0, object.value4, 5)
+	if temp0 == 1
+		arrayPos0 = object.value0
+		object[arrayPos0].xpos += temp1
+		object[arrayPos0].ypos += temp2
+		arrayPos1 = object[arrayPos0].value0
+		object[arrayPos1].xpos += temp1
+		object[arrayPos1].ypos += temp2
+		arrayPos0 = object[arrayPos1].value0
+		object[arrayPos0].xpos += temp1
+		object[arrayPos0].ypos += temp2
+	end if
+end function
+
+
+public function BossLeg_Function109
+	arrayPos0 = object.value0
+	object.xpos = object[arrayPos0].xpos
+	object.xpos += 262144
+	object.xpos += object.value6
+	object.ypos = object[arrayPos0].ypos
+	object.ypos += 1048576
+	object.ypos += object.value7
+end function
+
+
+event ObjectUpdate
+	switch object.state
+	case 0
+		object.xvel = 32768
+		object.yvel = 16384
+		object.state = 1
+		break
+	case 1
+		arrayPos0 = object.value0
+		object.xpos = object[arrayPos0].xpos
+		object.xpos += 262144
+		object.ypos = object[arrayPos0].ypos
+		object.ypos += 1048576
+		break
+	case 2
+		arrayPos0 = object.value0
+		arrayPos1 = object[arrayPos0].value0
+		arrayPos0 = object[arrayPos1].value1
+		arrayPos1 = object[arrayPos0].value1
+		object.xpos = object[arrayPos1].xpos
+		object.xpos -= 655360
+		object.ypos = object[arrayPos1].ypos
+		break
+	case 3
+		arrayPos0 = object.value1
+		if object.value6 < 524288
+			temp1 = object.xvel
+			object.value6 += temp1
+			GetBit(temp0, object.value4, 4)
+			if temp0 == 1
+				FlipSign(temp1)
+				temp2 = 0
+				CallFunction(BossLeg_Function108)
+			else
+				CallFunction(BossLeg_Function109)
+			end if
+		else
+			CallFunction(BossLeg_Function109)
+		end if
+		break
+	case 4
+		arrayPos0 = object.value1
+		if object.value6 > -524288
+			temp1 = object.xvel
+			object.value6 -= temp1
+			GetBit(temp0, object.value4, 4)
+			if temp0 == 1
+				temp2 = 0
+				CallFunction(BossLeg_Function108)
+			else
+				CallFunction(BossLeg_Function109)
+			end if
+		else
+			CallFunction(BossLeg_Function109)
+		end if
+		break
+	case 5
+		if object.value6 > -524288
+			temp1 = object.xvel
+			object.value6 -= temp1
+		else
+			temp1 = 0
+		end if
+		if object.value7 > -262144
+			temp2 = object.yvel
+			object.value7 -= temp2
+		else
+			temp2 = 0
+		end if
+		GetBit(temp0, object.value4, 4)
+		if temp0 == 1
+			CallFunction(BossLeg_Function108)
+		else
+			CallFunction(BossLeg_Function109)
+		end if
+		break
+	case 6
+		if object.value6 > -524288
+			temp1 = object.xvel
+			object.value6 -= temp1
+		else
+			temp1 = 0
+		end if
+		if object.value7 < 262144
+			temp2 = object.yvel
+			object.value7 += temp2
+		else
+			temp2 = 0
+		end if
+		GetBit(temp0, object.value4, 4)
+		if temp0 == 1
+			FlipSign(temp2)
+			CallFunction(BossLeg_Function108)
+		else
+			CallFunction(BossLeg_Function109)
+		end if
+		break
+	case 7
+		GetBit(temp0, object.value4, 4)
+		if temp0 == 0
+			object.xvel -= 1536
+		else
+			object.xvel += 1536
+		end if
+		object.yvel += 6752
+		object.xpos += object.xvel
+		object.ypos += object.yvel
+		if object.outOfBounds == 1
+			object.type = TypeName[Blank Object]
+			object.priority = 0
+		end if
+		break
+	end switch
+	if object.state < 6
+		foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+			if object[currentPlayer].value7 == 0
+				BoxCollisionTest(C_TOUCH, object.entityPos, -12, -20, 12, -20, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+				if checkResult == 1
+					arrayPos0 = object.value0
+					arrayPos1 = object[arrayPos0].value0
+					arrayPos0 = object[arrayPos1].value0
+					object[arrayPos0].animation = 2
+					object[arrayPos0].animationTimer = 180
+					CallFunction(Player_Hit)
+				end if
+			end if
+		next
+	end if
+end event
+
+
+event ObjectDraw
+	DrawSprite(0)
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R1/Objects3.gif")
+	SpriteFrame(-12, -20, 24, 40, 74, 1)
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

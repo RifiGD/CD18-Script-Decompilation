@@ -1,0 +1,131 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Flower Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 65 : TYPE_FLOWER
+
+
+
+event ObjectUpdate
+	switch object.state
+	case 0
+		object.frame = 8
+		object.value0++
+		if object.value0 == 20
+			object.value0 = 0
+			object.state++
+		end if
+		break
+	case 1
+		object.frame = object.value0
+		object.frame >>= 2
+		object.value0++
+		object.value0 &= 7
+		object.ypos += 131072
+		ObjectTileCollision(0, 0, 8, 0)
+		if checkResult == 1
+			object.ypos += 524288
+			object.state++
+			object.value0 = 0
+			object.frame = 2
+		end if
+		break
+	case 2
+		object.value0++
+		if object.value0 == 4
+			object.value0 = 0
+			object.state++
+			object.frame = 3
+		end if
+		break
+	case 3
+		object.value0++
+		if object.value0 == 4
+			object.value0 = 0
+			object.state++
+			object.frame = 2
+		end if
+		break
+	case 4
+		object.value0++
+		if object.value0 == 4
+			object.value0 = 0
+			object.state++
+			object.frame = 3
+		end if
+		break
+	case 5
+		object.value0++
+		if object.value0 == 5
+			object.value0 = 0
+			object.state++
+			object.frame = 4
+		end if
+		break
+	case 6
+		object.value0++
+		if object.value0 == 4
+			object.value0 = 0
+			object.state++
+			object.frame = 5
+		end if
+		break
+	case 7
+		object.value0++
+		if object.value0 == 2
+			object.value0 = 0
+			object.state++
+			object.frame = 6
+		end if
+		break
+	case 8
+		object.value0++
+		if object.value0 == 20
+			object.value0 = 0
+			object.state++
+			object.frame = 7
+		end if
+		break
+	case 9
+		object.value0++
+		if object.value0 == 20
+			object.value0 = 0
+			object.state--
+			object.frame = 6
+		end if
+		break
+	end switch
+end event
+
+
+event ObjectDraw
+	DrawSprite(object.frame)
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R5/Objects.gif")
+	SpriteFrame(-4, -8, 8, 16, 99, 51)
+	SpriteFrame(-4, -8, 8, 16, 99, 68)
+	SpriteFrame(-8, -8, 16, 16, 167, 110)
+	SpriteFrame(-8, -8, 16, 16, 150, 127)
+	SpriteFrame(-8, -16, 16, 16, 150, 110)
+	SpriteFrame(-12, -24, 24, 24, 100, 168)
+	SpriteFrame(-12, -48, 24, 48, 100, 144)
+	SpriteFrame(-12, -48, 24, 48, 125, 144)
+	SpriteFrame(0, 0, 0, 0, 1, 1)
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

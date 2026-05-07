@@ -1,0 +1,485 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Dango Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 54 : TYPE_DANGO
+
+// Function declarations
+reserve function Dango_DebugDraw
+reserve function Dango_DebugSpawn
+
+// Static Values
+public value Dango_value15 = 0;
+
+
+public function Dango_DebugDraw
+	temp0 = object[0].value16
+	temp0 -= Dango_value15
+	if temp0 == 0
+		DrawSprite(0)
+	else
+		DrawSprite(2)
+	end if
+end function
+
+
+public function Dango_DebugSpawn
+	temp0 = object[0].value16
+	temp0 -= Dango_value15
+	CreateTempObject(TypeName[Dango], temp0, object.xpos, object.ypos)
+end function
+
+
+event ObjectUpdate
+	if object.propertyValue == 0
+		switch object.state
+		case 0
+			object.priority = 1
+			object.frame = object.value0
+			object.frame /= 10
+			object.value0++
+			object.value0 %= 20
+			object.xpos += object.xvel
+			if object.direction == 0
+				ObjectTileGrip(0, -5, 15, 0)
+			else
+				ObjectTileGrip(0, 5, 15, 0)
+			end if
+			if checkResult == 0
+				FlipSign(object.xvel)
+				object.direction++
+				object.direction &= 1
+				object.value3 = 0
+			else
+				if object.xvel > 0
+					ObjectTileCollision(1, 16, 8, 0)
+					if checkResult == 1
+						FlipSign(object.xvel)
+						object.direction++
+						object.direction &= 1
+						object.value3 = 0
+					end if
+				else
+					ObjectTileCollision(2, -16, 8, 0)
+					if checkResult == 1
+						FlipSign(object.xvel)
+						object.direction++
+						object.direction &= 1
+						object.value3 = 0
+					end if
+				end if
+			end if
+			break
+		case 1
+			object.frame = 4
+			if object.value0 < 8
+				object.value0++
+			else
+				object.value0 = 0
+				object.state++
+			end if
+			break
+		case 2
+			object.frame = 5
+			if object.value0 < 6
+				object.value0++
+			else
+				object.value0 = 0
+				object.state++
+			end if
+			break
+		case 3
+			object.frame = object.animationTimer
+			object.frame /= 5
+			object.frame += 6
+			object.animationTimer++
+			object.animationTimer %= 10
+			if object.value0 < 34
+				object.value0++
+			else
+				object.value0 = 0
+				object.state++
+				if object.direction == 0
+					object.xvel = -262144
+				else
+					object.xvel = 262144
+				end if
+			end if
+			break
+		case 4
+			object.frame = object.animationTimer
+			object.frame /= 5
+			object.frame += 6
+			object.animationTimer++
+			object.animationTimer %= 10
+			object.xpos += object.xvel
+			if object.direction == 0
+				ObjectTileGrip(0, -5, 15, 0)
+			else
+				ObjectTileGrip(0, 5, 15, 0)
+			end if
+			if checkResult == 0
+				object.state++
+				object.value3++
+			else
+				if object.xvel > 0
+					ObjectTileCollision(1, 16, 8, 0)
+					if checkResult == 1
+						object.state++
+						object.value3++
+					end if
+				else
+					ObjectTileCollision(2, -16, 8, 0)
+					if checkResult == 1
+						object.state++
+						object.value3++
+					end if
+				end if
+			end if
+			break
+		case 5
+			object.frame = 5
+			if object.value0 < 6
+				object.value0++
+			else
+				object.value0 = 0
+				object.state++
+			end if
+			break
+		case 6
+			object.frame = 4
+			if object.value0 < 8
+				object.value0++
+			else
+				object.value0 = 0
+				object.state++
+			end if
+			break
+		case 7
+			object.frame = 0
+			if object.value0 < 16
+				object.value0++
+			else
+				object.value0 = 0
+				object.state = 0
+				if object.value3 > 7
+					object.direction++
+					object.direction &= 1
+					object.value3 = 0
+				end if
+				if object.direction == 0
+					object.xvel = -24576
+				else
+					object.xvel = 24576
+				end if
+			end if
+			break
+		case 8
+			if object.outOfBounds == 1
+				object.state = 0
+				object.priority = 0
+			end if
+			break
+		end switch
+	else
+		switch object.state
+		case 0
+			object.priority = 1
+			object.frame = object.value0
+			object.frame /= 30
+			object.frame += 2
+			object.value0++
+			object.value0 %= 60
+			object.xpos += object.xvel
+			if object.direction == 0
+				ObjectTileGrip(0, -5, 15, 0)
+			else
+				ObjectTileGrip(0, 5, 15, 0)
+			end if
+			if checkResult == 0
+				FlipSign(object.xvel)
+				object.direction++
+				object.direction &= 1
+				object.value3 = 0
+			else
+				if object.xvel > 0
+					ObjectTileCollision(1, 16, 8, 0)
+					if checkResult == 1
+						FlipSign(object.xvel)
+						object.direction++
+						object.direction &= 1
+						object.value3 = 0
+					end if
+				else
+					ObjectTileCollision(2, -16, 8, 0)
+					if checkResult == 1
+						FlipSign(object.xvel)
+						object.direction++
+						object.direction &= 1
+						object.value3 = 0
+					end if
+				end if
+			end if
+			break
+		case 1
+			object.frame = 4
+			if object.value0 < 20
+				object.value0++
+			else
+				object.value0 = 0
+				object.state++
+			end if
+			break
+		case 2
+			object.frame = 5
+			if object.value0 < 12
+				object.value0++
+			else
+				object.value0 = 0
+				object.state++
+			end if
+			break
+		case 3
+			object.frame = object.animationTimer
+			object.frame /= 10
+			object.frame += 8
+			object.animationTimer++
+			object.animationTimer %= 20
+			if object.value0 < 96
+				object.value0++
+			else
+				object.value0 = 0
+				object.state++
+				if object.direction == 0
+					object.xvel = -65536
+				else
+					object.xvel = 65536
+				end if
+			end if
+			break
+		case 4
+			object.frame = object.animationTimer
+			object.frame /= 10
+			object.frame += 8
+			object.animationTimer++
+			object.animationTimer %= 20
+			object.xpos += object.xvel
+			if object.direction == 0
+				ObjectTileGrip(0, -5, 15, 0)
+			else
+				ObjectTileGrip(0, 5, 15, 0)
+			end if
+			if checkResult == 0
+				object.state++
+				object.value3++
+			else
+				if object.xvel > 0
+					ObjectTileCollision(1, 16, 8, 0)
+					if checkResult == 1
+						object.state++
+						object.value3++
+					end if
+				else
+					ObjectTileCollision(2, -16, 8, 0)
+					if checkResult == 1
+						object.state++
+						object.value3++
+					end if
+				end if
+			end if
+			break
+		case 5
+			object.frame = 5
+			if object.value0 < 12
+				object.value0++
+			else
+				object.value0 = 0
+				object.state++
+			end if
+			break
+		case 6
+			object.frame = 4
+			if object.value0 < 20
+				object.value0++
+			else
+				object.value0 = 0
+				object.state++
+			end if
+			break
+		case 7
+			object.frame = 2
+			if object.value0 < 64
+				object.value0++
+			else
+				object.value0 = 0
+				object.state = 0
+				if object.value3 > 7
+					object.direction++
+					object.direction &= 1
+					object.value3 = 0
+				end if
+				if object.direction == 0
+					object.xvel = -4096
+				else
+					object.xvel = 4096
+				end if
+			end if
+			break
+		case 8
+			if object.outOfBounds == 1
+				object.state = 0
+				object.priority = 0
+			end if
+			break
+		end switch
+	end if
+	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+		if object.state == 0
+			if object.direction == 0
+				BoxCollisionTest(C_TOUCH, object.entityPos, -112, -128, 0, 128, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			else
+				BoxCollisionTest(C_TOUCH, object.entityPos, 0, -128, 112, 128, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			end if
+			if checkResult == 1
+				object.state = 1
+			end if
+		end if
+		switch object.state
+		case 0
+		case 1
+		case 2
+		case 5
+		case 6
+		case 7
+			BoxCollisionTest(C_TOUCH, object.entityPos, -14, -10, 14, 10, currentPlayer, object[currentPlayer].value41, object[currentPlayer].value39, object[currentPlayer].value42, object[currentPlayer].value40)
+			if checkResult == 1
+				CallFunction(Player_BadnikBreak)
+			end if
+			break
+		case 3
+			BoxCollisionTest(C_TOUCH, object.entityPos, -14, -10, 14, 10, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			if checkResult == 1
+				CheckEqual(object[currentPlayer].animation, ANI_JUMPING)
+				temp0 = checkResult
+				CheckEqual(object[currentPlayer].animation, ANI_SPINDASH)
+				temp0 |= checkResult
+				if temp0 == 1
+					object[currentPlayer].speed = object[currentPlayer].xpos
+					object[currentPlayer].speed -= object.xpos
+					object[currentPlayer].speed >>= 2
+					object[currentPlayer].xvel = object[currentPlayer].speed
+					if object[currentPlayer].gravity == 1
+						object[currentPlayer].yvel = object[currentPlayer].ypos
+						object[currentPlayer].yvel -= object.ypos
+						object[currentPlayer].yvel >>= 2
+					end if
+				else
+					CallFunction(Player_BadnikBreak)
+				end if
+			end if
+			break
+		case 4
+			BoxCollisionTest(C_TOUCH, object.entityPos, -14, -10, 14, 10, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			if checkResult == 1
+				CheckEqual(object[currentPlayer].animation, ANI_JUMPING)
+				temp0 = checkResult
+				CheckEqual(object[currentPlayer].animation, ANI_SPINDASH)
+				temp0 |= checkResult
+				if temp0 == 1
+					object.xvel = object[currentPlayer].xvel
+					object[currentPlayer].speed = object[currentPlayer].xpos
+					object[currentPlayer].speed -= object.xpos
+					object[currentPlayer].speed >>= 2
+					object[currentPlayer].xvel = object[currentPlayer].speed
+					if object[currentPlayer].gravity == 1
+						object[currentPlayer].yvel = object[currentPlayer].ypos
+						object[currentPlayer].yvel -= object.ypos
+						object[currentPlayer].yvel >>= 2
+					else
+						object[currentPlayer].state = Player_State_Roll
+						object[currentPlayer].animation = ANI_JUMPING
+					end if
+				else
+					CallFunction(Player_BadnikBreak)
+				end if
+			end if
+			break
+		end switch
+	next
+	CallFunction(StageSetup_CheckGoodFuture)
+	if object.outOfBounds == 1
+		temp0 = object.xpos
+		temp1 = object.ypos
+		object.xpos = object.value1
+		object.ypos = object.value2
+		if object.outOfBounds == 1
+			object.priority = 0
+			object.state = 0
+			object.value0 = 0
+			object.direction = 0
+			object.value3 = 0
+			if object.propertyValue == 0
+				object.xvel = -24576
+			else
+				object.xvel = -4096
+			end if
+		else
+			object.xpos = temp0
+			object.ypos = temp1
+		end if
+	end if
+end event
+
+
+event ObjectDraw
+	if object.state < 8
+		DrawSpriteFX(object.frame, FX_FLIP, object.xpos, object.ypos)
+	end if
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R7/Objects.gif")
+	SpriteFrame(-16, -7, 32, 24, 116, 121)
+	SpriteFrame(-16, -7, 32, 24, 149, 121)
+	SpriteFrame(-16, -7, 32, 24, 116, 146)
+	SpriteFrame(-16, -7, 32, 24, 149, 146)
+	SpriteFrame(-16, -16, 32, 32, 51, 219)
+	SpriteFrame(-16, -16, 32, 32, 84, 219)
+	SpriteFrame(-16, -15, 32, 32, 51, 186)
+	SpriteFrame(-16, -15, 32, 32, 117, 186)
+	SpriteFrame(-16, -16, 32, 32, 84, 186)
+	SpriteFrame(-16, -15, 32, 32, 51, 186)
+	foreach (TypeName[Dango], arrayPos0, ALL_ENTITIES)
+		object[arrayPos0].value1 = object[arrayPos0].xpos
+		object[arrayPos0].value2 = object[arrayPos0].ypos
+		if object[arrayPos0].propertyValue == 0
+			object[arrayPos0].xvel = -24576
+		else
+			object[arrayPos0].xvel = -4096
+		end if
+	next
+	temp0 = 0
+	Dango_value15 = DebugMode_ObjCount
+	while temp0 < 2
+		SetTableValue(TypeName[Dango], DebugMode_ObjCount, DebugMode_TypesTable)
+		SetTableValue(Dango_DebugDraw, DebugMode_ObjCount, DebugMode_DrawTable)
+		SetTableValue(Dango_DebugSpawn, DebugMode_ObjCount, DebugMode_SpawnTable)
+		DebugMode_ObjCount++
+		temp0++
+	loop
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

@@ -1,0 +1,79 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: UFO Power Up Object
+// Script Author: Christian Whitehead
+// Unpacked by RifiGD's UnScriptR
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 7 : TYPE_UFOPOWERUP
+
+
+
+event ObjectDraw
+	if object.value4 < 262144
+		DrawSpriteScreenXY(object.propertyValue, object.ixpos, object.iypos)
+		object.value4 += 8192
+		object.ypos += object.value4
+	end if
+	object.value6++
+	if object.value6 == 6
+		object.value6 = 0
+		PlaySfx(SfxName[Explosion], 0)
+		Rand(temp0, 48)
+		temp0 -= 24
+		temp0 += screen.xoffset
+		temp0 <<= 16
+		temp0 += object.value1
+		Rand(temp1, 48)
+		temp1 -= 24
+		temp1 += screen.yoffset
+		temp1 <<= 16
+		temp1 += object.value2
+		CreateTempObject(TypeName[Smoke Puff], 0, temp0, temp1)
+		object[tempObjectPos].drawOrder = 4
+	end if
+	if object.value0 > 50
+		object.value1 += 131072
+	else
+		object.value1 -= 131072
+	end if
+	object.value2 += 49152
+	object.value3++
+	if object.value3 == 160
+		if object.value7 == 1
+			if options.gameMode < 2
+				if stage.actNum < 8
+					object[2].state = 9
+				else
+					object[30].type = TypeName[Stage Finish]
+					object[30].state = 9
+					object[30].drawOrder = 7
+				end if
+			else
+				object[30].type = TypeName[Stage Finish]
+				object[30].state = 8
+				object[30].drawOrder = 7
+			end if
+		end if
+		object.type = TypeName[Blank Object]
+	end if
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("Special/Objects.gif")
+	SpriteFrame(-8, -8, 16, 16, 1, 67)
+	SpriteFrame(-8, -8, 16, 16, 18, 67)
+	SpriteFrame(-8, -8, 16, 16, 35, 67)
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

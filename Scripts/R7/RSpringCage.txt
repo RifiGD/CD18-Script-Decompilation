@@ -1,0 +1,325 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: R Spring Cage Object
+// Script Author: Christian Whitehead
+// Unpacked by RifiGD's UnScriptR
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 51 : TYPE_RSPRINGCAGE
+
+
+
+event ObjectUpdate
+	switch object.state
+	case 0
+		if object.propertyValue == 0
+			object.value0++
+			object.value0 %= 48
+			object.angle = object.value0
+			object.angle /= 6
+		end if
+		break
+	case 1
+		if object.value1 > 0
+			object.value1 -= 131072
+		else
+			PlaySfx(SfxName[Switch], 0)
+			object.state++
+		end if
+		break
+	case 2
+		if object[0].state != 26
+			if object.propertyValue == 0
+				object.value0++
+				object.value0 %= 48
+				object.angle = object.value0
+				object.angle /= 6
+			end if
+			object[0].animation = ANI_JUMPING
+			object[0].xpos = object.xpos
+			object[0].ypos = object.ypos
+			switch object.angle
+			case 0
+				object[0].xpos += 2097152
+				break
+			case 1
+				object[0].xpos += 1572864
+				object[0].ypos -= 1572864
+				break
+			case 2
+				object[0].ypos -= 2097152
+				break
+			case 3
+				object[0].xpos -= 1572864
+				object[0].ypos -= 1572864
+				break
+			case 4
+				object[0].xpos -= 2097152
+				break
+			case 5
+				object[0].xpos -= 1572864
+				object[0].ypos += 1572864
+				break
+			case 6
+				object[0].ypos += 2097152
+				break
+			case 7
+				object[0].xpos += 1572864
+				object[0].ypos += 1572864
+				break
+			end switch
+			if object[0].jumpPress == 1
+				PlaySfx(SfxName[Large Booster], 0)
+				object[0].state = 13
+				object[0].gravity = 1
+				object[0].value1 = 0
+				object[+1].value0 = 1
+				object.state++
+				switch object.angle
+				case 0
+					object[0].speed = 1048576
+					object[0].xvel = 1048576
+					object[0].yvel = 0
+					break
+				case 1
+					object[0].speed = 786432
+					object[0].xvel = 786432
+					object[0].yvel = -720896
+					break
+				case 2
+					object[0].speed = 0
+					object[0].xvel = 0
+					object[0].yvel = -1048576
+					break
+				case 3
+					object[0].speed = -786432
+					object[0].xvel = -786432
+					object[0].yvel = -720896
+					break
+				case 4
+					object[0].speed = -1048576
+					object[0].xvel = -1048576
+					object[0].yvel = 0
+					break
+				case 5
+					object[0].speed = -786432
+					object[0].xvel = -786432
+					object[0].yvel = 720896
+					break
+				case 6
+					object[0].speed = 0
+					object[0].xvel = 0
+					object[0].yvel = 1048576
+					break
+				case 7
+					object[0].speed = 786432
+					object[0].xvel = 786432
+					object[0].yvel = 720896
+					break
+				end switch
+			end if
+		else
+			object.state = 3
+		end if
+		break
+	case 3
+		if object[+1].value0 == 0
+			if object.value1 < 3145728
+				object.value1 += 524288
+			else
+				object.state = 0
+			end if
+		end if
+		break
+	end switch
+	switch object.angle
+	case 0
+		object[+1].direction = 0
+		object[+1].propertyValue = 1
+		break
+	case 1
+		object[+1].direction = 0
+		object[+1].propertyValue = 4
+		break
+	case 2
+		object[+1].direction = 0
+		object[+1].propertyValue = 0
+		break
+	case 3
+		object[+1].direction = 0
+		object[+1].propertyValue = 5
+		break
+	case 4
+		object[+1].direction = 0
+		object[+1].propertyValue = 2
+		break
+	case 5
+		object[+1].direction = 2
+		object[+1].propertyValue = 5
+		break
+	case 6
+		object[+1].direction = 0
+		object[+1].propertyValue = 3
+		break
+	case 7
+		object[+1].direction = 2
+		object[+1].propertyValue = 4
+		break
+	end switch
+	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+		if object.state == 0
+			BoxCollisionTest(C_TOUCH, object.entityPos, -24, -24, 24, 24, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			if checkResult == 1
+				object.state = 1
+				object[currentPlayer].xpos = object.xpos
+				object[currentPlayer].ypos = object.ypos
+				object[currentPlayer].state = Player_State_Static
+				object[currentPlayer].animation = ANI_JUMPING
+				object[currentPlayer].speed = 0
+				object[currentPlayer].xvel = 0
+				object[currentPlayer].yvel = 0
+				switch object.angle
+				case 0
+					object[currentPlayer].xpos += 2097152
+					break
+				case 1
+					object[currentPlayer].xpos += 1572864
+					object[currentPlayer].ypos -= 1572864
+					break
+				case 2
+					object[currentPlayer].ypos -= 2097152
+					break
+				case 3
+					object[currentPlayer].xpos -= 1572864
+					object[currentPlayer].ypos -= 1572864
+					break
+				case 4
+					object[currentPlayer].xpos -= 2097152
+					break
+				case 5
+					object[currentPlayer].xpos -= 1572864
+					object[currentPlayer].ypos += 1572864
+					break
+				case 6
+					object[currentPlayer].ypos += 2097152
+					break
+				case 7
+					object[currentPlayer].xpos += 1572864
+					object[currentPlayer].ypos += 1572864
+					break
+				end switch
+			end if
+		end if
+	next
+end event
+
+
+event ObjectDraw
+	switch object.angle
+	case 0
+		DrawSprite(1)
+		object.direction = 2
+		temp0 = object.xpos
+		temp0 -= object.value1
+		DrawSpriteFX(1, FX_FLIP, temp0, object.ypos)
+		break
+	case 1
+		DrawSprite(2)
+		object.direction = 3
+		temp2 = object.value1
+		temp2 >>= 1
+		temp0 = object.xpos
+		temp0 -= temp2
+		temp1 = object.ypos
+		temp1 += temp2
+		DrawSpriteFX(3, FX_FLIP, temp0, temp1)
+		break
+	case 2
+		DrawSprite(4)
+		object.direction = 1
+		temp1 = object.ypos
+		temp1 += object.value1
+		DrawSpriteFX(4, FX_FLIP, object.xpos, temp1)
+		break
+	case 3
+		object.direction = 1
+		temp2 = object.value1
+		temp2 >>= 1
+		temp0 = object.xpos
+		temp0 += temp2
+		temp1 = object.ypos
+		temp1 += temp2
+		DrawSpriteFX(2, FX_FLIP, temp0, temp1)
+		object.direction = 2
+		DrawSpriteFX(3, FX_FLIP, object.xpos, object.ypos)
+		break
+	case 4
+		temp0 = object.xpos
+		temp0 += object.value1
+		DrawSpriteXY(5, temp0, object.ypos)
+		object.direction = 2
+		DrawSpriteFX(5, FX_FLIP, object.xpos, object.ypos)
+		break
+	case 5
+		object.direction = 3
+		DrawSpriteFX(2, FX_FLIP, object.xpos, object.ypos)
+		object.direction = 0
+		temp2 = object.value1
+		temp2 >>= 1
+		temp0 = object.xpos
+		temp0 += temp2
+		temp1 = object.ypos
+		temp1 -= temp2
+		DrawSpriteFX(3, FX_FLIP, temp0, temp1)
+		break
+	case 6
+		object.direction = 2
+		temp1 = object.ypos
+		temp1 -= object.value1
+		DrawSpriteFX(4, FX_FLIP, object.xpos, temp1)
+		object.direction = 3
+		DrawSpriteFX(4, FX_FLIP, object.xpos, object.ypos)
+		break
+	case 7
+		object.direction = 2
+		temp2 = object.value1
+		temp2 >>= 1
+		temp0 = object.xpos
+		temp0 -= temp2
+		temp1 = object.ypos
+		temp1 -= temp2
+		DrawSpriteFX(2, FX_FLIP, temp0, temp1)
+		object.direction = 1
+		DrawSpriteFX(3, FX_FLIP, object.xpos, object.ypos)
+		break
+	end switch
+	DrawSprite(0)
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R7/Objects.gif")
+	SpriteFrame(-8, -8, 16, 16, 90, 52)
+	SpriteFrame(-8, -28, 64, 24, 34, 96)
+	SpriteFrame(-24, -56, 56, 56, 59, 121)
+	SpriteFrame(-56, -24, 56, 56, 59, 121)
+	SpriteFrame(-28, -56, 24, 64, 34, 121)
+	SpriteFrame(-56, -28, 64, 24, 34, 96)
+	foreach (TypeName[R Spring Cage], arrayPos0, ACTIVE_ENTITIES)
+		object[arrayPos0].drawOrder = 4
+		object[arrayPos0].value1 = 3145728
+		object[arrayPos1].xpos = object[arrayPos0].xpos
+		object[arrayPos1].ypos = object[arrayPos0].ypos
+	next
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

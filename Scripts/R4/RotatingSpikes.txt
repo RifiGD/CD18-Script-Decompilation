@@ -1,0 +1,142 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Rotating Spikes Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 51 : TYPE_ROTATINGSPIKES
+
+// Function declarations
+reserve function RotatingSpikes_DebugDraw
+reserve function RotatingSpikes_DebugSpawn
+
+// Static Values
+public value RotatingSpikes_value18 = 0;
+
+
+public function RotatingSpikes_DebugDraw
+	DrawSprite(0)
+	temp0 = 0
+	temp1 = 16
+	temp4 = object[0].value16
+	temp4 -= RotatingSpikes_value18
+	while temp0 < temp4
+		Cos(temp2, object.angle)
+		temp2 *= temp1
+		temp2 <<= 7
+		temp2 += object.xpos
+		Sin(temp3, object.angle)
+		temp3 *= temp1
+		temp3 <<= 7
+		temp3 += object.ypos
+		DrawSpriteXY(1, temp2, temp3)
+		temp0++
+		temp1 += 16
+	loop
+	Cos(temp2, object.angle)
+	temp2 *= temp1
+	temp2 <<= 7
+	temp2 += object.xpos
+	Sin(temp3, object.angle)
+	temp3 *= temp1
+	temp3 <<= 7
+	temp3 += object.ypos
+	DrawSpriteXY(2, temp2, temp3)
+end function
+
+
+public function RotatingSpikes_DebugSpawn
+	temp0 = object[0].value16
+	temp0 -= RotatingSpikes_value18
+	temp0++
+	CreateTempObject(TypeName[Rotating Spikes], temp0, object.xpos, object.ypos)
+end function
+
+
+event ObjectUpdate
+	object.angle += 2
+	object.angle &= 511
+	temp0 = 0
+	temp1 = object.propertyValue
+	temp1--
+	temp1 <<= 4
+	temp2 = object.xpos
+	temp3 = object.ypos
+	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+		Cos(object.xpos, object.angle)
+		object.xpos *= temp1
+		object.xpos <<= 7
+		object.xpos += temp2
+		Sin(object.ypos, object.angle)
+		object.ypos *= temp1
+		object.ypos <<= 7
+		object.ypos += temp3
+		BoxCollisionTest(C_TOUCH, object.entityPos, -12, -12, 12, 12, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+		if checkResult == 1
+			CallFunction(Player_Hit)
+		end if
+	next
+	object.xpos = temp2
+	object.ypos = temp3
+end event
+
+
+event ObjectDraw
+	DrawSprite(0)
+	temp0 = 0
+	temp1 = 16
+	temp4 = object.propertyValue
+	temp4--
+	while temp0 < temp4
+		Cos(temp2, object.angle)
+		temp2 *= temp1
+		temp2 <<= 7
+		temp2 += object.xpos
+		Sin(temp3, object.angle)
+		temp3 *= temp1
+		temp3 <<= 7
+		temp3 += object.ypos
+		DrawSpriteXY(1, temp2, temp3)
+		temp0++
+		temp1 += 16
+	loop
+	Cos(temp2, object.angle)
+	temp2 *= temp1
+	temp2 <<= 7
+	temp2 += object.xpos
+	Sin(temp3, object.angle)
+	temp3 *= temp1
+	temp3 <<= 7
+	temp3 += object.ypos
+	DrawSpriteXY(2, temp2, temp3)
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R4/Objects.gif")
+	SpriteFrame(-8, -8, 16, 16, 163, 52)
+	SpriteFrame(-8, -8, 16, 16, 180, 52)
+	SpriteFrame(-16, -16, 32, 32, 221, 53)
+	temp0 = 0
+	RotatingSpikes_value18 = DebugMode_ObjCount
+	RotatingSpikes_value18--
+	while temp0 < 4
+		SetTableValue(TypeName[Rotating Spikes], DebugMode_ObjCount, DebugMode_TypesTable)
+		SetTableValue(RotatingSpikes_DebugDraw, DebugMode_ObjCount, DebugMode_DrawTable)
+		SetTableValue(RotatingSpikes_DebugSpawn, DebugMode_ObjCount, DebugMode_SpawnTable)
+		DebugMode_ObjCount++
+		temp0++
+	loop
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

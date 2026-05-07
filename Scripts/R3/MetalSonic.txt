@@ -1,0 +1,171 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Metal Sonic Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 65 : TYPE_METALSONIC
+
+
+
+event ObjectUpdate
+	switch object.state
+	case 1
+		object.xpos -= 196608
+		object.frame++
+		object.frame &= 1
+		temp0 = 0
+		arrayPos0 = object.entityPos
+		arrayPos0++
+		while temp0 < 3
+			if object[arrayPos0].type > 0
+				temp1 = object[arrayPos0].xpos
+				temp1 += 2359296
+				if object.xpos < temp1
+					object[arrayPos0].type = TypeName[Blank Object]
+					temp2 = object[arrayPos0].propertyValue
+					temp2 <<= 2
+					CreateTempObject(TypeName[Spike Debris], temp2, object[arrayPos0].xpos, object[arrayPos0].ypos)
+					object[tempObjectPos].ixpos -= 9
+					object[tempObjectPos].iypos -= 9
+					object[tempObjectPos].xvel = -65536
+					object[tempObjectPos].yvel = -196608
+					temp2++
+					CreateTempObject(TypeName[Spike Debris], temp2, object[arrayPos0].xpos, object[arrayPos0].ypos)
+					object[tempObjectPos].ixpos += 8
+					object[tempObjectPos].iypos -= 9
+					object[tempObjectPos].xvel = 65536
+					object[tempObjectPos].yvel = -196608
+					temp2++
+					CreateTempObject(TypeName[Spike Debris], temp2, object[arrayPos0].xpos, object[arrayPos0].ypos)
+					object[tempObjectPos].ixpos -= 9
+					object[tempObjectPos].iypos += 8
+					object[tempObjectPos].xvel = -65536
+					object[tempObjectPos].yvel = -98304
+					temp2++
+					CreateTempObject(TypeName[Spike Debris], temp2, object[arrayPos0].xpos, object[arrayPos0].ypos)
+					object[tempObjectPos].ixpos += 8
+					object[tempObjectPos].iypos += 8
+					object[tempObjectPos].xvel = 65536
+					object[tempObjectPos].yvel = -98304
+					temp2++
+					PlaySfx(SfxName[Crumble], 0)
+				end if
+			end if
+			arrayPos0++
+			temp0++
+		loop
+		temp0 = object[-1].xpos
+		temp0 += 2097152
+		if object.xpos < temp0
+			object.state = 2
+			object.frame = 2
+			object.value1 = object.ypos
+			object[-1].frame = 8
+			object[-1].state = 4
+			PlaySfx(SfxName[Amy Captured], 0)
+		end if
+		break
+	case 2
+		if object.value0 > 8
+			if object[0].xpos < object.xpos
+				object.direction = 1
+			else
+				object.direction = 0
+			end if
+		end if
+		Sin(object.ypos, object.value0)
+		object.ypos <<= 9
+		object.ypos += object.value1
+		object.value0 += 8
+		if object.value0 > 607
+			object.state = 3
+			object.value0 = 0
+		end if
+		break
+	case 3
+		if object[0].xpos < object.xpos
+			object.direction = 1
+		else
+			object.direction = 0
+		end if
+		if object.value0 < 40
+			object.value0++
+			object.value1 -= 131072
+			object.ypos -= 131072
+		else
+			object.state = 4
+			object.value0 = 256
+		end if
+		break
+	case 4
+		if object[0].xpos < object.xpos
+			object.direction = 1
+		else
+			object.direction = 0
+		end if
+		Sin(object.ypos, object.value0)
+		object.ypos <<= 9
+		object.ypos += object.value1
+		object.value0 += 8
+		if object.value0 > 976
+			object.state = 5
+			object.direction = 0
+		end if
+		break
+	case 5
+		if object.xvel < 393216
+			object.xvel += 8192
+		end if
+		object.xpos += object.xvel
+		if object.outOfBounds == 1
+			temp0 = object.entityPos
+			ResetObjectEntity(temp0, TypeName[Blank Object], 0, 0, 0)
+			temp0--
+			ResetObjectEntity(temp0, TypeName[Blank Object], 0, 0, 0)
+		end if
+		break
+	end switch
+end event
+
+
+event ObjectDraw
+	if object.state < 2
+		DrawSprite(object.frame)
+	else
+		object[-1].xpos = object.xpos
+		object[-1].ypos = object.ypos
+		object[-1].direction = object.direction
+		temp0 = object.value4
+		temp0 >>= 1
+		temp0 += 3
+		DrawSpriteFX(temp0, FX_FLIP, object.xpos, object.ypos)
+		object.value4++
+		object.value4 &= 7
+		DrawSpriteFX(object.frame, FX_FLIP, object.xpos, object.ypos)
+	end if
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R3/Objects.gif")
+	SpriteFrame(-24, -16, 48, 32, 67, 68)
+	SpriteFrame(-24, -16, 48, 32, 116, 68)
+	SpriteFrame(-16, -24, 32, 48, 1, 108)
+	SpriteFrame(-24, -12, 24, 24, 214, 43)
+	SpriteFrame(0, 0, 2, 2, 165, 68)
+	SpriteFrame(-28, -16, 32, 32, 165, 68)
+	SpriteFrame(0, 0, 2, 2, 165, 68)
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

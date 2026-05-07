@@ -1,0 +1,265 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Seesaw Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 52 : TYPE_SEESAW
+
+
+
+event ObjectUpdate
+	switch object.state
+	case 1
+		switch object.value5
+		case 0
+			if object.value0 < 2
+				object.value0++
+			else
+				object.value0 = 0
+				object.value5++
+				object.value2 = 1048576
+			end if
+			break
+		case 1
+			if object.value0 < 6
+				object.value0++
+				object.frame = 1
+			else
+				object.value0 = 0
+				object.value5++
+				object.value2 = 1048576
+			end if
+			break
+		case 2
+			if object.value0 < 6
+				object.value0++
+				object.frame = 2
+			else
+				object.value0 = 0
+				object.value5++
+				object.value2 = 1572864
+			end if
+			break
+		case 3
+			if object.value0 < 6
+				object.value0++
+				object.frame = 3
+			else
+				object.value0 = 0
+				object.value5++
+				object.value2 = 1048576
+			end if
+			break
+		case 4
+			if object.value0 < 11
+				object.value0++
+				object.frame = 4
+			else
+				object.value0 = 0
+				object.value5++
+			end if
+			break
+		case 5
+			if object.value6 == 0
+				object.state = 2
+				object.value5 = 0
+			end if
+			break
+		end switch
+		object.value3 += object.yvel
+		object.yvel += 16384
+		temp0 = object.ypos
+		temp0 += 262144
+		if object.value3 > temp0
+			object.value3 = temp0
+			object.frame = 4
+			object.state = 3
+		end if
+		if object.yvel > 0
+			object.value4 = 12
+		else
+			if object.yvel > -589824
+				object.value4 = 11
+			end if
+		end if
+		break
+	case 2
+		switch object.value5
+		case 0
+			if object.value0 < 11
+				object.frame = 3
+				object.value0++
+			else
+				object.value0 = 0
+				object.value5++
+			end if
+			break
+		case 1
+			if object.value0 < 11
+				object.frame = 2
+				object.value0++
+			else
+				object.value0 = 0
+				object.value5++
+			end if
+			break
+		case 2
+			if object.value0 < 11
+				object.frame = 1
+				object.value0++
+			else
+				object.value0 = 0
+				object.value5++
+			end if
+			break
+		case 3
+			if object.value0 < 11
+				object.frame = 2
+				object.value0++
+			else
+				object.value0 = 0
+				object.value5 = 0
+			end if
+			break
+		end switch
+		object.value3 += object.yvel
+		object.yvel += 16384
+		temp0 = object.ypos
+		temp0 += 262144
+		if object.value3 > temp0
+			object.value3 = temp0
+			object.frame = 4
+			object.state = 3
+		end if
+		if object.yvel > 0
+			object.value4 = 12
+		else
+			if object.yvel > -589824
+				object.value4 = 11
+			end if
+		end if
+		if object.value6 == 1
+			object.state = 1
+			object.value0 = 0
+			object.value5 = object.frame
+		end if
+		break
+	end switch
+	object.value6 = 0
+	if object.outOfBounds == 1
+		object.state = 0
+		object.value3 = object.ypos
+		object.value4 = 10
+		object.frame = 0
+		object.value0 = 0
+		object.value5 = 0
+		object.value2 = 0
+		object.priority = 0
+	end if
+	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+		if object.state == 0
+			BoxCollisionTest(C_PLATFORM, object.entityPos, -40, -56, 40, -36, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			if checkResult == 1
+				object.state = 1
+				object.priority = 1
+				object.yvel = -786432
+			end if
+		else
+			switch object.frame
+			case 0
+				BoxCollisionTest(C_PLATFORM, object.entityPos, -40, -56, 40, -36, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+				break
+			case 1
+				BoxCollisionTest(C_PLATFORM, object.entityPos, -40, -40, 40, -20, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+				break
+			case 2
+				BoxCollisionTest(C_PLATFORM, object.entityPos, -40, -24, 40, -4, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+				break
+			case 3
+				BoxCollisionTest(C_PLATFORM, object.entityPos, -40, 0, 40, 20, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+				break
+			case 4
+				BoxCollisionTest(C_PLATFORM, object.entityPos, -40, 16, 40, 36, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+				break
+			end switch
+			if object.state < 3
+				if checkResult == 1
+					object.value6 = 1
+					if object.value2 > 0
+						object[currentPlayer].ypos += object.value2
+						object.value2 = 0
+						object.frame++
+					end if
+				end if
+			end if
+			if object.value4 > 11
+				temp0 = object.ypos
+				object.ypos = object.value3
+				BoxCollisionTest(C_TOUCH, object.entityPos, -24, -24, 24, 24, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+				if checkResult == 1
+					CallFunction(Player_Hit)
+				end if
+				object.ypos = temp0
+			end if
+		end if
+	next
+end event
+
+
+event ObjectDraw
+	if object.drawOrder == 3
+		if object.value4 < 11
+			DrawSpriteXY(object.value4, object.xpos, object.value3)
+			DrawSprite(object.frame)
+			DrawSpriteFX(object.frame, FX_FLIP, object.xpos, object.ypos)
+		else
+			DrawSprite(object.frame)
+			DrawSpriteFX(object.frame, FX_FLIP, object.xpos, object.ypos)
+			DrawSpriteXY(object.value4, object.xpos, object.value3)
+		end if
+		SetDrawListEntityRef(object.entityPos, 4, screen[4].drawListSize)
+		screen[4].drawListSize++
+		object.drawOrder = 4
+	else
+		temp0 = object.frame
+		temp0 += 5
+		DrawSprite(temp0)
+		object.drawOrder = 3
+	end if
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R8/Objects.gif")
+	SpriteFrame(-40, -56, 40, 112, 66, 1)
+	SpriteFrame(-40, -40, 40, 96, 107, 1)
+	SpriteFrame(-24, -24, 24, 80, 123, 17)
+	SpriteFrame(-40, -32, 40, 88, 148, 1)
+	SpriteFrame(-40, -40, 40, 96, 189, 1)
+	SpriteFrame(-40, -56, 80, 24, 175, 98)
+	SpriteFrame(-40, -40, 80, 24, 175, 98)
+	SpriteFrame(-40, -24, 80, 24, 175, 98)
+	SpriteFrame(-40, 0, 80, 24, 175, 98)
+	SpriteFrame(-40, 16, 80, 24, 175, 98)
+	SpriteFrame(-16, -16, 32, 32, 1, 213)
+	SpriteFrame(-24, -24, 48, 48, 1, 164)
+	SpriteFrame(-28, -32, 56, 64, 1, 99)
+	foreach (TypeName[Seesaw], arrayPos0, ALL_ENTITIES)
+		object[arrayPos0].direction = 1
+		object[arrayPos0].value3 = object[arrayPos0].ypos
+		object[arrayPos0].value4 = 10
+	next
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

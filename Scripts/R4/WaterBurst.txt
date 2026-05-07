@@ -1,0 +1,147 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Water Burst Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 66 : TYPE_WATERBURST
+
+
+
+event ObjectUpdate
+	object.value1++
+	if object.value1 == 8
+		Rand(temp0, 80)
+		temp0 -= 40
+		temp0 <<= 16
+		temp0 += object.xpos
+		Rand(temp1, 16)
+		temp1 -= 8
+		temp1 <<= 16
+		temp1 += object.ypos
+		temp1 -= 3145728
+		CreateTempObject(TypeName[Burst Splash], 0, temp0, temp1)
+		Rand(object[tempObjectPos].xvel, 10)
+		object[tempObjectPos].xvel -= 5
+		object[tempObjectPos].xvel <<= 13
+		object[tempObjectPos].yvel = -131072
+		object.value1 = 0
+	end if
+	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+		BoxCollisionTest(C_PLATFORM, object.entityPos, -48, -66, 48, -32, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+		if checkResult == 1
+			object[currentPlayer].ypos += 131072
+		end if
+		BoxCollisionTest(C_TOUCH, object.entityPos, -128, -24, 128, 400, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+		if checkResult == 1
+			if object[currentPlayer].state != Player_State_Death
+				if object[currentPlayer].state != Player_State_Drown
+					object[currentPlayer].state = Player_State_WaterCurrent
+					object[currentPlayer].animation = ANI_FANROTATE
+					object[currentPlayer].controlMode = -1
+					object[currentPlayer].left = 0
+					object[currentPlayer].right = 0
+					object[currentPlayer].up = 0
+					object[currentPlayer].down = 0
+					object[currentPlayer].yvel = -1048576
+					object[currentPlayer].value1 = 0
+				end if
+			end if
+			BoxCollisionTest(C_TOUCH, object.entityPos, -128, 48, 128, 332, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			if checkResult == 1
+				temp0 = object.xpos
+				temp0 -= object[currentPlayer].xpos
+				temp0 >>= 2
+				if temp0 > 1048576
+					temp0 = 1048576
+				end if
+				if temp0 < -1048576
+					temp0 = -1048576
+				end if
+				object[currentPlayer].xpos += temp0
+			end if
+		else
+			if object[currentPlayer].state == Player_State_WaterCurrent
+				object[currentPlayer].state = Player_State_Air
+				object[currentPlayer].controlMode = currentPlayer
+				object[currentPlayer].animation = ANI_BOUNCING
+				object[currentPlayer].xvel = 0
+				object[currentPlayer].speed = 0
+			end if
+		end if
+	next
+end event
+
+
+event ObjectDraw
+	object.ypos = stage.newWaterLevel
+	object.ypos -= 3145728
+	temp0 = oscillation
+	temp0 <<= 2
+	Sin(temp1, temp0)
+	temp1 <<= 9
+	object.ypos += temp1
+	temp0 = object.value0
+	temp0 /= 3
+	temp0 += 8
+	DrawSprite(temp0)
+	temp0 += 4
+	DrawSprite(temp0)
+	temp0 += 4
+	DrawSprite(temp0)
+	temp0 += 4
+	DrawSprite(temp0)
+	object.value0++
+	object.value0 %= 12
+	DrawSprite(object.frame)
+	temp0 = object.frame
+	temp0 += 4
+	DrawSprite(temp0)
+	object.frame++
+	object.frame &= 3
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R4/Objects3.gif")
+	SpriteFrame(-56, -80, 112, 32, 143, 46)
+	SpriteFrame(-56, -80, 112, 32, 143, 79)
+	SpriteFrame(-56, -80, 112, 32, 143, 112)
+	SpriteFrame(-56, -80, 112, 32, 143, 145)
+	SpriteFrame(-56, 48, 112, 32, 143, 46)
+	SpriteFrame(-56, 48, 112, 32, 143, 79)
+	SpriteFrame(-56, 48, 112, 32, 143, 112)
+	SpriteFrame(-56, 48, 112, 32, 143, 145)
+	SpriteFrame(-32, -64, 64, 32, 126, 178)
+	SpriteFrame(-32, -64, 64, 32, 61, 178)
+	SpriteFrame(-32, -64, 64, 32, 191, 178)
+	SpriteFrame(-32, -64, 64, 32, 191, 211)
+	SpriteFrame(-32, -32, 64, 32, 126, 178)
+	SpriteFrame(-32, -32, 64, 32, 61, 178)
+	SpriteFrame(-32, -32, 64, 32, 191, 178)
+	SpriteFrame(-32, -32, 64, 32, 191, 211)
+	SpriteFrame(-32, 0, 64, 32, 126, 178)
+	SpriteFrame(-32, 0, 64, 32, 61, 178)
+	SpriteFrame(-32, 0, 64, 32, 191, 178)
+	SpriteFrame(-32, 0, 64, 32, 191, 211)
+	SpriteFrame(-32, 32, 64, 32, 126, 178)
+	SpriteFrame(-32, 32, 64, 32, 61, 178)
+	SpriteFrame(-32, 32, 64, 32, 191, 178)
+	SpriteFrame(-32, 32, 64, 32, 191, 211)
+	foreach (TypeName[Water Burst], arrayPos0, ALL_ENTITIES)
+		object[arrayPos0].drawOrder = 4
+		object[arrayPos0].priority = 3
+	next
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

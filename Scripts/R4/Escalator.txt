@@ -1,0 +1,130 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Escalator Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 52 : TYPE_ESCALATOR
+
+
+
+event ObjectUpdate
+	switch object.state
+	case 1
+		if object.value0 > 0
+			object.value0--
+			object.xpos += object.value2
+			object.ypos -= object.value2
+		else
+			object.state++
+		end if
+		break
+	case 2
+		if object.outOfBounds == 1
+			object.state = 3
+			object.xpos -= 10485760
+			object.ypos += 10485760
+		end if
+		break
+	case 3
+		if object.outOfBounds == 1
+			object.state = 0
+			object.priority = 0
+		end if
+		break
+	end switch
+	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+		switch object.state
+		case 0
+			BoxCollisionTest(C_SOLID, object.entityPos, -16, -16, 16, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			if checkResult == 1
+				object.state = 1
+				object.value0 = object.value3
+				object.priority = 1
+				object[currentPlayer].tileCollisions = 0
+				object[currentPlayer].value1 = 1
+			else
+				if object.value1 == 1
+					object[currentPlayer].tileCollisions = 1
+				end if
+				object.value1 = 0
+			end if
+			break
+		case 1
+			BoxCollisionTest(C_SOLID, object.entityPos, -16, -16, 16, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			if checkResult == 1
+				object[currentPlayer].xpos += object.value2
+				object[currentPlayer].tileCollisions = 0
+				object.value1 = 1
+				BoxCollisionTest(C_SOLID, object.entityPos, 20, -32, 32, -16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+				object[currentPlayer].pushing = 0
+			else
+				if object.value1 == 1
+					object[currentPlayer].tileCollisions = 1
+				end if
+				object.value1 = 0
+			end if
+			break
+		case 2
+			object[currentPlayer].pushing = 0
+			BoxCollisionTest(C_SOLID, object.entityPos, -16, -16, 16, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			if checkResult == 1
+				object[currentPlayer].tileCollisions = 0
+				object.value1 = 1
+			else
+				if object.value1 == 1
+					object[currentPlayer].tileCollisions = 1
+				end if
+				object.value1 = 0
+			end if
+			break
+		end switch
+	next
+end event
+
+
+event ObjectDraw
+	if object.state < 3
+		DrawSprite(0)
+	end if
+end event
+
+
+event ObjectStartup
+	switch object[9].propertyValue
+	case 0
+	case 1
+		LoadSpriteSheet("R4/Objects.gif")
+		SpriteFrame(-16, -16, 32, 32, 130, 1)
+		break
+	case 2
+		LoadSpriteSheet("R4/Objects3.gif")
+		SpriteFrame(-16, -16, 32, 32, 1, 150)
+		break
+	case 3
+		LoadSpriteSheet("R4/Objects3.gif")
+		SpriteFrame(-16, -16, 32, 32, 1, 183)
+		break
+	end switch
+	foreach (TypeName[Escalator], arrayPos0, ALL_ENTITIES)
+		if object[24].propertyValue < 2
+			object[arrayPos0].value2 = 65536
+			object[arrayPos0].value3 = 160
+		else
+			object[arrayPos0].value2 = 131072
+			object[arrayPos0].value3 = 80
+		end if
+	next
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

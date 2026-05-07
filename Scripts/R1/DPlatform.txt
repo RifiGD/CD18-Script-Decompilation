@@ -1,0 +1,101 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Diag Platform Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 51 : TYPE_DIAGPLATFORM
+
+// Function declarations
+reserve function DiagPlatform_DebugDraw
+reserve function DiagPlatform_DebugSpawn
+
+
+public function DiagPlatform_DebugDraw
+	DrawSprite(0)
+end function
+
+
+public function DiagPlatform_DebugSpawn
+	CreateTempObject(TypeName[Diag Platform], 0, object.xpos, object.ypos)
+	object[tempObjectPos].xpos &= -65536
+	object[tempObjectPos].ypos &= -65536
+	object[tempObjectPos].value6 = 6144
+end function
+
+
+event ObjectUpdate
+	object.value5 = oscillation
+	object.value5 <<= 1
+	if object.propertyValue == 1
+		object.value5 += 256
+	end if
+	Cos(object.value2, object.value5)
+	object.value2 *= 6144
+	object.value2 += object.xpos
+	object.value2 &= -65536
+	object.value2 -= object.value1
+	Cos(object.value4, object.value5)
+	FlipSign(object.value4)
+	object.value4 *= object.value6
+	object.value4 += object.ypos
+	object.value4 &= -65536
+	object.value4 -= object.value3
+	temp0 = object.xpos
+	object.xpos = object.value1
+	temp1 = object.ypos
+	object.ypos = object.value3
+	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+		BoxCollisionTest(C_PLATFORM, object.entityPos, -32, -9, 32, 12, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+		if checkResult == 1
+			object[currentPlayer].xpos += object.value2
+			object[currentPlayer].ypos += object.value4
+		end if
+	next
+	object.xpos = temp0
+	object.ypos = temp1
+end event
+
+
+event ObjectDraw
+	Cos(object.value1, object.value5)
+	object.value1 *= 6144
+	object.value1 += object.xpos
+	object.value1 &= -65536
+	Cos(object.value3, object.value5)
+	FlipSign(object.value3)
+	object.value3 *= object.value6
+	object.value3 += object.ypos
+	object.value3 &= -65536
+	DrawSpriteXY(0, object.value1, object.value3)
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R1/Objects.gif")
+	SpriteFrame(-32, -16, 64, 32, 101, 109)
+	foreach (TypeName[Diag Platform], arrayPos0, ALL_ENTITIES)
+		if object[arrayPos0].propertyValue > 1
+			object[arrayPos0].value6 = -6144
+			object[arrayPos0].propertyValue -= 2
+		else
+			object[arrayPos0].value6 = 6144
+		end if
+	next
+	SetTableValue(TypeName[Diag Platform], DebugMode_ObjCount, DebugMode_TypesTable)
+	SetTableValue(DiagPlatform_DebugDraw, DebugMode_ObjCount, DebugMode_DrawTable)
+	SetTableValue(DiagPlatform_DebugSpawn, DebugMode_ObjCount, DebugMode_SpawnTable)
+	DebugMode_ObjCount++
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

@@ -1,0 +1,101 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Rising Float Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 72 : TYPE_RISINGFLOAT
+
+
+
+event ObjectUpdate
+	object.ypos = stage.waterLevel
+	object.ypos <<= 16
+	if object.state == 1
+		foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+			object.xpos = object[currentPlayer].xpos
+			if object.xpos < 269484032
+				object.xpos = 269484032
+			end if
+			if object.xpos > 284295168
+				object.xpos = 284295168
+			else
+				if object[currentPlayer].ypos > 96337920
+					if object[currentPlayer].ypos < object.ypos
+						ObjectTileCollision(1, 16, 6, 0)
+						if checkResult == 1
+							if object[currentPlayer].speed > 65536
+								object[currentPlayer].speed = 65536
+								object[currentPlayer].xvel = 65536
+							end if
+						end if
+						ObjectTileCollision(2, -16, 6, 0)
+						if checkResult == 1
+							if object[currentPlayer].speed < -65536
+								object[currentPlayer].speed = -65536
+								object[currentPlayer].xvel = -65536
+							end if
+						end if
+						object[currentPlayer].xpos = object.xpos
+					end if
+				else
+					ObjectTileCollision(1, 16, 0, 0)
+					ObjectTileCollision(2, -16, 0, 0)
+				end if
+			end if
+		next
+	end if
+	if object.outOfBounds == 1
+		temp0 = object.xpos
+		temp1 = object.ypos
+		object.xpos = object.value1
+		object.ypos = object.value2
+		if object.outOfBounds == 1
+			object.state = 0
+			object.priority = 0
+		else
+			object.xpos = temp0
+			object.ypos = temp1
+		end if
+	end if
+	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+		BoxCollisionTest(C_PLATFORM, object.entityPos, -16, -10, 16, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+		if checkResult == 1
+			object[currentPlayer].ypos += 131072
+			if object.state == 0
+				object[currentPlayer].speed = 0
+				object[currentPlayer].xvel = 0
+				stage.newWaterLevel = 98828288
+				object.state = 1
+				object.priority = 1
+			end if
+		end if
+	next
+end event
+
+
+event ObjectDraw
+	DrawSprite(0)
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R4/Objects2.gif")
+	SpriteFrame(-16, -8, 32, 16, 67, 235)
+	foreach (TypeName[Rising Float], arrayPos0, ALL_ENTITIES)
+		object[arrayPos0].value1 = object[arrayPos0].xpos
+		object[arrayPos0].value2 = object[arrayPos0].ypos
+	next
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

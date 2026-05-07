@@ -1,0 +1,268 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Minomusi Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 58 : TYPE_MINOMUSI
+
+// Function declarations
+reserve function Minomusi_DebugDraw
+reserve function Minomusi_DebugSpawn
+
+// Static Values
+public value Minomusi_value16 = 0;
+
+
+public function Minomusi_DebugDraw
+	temp0 = object[0].value16
+	temp0 -= Minomusi_value16
+	if temp0 == 0
+		DrawSprite(0)
+	else
+		DrawSprite(2)
+	end if
+end function
+
+
+public function Minomusi_DebugSpawn
+	temp0 = object[0].value16
+	temp0 -= Minomusi_value16
+	CreateTempObject(TypeName[Minomusi], temp0, object.xpos, object.ypos)
+end function
+
+
+event ObjectUpdate
+	if object.outOfBounds == 1
+		object.state = 0
+		object.value0 = 0
+		object.value2 = 0
+		object.ypos = object.value1
+		object.priority = 0
+	end if
+	if object.propertyValue == 0
+		switch object.state
+		case 0
+			object.frame = 0
+			if object.value0 > 0
+				object.value0--
+			end if
+			break
+		case 1
+			if object.value0 < 12
+				object.ypos += 524288
+				object.value0++
+			else
+				object.value0 = 0
+				object.state++
+			end if
+			break
+		case 2
+			if object.value2 < 30
+				object.value2++
+			else
+				object.value2 = 0
+				object.state++
+				object.frame = 3
+			end if
+			break
+		case 3
+			object.state++
+			object.frame = 4
+			PlaySfx(SfxName[Spikes], 0)
+			break
+		case 4
+			if object.value2 < 3
+				object.value2++
+			else
+				object.value2 = 0
+				object.state++
+				object.frame = 3
+			end if
+			break
+		case 5
+			object.state++
+			object.frame = 0
+			break
+		case 6
+			object.state++
+			object.frame = 3
+			break
+		case 7
+			object.state++
+			object.frame = 4
+			break
+		case 8
+			if object.value2 < 30
+				object.value2++
+			else
+				object.value2 = 0
+				object.state++
+				object.frame = 3
+			end if
+			break
+		case 9
+			object.frame = 0
+			if object.value0 < 2
+				object.state = 2
+				object.value0++
+			else
+				object.state++
+				object.value0 = 0
+			end if
+			break
+		case 10
+			if object.value0 < 20
+				object.value0++
+			else
+				object.value0 = 0
+				object.state++
+			end if
+			break
+		case 11
+			if object.value0 < 12
+				object.ypos -= 524288
+				object.value0++
+			else
+				object.value0 = 120
+				object.state = 0
+			end if
+			break
+		end switch
+	else
+		switch object.state
+		case 0
+			object.frame = 1
+			if object.value0 > 0
+				object.value0--
+			end if
+			break
+		case 1
+			object.frame = 1
+			if object.value0 < 12
+				object.ypos += 524288
+				object.value0++
+			else
+				object.value0 = 0
+				object.state++
+			end if
+			break
+		case 2
+			if object.value2 < 10
+				object.value2++
+			else
+				object.value2 = 0
+				object.state++
+				object.frame = 2
+			end if
+			break
+		case 3
+			if object.value2 < 10
+				object.value2++
+			else
+				object.value2 = 0
+				object.frame = 1
+				object.value0++
+				if object.value0 == 3
+					object.value0 = 0
+					object.state++
+				else
+					object.state = 2
+				end if
+			end if
+			break
+		case 4
+			if object.value0 < 48
+				object.ypos -= 131072
+				object.value0++
+			else
+				object.value0 = 120
+				object.state = 0
+			end if
+			break
+		end switch
+	end if
+	CallFunction(StageSetup_CheckGoodFuture)
+	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+		BoxCollisionTest(C_TOUCH, object.entityPos, -8, -6, 8, 22, currentPlayer, object[currentPlayer].value41, object[currentPlayer].value39, object[currentPlayer].value42, object[currentPlayer].value40)
+		if checkResult == 1
+			CallFunction(Player_BadnikBreak)
+		end if
+		if object.propertyValue == 0
+			if object.type == TypeName[Minomusi]
+				if object.frame > 2
+					BoxCollisionTest(C_TOUCH, object.entityPos, -17, -4, 17, 20, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+					if checkResult == 1
+						CallFunction(Player_Hit)
+					end if
+				end if
+			end if
+		end if
+		if object.state == 0
+			if object.value0 == 0
+				BoxCollisionTest(C_TOUCH, object.entityPos, -64, 0, 64, 128, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+				if checkResult == 1
+					object.state = 1
+					object.priority = 1
+				end if
+			end if
+		end if
+	next
+end event
+
+
+event ObjectDraw
+	temp0 = object.ypos
+	temp0 -= object.value1
+	temp0 >>= 19
+	temp0 += 5
+	DrawSpriteXY(temp0, object.xpos, object.value1)
+	DrawSprite(object.frame)
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R6/Objects.gif")
+	SpriteFrame(-8, -8, 16, 32, 82, 134)
+	SpriteFrame(-8, -8, 16, 32, 17, 184)
+	SpriteFrame(-8, -8, 16, 32, 1, 184)
+	SpriteFrame(-12, -8, 24, 32, 133, 166)
+	SpriteFrame(-16, -8, 32, 32, 1, 151)
+	SpriteFrame(-4, 16, 8, 0, 246, 91)
+	SpriteFrame(-4, 16, 8, 8, 246, 91)
+	SpriteFrame(-4, 16, 8, 16, 246, 91)
+	SpriteFrame(-4, 16, 8, 24, 246, 91)
+	SpriteFrame(-4, 16, 8, 32, 246, 91)
+	SpriteFrame(-4, 16, 8, 40, 246, 91)
+	SpriteFrame(-4, 16, 8, 48, 246, 91)
+	SpriteFrame(-4, 16, 8, 56, 246, 91)
+	SpriteFrame(-4, 16, 8, 64, 246, 91)
+	SpriteFrame(-4, 16, 8, 72, 246, 91)
+	SpriteFrame(-4, 16, 8, 72, 246, 91)
+	SpriteFrame(-4, 16, 8, 72, 246, 91)
+	SpriteFrame(-4, 16, 8, 72, 246, 91)
+	foreach (TypeName[Minomusi], arrayPos0, ALL_ENTITIES)
+		object[arrayPos0].value1 = object[arrayPos0].ypos
+	next
+	temp0 = 0
+	Minomusi_value16 = DebugMode_ObjCount
+	while temp0 < 2
+		SetTableValue(TypeName[Minomusi], DebugMode_ObjCount, DebugMode_TypesTable)
+		SetTableValue(Minomusi_DebugDraw, DebugMode_ObjCount, DebugMode_DrawTable)
+		SetTableValue(Minomusi_DebugSpawn, DebugMode_ObjCount, DebugMode_SpawnTable)
+		DebugMode_ObjCount++
+		temp0++
+	loop
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

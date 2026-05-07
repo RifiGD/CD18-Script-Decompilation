@@ -1,0 +1,211 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: VPlatform Medium Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 48 : TYPE_VPLATFORMMEDIUM
+
+// Function declarations
+reserve function VPlatformMedium_DebugDraw
+reserve function VPlatformMedium_DebugSpawn
+
+// Static Values
+public value VPlatformMedium_value20 = 0;
+
+
+public function VPlatformMedium_DebugDraw
+	temp0 = object[0].value16
+	temp0 -= VPlatformMedium_value20
+	switch temp0
+	case 0
+		DrawSprite(0)
+		break
+	case 1
+		DrawSprite(0)
+		DrawSprite(1)
+		break
+	end switch
+end function
+
+
+public function VPlatformMedium_DebugSpawn
+	temp0 = object[0].value16
+	temp0 -= VPlatformMedium_value20
+	switch temp0
+	case 0
+		temp1 = 0
+		break
+	case 1
+		temp1 = 2
+		break
+	end switch
+	CreateTempObject(TypeName[VPlatform Medium], temp1, object.xpos, object.ypos)
+	object[tempObjectPos].xpos &= -65536
+	object[tempObjectPos].ypos &= -65536
+end function
+
+
+event ObjectUpdate
+	object.value0++
+	if object.value0 == 312
+		object.value0 = 0
+	end if
+	object.angle = object.value0
+	object.angle <<= 6
+	object.angle /= 39
+	Sin(object.value2, object.angle)
+	FlipSign(object.value2)
+	switch object.propertyValue
+	case 0
+	case 2
+		object.value2 *= 6144
+		object.value2 += 3145728
+		object.value2 += object.ypos
+		object.value2 &= -65536
+		object.value2 -= object.value1
+		break
+	case 3
+	case 5
+		object.value2 *= -6144
+		object.value2 -= 3145728
+		object.value2 += object.ypos
+		object.value2 &= -65536
+		object.value2 -= object.value1
+		break
+	case 1
+		object.value2 *= 6144
+		object.value2 += 3145728
+		object.value2 += object.ypos
+		object.value2 &= -65536
+		object.value2 -= object.value1
+		break
+	case 4
+		object.value2 *= -6144
+		object.value2 -= 3145728
+		object.value2 += object.ypos
+		object.value2 &= -65536
+		object.value2 -= object.value1
+		break
+	end switch
+	temp0 = object.ypos
+	object.ypos = object.value1
+	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+		switch object.propertyValue
+		case 0
+		case 3
+			BoxCollisionTest(C_PLATFORM, object.entityPos, -32, -16, 32, 12, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			if checkResult == 1
+				object[currentPlayer].ypos += object.value2
+			end if
+			break
+		case 2
+		case 5
+			BoxCollisionTest(C_PLATFORM, object.entityPos, -32, -16, 32, 12, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			if checkResult == 1
+				object[currentPlayer].ypos += object.value2
+				if R5Setup_value14 == 0
+					object[currentPlayer].xpos += R5Setup_value16
+				else
+					object[currentPlayer].xpos -= R5Setup_value16
+				end if
+			end if
+			break
+		end switch
+	next
+	object.ypos = temp0
+end event
+
+
+event ObjectDraw
+	Sin(object.value1, object.angle)
+	FlipSign(object.value1)
+	switch object.propertyValue
+	case 0
+	case 1
+		object.value1 *= 6144
+		object.value1 += 3145728
+		object.value1 += object.ypos
+		object.value1 &= -65536
+		DrawSpriteXY(0, object.xpos, object.value1)
+		break
+	case 2
+		object.value1 *= 6144
+		object.value1 += 3145728
+		object.value1 += object.ypos
+		object.value1 &= -65536
+		DrawSpriteXY(0, object.xpos, object.value1)
+		DrawSpriteXY(1, object.xpos, object.value1)
+		break
+	case 3
+	case 4
+		object.value1 *= -6144
+		object.value1 -= 3145728
+		object.value1 += object.ypos
+		object.value1 &= -65536
+		DrawSpriteXY(0, object.xpos, object.value1)
+		break
+	case 5
+		object.value1 *= -6144
+		object.value1 -= 3145728
+		object.value1 += object.ypos
+		object.value1 &= -65536
+		DrawSpriteXY(0, object.xpos, object.value1)
+		DrawSpriteXY(1, object.xpos, object.value1)
+		break
+	end switch
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R5/Objects.gif")
+	switch object[9].propertyValue
+	case 0
+		LoadSpriteSheet("R5/Objects.gif")
+		SpriteFrame(-32, -16, 64, 32, 34, 51)
+		SpriteFrame(-32, -16, 64, 16, 1, 208)
+		break
+	case 1
+		LoadSpriteSheet("R5/Objects3.gif")
+		SpriteFrame(-32, -16, 64, 32, 34, 170)
+		SpriteFrame(-32, -16, 64, 16, 159, 148)
+		break
+	case 2
+		LoadSpriteSheet("R5/Objects3.gif")
+		SpriteFrame(-32, -16, 64, 32, 34, 170)
+		SpriteFrame(-32, -16, 64, 16, 159, 182)
+		break
+	case 3
+		LoadSpriteSheet("R5/Objects3.gif")
+		SpriteFrame(-32, -16, 64, 32, 34, 170)
+		SpriteFrame(-32, -16, 64, 16, 159, 216)
+		break
+	end switch
+	foreach (TypeName[VPlatform Medium], arrayPos0, ALL_ENTITIES)
+		if object[arrayPos0].propertyValue > 5
+			object[arrayPos0].propertyValue -= 6
+			object[arrayPos0].priority = 3
+		end if
+	next
+	temp0 = 0
+	VPlatformMedium_value20 = DebugMode_ObjCount
+	while temp0 < 2
+		SetTableValue(TypeName[VPlatform Medium], DebugMode_ObjCount, DebugMode_TypesTable)
+		SetTableValue(VPlatformMedium_DebugDraw, DebugMode_ObjCount, DebugMode_DrawTable)
+		SetTableValue(VPlatformMedium_DebugSpawn, DebugMode_ObjCount, DebugMode_SpawnTable)
+		DebugMode_ObjCount++
+		temp0++
+	loop
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

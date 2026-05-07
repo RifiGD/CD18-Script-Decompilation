@@ -1,0 +1,790 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: 3D Ramp Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 70 : TYPE_3DRAMP
+
+// Aliases
+private alias 0	:	RAMP3D_RUN
+private alias 1	:	RAMP3D_EXIT_UNUSED	// a copy of Exit Boost
+private alias 2	:	RAMP3D_EXIT
+private alias 3	:	RAMP3D_SET_YBOUND	// this doesn't really have anything to do with this object
+private alias 4	:	RAMP3D_ENTER
+private alias 5	:	RAMP3D_DROP
+private alias 6	:	RAMP3D_SET_YBOUND2	// this doesn't really have anything to do with this object
+private alias 7	:	RAMP3D_RUN_FROM_TOP
+private alias 8	:	RAMP3D_EXIT_BOOST
+
+//Unknown Variables
+// yeah im not touching these tables, thank you
+// private value value62034 = 106;
+// private value value62035 = 2;
+// private value value62036 = 2;
+// private value value62037 = 19;
+// private value value62038 = 2;
+// private value value62039 = 0;
+// private value value62040 = 1;
+// private value value62041 = 0;
+// private value value62042 = 54;
+// private value value62043 = 2;
+// private value value62044 = 1;
+// private value value62045 = 1;
+// private value value62046 = 1;
+// private value value62047 = 0;
+// private value value62048 = 30;
+// private value value62049 = 2;
+// private value value62050 = 13;
+// private value value62051 = 1;
+// private value value62052 = 1;
+// private value value62053 = 0;
+// private value value62054 = 74;
+// private value value62055 = 2;
+// private value value62056 = 0;
+// private value value62057 = 106;
+// private value value62058 = 2;
+// private value value62059 = 4;
+// private value value62060 = 19;
+// private value value62061 = 2;
+// private value value62062 = 2;
+// private value value62063 = 1;
+// private value value62064 = 0;
+// private value value62065 = 35;
+// private value value62066 = 2;
+// private value value62067 = 1;
+// private value value62068 = 19;
+// private value value62069 = 2;
+// private value value62070 = 4;
+// private value value62071 = 1;
+// private value value62072 = 0;
+// private value value62073 = 39;
+// private value value62074 = 1;
+// private value value62075 = 1;
+// private value value62076 = 0;
+// private value value62077 = 103;
+// private value value62078 = 17;
+// private value value62079 = 1;
+// private value value62080 = 1;
+// private value value62081 = 0;
+// private value value62082 = 39;
+// private value value62083 = 1;
+// private value value62084 = 1;
+// private value value62085 = 0;
+// private value value62086 = 105;
+// private value value62087 = 17;
+// private value value62088 = 26;
+// private value value62089 = 19;
+// private value value62090 = 2;
+// private value value62091 = 6;
+// private value value62092 = 1;
+// private value value62093 = 0;
+// private value value62094 = 39;
+// private value value62095 = 1;
+// private value value62096 = 1;
+// private value value62097 = 0;
+// private value value62098 = 102;
+// private value value62099 = 17;
+// private value value62100 = 1;
+// private value value62101 = 1;
+// private value value62102 = 0;
+// private value value62103 = 39;
+// private value value62104 = 1;
+// private value value62105 = 1;
+// private value value62106 = 0;
+// private value value62107 = 106;
+// private value value62108 = 17;
+// private value value62109 = 26;
+// private value value62110 = 26;
+// private value value62111 = 25;
+// private value value62112 = 106;
+// private value value62113 = 2;
+// private value value62114 = 5;
+// private value value62115 = 19;
+// private value value62116 = 2;
+// private value value62117 = 8;
+// private value value62118 = 1;
+// private value value62119 = 0;
+// private value value62120 = 29;
+// private value value62121 = 2;
+// private value value62122 = 0;
+// private value value62123 = 20;
+// private value value62124 = 2;
+// private value value62125 = 10;
+// private value value62126 = 1;
+// private value value62127 = 1;
+// private value value62128 = 0;
+// private value value62129 = 47;
+// private value value62130 = 17;
+// private value value62131 = 2;
+// private value value62132 = 0;
+// private value value62133 = 20;
+// private value value62134 = 2;
+// private value value62135 = 12;
+// private value value62136 = 1;
+// private value value62137 = 1;
+// private value value62138 = 0;
+// private value value62139 = 48;
+// private value value62140 = 17;
+// private value value62141 = 2;
+// private value value62142 = 99;
+// private value value62143 = 22;
+// private value value62144 = 2;
+// private value value62145 = 14;
+// private value value62146 = 1;
+// private value value62147 = 1;
+// private value value62148 = 0;
+// private value value62149 = 48;
+// private value value62150 = 17;
+// private value value62151 = 2;
+// private value value62152 = 204;
+// private value value62153 = 1;
+// private value value62154 = 1;
+// private value value62155 = 1;
+// private value value62156 = 0;
+// private value value62157 = 47;
+// private value value62158 = 17;
+// private value value62159 = 2;
+// private value value62160 = 0;
+// private value value62161 = 26;
+// private value value62162 = 26;
+// private value value62163 = 1;
+// private value value62164 = 1;
+// private value value62165 = 1;
+// private value value62166 = 0;
+// private value value62167 = 48;
+// private value value62168 = 17;
+// private value value62169 = 2;
+// private value value62170 = 0;
+// private value value62171 = 26;
+// private value value62172 = 22;
+// private value value62173 = 2;
+// private value value62174 = 16;
+// private value value62175 = 1;
+// private value value62176 = 0;
+// private value value62177 = 74;
+// private value value62178 = 2;
+// private value value62179 = 240;
+// private value value62180 = 1;
+// private value value62181 = 1;
+// private value value62182 = 0;
+// private value value62183 = 39;
+// private value value62184 = 1;
+// private value value62185 = 1;
+// private value value62186 = 0;
+// private value value62187 = 72;
+// private value value62188 = 17;
+// private value value62189 = 4;
+// private value value62190 = 1;
+// private value value62191 = 0;
+// private value value62192 = 74;
+// private value value62193 = 25;
+// private value value62194 = 1;
+// private value value62195 = 1;
+// private value value62196 = 0;
+// private value value62197 = 39;
+// private value value62198 = 1;
+// private value value62199 = 1;
+// private value value62200 = 0;
+// private value value62201 = 73;
+// private value value62202 = 17;
+// private value value62203 = 26;
+// private value value62204 = 25;
+// private value value62205 = 19;
+// private value value62206 = 2;
+// private value value62207 = 18;
+// private value value62208 = 1;
+// private value value62209 = 0;
+// private value value62210 = 43;
+// private value value62211 = 2;
+// private value value62212 = 0;
+// private value value62213 = 1;
+// private value value62214 = 1;
+// private value value62215 = 0;
+// private value value62216 = 39;
+// private value value62217 = 1;
+// private value value62218 = 1;
+// private value value62219 = 0;
+// private value value62220 = 101;
+// private value value62221 = 17;
+// private value value62222 = 26;
+// private value value62223 = 20;
+// private value value62224 = 2;
+// private value value62225 = 20;
+// private value value62226 = 1;
+// private value value62227 = 0;
+// private value value62228 = 43;
+// private value value62229 = 2;
+// private value value62230 = 200;
+// private value value62231 = 19;
+// private value value62232 = 2;
+// private value value62233 = 22;
+// private value value62234 = 1;
+// private value value62235 = 0;
+// private value value62236 = 35;
+// private value value62237 = 2;
+// private value value62238 = 0;
+// private value value62239 = 1;
+// private value value62240 = 1;
+// private value value62241 = 0;
+// private value value62242 = 39;
+// private value value62243 = 1;
+// private value value62244 = 1;
+// private value value62245 = 0;
+// private value value62246 = 103;
+// private value value62247 = 17;
+// private value value62248 = 25;
+// private value value62249 = 1;
+// private value value62250 = 1;
+// private value value62251 = 0;
+// private value value62252 = 39;
+// private value value62253 = 1;
+// private value value62254 = 1;
+// private value value62255 = 0;
+// private value value62256 = 105;
+// private value value62257 = 17;
+// private value value62258 = 26;
+// private value value62259 = 26;
+// private value value62260 = 20;
+// private value value62261 = 2;
+// private value value62262 = 24;
+// private value value62263 = 1;
+// private value value62264 = 0;
+// private value value62265 = 43;
+// private value value62266 = 2;
+// private value value62267 = 216;
+// private value value62268 = 19;
+// private value value62269 = 2;
+// private value value62270 = 26;
+// private value value62271 = 1;
+// private value value62272 = 0;
+// private value value62273 = 35;
+// private value value62274 = 2;
+// private value value62275 = 0;
+// private value value62276 = 1;
+// private value value62277 = 1;
+// private value value62278 = 0;
+// private value value62279 = 39;
+// private value value62280 = 1;
+// private value value62281 = 1;
+// private value value62282 = 0;
+// private value value62283 = 102;
+// private value value62284 = 17;
+// private value value62285 = 25;
+// private value value62286 = 1;
+// private value value62287 = 1;
+// private value value62288 = 0;
+// private value value62289 = 39;
+// private value value62290 = 1;
+// private value value62291 = 1;
+// private value value62292 = 0;
+// private value value62293 = 106;
+// private value value62294 = 17;
+// private value value62295 = 26;
+// private value value62296 = 26;
+// private value value62297 = 20;
+// private value value62298 = 2;
+// private value value62299 = 28;
+// private value value62300 = 1;
+// private value value62301 = 0;
+// private value value62302 = 43;
+// private value value62303 = 2;
+// private value value62304 = 232;
+// private value value62305 = 1;
+// private value value62306 = 1;
+// private value value62307 = 0;
+// private value value62308 = 39;
+// private value value62309 = 1;
+// private value value62310 = 1;
+// private value value62311 = 0;
+// private value value62312 = 101;
+// private value value62313 = 17;
+// private value value62314 = 26;
+// private value value62315 = 19;
+// private value value62316 = 2;
+// private value value62317 = 30;
+// private value value62318 = 1;
+// private value value62319 = 0;
+// private value value62320 = 43;
+// private value value62321 = 2;
+// private value value62322 = 192;
+// private value value62323 = 1;
+// private value value62324 = 1;
+// private value value62325 = 0;
+// private value value62326 = 39;
+// private value value62327 = 1;
+// private value value62328 = 1;
+// private value value62329 = 0;
+// private value value62330 = 104;
+// private value value62331 = 17;
+// private value value62332 = 26;
+// private value value62333 = 26;
+// private value value62334 = 19;
+// private value value62335 = 2;
+// private value value62336 = 32;
+// private value value62337 = 1;
+// private value value62338 = 0;
+// private value value62339 = 59;
+// private value value62340 = 2;
+// private value value62341 = 1;
+// private value value62342 = 106;
+// private value value62343 = 2;
+// private value value62344 = 6;
+// private value value62345 = 25;
+// private value value62346 = 19;
+// private value value62347 = 2;
+// private value value62348 = 34;
+// private value value62349 = 1;
+// private value value62350 = 0;
+// private value value62351 = 55;
+// private value value62352 = 2;
+// private value value62353 = 1;
+// private value value62354 = 19;
+// private value value62355 = 2;
+// private value value62356 = 36;
+// private value value62357 = 1;
+// private value value62358 = 0;
+// private value value62359 = 29;
+// private value value62360 = 2;
+// private value value62361 = 0;
+// private value value62362 = 1;
+// private value value62363 = 1;
+// private value value62364 = 0;
+// private value value62365 = 30;
+// private value value62366 = 2;
+// private value value62367 = 17;
+// private value value62368 = 1;
+// private value value62369 = 1;
+// private value value62370 = 0;
+// private value value62371 = 39;
+// private value value62372 = 1;
+// private value value62373 = 1;
+// private value value62374 = 0;
+// private value value62375 = 75;
+// private value value62376 = 17;
+// private value value62377 = 1;
+// private value value62378 = 1;
+// private value value62379 = 0;
+// private value value62380 = 74;
+// private value value62381 = 2;
+// private value value62382 = 0;
+// private value value62383 = 26;
+// private value value62384 = 26;
+// private value value62385 = 19;
+// private value value62386 = 2;
+// private value value62387 = 38;
+// private value value62388 = 1;
+// private value value62389 = 0;
+// private value value62390 = 56;
+// private value value62391 = 2;
+// private value value62392 = 1;
+// private value value62393 = 19;
+// private value value62394 = 2;
+// private value value62395 = 40;
+// private value value62396 = 1;
+// private value value62397 = 0;
+// private value value62398 = 29;
+// private value value62399 = 2;
+// private value value62400 = 0;
+// private value value62401 = 1;
+// private value value62402 = 1;
+// private value value62403 = 0;
+// private value value62404 = 30;
+// private value value62405 = 2;
+// private value value62406 = 18;
+// private value value62407 = 1;
+// private value value62408 = 1;
+// private value value62409 = 0;
+// private value value62410 = 39;
+// private value value62411 = 1;
+// private value value62412 = 1;
+// private value value62413 = 0;
+// private value value62414 = 76;
+// private value value62415 = 17;
+// private value value62416 = 1;
+// private value value62417 = 1;
+// private value value62418 = 0;
+// private value value62419 = 74;
+// private value value62420 = 2;
+// private value value62421 = 0;
+// private value value62422 = 25;
+// private value value62423 = 20;
+// private value value62424 = 2;
+// private value value62425 = 42;
+// private value value62426 = 1;
+// private value value62427 = 0;
+// private value value62428 = 29;
+// private value value62429 = 2;
+// private value value62430 = 6554;
+// private value value62431 = 1;
+// private value value62432 = 1;
+// private value value62433 = 0;
+// private value value62434 = 49;
+// private value value62435 = 2;
+// private value value62436 = 0;
+// private value value62437 = 1;
+// private value value62438 = 1;
+// private value value62439 = 0;
+// private value value62440 = 30;
+// private value value62441 = 2;
+// private value value62442 = 15;
+// private value value62443 = 1;
+// private value value62444 = 1;
+// private value value62445 = 0;
+// private value value62446 = 39;
+// private value value62447 = 1;
+// private value value62448 = 1;
+// private value value62449 = 0;
+// private value value62450 = 82;
+// private value value62451 = 17;
+// private value value62452 = 26;
+// private value value62453 = 22;
+// private value value62454 = 2;
+// private value value62455 = 44;
+// private value value62456 = 1;
+// private value value62457 = 0;
+// private value value62458 = 29;
+// private value value62459 = 2;
+// private value value62460 = -6554;
+// private value value62461 = 1;
+// private value value62462 = 1;
+// private value value62463 = 0;
+// private value value62464 = 49;
+// private value value62465 = 2;
+// private value value62466 = 0;
+// private value value62467 = 1;
+// private value value62468 = 1;
+// private value value62469 = 0;
+// private value value62470 = 30;
+// private value value62471 = 2;
+// private value value62472 = 15;
+// private value value62473 = 1;
+// private value value62474 = 1;
+// private value value62475 = 0;
+// private value value62476 = 39;
+// private value value62477 = 1;
+// private value value62478 = 1;
+// private value value62479 = 0;
+// private value value62480 = 82;
+// private value value62481 = 17;
+// private value value62482 = 26;
+// private value value62483 = 26;
+// private value value62484 = 26;
+// private value value62485 = 26;
+// private value value62486 = 26;
+// private value value62487 = 24;
+// private value value62488 = 2;
+// private value value62489 = 46;
+// private value value62490 = 1;
+// private value value62491 = 0;
+// private value value62492 = 39;
+// private value value62493 = 1;
+// private value value62494 = 1;
+// private value value62495 = 0;
+// private value value62496 = 72;
+// private value value62497 = 17;
+// private value value62498 = 1;
+// private value value62499 = 1;
+// private value value62500 = 0;
+// private value value62501 = 41;
+// private value value62502 = 1;
+// private value value62503 = 0;
+// private value value62504 = 29;
+// private value value62505 = 22;
+// private value value62506 = 2;
+// private value value62507 = 48;
+// private value value62508 = 1;
+// private value value62509 = 0;
+// private value value62510 = 41;
+// private value value62511 = 2;
+// private value value62512 = 0;
+// private value value62513 = 14;
+// private value value62514 = 1;
+// private value value62515 = 0;
+// private value value62516 = 41;
+// private value value62517 = 26;
+// private value value62518 = 6;
+// private value value62519 = 1;
+// private value value62520 = 0;
+// private value value62521 = 41;
+// private value value62522 = 2;
+// private value value62523 = 60;
+// private value value62524 = 7;
+// private value value62525 = 1;
+// private value value62526 = 0;
+// private value value62527 = 41;
+// private value value62528 = 2;
+// private value value62529 = 393216;
+// private value value62530 = 2;
+// private value value62531 = 1;
+// private value value62532 = 0;
+// private value value62533 = 41;
+// private value value62534 = 2;
+// private value value62535 = 20;
+// private value value62536 = 25;
+// private value value62537 = 1;
+// private value value62538 = 1;
+// private value value62539 = 0;
+// private value value62540 = 41;
+// private value value62541 = 2;
+// private value value62542 = 0;
+// private value value62543 = 26;
+// private value value62544 = 107;
+
+// NOTE TO FUTURE SELF:
+// STATE 34 FOR PLAYER BEING STATIC GROUND IS A PLACEHOLDER
+
+// NOTE FROM 30 SECONDS LATER:
+// It kind of wasn't? The correct ANIMATION still doesnt display unless the Player is in a rolling state.
+// BUT, at least dropping from the second ramp actually works now!!
+
+// NOTE FROM LIKE A WEEK LATER:
+// I just transplanted Player_State_Ramp3D from the v3 scripts and it literally just works like the bytecode in 2018, GGs.
+
+event ObjectUpdate
+	switch object.propertyValue
+	case RAMP3D_RUN
+		if object[0].gravity == 0
+			BoxCollisionTest(C_TOUCH, object.entityPos, -16, -16, 16, 16, 0, C_BOX, C_BOX, C_BOX, C_BOX)
+			if checkResult == true
+				if object[0].state != Player_State_Static
+					object[0].speed = 0
+					object[0].xvel = 0
+					object[0].animationSpeed = 0
+					object[0].scrollTracking = true
+					object[0].yvel = -786432
+					object[0].state = Player_State_Static
+					object[0].tileCollisions = 0
+				end if
+			end if
+		end if
+		break
+	case RAMP3D_EXIT_UNUSED
+		BoxCollisionTest(C_TOUCH, object.entityPos, -16, -16, 16, 16, 0, C_BOX, C_BOX, C_BOX, C_BOX)
+		if checkResult == true
+			object[0].state = Player_State_Air
+			object[0].tileCollisions = true
+			object[0].speed = 524288
+			object[0].gravity = 1
+			object[0].xvel = 524288
+			object[0].yvel = -917504
+			object[0].rotation = 384
+			stage.newYBoundary2 = 1280
+			stage.newXBoundary1 = 2080
+			if object[0].animation == ANI_ROLL3D
+				object[0].animation = ANI_JUMPING
+			else
+				if object[0].animation != ANI_JUMPING
+					object[0].animation = ANI_WALKING
+				end if
+			end if
+			object[15].type = TypeName[Background FX]
+			object[15].priority = 1
+			object[15].drawOrder = 0
+			arrayPos0 = 0
+			while arrayPos0 < 2
+				hParallax[arrayPos0].scrollPos = 0
+				arrayPos0++
+			loop
+		end if
+		break
+	case RAMP3D_EXIT
+		if object[0].state == Player_State_Static
+			BoxCollisionTest(C_TOUCH, object.entityPos, -16, -16, 16, 16, 0, C_BOX, C_BOX, C_BOX, C_BOX)
+			if checkResult == 1
+				object[0].state = Player_State_Air
+				object[0].tileCollisions = true
+				object[0].speed = 262144
+				object[0].gravity = 1
+				object[0].xvel = 262144
+				object[0].yvel = -786432
+				object[0].rotation = 384
+				stage.newYBoundary2 = 1280
+				stage.deathBoundary = 83886080
+				if object[0].animation == ANI_ROLL3D
+					object[0].animation = ANI_JUMPING
+				else
+					if object[0].animation != ANI_JUMPING
+						object[0].animation = ANI_WALKING
+					end if
+				end if
+			end if
+		end if
+		break
+	case RAMP3D_SET_YBOUND
+	// Unlike v3, this script actually sets a new death boundary
+		if object[0].xpos > object.xpos
+			stage.curYBoundary2 = 1024
+			stage.deathBoundary = 67108864
+		else
+			stage.curYBoundary2 = 1280
+			stage.deathBoundary = 83886080
+		end if
+		break
+	case RAMP3D_ENTER
+		if object[0].xpos > object.xpos
+			if object[0].gravity == 0
+				if object[0].state != Player_State_Static
+					if object[0].state == Player_State_Roll
+						if object[0].angle > 216
+							object[0].animation = ANI_JUMPING
+						else
+							if object[0].angle == 0
+								object[0].animation = ANI_JUMPING
+							else
+								object[0].animation = ANI_ROLL3D
+							end if
+						end if
+					else
+						if object[0].speed != 0
+							object[0].state = Player_State_Ramp3D
+						end if
+					end if
+				end if
+			end if
+			object[+3].value0 = object[0].xpos
+			object[+3].value0 -= object.xpos
+			object[+5].value0 = object[+3].value0
+			object[+5].value0 /= 3
+			object[+3].value0 >>= 1
+			object[+4].value0 = object[+3].value0
+			object[+3].value0 += object[+3].xpos
+			object[+4].value0 += object[+4].xpos
+			object[+5].value0 += object[+5].xpos
+			temp0 = object.ypos
+			temp0 -= object[0].ypos
+			if temp0 < 14680064
+				temp0 = object[0].xpos
+				temp0 -= object.value1
+				hParallax[0].scrollPos += temp0
+				arrayPos0 = 13
+				temp2 = 128
+				while arrayPos0 < 141
+					temp1 = temp0
+					temp1 *= temp2
+					temp1 >>= 7
+					hParallax[arrayPos0].scrollPos += temp1
+					arrayPos0++
+					temp2--
+				loop
+				temp0 <<= 1
+				hParallax[1].scrollPos += temp0
+			end if
+		else
+			object[+3].value0 = object[+3].xpos
+			object[+4].value0 = object[+4].xpos
+			object[+5].value0 = object[+5].xpos
+			if object[0].gravity == 0
+				if object[0].state == Player_State_Ramp3D
+					object[0].state = 12
+				end if
+			end if
+		end if
+		object.value1 = object[0].xpos
+		break
+	case 5
+		if object[0].state == Player_State_Air
+			BoxCollisionTest(C_TOUCH, object.entityPos, -16, -16, 16, 16, 0, C_BOX, C_BOX, C_BOX, C_BOX)
+			if checkResult == 1
+				object[0].animation = ANI_DROPPING
+				object.value1 = object[0].xpos
+			end if
+			if object[0].animation == ANI_DROPPING
+				object[0].speed = 0
+				object[0].xvel = 0
+				object[0].xpos = object.value1
+			end if
+		end if
+		break
+	case 6
+		if object[0].ypos < object.ypos
+			if object[0].xpos > object.xpos
+				stage.curYBoundary2 = 792
+				stage.deathBoundary = 51904512
+			else
+				stage.curYBoundary2 = 1024
+				stage.deathBoundary = 67108864
+			end if
+		end if
+		break
+	case 7
+		if object[0].xpos > object.xpos
+			stage.curYBoundary2 = 1024
+			if object[0].gravity == 0
+				if object[0].state == Player_State_Ramp3D
+					object[0].state = 12
+				end if
+			end if
+		else
+			stage.curYBoundary2 = 792
+			stage.deathBoundary = 51904512
+		end if
+		break
+	case 8
+		BoxCollisionTest(C_TOUCH, object.entityPos, -16, -16, 16, 16, 0, C_BOX, C_BOX, C_BOX, C_BOX)
+		if checkResult == 1
+			object[0].value1 = 0
+			object[0].state = 13
+			object[0].tileCollisions = 1
+			object[0].speed = 524288
+			object[0].gravity = 1
+			object[0].xvel = 524288
+			object[0].yvel = -917504
+			object[0].rotation = 384
+			stage.newYBoundary2 = 1280
+			stage.deathBoundary = 83886080
+			stage.newXBoundary1 = 2080
+			if object[0].animation == ANI_ROLL3D
+				object[0].animation = ANI_JUMPING
+			else
+				if object[0].animation != ANI_JUMPING
+					object[0].animation = ANI_WALKING
+				end if
+			end if
+			object[15].type = TypeName[Background FX]
+			object[15].priority = 1
+			object[15].drawOrder = 0
+			arrayPos0 = 0
+			while arrayPos0 < 2
+				hParallax[arrayPos0].scrollPos = 0
+				arrayPos0++
+			loop
+		end if
+		if object[0].yvel < 0
+			object[0].controlMode = -1
+			object[0].left = 0
+			object[0].right = 0
+			object.priority = 1
+		else
+			object[0].controlMode = 0
+			object.priority = 0
+		end if
+		break
+	end switch
+end event
+
+
+event ObjectStartup
+	if object[0].xpos > 131072000
+		stage.curYBoundary2 = 1280
+		object[15].type = TypeName[Background FX]
+		object[15].priority = 1
+		object[15].drawOrder = 0
+	end if
+	if object[0].xpos > 262144000
+		stage.curYBoundary2 = 1024
+		stage.deathBoundary = 67108864
+	end if
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

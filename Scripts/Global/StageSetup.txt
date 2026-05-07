@@ -1,0 +1,301 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Stage Setup Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 3 : TYPE_STAGESETUP
+
+// Function declarations
+reserve function StageSetup_CheckGoodFuture
+reserve function StageSetup_SaveStageState
+reserve function StageSetup_LoadStageState
+
+
+public function StageSetup_CheckGoodFuture
+	if goodFuture.enabled == true
+		if object.propertyValue > 0
+			ResetObjectEntity(object.entityPos, flowerType, 0, object.xpos, object.ypos)
+			object.drawOrder = 4
+			object.state = 1
+		else
+			if object[9].propertyValue > 0
+				ResetObjectEntity(object.entityPos, flowerType, 0, object.xpos, object.ypos)
+				object.drawOrder = 4
+				object.state = 1
+			end if
+		end if
+	end if
+end function
+
+
+public function StageSetup_SaveStageState
+	arrayPos0 = 32
+	arrayPos1 = 7168
+	temp1 = object[9].propertyValue
+	temp1 += 4
+
+	// Checks and saves:
+	// Anything that doesn't exist anymore
+	// Broken Monitors
+	// Used Warp Signs
+	// Anything that transformed into a flower
+
+	while arrayPos0 < 1056
+		if object[arrayPos0].type == TypeName[Blank Object]
+			SetBit(saveRAM[arrayPos1], object[9].propertyValue, 1)
+		else
+			if object[arrayPos0].type == TypeName[Broken Monitor]
+				SetBit(saveRAM[arrayPos1], object[9].propertyValue, 1)
+			else
+				if object[arrayPos0].type == TypeName[Future Post]
+					if object[arrayPos0].state == 2
+						SetBit(saveRAM[arrayPos1], object[9].propertyValue, 1)
+					else
+						SetBit(saveRAM[arrayPos1], object[9].propertyValue, 0)
+					end if
+				else
+					if object[arrayPos0].type == TypeName[Past Post]
+						if object[arrayPos0].state == 2
+							SetBit(saveRAM[arrayPos1], object[9].propertyValue, 1)
+						else
+							SetBit(saveRAM[arrayPos1], object[9].propertyValue, 0)
+						end if
+					else
+						SetBit(saveRAM[arrayPos1], object[9].propertyValue, 0)
+						if object[arrayPos0].type == flowerType
+							SetBit(saveRAM[arrayPos1], temp1, 1)
+						else
+							SetBit(saveRAM[arrayPos1], temp1, 0)
+						end if
+					end if
+				end if
+			end if
+		end if
+		arrayPos0++
+		arrayPos1++
+	loop
+end function
+
+
+public function StageSetup_LoadStageState
+	arrayPos0 = 32
+	arrayPos1 = 7168
+	temp1 = object[9].propertyValue
+	temp1 += 4
+
+	// Checks and loads:
+	// Anything that doesn't exist anymore
+	// Broken Monitors
+	// Used Warp Signs
+	// Anything that transformed into a flower
+
+	while arrayPos0 < 1056
+		if object[arrayPos0].type == TypeName[Ring]
+			GetBit(temp0, saveRAM[arrayPos1], object[9].propertyValue)
+			if temp0 == 1
+				object[arrayPos0].type = TypeName[Blank Object]
+			end if
+		else
+			if object[arrayPos0].type == TypeName[Monitor]
+				GetBit(temp0, saveRAM[arrayPos1], object[9].propertyValue)
+				if temp0 == 1
+					object[arrayPos0].type = TypeName[Broken Monitor]
+					object[arrayPos0].state = 2
+				end if
+			else
+				if object[arrayPos0].type == TypeName[Future Post]
+					GetBit(temp0, saveRAM[arrayPos1], object[9].propertyValue)
+					if temp0 == 1
+						object[arrayPos0].state = 2
+					end if
+				else
+					if object[arrayPos0].type == TypeName[Past Post]
+						GetBit(temp0, saveRAM[arrayPos1], object[9].propertyValue)
+						if temp0 == 1
+							object[arrayPos0].state = 2
+						end if
+					else
+						GetBit(temp0, saveRAM[arrayPos1], temp1)
+						if temp0 == 1
+							object[arrayPos0].type = TypeName[Blank Object]
+						end if
+					end if
+				end if
+			end if
+		end if
+		arrayPos0++
+		arrayPos1++
+	loop
+end function
+
+
+event ObjectUpdate
+	switch stage.state
+	case 2
+	case 3
+		break
+	default
+		ringTimer++
+		if ringTimer == 4
+			ringTimer = 0
+			ringFrame++
+			ringFrame &= 7
+		end if
+		if options.gameMode != 2
+			if player.score >= player.scoreBonus
+				player.lives++
+				player.scoreBonus += 50000
+				if stage.playerListPos == 0
+					PlaySfx(SfxName[1 Up], 0)
+				else
+					PlaySfx(SfxName[Achievement], 0)
+				end if
+			end if
+		end if
+		oscillation++
+		oscillation &= 511
+		if stage.timeEnabled == 1
+			if stage.minutes == 10
+				CheckEqual(stage.debugMode, 1)
+				temp0 = checkResult
+				CheckEqual(options.gameMode, 2)
+				temp0 |= checkResult
+				if temp0 == 0
+					currentPlayer = 0
+					object[0].type = TypeName[Player Object]
+					CallFunction(Player_Kill)
+				end if
+				stage.minutes = 9
+				stage.seconds = 59
+				stage.milliSeconds = 99
+				stage.timeEnabled = 0
+			end if
+		end if
+		foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+			temp0 = object[currentPlayer].collisionLeft
+			temp0 <<= 16
+			temp0 += object[currentPlayer].xpos
+			temp1 = stage.curXBoundary1
+			temp1 <<= 16
+			if temp0 < temp1
+				if object[currentPlayer].right == 1
+					object[currentPlayer].xvel = 65536
+					object[currentPlayer].speed = 65536
+				else
+					object[currentPlayer].xvel = 0
+					object[currentPlayer].speed = 0
+				end if
+				object[currentPlayer].xpos = temp1
+				temp0 = object[currentPlayer].collisionLeft
+				temp0 <<= 16
+				object[currentPlayer].xpos -= temp0
+			end if
+			temp1 = stage.curYBoundary2
+			temp1 <<= 16
+			if temp1 < stage.deathBoundary
+				if object[currentPlayer].ypos > stage.deathBoundary
+					CallFunction(Player_Kill)
+				end if
+			else
+				if object[currentPlayer].ypos > temp1
+					CallFunction(Player_Kill)
+				end if
+			end if
+		next
+	end switch
+end event
+
+
+event ObjectStartup
+	if options.soundtrack == 0
+		SetMusicTrack("JP/ZoneComplete.ogg", 1, 0)
+		SetMusicTrack("JP/Invincibility.ogg", 2, 0)
+		SetMusicTrack("JP/SpeedShoes.ogg", 3, 0)
+		SetMusicTrack("JP/Boss.ogg", 4, 1)
+		SetMusicTrack("JP/GameOver.ogg", 5, 0)
+	else
+		SetMusicTrack("US/ZoneComplete.ogg", 1, 0)
+		SetMusicTrack("US/Invincibility.ogg", 2, 0)
+		SetMusicTrack("US/SpeedShoes.ogg", 3, 0)
+		SetMusicTrack("US/Boss.ogg", 4, 196526)
+		SetMusicTrack("US/GameOver.ogg", 5, 0)
+	end if
+	if options.attractMode == false
+		stage.pauseEnabled = true
+	else
+		SetObjectRange(424)
+	end if
+	stage.deathBoundary = stage.curYBoundary2
+	stage.deathBoundary <<= 16
+	foreach (TypeName[Stage Setup], arrayPos0, ALL_ENTITIES)
+		ResetObjectEntity(arrayPos0, TypeName[Blank Object], 0, 0, 0)
+	next
+	object[8].type = TypeName[Stage Setup]
+	object[8].priority = 2
+	foreach (TypeName[HUD], arrayPos0, ALL_ENTITIES)
+		object[arrayPos0].type = TypeName[Blank Object]
+		object[9].type = TypeName[HUD]
+		object[9].priority = 1
+		object[9].drawOrder = 6
+		object[9].propertyValue = object[arrayPos0].propertyValue
+	next
+	ringExtraLife = 100
+	oscillation = 0
+	if options.saveSlot > 0
+		options.shieldType = 0
+	end if
+
+	blueShieldType		 = TypeName[Blue Shield]
+	invincibilityType 	 = TypeName[Invincibility]
+
+	warp.timer = 0
+	if warp.xpos > 0
+		object[0].xpos = warp.xpos
+		object[0].ypos = warp.ypos
+		object[0].xvel = warp.xvel
+		object[0].yvel = warp.yvel
+		object[0].speed = warp.speed
+		object[0].collisionMode = warp.collisionMode
+		object[0].gravity = warp.gravity
+		object[0].state = warp.state
+		object[0].animation = warp.animation
+		object[0].frame = warp.playerFrame
+		object[0].angle = warp.angle
+		object[0].value0 = warp.rings
+		object[0].value17 = warp.minRollSpeed
+		object[0].value8 = 120
+		object[0].value7 = 120
+		temp0 = warp.xpos
+		temp0 >>= 16
+		screen[0].cameraX = temp0
+		temp0 = warp.ypos
+		temp0 >>= 16
+		screen[0].cameraY = temp0
+		stage.milliSeconds = recMilliSeconds
+		stage.seconds = recSeconds
+		stage.minutes = recMinutes
+		CallFunction(StageSetup_LoadStageState)
+	end if
+	if object[9].propertyValue == 2
+		goodFuture.enabled = 1
+		generator.destroyed = 1
+	end if
+	if specialStage.timeStones == 127
+		goodFuture.enabled = 1
+		generator.destroyed = 1
+	end if
+	warp.destination = 0
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

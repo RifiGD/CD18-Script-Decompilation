@@ -1,0 +1,75 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Background Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 4 : TYPE_BACKGROUND
+
+
+
+event ObjectDraw
+	temp0 = screen.xcenter
+	temp0 <<= 1
+	DrawRect(0, 0, temp0, 100, 0, 0, 96, 255)
+	Sin(temp0, object.value0)
+	temp0 >>= 7
+	temp0 -= 16
+	DrawSpriteScreenXY(2, 280, temp0)
+	object.value0++
+	object.value0 &= 511
+	temp0 = 3
+	temp1 = 16
+	arrayPos0 = 40
+	while temp0 < 39
+		object[arrayPos0].xpos += temp1
+		if object[arrayPos0].xpos > 33554432
+			object[arrayPos0].xpos -= 33554432
+		end if
+		temp2 = object[arrayPos0].xpos
+		temp2 >>= 16
+		arrayPos0++
+		DrawSpriteScreenXY(temp0, temp2, 0)
+		temp0++
+		DrawSpriteScreenXY(temp0, temp2, 0)
+		temp0++
+		temp1 += 8192
+	loop
+	object.value1++
+	object.value1 &= 511
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("Title/Title.gif")
+	SpriteFrame(0, 0, 176, 68, 256, 4)
+	SpriteFrame(-144, 0, 144, 68, 257, 251)
+	SpriteFrame(0, 0, 120, 104, 257, 146)
+	temp0 = 447
+	temp1 = 168
+	while temp0 < 511
+		SpriteFrame(0, temp1, 512, 4, 0, temp0)
+		SpriteFrame(-512, temp1, 512, 4, 0, temp0)
+		temp0 += 4
+		temp1 += 4
+	loop
+	temp0 -= 16
+	while temp1 < 240
+		SpriteFrame(0, temp1, 512, 4, 0, temp0)
+		SpriteFrame(-512, temp1, 512, 4, 0, temp0)
+		temp0 += 4
+		temp1 += 4
+	loop
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

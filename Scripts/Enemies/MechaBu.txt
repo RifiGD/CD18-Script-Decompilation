@@ -1,0 +1,160 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Mecha Bu Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 50 : TYPE_MECHABU
+
+// Function declarations
+reserve function MechaBu_DebugDraw
+reserve function MechaBu_DebugSpawn
+
+// Static Values
+public value MechaBu_value13 = 0;
+
+
+public function MechaBu_DebugDraw
+	temp0 = object[0].value16
+	temp0 -= MechaBu_value13
+	if temp0 == 0
+		DrawSprite(0)
+	else
+		DrawSprite(2)
+	end if
+end function
+
+
+public function MechaBu_DebugSpawn
+	temp0 = object[0].value16
+	temp0 -= MechaBu_value13
+	CreateTempObject(TypeName[Mecha Bu], temp0, object.xpos, object.ypos)
+	object[tempObjectPos].value2 = object.xpos
+	object[tempObjectPos].value3 = object.ypos
+end function
+
+
+event ObjectUpdate
+	switch object.state
+	case 0
+		ObjectTileCollision(0, 0, 15, 0)
+		if checkResult == 1
+			object.state = 1
+		else
+			object.ypos += 65536
+		end if
+		break
+	case 1
+		if object.value0 < 416
+			object.value0++
+			object.xpos += 20480
+		else
+			object.value0 = 0
+			object.state = 2
+		end if
+		ObjectTileGrip(0, 0, 15, 0)
+		break
+	case 2
+		if object.value0 < 416
+			object.value0++
+			object.xpos -= 20480
+		else
+			object.value0 = 0
+			object.state = 1
+		end if
+		ObjectTileGrip(0, 0, 15, 0)
+		break
+	end switch
+	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+		if object.state < 3
+			BoxCollisionTest(C_TOUCH, object.entityPos, -16, -14, 16, 14, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			if checkResult == 1
+				CallFunction(Player_BadnikBreak)
+			end if
+			if object.type == TypeName[Mecha Bu]
+				if object.value4 > 59
+					BoxCollisionTest(C_TOUCH, object.entityPos, -30, -32, -8, 0, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+					if checkResult == 1
+						CallFunction(Player_Hit)
+					end if
+				else
+					BoxCollisionTest(C_TOUCH, object.entityPos, -36, -16, -14, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+					if checkResult == 1
+						CallFunction(Player_Hit)
+					end if
+				end if
+			end if
+		end if
+	next
+	object.value5++
+	if object.value5 == 48
+		object.value5 = 0
+		PlaySfx(SfxName[Buzzsaw], 0)
+	end if
+	object.animationTimer++
+	object.animationTimer %= 6
+	CallFunction(StageSetup_CheckGoodFuture)
+end event
+
+
+event ObjectDraw
+	temp0 = object.animationTimer
+	temp0 /= 3
+	if object.propertyValue == 0
+		if object.value4 > 59
+			temp0 += 5
+			DrawSpriteFX(temp0, FX_FLIP, object.xpos, object.ypos)
+			DrawSpriteFX(0, FX_FLIP, object.xpos, object.ypos)
+			DrawSpriteFX(4, FX_FLIP, object.xpos, object.ypos)
+		else
+			temp0 += 2
+			DrawSpriteFX(temp0, FX_FLIP, object.xpos, object.ypos)
+			DrawSpriteFX(0, FX_FLIP, object.xpos, object.ypos)
+			DrawSpriteFX(1, FX_FLIP, object.xpos, object.ypos)
+		end if
+		object.value4++
+		object.value4 %= 120
+	else
+		temp0 += 5
+		DrawSpriteFX(temp0, FX_FLIP, object.xpos, object.ypos)
+		DrawSpriteFX(0, FX_FLIP, object.xpos, object.ypos)
+		DrawSpriteFX(4, FX_FLIP, object.xpos, object.ypos)
+	end if
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R8/Objects.gif")
+	SpriteFrame(-24, -16, 48, 32, 173, 140)
+	SpriteFrame(-23, -17, 16, 24, 156, 177)
+	SpriteFrame(-31, -32, 24, 32, 230, 1)
+	SpriteFrame(-31, -32, 24, 32, 173, 173)
+	SpriteFrame(-33, -8, 24, 16, 131, 177)
+	SpriteFrame(-37, -16, 24, 32, 230, 1)
+	SpriteFrame(-37, -16, 24, 32, 173, 173)
+	foreach (TypeName[Mecha Bu], arrayPos0, ALL_ENTITIES)
+		object[arrayPos0].value2 = object[arrayPos0].xpos
+		object[arrayPos0].value3 = object[arrayPos0].ypos
+	next
+	temp0 = 0
+	MechaBu_value13 = DebugMode_ObjCount
+	while temp0 < 2
+		SetTableValue(TypeName[Mecha Bu], DebugMode_ObjCount, DebugMode_TypesTable)
+		SetTableValue(MechaBu_DebugDraw, DebugMode_ObjCount, DebugMode_DrawTable)
+		SetTableValue(MechaBu_DebugSpawn, DebugMode_ObjCount, DebugMode_SpawnTable)
+		DebugMode_ObjCount++
+		temp0++
+	loop
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

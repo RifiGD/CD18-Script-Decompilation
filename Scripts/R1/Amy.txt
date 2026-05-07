@@ -1,0 +1,595 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Amy Rose Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 68 : TYPE_AMYROSE
+
+// Function declarations
+reserve function AmyRose_DebugDraw
+reserve function AmyRose_DebugSpawn
+
+//Unknown Variables
+// I honestly didn't do these tables out lazyness.
+// private value value59355 = 19;
+// private value value59356 = 2;
+// private value value59357 = 0;
+// private value value59358 = 1;
+// private value value59359 = 0;
+// private value value59360 = 54;
+// private value value59361 = 2;
+// private value value59362 = 1;
+// private value value59363 = 1;
+// private value value59364 = 1;
+// private value value59365 = 0;
+// private value value59366 = 30;
+// private value value59367 = 2;
+// private value value59368 = 13;
+// private value value59369 = 1;
+// private value value59370 = 1;
+// private value value59371 = 0;
+// private value value59372 = 39;
+// private value value59373 = 1;
+// private value value59374 = 1;
+// private value value59375 = 0;
+// private value value59376 = 77;
+// private value value59377 = 17;
+// private value value59378 = 1;
+// private value value59379 = 1;
+// private value value59380 = 0;
+// private value value59381 = 74;
+// private value value59382 = 2;
+// private value value59383 = 0;
+// private value value59384 = 106;
+// private value value59385 = 2;
+// private value value59386 = 4;
+// private value value59387 = 25;
+// private value value59388 = 106;
+// private value value59389 = 2;
+// private value value59390 = 5;
+// private value value59391 = 22;
+// private value value59392 = 2;
+// private value value59393 = 2;
+// private value value59394 = 1;
+// private value value59395 = 0;
+// private value value59396 = 74;
+// private value value59397 = 2;
+// private value value59398 = 240;
+// private value value59399 = 1;
+// private value value59400 = 1;
+// private value value59401 = 0;
+// private value value59402 = 39;
+// private value value59403 = 1;
+// private value value59404 = 1;
+// private value value59405 = 0;
+// private value value59406 = 72;
+// private value value59407 = 17;
+// private value value59408 = 4;
+// private value value59409 = 1;
+// private value value59410 = 0;
+// private value value59411 = 74;
+// private value value59412 = 25;
+// private value value59413 = 1;
+// private value value59414 = 1;
+// private value value59415 = 0;
+// private value value59416 = 39;
+// private value value59417 = 1;
+// private value value59418 = 1;
+// private value value59419 = 0;
+// private value value59420 = 73;
+// private value value59421 = 17;
+// private value value59422 = 26;
+// private value value59423 = 20;
+// private value value59424 = 2;
+// private value value59425 = 4;
+// private value value59426 = 1;
+// private value value59427 = 1;
+// private value value59428 = 0;
+// private value value59429 = 47;
+// private value value59430 = 17;
+// private value value59431 = 2;
+// private value value59432 = 0;
+// private value value59433 = 20;
+// private value value59434 = 2;
+// private value value59435 = 6;
+// private value value59436 = 1;
+// private value value59437 = 1;
+// private value value59438 = 0;
+// private value value59439 = 48;
+// private value value59440 = 17;
+// private value value59441 = 2;
+// private value value59442 = 99;
+// private value value59443 = 22;
+// private value value59444 = 2;
+// private value value59445 = 8;
+// private value value59446 = 1;
+// private value value59447 = 1;
+// private value value59448 = 0;
+// private value value59449 = 48;
+// private value value59450 = 17;
+// private value value59451 = 2;
+// private value value59452 = 204;
+// private value value59453 = 1;
+// private value value59454 = 1;
+// private value value59455 = 1;
+// private value value59456 = 0;
+// private value value59457 = 47;
+// private value value59458 = 17;
+// private value value59459 = 2;
+// private value value59460 = 0;
+// private value value59461 = 26;
+// private value value59462 = 26;
+// private value value59463 = 1;
+// private value value59464 = 1;
+// private value value59465 = 1;
+// private value value59466 = 0;
+// private value value59467 = 48;
+// private value value59468 = 17;
+// private value value59469 = 2;
+// private value value59470 = 0;
+// private value value59471 = 26;
+// private value value59472 = 19;
+// private value value59473 = 2;
+// private value value59474 = 10;
+// private value value59475 = 1;
+// private value value59476 = 0;
+// private value value59477 = 59;
+// private value value59478 = 2;
+// private value value59479 = 1;
+// private value value59480 = 106;
+// private value value59481 = 2;
+// private value value59482 = 6;
+// private value value59483 = 26;
+// private value value59484 = 26;
+// private value value59485 = 107;
+
+
+public function AmyRose_DebugDraw
+	DrawSpriteFX(0, FX_FLIP, object.xpos, object.ypos)
+end function
+
+
+public function AmyRose_DebugSpawn
+	CreateTempObject(TypeName[Amy Rose], 4, object.xpos, object.ypos)
+	object[tempObjectPos].value0 = object[arrayPos0].xpos
+	object[tempObjectPos].value0 -= 20971520
+	object[tempObjectPos].value1 = object[arrayPos0].xpos
+	object[tempObjectPos].value1 += 4194304
+	object[tempObjectPos].drawOrder = 4
+	object[tempObjectPos].gravity = 1
+end function
+
+
+event ObjectUpdate
+	object.priority = 1
+	if object[0].xpos < object.xpos
+		object.direction = 1
+	else
+		object.direction = 0
+	end if
+	switch object.state
+	case 0
+		temp0 = object.value3
+		temp0 /= 10
+		temp0 += 11
+		object.frame = temp0
+		object.value3++
+		if object.value3 > 139
+			object.value3 = 0
+		end if
+		if object[0].type != 7
+			BoxCollisionTest(C_TOUCH, object.entityPos, -96, -360, 96, 360, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			if checkResult == 1
+				object.xvel = 0
+				object.state = 1
+				object.frame = 4
+				object.value3 = 0
+			end if
+		end if
+		break
+	case 1
+		object.value3++
+		switch object.frame
+		case 4
+		case 6
+			if object.value3 == 4
+				object.value3 = 0
+				object.frame++
+			end if
+			break
+		case 5
+		case 7
+			if object.value3 == 3
+				object.value3 = 0
+				object.frame++
+			end if
+			break
+		end switch
+		if object.frame > 7
+			object.frame = 4
+		end if
+		if object.direction == 0
+			if object.xvel < 131072
+				object.xvel += 4096
+			end if
+			BoxCollisionTest(C_TOUCH, object.entityPos, -32, -360, 4, 360, 0, C_BOX, C_BOX, C_BOX, C_BOX)
+			if checkResult == 1
+				if object[0].gravity == 0
+					if object[0].direction == object.direction
+						BoxCollisionTest(C_TOUCH, object.entityPos, -32, -20, 4, 20, 0, C_BOX, C_BOX, C_BOX, C_BOX)
+						if checkResult == 1
+							CheckEqual(object[0].animation, ANI_SPINDASH)
+							temp0 = checkResult
+							CheckEqual(object[1].type, TypeName[Blue Shield])
+							temp0 |= checkResult
+							if temp0 == 1
+								object.state = 8
+								object.frame = 9
+								object.yvel = -262144
+								object.gravity = 1
+								object.xvel = -65536
+							else
+								object.value2 = 1
+								object.state = 7
+								object.frame = 8
+								object.value3 = 0
+								object[0].state = Player_State_Hugged
+								PlaySfx(SfxName[Giggle], 0)
+								if stage.debugMode == 0
+								end if
+							end if
+						else
+							object.state = 6
+							object.frame = 0
+							object.value3 = 0
+							object.xvel = 0
+						end if
+					else
+						object.state = 6
+						object.frame = 0
+						object.value3 = 0
+						object.xvel = 0
+					end if
+				end if
+			end if
+			if object.xpos < object.value1
+				object.xpos += object.xvel
+			else
+				object.xvel = 0
+				object.xpos = object.value1
+				if object.value2 == 1
+					object.state = 4
+				else
+					object.state = 2
+					object.frame = 0
+					object.value3 = 0
+				end if
+			end if
+		else
+			if object.xvel > -131072
+				object.xvel -= 4096
+			end if
+			BoxCollisionTest(C_TOUCH, object.entityPos, -4, -360, 32, 360, 0, C_BOX, C_BOX, C_BOX, C_BOX)
+			if checkResult == 1
+				if object[0].gravity == 0
+					if object[0].direction == object.direction
+						BoxCollisionTest(C_TOUCH, object.entityPos, -32, -20, 4, 20, 0, C_BOX, C_BOX, C_BOX, C_BOX)
+						if checkResult == 1
+							CheckEqual(object[0].animation, ANI_SPINDASH)
+							temp0 = checkResult
+							CheckEqual(object[1].type, TypeName[Blue Shield])
+							temp0 |= checkResult
+							if temp0 == 1
+								object.state = 8
+								object.frame = 9
+								object.yvel = -262144
+								object.gravity = 1
+								object.xvel = 65536
+							else
+								object.value2 = 1
+								object.state = 7
+								object.frame = 8
+								object.value3 = 0
+								object[0].state = Player_State_Hugged
+								PlaySfx(SfxName[Giggle], 0)
+								if stage.debugMode == 0
+								end if
+							end if
+						else
+							object.state = 6
+							object.frame = 0
+							object.value3 = 0
+							object.xvel = 0
+						end if
+					else
+						object.state = 6
+						object.frame = 0
+						object.value3 = 0
+						object.xvel = 0
+					end if
+				end if
+			end if
+			if object.xpos > object.value0
+				object.xpos += object.xvel
+			else
+				object.xvel = 0
+				object.xpos = object.value0
+				if object.value2 == 1
+					object.state = 5
+				else
+					object.state = 3
+					object.frame = 0
+					object.value3 = 0
+				end if
+			end if
+		end if
+		break
+	case 2
+		object.value3++
+		if object.value3 == 12
+			object.value3 = 0
+			object.frame++
+		end if
+		if object.frame > 3
+			object.frame = 0
+		end if
+		if object.direction == 1
+			object.state = 1
+			object.frame = 4
+			object.value3 = 0
+		end if
+		break
+	case 3
+		object.value3++
+		if object.value3 == 12
+			object.value3 = 0
+			object.frame++
+		end if
+		if object.frame > 3
+			object.frame = 0
+		end if
+		if object.direction == 0
+			object.state = 1
+			object.frame = 4
+			object.value3 = 0
+		end if
+		break
+	case 4
+		if object.value3 < 8
+			object.frame = 0
+		else
+			if object.value3 > 47
+				if object.gravity == 0
+					if object.value3 < 120
+						object.yvel = -262144
+						object.gravity = 1
+						object.frame = 9
+					else
+						object.value3 = 0
+					end if
+				else
+					if object.yvel > 0
+						object.frame = 0
+					end if
+				end if
+			else
+				temp0 = object.value3
+				temp0 -= 8
+				temp0 %= 20
+				temp0 /= 10
+				object.frame = temp0
+				object.frame += 9
+			end if
+		end if
+		if object.gravity == 0
+			if object.direction == 1
+				object.state = 1
+				object.frame = 4
+				object.value3 = 0
+			end if
+		end if
+		object.value3++
+		break
+	case 5
+		if object.value3 < 8
+			object.frame = 0
+		else
+			if object.value3 > 47
+				if object.gravity == 0
+					if object.value3 < 120
+						object.yvel = -262144
+						object.gravity = 1
+						object.frame = 9
+					else
+						object.value3 = 0
+					end if
+				else
+					if object.yvel > 0
+						object.frame = 0
+					end if
+				end if
+			else
+				temp0 = object.value3
+				temp0 -= 8
+				temp0 %= 20
+				temp0 /= 10
+				object.frame = temp0
+				object.frame += 9
+			end if
+		end if
+		if object.gravity == 0
+			if object.direction == 0
+				object.state = 1
+				object.frame = 4
+				object.value3 = 0
+			end if
+		end if
+		object.value3++
+		break
+	case 6
+		object.value3++
+		if object.value3 == 12
+			object.value3 = 0
+			object.frame++
+		end if
+		if object.frame > 3
+			object.frame = 0
+		end if
+		BoxCollisionTest(C_TOUCH, object.entityPos, -4, -360, 4, 360, 0, C_BOX, C_BOX, C_BOX, C_BOX)
+		if checkResult == 0
+			if object[0].gravity == 0
+				object.state = 1
+				object.frame = 4
+				object.value3 = 0
+			end if
+		else
+			if object[0].gravity == 1
+				object.state = 1
+				object.frame = 4
+				object.value3 = 0
+			end if
+		end if
+		break
+	case 7
+		object[0].speed = 0
+		object[0].xvel = 0
+		object[0].direction = object.direction
+		if object[0].animation == 10
+			object.state = 8
+			object.frame = 9
+			object.yvel = -262144
+			object.gravity = 1
+			if object.direction == 0
+				object.xvel = -65536
+			else
+				object.xvel = 65536
+			end if
+		end if
+		break
+	case 8
+		if object.yvel > 0
+			object.frame = 10
+		end if
+		if object.xvel > 0
+			object.xvel -= 2048
+		end if
+		if object.xvel < 0
+			object.xvel += 2048
+		end if
+		object.xpos += object.xvel
+		if object.gravity == 0
+			if object.value3 == 16
+				object.state = 1
+				object.frame = 4
+				object.value3 = 0
+			else
+				object.value3++
+			end if
+		end if
+		if object.xpos > object.value1
+			object.xpos = object.value1
+		end if
+		break
+	end switch
+	object.value4++
+	if object.state == 7
+		if object.value4 > 15
+			CreateTempObject(TypeName[Love Heart], 0, object.xpos, object.ypos)
+			object[tempObjectPos].iypos -= 6
+			object[tempObjectPos].inkEffect = 2
+			object[tempObjectPos].alpha = 255
+			object.value4 = 0
+		end if
+	else
+		if object.value4 > 41
+			CreateTempObject(TypeName[Love Heart], 0, object.xpos, object.ypos)
+			object[tempObjectPos].iypos -= 6
+			object[tempObjectPos].inkEffect = 2
+			object[tempObjectPos].alpha = 255
+			object.value4 = 0
+		end if
+	end if
+	if object.gravity == 0
+		ObjectTileGrip(0, 0, 19, 0)
+	else
+		object.yvel += 16384
+		object.ypos += object.yvel
+		ObjectTileCollision(0, 0, 19, 0)
+		if checkResult == 1
+			object.yvel = 0
+			object.gravity = 0
+		end if
+	end if
+	if object.outOfBounds == 1
+		object.priority = 0
+		object.state = 0
+		object.value2 = 0
+	end if
+end event
+
+
+event ObjectDraw
+	DrawSpriteFX(object.frame, FX_FLIP, object.xpos, object.ypos)
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R1/Objects.gif")
+	foreach (TypeName[Amy Rose], arrayPos0, ALL_ENTITIES)
+		if stage.playerListPos == 1
+			object[arrayPos0].type = TypeName[Blank Object]
+		else
+			if options.gameMode == 2
+				object[arrayPos0].type = TypeName[Blank Object]
+			else
+				object[arrayPos0].value0 = object[arrayPos0].xpos
+				object[arrayPos0].value0 -= 20971520
+				object[arrayPos0].value1 = object[arrayPos0].xpos
+				object[arrayPos0].value1 += 4194304
+				object[arrayPos0].drawOrder = 4
+			end if
+		end if
+	next
+	SpriteFrame(-11, -20, 22, 40, 34, 208)
+	SpriteFrame(-11, -20, 22, 40, 57, 208)
+	SpriteFrame(-11, -20, 22, 40, 34, 208)
+	SpriteFrame(-11, -20, 22, 40, 126, 167)
+	SpriteFrame(-15, -20, 30, 40, 68, 167)
+	SpriteFrame(-10, -20, 21, 40, 166, 101)
+	SpriteFrame(-13, -20, 26, 40, 99, 167)
+	SpriteFrame(-10, -20, 21, 40, 166, 101)
+	SpriteFrame(-12, -20, 24, 40, 181, 208)
+	SpriteFrame(-13, -20, 26, 40, 80, 208)
+	SpriteFrame(-12, -20, 24, 40, 107, 208)
+	SpriteFrame(-12, -20, 22, 40, 158, 208)
+	SpriteFrame(-12, -20, 22, 40, 158, 208)
+	SpriteFrame(-12, -20, 22, 40, 158, 208)
+	SpriteFrame(-12, -20, 22, 40, 158, 208)
+	SpriteFrame(-12, -20, 22, 40, 158, 208)
+	SpriteFrame(-14, -20, 25, 40, 132, 208)
+	SpriteFrame(-14, -20, 25, 40, 132, 208)
+	SpriteFrame(-14, -20, 25, 40, 132, 208)
+	SpriteFrame(-12, -20, 22, 40, 158, 208)
+	SpriteFrame(-12, -20, 22, 40, 158, 208)
+	SpriteFrame(-12, -20, 22, 40, 158, 208)
+	SpriteFrame(-14, -20, 25, 40, 132, 208)
+	SpriteFrame(-14, -20, 25, 40, 132, 208)
+	SpriteFrame(-14, -20, 25, 40, 132, 208)
+	SetTableValue(TypeName[Amy Rose], DebugMode_ObjCount, DebugMode_TypesTable)
+	SetTableValue(AmyRose_DebugDraw, DebugMode_ObjCount, DebugMode_DrawTable)
+	SetTableValue(AmyRose_DebugSpawn, DebugMode_ObjCount, DebugMode_SpawnTable)
+	DebugMode_ObjCount++
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

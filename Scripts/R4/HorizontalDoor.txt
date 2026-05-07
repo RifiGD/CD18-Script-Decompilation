@@ -1,0 +1,98 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Horizontal Door Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 54 : TYPE_HORIZONTALDOOR
+
+// Function declarations
+reserve function HorizontalDoor_DebugDraw
+reserve function HorizontalDoor_DebugSpawn
+
+
+public function HorizontalDoor_DebugDraw
+	DrawSprite(0)
+end function
+
+
+public function HorizontalDoor_DebugSpawn
+	CreateTempObject(TypeName[Horizontal Door], 0, object.xpos, object.ypos)
+end function
+
+
+event ObjectUpdate
+	switch object.propertyValue
+	case 0
+		if object.value0 > 0
+			object.value0 -= 524288
+			if object.direction == 0
+				object.xpos += 524288
+			else
+				object.xpos -= 524288
+			end if
+		end if
+		if object[-1].propertyValue == 1
+			object.propertyValue = 1
+		end if
+		break
+	case 1
+		if object.value0 < 8388608
+			object.value0 += 524288
+			if object.direction == 0
+				object.xpos -= 524288
+			else
+				object.xpos += 524288
+			end if
+		end if
+		temp0 = object.ypos
+		temp0 -= 3145728
+		if object[0].ypos < temp0
+			object.propertyValue = 0
+		end if
+		break
+	end switch
+	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+		BoxCollisionTest(C_SOLID, object.entityPos, -64, -8, 64, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+		if checkResult > 0
+			object.collisionMode = 0
+		end if
+	next
+end event
+
+
+event ObjectDraw
+	DrawSprite(0)
+end event
+
+
+event ObjectStartup
+	if object[24].propertyValue < 2
+		LoadSpriteSheet("R4/Objects.gif")
+		SpriteFrame(-64, -8, 128, 16, 18, 69)
+	else
+		LoadSpriteSheet("R4/Objects3.gif")
+		SpriteFrame(-64, -8, 128, 16, 62, 211)
+	end if
+	foreach (TypeName[Horizontal Door], arrayPos0, ALL_ENTITIES)
+		object[arrayPos0].priority = 3
+		object[arrayPos0].direction = object[arrayPos0].propertyValue
+		object[arrayPos0].propertyValue = 0
+	next
+	SetTableValue(TypeName[Horizontal Door], DebugMode_ObjCount, DebugMode_TypesTable)
+	SetTableValue(HorizontalDoor_DebugDraw, DebugMode_ObjCount, DebugMode_DrawTable)
+	SetTableValue(HorizontalDoor_DebugSpawn, DebugMode_ObjCount, DebugMode_SpawnTable)
+	DebugMode_ObjCount++
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

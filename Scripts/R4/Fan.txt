@@ -1,0 +1,121 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Fan Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 55 : TYPE_FAN
+
+
+
+event ObjectUpdate
+	switch object.state
+	case 0
+	case 2
+		if object[-1].propertyValue == 1
+			object.propertyValue = 1
+			object.state++
+		end if
+		break
+	case 1
+	case 3
+		if object[24].propertyValue < 2
+			object.frame++
+			if object.frame > 9
+				object.frame = 0
+			end if
+		else
+			object.frame = 2
+		end if
+		break
+	end switch
+end event
+
+
+event ObjectDraw
+	switch object.state
+	case 0
+		DrawSprite(0)
+		break
+	case 1
+		temp0 = object.frame
+		temp0 >>= 1
+		DrawSprite(temp0)
+		break
+	case 2
+		DrawSpriteFX(5, FX_FLIP, object.xpos, object.ypos)
+		break
+	case 3
+		temp0 = object.frame
+		temp0 >>= 1
+		temp0 += 5
+		DrawSpriteFX(temp0, FX_FLIP, object.xpos, object.ypos)
+		break
+	end switch
+end event
+
+
+event ObjectStartup
+	switch object[9].propertyValue
+	case 0
+	case 1
+		LoadSpriteSheet("R4/Objects.gif")
+		SpriteFrame(-16, -8, 32, 16, 163, 35)
+		SpriteFrame(-12, -8, 24, 16, 229, 1)
+		SpriteFrame(-8, -8, 16, 16, 229, 18)
+		SpriteFrame(-12, -8, 24, 16, 196, 35)
+		SpriteFrame(-16, -8, 32, 16, 221, 35)
+		SpriteFrame(-8, -16, 16, 32, 239, 136)
+		SpriteFrame(-8, -12, 16, 24, 222, 169)
+		SpriteFrame(-8, -8, 16, 16, 239, 194)
+		SpriteFrame(-8, -12, 16, 24, 239, 169)
+		SpriteFrame(-8, -16, 16, 32, 222, 136)
+		break
+	case 2
+		LoadSpriteSheet("R4/Objects3.gif")
+		SpriteFrame(-16, -8, 32, 16, 51, 67)
+		SpriteFrame(-16, -8, 32, 16, 51, 84)
+		SpriteFrame(-16, -8, 32, 16, 51, 84)
+		SpriteFrame(-16, -8, 32, 16, 51, 84)
+		SpriteFrame(-16, -8, 32, 16, 51, 84)
+		SpriteFrame(-8, -16, 16, 32, 50, 101)
+		SpriteFrame(-8, -16, 16, 32, 67, 101)
+		SpriteFrame(-8, -16, 16, 32, 67, 101)
+		SpriteFrame(-8, -16, 16, 32, 67, 101)
+		SpriteFrame(-8, -16, 16, 32, 67, 101)
+		break
+	case 3
+		LoadSpriteSheet("R4/Objects3.gif")
+		SpriteFrame(-16, -8, 32, 16, 62, 228)
+		SpriteFrame(-16, -8, 32, 16, 94, 228)
+		SpriteFrame(-16, -8, 32, 16, 94, 228)
+		SpriteFrame(-16, -8, 32, 16, 94, 228)
+		SpriteFrame(-16, -8, 32, 16, 94, 228)
+		SpriteFrame(-8, -16, 16, 32, 76, 144)
+		SpriteFrame(-8, -16, 16, 32, 93, 144)
+		SpriteFrame(-8, -16, 16, 32, 93, 144)
+		SpriteFrame(-8, -16, 16, 32, 93, 144)
+		SpriteFrame(-8, -16, 16, 32, 93, 144)
+		break
+	end switch
+	foreach (TypeName[Fan], arrayPos0, ALL_ENTITIES)
+		object[arrayPos0].state = object[arrayPos0].propertyValue
+		if object[arrayPos0].propertyValue > 3
+			object[arrayPos0].state -= 2
+			object[arrayPos0].direction = 1
+		end if
+		object[arrayPos0].propertyValue &= 1
+	next
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

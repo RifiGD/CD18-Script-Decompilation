@@ -1,0 +1,54 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Shooting Face Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 69 : TYPE_SHOOTINGFACE
+
+
+
+event ObjectUpdate
+	object.value0++
+	if object.value0 == 32
+		object.value0 = 0
+		CreateTempObject(TypeName[Face Projectile], 0, object.xpos, object.ypos)
+		if object.propertyValue == 0
+			object[tempObjectPos].xpos += 1048576
+			object[tempObjectPos].direction = 0
+			object[tempObjectPos].xvel = -196608
+		else
+			object[tempObjectPos].xpos -= 1048576
+			object[tempObjectPos].direction = 1
+			object[tempObjectPos].xvel = 196608
+		end if
+		object[tempObjectPos].ypos += 262144
+	end if
+end event
+
+
+event ObjectDraw
+	DrawSprite(object.propertyValue)
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R4/Objects2.gif")
+	foreach (TypeName[Shooting Face], arrayPos0, ALL_ENTITIES)
+		object[arrayPos0].drawOrder = 4
+	next
+	SpriteFrame(-8, -16, 16, 32, 118, 151)
+	SpriteFrame(-8, -16, 16, 32, 135, 151)
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

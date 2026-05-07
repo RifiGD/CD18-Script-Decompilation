@@ -1,0 +1,331 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Tails Object Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 2 : TYPE_TAILSOBJECT
+
+// Function declarations
+reserve function TailsObject_ProcessTailSprite
+
+
+public function TailsObject_ProcessTailSprite
+	switch object.value12
+	case 0
+		if object.frame == 0
+			object.value11++
+			object.value11 %= 40
+		end if
+		break
+	case 1
+	case 3
+	case 4
+		object.value11++
+		object.value11 %= 40
+		break
+	case 7
+	case 9
+	case 10
+	case 43
+		object.value11++
+		object.value11 %= 12
+		break
+	case 17
+		object.value11++
+		object.value11 %= 30
+		break
+	end switch
+end function
+
+
+event ObjectUpdate
+	if stage.debugMode == true
+		CallFunction(Player_ProcessUpdate)
+		CheckEqual(options.attractMode, 0)
+		temp0 = checkResult
+		CheckEqual(keyPress[0].buttonB, 1)
+		temp0 &= checkResult
+		if temp0 == true
+			object.type = TypeName[Debug Mode]
+			object.yvel = 0
+			object.state = Player_State_Static
+			object.frame = 0
+			object.rotation = 0
+			object.interaction = 0
+			object.drawOrder = 4
+			object.priority = 1
+			object.value8 = 0
+			object.visible = 1
+			object.value2 = 0
+			object.value3 = 0
+			object.value4 = 0
+			object.frame = object.value16
+			screen[0].cameraEnabled = 1
+			screen[0].cameraStyle = options.originalControls
+			StopSfx(SfxName[Flying])
+			StopSfx(SfxName[Jump])
+			if stage.state == STAGE_FROZEN
+				stage.state = STAGE_RUNNING
+			end if
+			if object[1].type == TypeName[Blank Object]
+				object[1].priority = 1
+			end if
+			if object[+playerCount].propertyValue == 3
+				object[+playerCount].type = TypeName[Invincibility]
+				object[+playerCount].propertyValue = 0
+			end if
+		else
+			if object.gravity == 0
+				object.value34 = 0
+			end if
+			CallFunction(object.state)
+			ProcessAnimation()
+			CallFunction(TailsObject_ProcessTailSprite)
+			if object.animation == ANI_JUMPING
+				screen[0].adjustCameraY = object.value29
+			else
+				if screen[0].adjustCameraY == object.value29
+					screen[0].adjustCameraY = 0
+					object.iypos += object.value29
+				end if
+			end if
+			if object.value33 == 0
+				object.value43 = object.gravity
+				object.value43 ^= 1
+				ProcessObjectMovement()
+				checkResult |= object.value43
+				object.value43 ^= 1
+				if checkResult == 1
+					object.value18 = 0
+					if object.animation == ANI_JUMPING
+						if object.down == 0
+							if object.state != Player_State_Roll
+								if object.state != Player_State_TubeRoll
+									object.animation = ANI_WALKING
+									screen[0].adjustCameraY = 0
+									object.iypos += object.value29
+								end if
+							end if
+						end if
+					end if
+				end if
+			else
+				object.value33 = 0
+			end if
+		end if
+	else
+		CallFunction(Player_ProcessUpdate)
+		if object.gravity == 0
+			object.value34 = 0
+		end if
+		CallFunction(object.state)
+		ProcessAnimation()
+		CallFunction(TailsObject_ProcessTailSprite)
+		if object.animation == ANI_JUMPING
+			screen[0].adjustCameraY = object.value29
+		else
+			if screen[0].adjustCameraY == object.value29
+				screen[0].adjustCameraY = 0
+				object.iypos += object.value29
+			end if
+		end if
+		if object.value33 == 0
+			temp0 = object.value43
+			object.value43 = object.gravity
+			ProcessObjectMovement()
+			object.value43 ^= 1
+			CheckEqual(object.gravity, 0)
+			object.value43 |= checkResult
+			object.value43 ^= 1
+			if temp0 == 1
+				if object.value43 == 0
+					object.value18 = 0
+					if object.animation == ANI_JUMPING
+						if object.down == 0
+							if object.state != Player_State_Roll
+								if object.state != Player_State_TubeRoll
+									object.animation = ANI_WALKING
+									screen[0].adjustCameraY = 0
+									object.iypos += object.value29
+								end if
+							end if
+						end if
+					end if
+				end if
+			end if
+		else
+			object.value33 = 0
+		end if
+	end if
+end event
+
+
+event ObjectDraw
+	if object.animation != object.prevAnimation
+		object.prevAnimation = object.animation
+		object.frame = 0
+		object.animationTimer = 0
+		object.animationSpeed = 0
+	end if
+	if object.value12 != object.animation
+		if object.animation > 4
+			object.value11 = 0
+		end if
+		if object.value12 > 4
+			object.value11 = 0
+		end if
+		object.value12 = object.animation
+	end if
+	switch object.value12
+	case 0
+		if object.frame == 0
+			temp0 = object.value11
+			temp0 >>= 3
+			if object.visible == 1
+				DrawSpriteFX(temp0, FX_FLIP, object.xpos, object.ypos)
+			end if
+		end if
+		break
+	case 1
+	case 3
+	case 4
+	case 37
+		temp0 = object.value11
+		temp0 >>= 3
+		if object.visible == 1
+			DrawSpriteFX(temp0, FX_FLIP, object.xpos, object.ypos)
+		end if
+		break
+	case 7
+	case 9
+		temp0 = object.value11
+		temp0 >>= 2
+		temp0 += 11
+		if object.visible == 1
+			DrawSpriteFX(temp0, FX_FLIP, object.xpos, object.ypos)
+		end if
+		break
+	case 10
+	case 43
+		temp0 = object.value11
+		temp0 >>= 2
+		CheckEqual(object.xvel, 0)
+		temp1 = checkResult
+		CheckEqual(object.yvel, 0)
+		temp1 &= checkResult
+		temp2 = object.rotation
+		if temp1 == 0
+			ATan2(object.rotation, object.xvel, object.yvel)
+			object.rotation += 16
+			object.rotation &= 255
+			object.rotation >>= 5
+			switch object.rotation
+			case 0
+			case 8
+				temp0 += 5
+				object.rotation = 0
+				break
+			case 1
+				temp0 += 8
+				if object.direction == 0
+					object.rotation = 64
+				else
+					object.rotation = 0
+				end if
+				break
+			case 2
+				temp0 += 5
+				object.rotation = 64
+				break
+			case 3
+				temp0 += 8
+				if object.direction == 0
+					object.rotation = 128
+				else
+					object.rotation = 64
+				end if
+				break
+			case 4
+				temp0 += 5
+				object.rotation = 128
+				break
+			case 5
+				temp0 += 8
+				if object.direction == 0
+					object.rotation = 192
+				else
+					object.rotation = 128
+				end if
+				break
+			case 6
+				temp0 += 5
+				object.rotation = 192
+				break
+			case 7
+				temp0 += 8
+				if object.direction == 0
+					object.rotation = 0
+				else
+					object.rotation = 192
+				end if
+				break
+			end switch
+			if object.direction == 1
+				object.rotation += 128
+			end if
+		else
+			temp0 += 5
+			object.rotation = 0
+		end if
+		object.rotation <<= 1
+		if object.visible == 1
+			DrawSpriteFX(temp0, FX_ROTATE, object.xpos, object.ypos)
+		end if
+		object.rotation = temp2
+		break
+	case 17
+		temp0 = object.value11
+		temp0 /= 10
+		temp0 += 11
+		if object.visible == 1
+			DrawSpriteFX(temp0, FX_FLIP, object.xpos, object.ypos)
+		end if
+		break
+	end switch
+	DrawObjectAnimation()
+end event
+
+
+event ObjectStartup
+	if stage.playerListPos == 1
+		LoadSpriteSheet("Players/Tails1.gif")
+		LoadAnimation("Tails.ani")
+		SpriteFrame(-22, -8, 16, 24, 82, 199)
+		SpriteFrame(-26, -8, 20, 24, 99, 199)
+		SpriteFrame(-26, -8, 20, 24, 120, 199)
+		SpriteFrame(-26, -8, 20, 24, 141, 199)
+		SpriteFrame(-26, -8, 20, 24, 162, 199)
+		SpriteFrame(-35, -8, 24, 16, 231, 166)
+		SpriteFrame(-35, -8, 24, 16, 231, 183)
+		SpriteFrame(-35, -8, 24, 16, 231, 200)
+		SpriteFrame(-25, 9, 20, 16, 235, 217)
+		SpriteFrame(-25, 9, 18, 16, 237, 234)
+		SpriteFrame(-25, 9, 20, 16, 216, 234)
+		SpriteFrame(-30, -6, 24, 16, 231, 166)
+		SpriteFrame(-30, -6, 24, 16, 231, 183)
+		SpriteFrame(-30, -6, 24, 16, 231, 200)
+	end if
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

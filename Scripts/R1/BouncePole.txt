@@ -1,0 +1,101 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Bounce Pole Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 61 : TYPE_BOUNCEPOLE
+
+// Function declarations
+reserve function BouncePole_DebugDraw
+reserve function BouncePole_DebugSpawn
+
+
+public function BouncePole_DebugDraw
+	DrawSpriteFX(0, FX_FLIP, object.xpos, object.ypos)
+end function
+
+
+public function BouncePole_DebugSpawn
+	CreateTempObject(TypeName[Bounce Pole], object.direction, object.xpos, object.ypos)
+end function
+
+
+event ObjectUpdate
+	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+		BoxCollisionTest(C_TOUCH, object.entityPos, -16, -8, 16, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+		if checkResult == 1
+			if object[currentPlayer].gravity == 1
+				if object[currentPlayer].yvel > 0
+					object[currentPlayer].state = Player_State_Air
+					object[currentPlayer].value1 = 0
+					object[currentPlayer].animation = ANI_JUMPING
+					FlipSign(object[currentPlayer].yvel)
+					object[currentPlayer].yvel -= 131072
+					if object[currentPlayer].yvel < -655360
+						object[currentPlayer].yvel = -655360
+					end if
+					object.frame = 1
+				end if
+			end if
+		end if
+		if object.frame > 0
+			object.value0++
+			if object.value0 == 3
+				object.value0 = 0
+				object.frame++
+				if object.frame > 20
+					object.frame = 0
+				end if
+			end if
+		end if
+	next
+end event
+
+
+event ObjectDraw
+	object.direction = object.propertyValue
+	DrawSpriteFX(object.frame, FX_FLIP, object.xpos, object.ypos)
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R1/Objects.gif")
+	SpriteFrame(-16, -8, 32, 16, 190, 34)
+	SpriteFrame(-16, -8, 32, 16, 190, 34)
+	SpriteFrame(-16, -8, 32, 20, 190, 80)
+	SpriteFrame(-16, -8, 32, 16, 190, 34)
+	SpriteFrame(-16, -20, 32, 28, 190, 51)
+	SpriteFrame(-16, -8, 32, 16, 190, 34)
+	SpriteFrame(-16, -8, 32, 20, 190, 80)
+	SpriteFrame(-16, -8, 32, 16, 190, 34)
+	SpriteFrame(-16, -8, 32, 16, 190, 34)
+	SpriteFrame(-16, -8, 32, 20, 190, 80)
+	SpriteFrame(-16, -8, 32, 16, 190, 34)
+	SpriteFrame(-16, -20, 32, 28, 190, 51)
+	SpriteFrame(-16, -8, 32, 16, 190, 34)
+	SpriteFrame(-16, -8, 32, 20, 190, 80)
+	SpriteFrame(-16, -8, 32, 16, 190, 34)
+	SpriteFrame(-16, -8, 32, 16, 190, 34)
+	SpriteFrame(-16, -8, 32, 20, 190, 80)
+	SpriteFrame(-16, -8, 32, 16, 190, 34)
+	SpriteFrame(-16, -20, 32, 28, 190, 51)
+	SpriteFrame(-16, -8, 32, 16, 190, 34)
+	SpriteFrame(-16, -8, 32, 20, 190, 80)
+	SetTableValue(TypeName[Bounce Pole], DebugMode_ObjCount, DebugMode_TypesTable)
+	SetTableValue(BouncePole_DebugDraw, DebugMode_ObjCount, DebugMode_DrawTable)
+	SetTableValue(BouncePole_DebugSpawn, DebugMode_ObjCount, DebugMode_SpawnTable)
+	DebugMode_ObjCount++
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

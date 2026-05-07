@@ -1,0 +1,635 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Eggman Part 2 Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 54 : TYPE_EGGMANPART2
+
+// Function declarations
+reserve function EggmanPart2_Function92
+reserve function EggmanPart2_Function93
+reserve function EggmanPart2_Function94
+reserve function EggmanPart2_Function95
+reserve function EggmanPart2_Function96
+reserve function EggmanPart2_Function97
+
+
+public function EggmanPart2_Function92
+	arrayPos0 = 1
+	temp0 = object.angle
+	while arrayPos0 <= object.value4
+		if object[+arrayPos0].state < 3
+			object[+arrayPos0].drawOrder = 3
+			Cos(temp1, temp0)
+			temp1 *= object.value3
+			temp1 >>= 1
+			Cos(object[+arrayPos0].xpos, object.rotation)
+			object[+arrayPos0].xpos *= temp1
+			object[+arrayPos0].xpos >>= 9
+			object[+arrayPos0].xpos += object.xpos
+			Sin(object[+arrayPos0].ypos, temp0)
+			object[+arrayPos0].ypos *= object.value3
+			object[+arrayPos0].ypos >>= 1
+			object[+arrayPos0].ypos += object.ypos
+		end if
+		temp0 += object.value5
+		arrayPos0++
+	loop
+end function
+
+
+public function EggmanPart2_Function93
+	arrayPos0 = 1
+	temp0 = object.angle
+	while arrayPos0 <= object.value4
+		if object[+arrayPos0].state < 3
+			if temp0 < 128
+				object[+arrayPos0].drawOrder = 3
+			else
+				if temp0 > 383
+					object[+arrayPos0].drawOrder = 3
+				else
+					object[+arrayPos0].drawOrder = 2
+				end if
+			end if
+			Cos(temp1, temp0)
+			temp1 *= object.value3
+			temp1 >>= 1
+			Cos(object[+arrayPos0].xpos, object.rotation)
+			object[+arrayPos0].xpos *= temp1
+			object[+arrayPos0].xpos >>= 9
+			object[+arrayPos0].xpos += object.xpos
+			Sin(object[+arrayPos0].ypos, temp0)
+			object[+arrayPos0].ypos *= object.value3
+			object[+arrayPos0].ypos >>= 1
+			object[+arrayPos0].ypos += object.ypos
+		end if
+		temp0 += object.value5
+		temp0 &= 511
+		arrayPos0++
+	loop
+end function
+
+
+public function EggmanPart2_Function94
+	arrayPos0 = 1
+	temp0 = 0
+	while arrayPos0 <= object.value4
+		if object[+arrayPos0].type == TypeName[Boss Bubble 2]
+			temp0++
+		end if
+		arrayPos0++
+	loop
+	checkResult = 0
+	switch temp0
+	case 3
+		if object.value4 > 4
+			checkResult = 1
+		end if
+		break
+	case 4
+	case 5
+	case 6
+	case 7
+		if temp0 < object.value4
+			checkResult = 1
+		end if
+		break
+	case 8
+	case 9
+	case 10
+	case 11
+	case 12
+	case 13
+	case 14
+		temp1 = object.value4
+		temp1 -= temp0
+		if temp1 > 1
+			checkResult = 1
+		end if
+		break
+	end switch
+end function
+
+
+public function EggmanPart2_Function95
+	arrayPos0 = 1
+	temp0 = 0
+	while arrayPos0 <= object.value4
+		if object[+arrayPos0].type == TypeName[Boss Bullet 2]
+			temp0++
+		end if
+		arrayPos0++
+	loop
+	arrayPos0 = 1
+	while arrayPos0 <= object.value4
+		if arrayPos0 <= temp0
+			object[+arrayPos0].type = TypeName[Boss Bubble 2]
+			object[+arrayPos0].state = 2
+			object[+arrayPos0].value0 = 0
+		else
+			object[+arrayPos0].type = TypeName[Blank Object]
+		end if
+		arrayPos0++
+	loop
+	object.value4 = temp0
+	object.value5 = 512
+	object.value5 /= object.value4
+end function
+
+
+public function EggmanPart2_Function96
+	arrayPos0 = 1
+	while arrayPos0 <= object.value4
+		if object[+arrayPos0].type == TypeName[Boss Bullet 2]
+			object[+arrayPos0].state = 3
+			object[+arrayPos0].value0 = 0
+		end if
+		arrayPos0++
+	loop
+end function
+
+
+public function EggmanPart2_Function97
+	if object.direction == 0
+		CreateTempObject(TypeName[Boss Bullet], 0, object.xpos, object.ypos)
+		object[tempObjectPos].value4 = object.entityPos
+		object[tempObjectPos].drawOrder = 2
+		CreateTempObject(TypeName[Boss Bullet], 1, object.xpos, object.ypos)
+		object[tempObjectPos].value4 = object.entityPos
+		object[tempObjectPos].drawOrder = 2
+		CreateTempObject(TypeName[Boss Bullet], 2, object.xpos, object.ypos)
+		object[tempObjectPos].value4 = object.entityPos
+		object[tempObjectPos].drawOrder = 2
+		CreateTempObject(TypeName[Boss Bullet], 3, object.xpos, object.ypos)
+		object[tempObjectPos].value4 = object.entityPos
+		object[tempObjectPos].drawOrder = 2
+	else
+		CreateTempObject(TypeName[Boss Bullet], 4, object.xpos, object.ypos)
+		object[tempObjectPos].value4 = object.entityPos
+		object[tempObjectPos].drawOrder = 2
+		CreateTempObject(TypeName[Boss Bullet], 5, object.xpos, object.ypos)
+		object[tempObjectPos].value4 = object.entityPos
+		object[tempObjectPos].drawOrder = 2
+		CreateTempObject(TypeName[Boss Bullet], 6, object.xpos, object.ypos)
+		object[tempObjectPos].value4 = object.entityPos
+		object[tempObjectPos].drawOrder = 2
+		CreateTempObject(TypeName[Boss Bullet], 7, object.xpos, object.ypos)
+		object[tempObjectPos].value4 = object.entityPos
+		object[tempObjectPos].drawOrder = 2
+	end if
+end function
+
+
+event ObjectUpdate
+	switch object.state
+	case 0
+		stage.newXBoundary1 = object.ixpos
+		stage.newXBoundary1 -= 96
+		stage.newXBoundary1 -= screen.xcenter
+		stage.newXBoundary2 = stage.newXBoundary1
+		stage.newXBoundary2 += screen.xcenter
+		stage.newXBoundary2 += screen.xcenter
+		BoxCollisionTest(C_TOUCH, object.entityPos, -80, -256, 64, 256, 0, C_BOX, C_BOX, C_BOX, C_BOX)
+		if checkResult == 1
+			object.state = 1
+			object[+17].xpos = object.xpos
+			object[+17].xpos -= 6291456
+			object[+17].ypos = object.ypos
+			CreateTempObject(TypeName[Fade Music], 0, object.xpos, object.ypos)
+		end if
+		break
+	case 1
+		if object.value0 < 60
+			object.value0++
+		else
+			object.value0 = 0
+			object.value2 = 0
+			object.state = 2
+		end if
+		break
+	case 2
+		if object.value0 < 320
+			temp0 = object.value0
+			temp0 %= 20
+			if temp0 == 0
+				PlaySfx(SfxName[Drowning], 0)
+			end if
+			if object.value1 > 0
+				object.value1--
+			else
+				object.value1 = 10
+				CreateTempObject(TypeName[Boss Bubble 1], 0, object.xpos, object.ypos)
+				Rand(object[tempObjectPos].xpos, 28)
+				object[tempObjectPos].xpos -= 14
+				object[tempObjectPos].xpos <<= 16
+				object[tempObjectPos].xpos += object.xpos
+				object[tempObjectPos].value1 = object[tempObjectPos].xpos
+				object[tempObjectPos].ypos += 10223616
+				Rand(object[tempObjectPos].value3, 4)
+				object[tempObjectPos].value3 += 9
+				object[tempObjectPos].value4 = object.entityPos
+				if object.value2 == 1
+					Rand(object[tempObjectPos].value5, 32)
+					object[tempObjectPos].value5 -= 16
+					object[tempObjectPos].value5 <<= 16
+				else
+					object[tempObjectPos].value5 = 0
+				end if
+				object.value2++
+				object.value2 &= 1
+			end if
+			object.value0++
+		else
+			object.state = 3
+			object.value0 = 0
+		end if
+		break
+	case 3
+		if object.value0 < 180
+			object.value0++
+		else
+			object.value0 = 0
+			object.value4 = 16
+			object.angle = 0
+			object.value5 = 32
+			object.value3 = 4096
+			object.rotation = 256
+			object.state = 4
+			arrayPos0 = 1
+			while arrayPos0 < 17
+				object[+arrayPos0].type = TypeName[Boss Bubble 2]
+				arrayPos0++
+			loop
+			CallFunction(EggmanPart2_Function92)
+		end if
+		break
+	case 4
+		object.angle += 8
+		object.angle &= 511
+		if object.value3 < 12288
+			object.value3 += 96
+		else
+			object.state = 5
+		end if
+		CallFunction(EggmanPart2_Function92)
+		break
+	case 5
+		object.angle += 2
+		object.angle &= 511
+		if object.value0 < 20
+			object.value0++
+		else
+			object.state = 6
+			object[+17].angle = 0
+		end if
+		CallFunction(EggmanPart2_Function92)
+		break
+	case 6
+		Cos(object.xpos, object[+17].angle)
+		object.xpos *= 12288
+		object.xpos += object[+17].xpos
+		Sin(object.ypos, object[+17].angle)
+		object.ypos *= 8192
+		object.ypos += object[+17].ypos
+		if object[+17].angle == 12
+			CallFunction(EggmanPart2_Function97)
+		end if
+		if object[+17].angle < 256
+			object[+17].angle += 2
+		else
+			object.state = 7
+		end if
+		object.angle += 2
+		object.angle &= 511
+		CallFunction(EggmanPart2_Function92)
+		break
+	case 7
+		object.angle += 8
+		object.angle &= 511
+		CallFunction(EggmanPart2_Function93)
+		if object.rotation == 128
+			object.direction = 1
+		end if
+		if object.rotation > 0
+			object.rotation -= 2
+		else
+			CallFunction(EggmanPart2_Function94)
+			if checkResult == 1
+				object.state = 10
+				object.value0 = 0
+			else
+				object.state = 8
+			end if
+		end if
+		break
+	case 8
+		Cos(object.xpos, object[+17].angle)
+		object.xpos *= 12288
+		object.xpos += object[+17].xpos
+		Sin(object.ypos, object[+17].angle)
+		object.ypos *= 8192
+		object.ypos += object[+17].ypos
+		if object[+17].angle == 244
+			CallFunction(EggmanPart2_Function97)
+		end if
+		if object[+17].angle > 0
+			object[+17].angle -= 2
+		else
+			object.state = 9
+		end if
+		object.angle += 2
+		object.angle &= 511
+		CallFunction(EggmanPart2_Function92)
+		break
+	case 9
+		object.angle += 8
+		object.angle &= 511
+		CallFunction(EggmanPart2_Function93)
+		if object.rotation == 128
+			object.direction = 0
+		end if
+		if object.rotation < 256
+			object.rotation += 2
+		else
+			CallFunction(EggmanPart2_Function94)
+			if checkResult == 1
+				object.state = 12
+				object.value0 = 0
+			else
+				object.state = 6
+			end if
+		end if
+		break
+	case 10
+		object.xpos += 65536
+		if object.value0 < 20
+			object.value0++
+			object.angle += 2
+			object.angle &= 511
+			CallFunction(EggmanPart2_Function92)
+			if object.value0 == 20
+				object.animation = 1
+			end if
+		else
+			if object.value3 > 3072
+				object.value3 -= 256
+			else
+				object.state = 11
+				CallFunction(EggmanPart2_Function95)
+				CallFunction(EggmanPart2_Function97)
+			end if
+			object.angle += 8
+			object.angle &= 511
+			CallFunction(EggmanPart2_Function92)
+		end if
+		break
+	case 11
+		object.xpos += 65536
+		if object.value3 < 12288
+			object.value3 += 96
+			object.angle += 8
+		else
+			object.angle += 2
+		end if
+		temp0 = object[+17].xpos
+		temp0 += 6291456
+		if object.xpos > temp0
+			object.xpos = temp0
+			object[+17].angle = 0
+			object.state = 9
+		end if
+		object.angle &= 511
+		CallFunction(EggmanPart2_Function92)
+		break
+	case 12
+		object.xpos -= 65536
+		if object.value0 < 20
+			object.value0++
+			object.angle += 2
+			object.angle &= 511
+			CallFunction(EggmanPart2_Function92)
+			if object.value0 == 20
+				object.animation = 1
+			end if
+		else
+			if object.value3 > 3072
+				object.value3 -= 256
+			else
+				object.state = 13
+				CallFunction(EggmanPart2_Function95)
+				CallFunction(EggmanPart2_Function97)
+			end if
+			object.angle += 8
+			object.angle &= 511
+			CallFunction(EggmanPart2_Function92)
+		end if
+		break
+	case 13
+		object.xpos -= 65536
+		if object.value3 < 12288
+			object.value3 += 96
+			object.angle += 8
+		else
+			object.angle += 2
+		end if
+		temp0 = object[+17].xpos
+		temp0 -= 6291456
+		if object.xpos < temp0
+			object.xpos = temp0
+			object[+17].angle = 256
+			object.state = 7
+		end if
+		object.angle &= 511
+		CallFunction(EggmanPart2_Function92)
+		break
+	case 14
+		if object.value0 < 70
+			temp0 = object.value0
+			temp0 &= 3
+			if temp0 == 0
+				Rand(temp0, 80)
+				temp0 -= 40
+				temp0 <<= 16
+				temp0 += object.xpos
+				Rand(temp1, 56)
+				temp1 -= 28
+				temp1 <<= 16
+				temp1 += object.ypos
+				CreateTempObject(TypeName[Explosion], 0, temp0, temp1)
+				PlaySfx(SfxName[Explosion], 0)
+			end if
+			object.value0++
+		else
+			object.state = 15
+			object.animation = 3
+			object.value0 = 0
+			object.direction = 1
+			player.score += 1000
+			CallFunction(EggmanPart2_Function96)
+		end if
+		break
+	case 15
+		if object.value0 < 70
+			object.value0++
+		else
+			object.value0 = 0
+			object.priority = 1
+			object.state = 16
+			object.animation = 4
+			object.frame = 0
+			stage.newWaterLevel = 134217728
+			CreateTempObject(TypeName[Fade Music], 1, object.xpos, object.ypos)
+		end if
+		break
+	case 16
+		object.xpos += 114688
+		if object.outOfBounds == 1
+			object.state = 17
+			object.animation = 5
+		end if
+		break
+	case 17
+		if object.value0 < 60
+			stage.curXBoundary2 += 4
+			object.value0++
+		else
+			ResetObjectEntity(object.entityPos, TypeName[Blank Object], 0, 0, 0)
+			stage.newXBoundary2 = 3840
+		end if
+		break
+	end switch
+	if object.state > 4
+		if object.state < 14
+			foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+				BoxCollisionTest(C_TOUCH, object.entityPos, -24, -16, 24, 16, currentPlayer, object[currentPlayer].value41, object[currentPlayer].value39, object[currentPlayer].value42, object[currentPlayer].value40)
+				if checkResult == 1
+					CheckEqual(object[currentPlayer].animation, ANI_JUMPING)
+					temp0 = checkResult
+					CheckEqual(object[currentPlayer].animation, ANI_SPINDASH)
+					temp0 |= checkResult
+					arrayPos0 = currentPlayer
+					arrayPos0 += playerCount
+					if object[arrayPos0].type == TypeName[Eggman Part 2]
+						temp0 = 1
+					end if
+					if temp0 == 1
+						FlipSign(object[currentPlayer].xvel)
+						FlipSign(object[currentPlayer].speed)
+						object[currentPlayer].xvel >>= 1
+						object[currentPlayer].speed >>= 1
+						object[currentPlayer].yvel = object[currentPlayer].ypos
+						object[currentPlayer].yvel -= object.ypos
+						object[currentPlayer].yvel >>= 3
+						object.state = 14
+						object.animation = 2
+						object.value0 = 0
+					else
+						if object[currentPlayer].value7 == 0
+							object[currentPlayer].state = Player_State_GotHit
+							if object[currentPlayer].xpos > object.xpos
+								object[currentPlayer].speed = 131072
+							else
+								object[currentPlayer].speed = -131072
+							end if
+						end if
+						object.animation = 1
+					end if
+				end if
+			next
+		end if
+	end if
+	if object.state < 17
+		foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+			temp0 = object[currentPlayer].collisionRight
+			temp0 <<= 16
+			temp0 += object[currentPlayer].xpos
+			temp1 = stage.curXBoundary2
+			temp1 <<= 16
+			if temp0 > temp1
+				object[currentPlayer].xvel = 0
+				object[currentPlayer].speed = 0
+				object[currentPlayer].xpos = temp1
+				temp0 = object[currentPlayer].collisionRight
+				temp0 <<= 16
+				object[currentPlayer].xpos -= temp0
+			end if
+		next
+	end if
+end event
+
+
+event ObjectDraw
+	switch object.animation
+	case 0
+		DrawSpriteFX(0, FX_FLIP, object.xpos, object.ypos)
+		DrawSpriteFX(2, FX_FLIP, object.xpos, object.ypos)
+		break
+	case 1
+		DrawSpriteFX(0, FX_FLIP, object.xpos, object.ypos)
+		temp0 = object.frame
+		temp0 &= 15
+		temp0 >>= 3
+		temp0 += 3
+		DrawSpriteFX(temp0, FX_FLIP, object.xpos, object.ypos)
+		if object.frame < 112
+			object.frame++
+		else
+			object.frame = 0
+			object.animation = 0
+		end if
+		break
+	case 2
+		DrawSpriteFX(0, FX_FLIP, object.xpos, object.ypos)
+		DrawSpriteFX(5, FX_FLIP, object.xpos, object.ypos)
+		break
+	case 3
+		DrawSpriteFX(1, FX_FLIP, object.xpos, object.ypos)
+		DrawSpriteFX(6, FX_FLIP, object.xpos, object.ypos)
+		break
+	case 4
+		DrawSpriteFX(1, FX_FLIP, object.xpos, object.ypos)
+		DrawSpriteFX(6, FX_FLIP, object.xpos, object.ypos)
+		temp0 = object.frame
+		temp0 >>= 2
+		temp0 += 7
+		DrawSpriteFX(temp0, FX_FLIP, object.xpos, object.ypos)
+		object.frame++
+		object.frame &= 15
+		break
+	end switch
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R4/Objects2.gif")
+	foreach (TypeName[Eggman Part 2], arrayPos0, ALL_ENTITIES)
+		temp0 = 160
+		temp0 -= screen.xcenter
+		object[arrayPos0].ixpos += temp0
+	next
+	SpriteFrame(-32, -28, 64, 56, 51, 58)
+	SpriteFrame(-32, -28, 64, 56, 189, 58)
+	SpriteFrame(-32, -28, 48, 16, 1, 67)
+	SpriteFrame(-32, -28, 48, 16, 1, 84)
+	SpriteFrame(-32, -28, 48, 16, 1, 101)
+	SpriteFrame(-32, -28, 48, 16, 1, 118)
+	SpriteFrame(-32, -28, 48, 16, 50, 118)
+	SpriteFrame(4, -44, 16, 16, 207, 35)
+	SpriteFrame(4, -44, 1, 1, 207, 35)
+	SpriteFrame(4, -44, 16, 16, 224, 35)
+	SpriteFrame(4, -44, 1, 1, 207, 35)
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

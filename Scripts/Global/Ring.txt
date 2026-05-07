@@ -1,0 +1,176 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Ring Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 8 : TYPE_RING
+
+// Function declarations
+reserve function Ring_DebugDraw
+reserve function Ring_DebugSpawn
+
+
+public function Ring_DebugDraw
+	DrawSprite(0)
+end function
+
+
+public function Ring_DebugSpawn
+	CreateTempObject(TypeName[Ring], 0, object.xpos, object.ypos)
+	object[tempObjectPos].drawOrder = 4
+end function
+
+
+event ObjectUpdate
+	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+		CheckEqual(object[currentPlayer].state, Player_State_Hurt)
+		temp0 = checkResult
+		CheckEqual(object[currentPlayer].state, Player_State_GotHit)
+		temp0 |= checkResult
+		CheckNotEqual(object[currentPlayer].collisionPlane, object.propertyValue)
+		temp0 |= checkResult
+		if temp0 == 0
+			BoxCollisionTest(C_TOUCH, object.entityPos, -8, -8, 8, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+			if checkResult == 1
+				object.type = TypeName[Ring Sparkle]
+				object[0].value0++
+				if object[0].value0 > 999
+					object[0].value0 = 999
+				end if
+				if object[0].value0 >= ringExtraLife
+					if options.gameMode != 2
+						player.lives++
+#platform: USE_ORIGINAL_CODE
+						PlaySfx(SfxName[Jump], 0)
+						PauseMusic()
+#endplatform
+
+#platform: USE_DECOMP
+						if stage.playerListPos == 0
+							PlaySfx(SfxName[1 Up], 0)
+						else
+							PlaySfx(SfxName[Achievement], 0)
+						end if
+#endplatform
+						ResetObjectEntity(25, TypeName[Blank Object], 2, 0, 0)
+						object[25].priority = 1
+					end if
+					if stage.debugMode == 0
+						if object[0].value0 >= 200
+						end if
+					end if
+					ringExtraLife += 100
+					if ringExtraLife > 300
+						ringExtraLife = 1000
+					end if
+				end if
+				if ringPan == 0
+					PlaySfx(SfxName[Ring L], 0)
+					SetSfxAttributes(SfxName[Ring L], -1, -100)
+					ringPan = 1
+				else
+					PlaySfx(SfxName[Ring R], 0)
+					SetSfxAttributes(SfxName[Ring R], -1, 100)
+					ringPan = 0
+				end if
+			else
+				if object.state == 0
+					if object[currentPlayer].value38 == 4
+						BoxCollisionTest(C_TOUCH, object.entityPos, -64, -64, 64, 64, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+						if checkResult == 1
+							object.state = 1
+							object.value1 = currentPlayer
+						end if
+					end if
+				end if
+			end if
+		end if
+	next
+	if object.state == 1
+		arrayPos0 = object.value1
+		if object[arrayPos0].value38 != 4
+			object.type = TypeName[Lose Ring]
+			object.animationSpeed = 128
+			object.alpha = 256
+		else
+			arrayPos0 = object.value1
+			if object.xpos > object[arrayPos0].xpos
+				if object.xvel > 0
+					object.xvel -= 49152
+				else
+					object.xvel -= 12288
+				end if
+			else
+				if object.xvel < 0
+					object.xvel += 49152
+				else
+					object.xvel += 12288
+				end if
+			end if
+			if object.ypos > object[arrayPos0].ypos
+				if object.yvel > 0
+					object.yvel -= 49152
+				else
+					object.yvel -= 12288
+				end if
+			else
+				if object.yvel < 0
+					object.yvel += 49152
+				else
+					object.yvel += 12288
+				end if
+			end if
+			object.xpos += object.xvel
+			object.ypos += object.yvel
+		end if
+	end if
+end event
+
+
+event ObjectDraw
+	DrawSprite(ringFrame)
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("Global/Items.gif")
+	foreach (TypeName[Ring], arrayPos0, ALL_ENTITIES)
+		if object[arrayPos0].propertyValue == 0
+			object[arrayPos0].drawOrder = 4
+		else
+			object[arrayPos0].drawOrder = 2
+		end if
+	next
+	SpriteFrame(-8, -8, 16, 16, 1, 1)
+	SpriteFrame(-8, -8, 16, 16, 1, 18)
+	SpriteFrame(-8, -8, 16, 16, 1, 35)
+	SpriteFrame(-8, -8, 16, 16, 1, 52)
+	SpriteFrame(-8, -8, 16, 16, 1, 69)
+	SpriteFrame(-8, -8, 16, 16, 1, 86)
+	SpriteFrame(-8, -8, 16, 16, 1, 103)
+	SpriteFrame(-8, -8, 16, 16, 1, 120)
+	SetTableValue(TypeName[Ring], DebugMode_ObjCount, DebugMode_TypesTable)
+	SetTableValue(Ring_DebugDraw, DebugMode_ObjCount, DebugMode_DrawTable)
+	SetTableValue(Ring_DebugSpawn, DebugMode_ObjCount, DebugMode_SpawnTable)
+	DebugMode_ObjCount++
+end event
+
+event RSDKDraw
+	object.inkEffect = object.propertyValue
+	DrawSpriteFX(0, FX_INK, object.xpos, object.ypos)
+end event
+
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Items.gif")
+	SpriteFrame(-8, -8, 16, 16, 1, 1)		// #0 - Ring Frame 0
+
+	AddEditorVariable("Plane Type")
+	SetActiveVariable("Plane Type")
+	AddEnumVariable("Plane A", 0)
+	AddEnumVariable("Plane B", 1)
+end event

@@ -1,0 +1,82 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: SpinningPlatform Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 41 : TYPE_SPINNINGPLATFORM
+
+
+
+event ObjectUpdate
+	object.rotation = object[21].rotation
+	object.rotation += object.propertyValue
+	object.rotation %= 144
+	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+		if object.rotation < 121
+			BoxCollisionTest(C_PLATFORM, object.entityPos, -16, -5, 16, 11, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+		end if
+	next
+end event
+
+
+event ObjectDraw
+	if object.rotation < 121
+		DrawSprite(0)
+	else
+		temp0 = object.rotation
+		temp0 -= 120
+		temp0 >>= 1
+		switch temp0
+		case 0
+		case 6
+			DrawSprite(1)
+			break
+		case 1
+		case 7
+			DrawSprite(2)
+			break
+		case 2
+		case 8
+			DrawSprite(3)
+			break
+		case 3
+		case 9
+			object.direction = 1
+			DrawSpriteFX(4, FX_FLIP, object.xpos, object.ypos)
+			break
+		case 4
+		case 10
+			object.direction = 1
+			DrawSpriteFX(5, FX_FLIP, object.xpos, object.ypos)
+			break
+		case 5
+		case 11
+			DrawSprite(0)
+			break
+		end switch
+	end if
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R8/Objects.gif")
+	SpriteFrame(-16, -8, 32, 16, 107, 98)
+	SpriteFrame(-16, -12, 32, 24, 107, 115)
+	SpriteFrame(-12, -16, 24, 32, 230, 34)
+	SpriteFrame(-8, -16, 16, 32, 239, 212)
+	SpriteFrame(-12, -16, 24, 32, 230, 34)
+	SpriteFrame(-16, -12, 32, 24, 107, 115)
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

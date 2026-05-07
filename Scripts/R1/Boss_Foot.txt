@@ -1,0 +1,224 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Boss Foot Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 57 : TYPE_BOSSFOOT
+
+// Function declarations
+reserve function BossFoot_Function110
+reserve function BossFoot_Function111
+reserve function BossFoot_Function112
+reserve function BossFoot_Function113
+
+
+public function BossFoot_Function110
+	arrayPos0 = object.value0
+	object.xpos = object[arrayPos0].xpos
+	object.xpos -= 720896
+	object.xpos += object.value6
+	object.ypos = object[arrayPos0].ypos
+	object.ypos += 917504
+	object.ypos += object.value7
+end function
+
+
+public function BossFoot_Function111
+	SetBit(object.value4, 4, 1)
+	arrayPos0 = object.value0
+	SetBit(object[arrayPos0].value4, 4, 1)
+	arrayPos1 = object[arrayPos0].value0
+	SetBit(object[arrayPos1].value4, 4, 1)
+	screen.shakeY = 4
+	arrayPos0 = object.value1
+	arrayPos0++
+	if object[arrayPos0].value5 > 2
+		arrayPos0--
+		object[arrayPos0].ypos -= 98304
+		arrayPos0--
+		object[arrayPos0].ypos -= 98304
+	end if
+	PlaySfx(SfxName[Mech Step], 0)
+end function
+
+
+public function BossFoot_Function112
+	GetBit(temp0, object.value4, 4)
+	if temp0 == 0
+		CallFunction(BossFoot_Function110)
+	else
+		GetBit(temp0, object.value4, 5)
+		if temp0 == 1
+			temp6 = object.xvel
+			temp7 = object.yvel
+			if object.state != 3
+				FlipSign(temp6)
+				FlipSign(temp7)
+			end if
+			arrayPos0 = object.value0
+			object[arrayPos0].xpos -= temp6
+			object[arrayPos0].ypos += temp7
+			arrayPos1 = object[arrayPos0].value0
+			object[arrayPos1].xpos -= temp6
+			object[arrayPos1].ypos += temp7
+			arrayPos0 = object[arrayPos1].value0
+			object[arrayPos0].xpos -= temp6
+			object[arrayPos0].ypos += temp7
+			arrayPos1 = object[arrayPos0].value0
+			object[arrayPos1].xpos -= temp6
+			object[arrayPos1].ypos += temp7
+		end if
+	end if
+end function
+
+
+public function BossFoot_Function113
+	temp0 = object.ypos
+	ObjectTileCollision(0, 0, 20, 0)
+	if checkResult == 1
+		GetBit(temp0, object.value4, 5)
+		if temp0 == 1
+			temp0 -= object.ypos
+			arrayPos0 = object.value0
+			object[arrayPos0].ypos -= temp0
+			arrayPos1 = object[arrayPos0].value0
+			object[arrayPos1].ypos -= temp0
+			arrayPos0 = object[arrayPos1].value0
+			object[arrayPos1].ypos -= temp0
+			arrayPos1 = object[arrayPos0].value0
+			object[arrayPos1].ypos -= temp0
+		end if
+	end if
+end function
+
+
+event ObjectUpdate
+	switch object.state
+	case 0
+		object.xvel = 16384
+		object.yvel = 32768
+		object.value6 = -524288
+		object.value7 = 1048576
+		SetBit(object.value4, 0, 1)
+		CallFunction(BossFoot_Function110)
+		object.state = 2
+		break
+	case 1
+		object.value6 -= object.xvel
+		object.value7 += object.yvel
+		temp1 = 1
+		GetBit(temp0, object.value4, 4)
+		checkResult = temp0
+		GetBit(temp0, object.value4, 7)
+		checkResult &= temp0
+		if checkResult == 1
+			if object.value7 >= 786432
+				SetBit(object.value4, 0, 1)
+				object.state = 2
+				temp1 = 0
+			end if
+		else
+			if object.value7 >= 1048576
+				SetBit(object.value4, 0, 1)
+				object.state = 2
+				temp1 = 0
+			end if
+		end if
+		if temp1 == 1
+			CallFunction(BossFoot_Function112)
+			ObjectTileCollision(0, 0, 20, 0)
+			if checkResult == 1
+				CallFunction(BossFoot_Function111)
+			end if
+		end if
+		break
+	case 2
+		GetBit(temp0, object.value4, 4)
+		if temp0 == 0
+			CallFunction(BossFoot_Function110)
+			ObjectTileCollision(0, 0, 20, 0)
+			if checkResult == 1
+				CallFunction(BossFoot_Function111)
+			end if
+		end if
+		break
+	case 3
+		object.value6 += object.xvel
+		object.value7 -= object.yvel
+		if object.value7 <= 0
+			object.value6 = 0
+			object.value7 = 0
+			SetBit(object.value4, 0, 1)
+			object.state = 4
+		end if
+		CallFunction(BossFoot_Function112)
+		break
+	case 4
+		CallFunction(BossFoot_Function110)
+		break
+	case 5
+		arrayPos0 = object.value1
+		arrayPos1 = object[arrayPos0].value1
+		arrayPos0 = object[arrayPos1].value1
+		arrayPos1 = object[arrayPos0].value1
+		object.xpos = object[arrayPos1].xpos
+		object.xpos -= 655360
+		object.ypos = object[arrayPos1].ypos
+		break
+	case 6
+		GetBit(temp0, object.value4, 4)
+		if temp0 == 0
+			object.xvel -= 1632
+		else
+			object.xvel += 1632
+		end if
+		object.yvel += 5728
+		object.xpos += object.xvel
+		object.ypos += object.yvel
+		if object.outOfBounds == 1
+			object.type = TypeName[Blank Object]
+			object.priority = 0
+		end if
+		break
+	end switch
+	if object.state < 6
+		foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
+			if object[currentPlayer].value7 == 0
+				BoxCollisionTest(C_TOUCH, object.entityPos, -28, -20, 26, 20, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
+				if checkResult == 1
+					arrayPos0 = object.value0
+					arrayPos1 = object[arrayPos0].value0
+					arrayPos0 = object[arrayPos1].value0
+					arrayPos1 = object[arrayPos0].value0
+					object[arrayPos1].animation = 2
+					object[arrayPos1].animationTimer = 180
+					CallFunction(Player_Hit)
+				end if
+			end if
+		next
+	end if
+end event
+
+
+event ObjectDraw
+	DrawSprite(0)
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("R1/Objects3.gif")
+	SpriteFrame(-32, -20, 58, 40, 1, 66)
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

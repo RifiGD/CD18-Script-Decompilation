@@ -1,0 +1,194 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: BG Animation Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 1 : TYPE_BGANIMATION
+
+public alias 256 : GROUP_PLAYERS
+public alias arrayPos6 : currentPlayer
+public alias arrayPos7 : playerCount
+
+
+
+event ObjectDraw
+	if object.drawOrder == 3
+		switch object.state
+		case 0
+			DrawSprite(0)
+			DrawSprite(1)
+			object.value0++
+			if object.value0 > 480
+				object.value0 = 0
+				object.alpha = 0
+				object.inkEffect = 2
+				object.state++
+			end if
+			break
+		case 1
+			DrawSprite(0)
+			DrawSprite(1)
+			if object.alpha < 248
+				object.alpha += 4
+			else
+				object.alpha = 255
+				object.state++
+			end if
+			DrawSpriteFX(2, FX_INK, object.xpos, object.ypos)
+			DrawSpriteFX(3, FX_INK, object.xpos, object.ypos)
+			break
+		case 2
+			DrawSprite(2)
+			DrawSprite(3)
+			object.value0++
+			if object.value0 > 480
+				object.value0 = 0
+				object.alpha = 0
+				object.state++
+			end if
+			break
+		case 3
+			DrawSprite(2)
+			DrawSprite(3)
+			if object.alpha < 248
+				object.alpha += 4
+			else
+				object.alpha = 255
+				object[+7].value2 = 1
+				object.state++
+			end if
+			DrawSpriteFX(4, FX_INK, object.xpos, object.ypos)
+			DrawSpriteFX(5, FX_INK, object.xpos, object.ypos)
+			break
+		case 4
+			DrawSprite(4)
+			DrawSprite(5)
+			object.value0++
+			if object.value0 > 480
+				object.value0 = 0
+				object.alpha = 0
+				object.state++
+			end if
+			break
+		case 5
+			DrawSprite(4)
+			DrawSprite(5)
+			if object.alpha < 248
+				object.alpha += 4
+			else
+				object.alpha = 255
+				object.state++
+			end if
+			DrawSpriteFX(6, FX_INK, object.xpos, object.ypos)
+			DrawSpriteFX(7, FX_INK, object.xpos, object.ypos)
+			break
+		case 6
+			DrawSprite(6)
+			DrawSprite(7)
+			object.value0++
+			if object.value0 > 480
+				object.value0 = 0
+				object.alpha = 0
+				object.state++
+			end if
+			break
+		case 7
+			DrawSprite(6)
+			DrawSprite(7)
+			if object.alpha < 248
+				object.alpha += 4
+			else
+				object.alpha = 255
+				object.state++
+			end if
+			DrawSpriteFX(8, FX_INK, object.xpos, object.ypos)
+			DrawSpriteFX(9, FX_INK, object.xpos, object.ypos)
+			break
+		case 8
+			DrawSprite(8)
+			DrawSprite(9)
+			object.value0++
+			if object.value0 > 512
+				object.value0 = 0
+				object.alpha = 0
+				object[+7].value2 = 0
+				object.state++
+			end if
+			break
+		case 9
+			DrawSprite(8)
+			DrawSprite(9)
+			if object.alpha < 248
+				object.alpha += 2
+			else
+				object.alpha = 255
+				object.state++
+			end if
+			DrawSpriteFX(10, FX_INK, object.xpos, object.ypos)
+			DrawSpriteFX(11, FX_INK, object.xpos, object.ypos)
+			break
+		case 10
+			DrawSprite(10)
+			DrawSprite(11)
+			object.value0++
+			if object.value0 > 480
+				object.value0 = 0
+				object.alpha = 0
+				object.state++
+			end if
+			break
+		case 11
+			DrawSprite(10)
+			DrawSprite(11)
+			if object.alpha < 248
+				object.alpha += 4
+			else
+				object.alpha = 255
+				object.state = 0
+			end if
+			DrawSpriteFX(0, FX_INK, object.xpos, object.ypos)
+			DrawSpriteFX(1, FX_INK, object.xpos, object.ypos)
+			break
+		end switch
+		SetDrawListEntityRef(object.entityPos, 4, screen[4].drawListSize)
+		screen[4].drawListSize++
+		object.drawOrder = 4
+	else
+		DrawRect(0, 0, screen.xsize, 32, 0, 0, 0, 255)
+		DrawRect(0, 208, screen.xsize, 32, 0, 0, 0, 255)
+		object.drawOrder = 3
+	end if
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("DAGarden/Objects.gif")
+	SpriteFrame(0, 0, 256, 192, 0, 0)
+	SpriteFrame(256, 0, 256, 192, 0, 0)
+	SpriteFrame(0, 0, 256, 192, 256, 0)
+	SpriteFrame(256, 0, 256, 192, 256, 0)
+	SpriteFrame(0, 0, 256, 192, 0, 192)
+	SpriteFrame(256, 0, 256, 192, 0, 192)
+	SpriteFrame(0, 0, 256, 192, 256, 192)
+	SpriteFrame(256, 0, 256, 192, 256, 192)
+	SpriteFrame(0, 0, 256, 192, 0, 384)
+	SpriteFrame(256, 0, 256, 192, 0, 384)
+	SpriteFrame(0, 0, 256, 192, 256, 384)
+	SpriteFrame(256, 0, 256, 192, 256, 384)
+	object[31].type = TypeName[BG Animation]
+	object[31].xpos = 0
+	object[31].ypos = 1572864
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

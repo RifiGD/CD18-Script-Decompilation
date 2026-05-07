@@ -1,0 +1,220 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Touch Buttons Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 5 : TYPE_TOUCHBUTTONS
+
+
+
+event ObjectUpdate
+	if object[0].state > 1
+		if object[0].state < 4
+			temp0 = object.xpos
+			temp0 >>= 16
+			temp1 = temp0
+			temp0 -= 32
+			temp0 -= screen.xoffset
+			temp1 += 32
+			temp1 -= screen.xoffset
+			CheckTouchRect(temp0, 0, temp1, 32)
+			if checkResult > -1
+				object.value1 = object.propertyValue
+				object.value1++
+				switch object.propertyValue
+				case 0
+					if object[32].value1 < 16384
+						object[32].value1 += 8
+					end if
+					break
+				case 1
+					if object[32].value1 > 48
+						object[32].value1 -= 8
+					end if
+					break
+				case 2
+					if object[32].value3 < 256
+						object[32].value3 += 2
+					end if
+					break
+				case 3
+					if object[32].value3 > -256
+						object[32].value3 -= 2
+					end if
+					break
+				end switch
+			else
+				CheckTouchRect(0, 0, screen.xsize, screen.ysize)
+				if checkResult < 0
+					switch object.propertyValue
+					case 0
+						if object.value1 == 1
+							object.value1 = 0
+							object[35].propertyValue = 1
+						end if
+						break
+					case 1
+						if object.value1 == 2
+							object.value1 = 0
+							object[35].propertyValue = 0
+						end if
+						break
+					case 2
+						if object.value1 == 3
+							object.value1 = 0
+							object[36].propertyValue = 3
+						end if
+						break
+					case 3
+						if object.value1 == 4
+							object.value1 = 0
+							object[36].propertyValue = 2
+						end if
+						break
+					case 4
+						if object.value1 == 5
+							object.value1 = 0
+							PlaySfx(SfxName[Menu Button], 0)
+							object[33].state = 4
+						end if
+						break
+					case 5
+						if object.value1 == 6
+							object.value1 = 0
+							object[0].state = 4
+							StopMusic()
+						end if
+						break
+					case 6
+						if object.value1 == 7
+							object.value1 = 0
+							PlaySfx(SfxName[Menu Button], 0)
+							object[33].state = 2
+						end if
+						break
+					case 7
+						if object.value1 == 8
+							object.value1 = 0
+							PlaySfx(SfxName[Select], 0)
+							object[0].state = 3
+							object[33].xpos = screen.xsize
+							object[33].xpos += 96
+							object[33].xpos <<= 16
+							object[33].state = 1
+							object[33].drawOrder = 5
+							object[33].priority = 1
+							object[35].propertyValue = 4
+							object[36].propertyValue = 5
+							object[37].propertyValue = 6
+						end if
+						break
+					case 8
+						if object.value1 == 9
+							object.value1 = 0
+							StopMusic()
+							PlaySfx(SfxName[Select], 0)
+							object[0].state = 6
+						end if
+						break
+					end switch
+				else
+					switch object.propertyValue
+					case 0
+						if object.value1 == 1
+							object.value1 = 0
+						end if
+						break
+					case 1
+						if object.value1 == 2
+							object.value1 = 0
+						end if
+						break
+					case 2
+						if object.value1 == 3
+							object.value1 = 0
+						end if
+						break
+					case 3
+						if object.value1 == 4
+							object.value1 = 0
+						end if
+						break
+					case 4
+						if object.value1 == 5
+							object.value1 = 0
+						end if
+						break
+					case 5
+						if object.value1 == 6
+							object.value1 = 0
+						end if
+						break
+					case 6
+						if object.value1 == 7
+							object.value1 = 0
+						end if
+						break
+					case 7
+						if object.value1 == 8
+							object.value1 = 0
+						end if
+						break
+					case 8
+						if object.value1 == 9
+							object.value1 = 0
+						end if
+						break
+					end switch
+				end if
+			end if
+		end if
+	end if
+end event
+
+
+event ObjectDraw
+	temp0 = object.propertyValue
+	temp0 <<= 1
+	temp1 = object.propertyValue
+	temp1++
+	if object.value1 == temp1
+		temp0++
+	end if
+	DrawSprite(temp0)
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("DAGarden/Objects.gif")
+	SpriteFrame(-32, -16, 63, 31, 146, 577)
+	SpriteFrame(-32, -16, 63, 31, 146, 609)
+	SpriteFrame(-32, -16, 63, 31, 210, 577)
+	SpriteFrame(-32, -16, 63, 31, 210, 609)
+	SpriteFrame(-32, -16, 63, 31, 274, 577)
+	SpriteFrame(-32, -16, 63, 31, 274, 609)
+	SpriteFrame(-32, -16, 63, 31, 338, 577)
+	SpriteFrame(-32, -16, 63, 31, 338, 609)
+	SpriteFrame(-32, -16, 63, 31, 210, 641)
+	SpriteFrame(-32, -16, 63, 31, 210, 673)
+	SpriteFrame(-32, -16, 63, 31, 274, 641)
+	SpriteFrame(-32, -16, 63, 31, 274, 673)
+	SpriteFrame(-32, -16, 63, 31, 338, 641)
+	SpriteFrame(-32, -16, 63, 31, 338, 673)
+	SpriteFrame(-32, -16, 63, 31, 402, 641)
+	SpriteFrame(-32, -16, 63, 31, 402, 673)
+	SpriteFrame(-32, -16, 63, 31, 402, 577)
+	SpriteFrame(-32, -16, 63, 31, 402, 609)
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event

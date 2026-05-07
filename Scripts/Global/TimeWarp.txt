@@ -1,0 +1,204 @@
+// ----------------------------------
+// RSDK Project: Sonic CD
+// Script Description: Time Warp Object
+// Script Author: Christian Whitehead
+// Unpacked by Rubberduckycooly's script unpacker
+// ----------------------------------
+
+//-------Aliases-------//
+
+private alias 33 : TYPE_TIMEWARP
+
+
+event ObjectDraw
+	switch object.state
+	case 0
+		if object.value1 < 320
+			if object.value1 == 0
+				warp.xpos = object[0].xpos
+				warp.ypos = object[0].ypos
+				warp.xvel = object[0].xvel
+				warp.yvel = object[0].yvel
+				warp.speed = object[0].speed
+				warp.collisionMode = object[0].collisionMode
+				warp.minRollSpeed = object[0].value17
+				warp.gravity = object[0].gravity
+				if object[0].state == 1
+					warp.state = 13
+				else
+					if object[0].state == 32
+						warp.state = 13
+					else
+						if object[0].state == 35
+							warp.state = 13
+						else
+							warp.state = object[0].state
+						end if
+					end if
+				end if
+				warp.animation = object[0].animation
+				warp.angle = object[0].angle
+				warp.playerFrame = object[0].frame
+				object[0].value7 = 1000
+				object[0].controlMode = -1
+				object[0].visible = 0
+			end if
+			music.volume -= 8
+			SetScreenFade(208, 255, 224, object.value1)
+			object.value1 += 10
+		else
+			if stage.playerListPos == 0
+				if stage.debugMode == 0
+				end if
+			end if
+			StopSfx(SfxName[Flying])
+			StopSfx(SfxName[Tired])
+			stage.state = STAGE_RUNNING
+			stage.timeEnabled = 0
+			CallFunction(StageSetup_SaveStageState)
+			recMilliSeconds = stage.milliSeconds
+			recSeconds = stage.seconds
+			recMinutes = stage.minutes
+			warp.rings = object[0].value0
+			temp2 = object[9].propertyValue
+			temp0 = 0
+			while temp0 < 1184
+				ResetObjectEntity(temp0, TypeName[Blank Object], 0, 0, 0)
+				temp0++
+			loop
+			screen.xoffset = 0
+			screen.yoffset = 0
+			stage[0].activeLayer = 9
+			stage[1].activeLayer = 9
+			stage[2].activeLayer = 9
+			stage[3].activeLayer = 9
+			arrayPos0 = 0
+			object[arrayPos0].type = TypeName[Time Warp]
+			object[arrayPos0].state = 1
+			object[arrayPos0].value1 = 320
+			object[arrayPos0].value7 = temp2
+			arrayPos0++
+			temp0 = -32
+			while temp0 < 256
+				temp1 = 0
+				while temp1 < screen.xsize
+					object[arrayPos0].type = TypeName[Time Warp]
+					object[arrayPos0].state = 2
+					Rand(object[arrayPos0].frame, 27)
+					object[arrayPos0].frame >>= 2
+					object[arrayPos0].frame <<= 2
+					object[arrayPos0].ixpos = temp1
+					object[arrayPos0].iypos = temp0
+					object[arrayPos0].ixpos += 16
+					object[arrayPos0].iypos += 16
+					Rand(object[arrayPos0].direction, 15)
+					object[arrayPos0].direction >>= 2
+					arrayPos0++
+					temp1 += 32
+				loop
+				temp0 += 32
+			loop
+			object[arrayPos0].type = TypeName[Warp Sonic]
+			object[arrayPos0].ixpos = screen.xcenter
+			object[arrayPos0].iypos = 480
+			SetScreenFade(208, 255, 224, 255)
+			PlaySfx(SfxName[Time Warp], 0)
+		end if
+		break
+	case 1
+		if object.value1 > 0
+			SetScreenFade(208, 255, 224, object.value1)
+			object.value1 -= 10
+		else
+			object.state = 3
+		end if
+		break
+	case 2
+		temp0 = object.frame
+		temp0 >>= 1
+		DrawSpriteFX(temp0, FX_FLIP, object.xpos, object.ypos)
+		object.frame++
+		if object.frame == 28
+			object.frame = 0
+		end if
+		object.ypos += 262144
+		if object.ypos >= 16777216
+			object.ypos -= 18874368
+		end if
+		break
+	case 3
+		break
+	case 4
+		object.value1++
+		if object.value1 == 40
+			object.value1 = 0
+			object.state = 5
+		end if
+		break
+	case 5
+		if object.value1 < 1800
+			SetScreenFade(208, 255, 224, object.value1)
+			object.value1 += 10
+		else
+			SetScreenFade(208, 255, 224, 255)
+			switch object.value7
+			case 0
+				if warp.destination == 1
+					stage.listPos++
+				else
+					if generator.destroyed == 1
+						stage.listPos += 2
+					else
+						stage.listPos += 3
+					end if
+				end if
+				break
+			case 1
+				stage.listPos--
+				break
+			case 2
+				stage.listPos -= 2
+				break
+			case 3
+				stage.listPos -= 3
+				break
+			end switch
+			fadeColor = 208
+			fadeColor <<= 16
+			temp0 = 255
+			temp0 <<= 8
+			fadeColor += temp0
+			fadeColor += 224
+			LoadStage()
+		end if
+		break
+	end switch
+end event
+
+
+event ObjectStartup
+	LoadSpriteSheet("Global/Items3.gif")
+	SpriteFrame(-16, -16, 32, 32, 83, 0)
+	SpriteFrame(-16, -16, 32, 32, 83, 32)
+	SpriteFrame(-16, -16, 32, 32, 83, 64)
+	SpriteFrame(-16, -16, 32, 32, 83, 96)
+	SpriteFrame(-16, -16, 32, 32, 83, 128)
+	SpriteFrame(-16, -16, 32, 32, 83, 160)
+	SpriteFrame(-16, -16, 32, 32, 83, 192)
+	SpriteFrame(-16, -16, 32, 32, 83, 224)
+	SpriteFrame(-16, -16, 32, 32, 115, 0)
+	SpriteFrame(-16, -16, 32, 32, 115, 32)
+	SpriteFrame(-16, -16, 32, 32, 115, 64)
+	SpriteFrame(-16, -16, 32, 32, 115, 96)
+	SpriteFrame(-16, -16, 32, 32, 115, 128)
+	SpriteFrame(-16, -16, 32, 32, 115, 160)
+end event
+
+event RSDKDraw
+	DrawSprite(0)
+end event
+
+event RSDKLoad
+	LoadSpriteSheet("Global/Display.gif")
+	SpriteFrame(-16, -16, 32, 32, 1, 143)
+end event
