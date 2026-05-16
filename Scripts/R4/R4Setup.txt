@@ -9,6 +9,15 @@
 
 private alias 40 : TYPE_R4SETUP
 
+// Time Period Aliases
+private alias object[9].propertyValue : hud.currentTimePeriod
+
+private alias 0 : TIME_PRESENT
+private alias 1 : TIME_PAST
+private alias 2 : TIME_GOOD_FUTURE
+private alias 3 : TIME_BAD_FUTURE
+
+
 // Function declarations
 reserve function R4Setup_Function83
 reserve function R4Setup_Function84
@@ -132,8 +141,8 @@ event ObjectStartup
 		arrayPos0++
 	loop
 	SetLayerDeformation(3, 128, 4, 0, 0, 0)
-	switch object[9].propertyValue
-	case 0
+	switch hud.currentTimePeriod
+	case TIME_PRESENT
 		LoadPalette("R4A_WaterPal.act", 1, 0, 0, 256)
 		if stage.actNum == 2
 			LoadPalette("R4A_PalCycle.act", 3, 0, 0, 64)
@@ -141,7 +150,7 @@ event ObjectStartup
 			object[21].value3 = 64
 		end if
 		break
-	case 1
+	case TIME_PAST
 		LoadPalette("R4B_WaterPal.act", 1, 0, 0, 256)
 		if stage.actNum == 2
 			LoadPalette("R4B_PalCycle.act", 3, 0, 0, 48)
@@ -149,13 +158,13 @@ event ObjectStartup
 			object[21].value3 = 48
 		end if
 		break
-	case 2
+	case TIME_GOOD_FUTURE
 		LoadPalette("R4C_WaterPal.act", 1, 0, 0, 256)
 		LoadPalette("R4C_PalCycle.act", 3, 0, 0, 64)
 		object[21].value4 = 1
 		object[21].value3 = 64
 		break
-	case 3
+	case TIME_BAD_FUTURE
 		LoadPalette("R4D_WaterPal.act", 1, 0, 0, 256)
 		LoadPalette("R4D_PalCycle.act", 3, 0, 0, 48)
 		object[21].value4 = 1

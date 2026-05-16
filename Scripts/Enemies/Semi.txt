@@ -33,6 +33,7 @@ public function Semi_DebugSpawn
 	temp0 -= Semi_value15
 
 #platform: USE_ORIGINAL_CODE
+	// "What" - RifiGD when seeing this for the first time.
 	CreateTempObject(TypeName[Poh Bee], temp0, object.xpos, object.ypos)
 #endplatform
 
@@ -167,17 +168,10 @@ event ObjectStartup
 	Semi_value15 = DebugMode_ObjCount
 	while temp0 < 2
 
-#platform: USE_ORIGINAL_CODE
-		SetTableValue(TypeName[Poh Bee], DebugMode_ObjCount, DebugMode_TypesTable)
-		SetTableValue(PohBee_DebugDraw, DebugMode_ObjCount, DebugMode_DrawTable)
-		SetTableValue(PohBee_DebugSpawn, DebugMode_ObjCount, DebugMode_SpawnTable)
-#endplatform
-
-#platform: USE_DECOMP
+		// Yeah I think it creates a Poh Bee sadly...
 		SetTableValue(TypeName[Semi], DebugMode_ObjCount, DebugMode_TypesTable)
 		SetTableValue(Semi_DebugDraw, DebugMode_ObjCount, DebugMode_DrawTable)
 		SetTableValue(Semi_DebugSpawn, DebugMode_ObjCount, DebugMode_SpawnTable)
-#endplatform
 
 		DebugMode_ObjCount++
 		temp0++

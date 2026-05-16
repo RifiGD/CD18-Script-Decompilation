@@ -9,7 +9,13 @@
 
 private alias 62 : TYPE_REDFISH
 
+// Time Period Aliases
+private alias object[9].propertyValue : hud.currentTimePeriod
 
+private alias 0 : TIME_PRESENT
+private alias 1 : TIME_PAST
+private alias 2 : TIME_GOOD_FUTURE
+private alias 3 : TIME_BAD_FUTURE
 
 event ObjectUpdate
 	switch object.state
@@ -48,7 +54,7 @@ event ObjectDraw
 		temp1 += object.ypos
 		DrawSpriteFX(object.frame, FX_FLIP, object.xpos, temp1)
 	end if
-	if object[9].propertyValue == 2
+	if hud.currentTimePeriod == TIME_GOOD_FUTURE
 		Sin(temp1, object.angle)
 		temp1 <<= 12
 		temp1 += object.ypos

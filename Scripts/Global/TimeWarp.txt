@@ -9,6 +9,13 @@
 
 private alias 33 : TYPE_TIMEWARP
 
+// Time Period Aliases
+private alias object[9].propertyValue : hud.currentTimePeriod
+
+private alias 0 : TIME_PRESENT
+private alias 1 : TIME_PAST
+private alias 2 : TIME_GOOD_FUTURE
+private alias 3 : TIME_BAD_FUTURE
 
 event ObjectDraw
 	switch object.state
@@ -60,7 +67,7 @@ event ObjectDraw
 			recSeconds = stage.seconds
 			recMinutes = stage.minutes
 			warp.rings = object[0].value0
-			temp2 = object[9].propertyValue
+			temp2 = hud.currentTimePeriod
 			temp0 = 0
 			while temp0 < 1184
 				ResetObjectEntity(temp0, TypeName[Blank Object], 0, 0, 0)

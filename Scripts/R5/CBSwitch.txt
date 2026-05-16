@@ -9,6 +9,15 @@
 
 private alias 46 : TYPE_CBSWITCH
 
+// Time Period Aliases
+private alias object[9].propertyValue : hud.currentTimePeriod
+
+private alias 0 : TIME_PRESENT
+private alias 1 : TIME_PAST
+private alias 2 : TIME_GOOD_FUTURE
+private alias 3 : TIME_BAD_FUTURE
+
+
 // Function declarations
 reserve function CBSwitch_DebugDraw
 reserve function CBSwitch_DebugSpawn
@@ -120,7 +129,7 @@ end event
 
 event ObjectStartup
 	LoadSpriteSheet("R5/Objects.gif")
-	if object[9].propertyValue == 1
+	if hud.currentTimePeriod == TIME_PAST
 		SpriteFrame(-4, -16, 32, 28, 1, 225)
 		SpriteFrame(-8, -36, 16, 48, 206, 207)
 		SpriteFrame(-28, -16, 32, 28, 34, 225)

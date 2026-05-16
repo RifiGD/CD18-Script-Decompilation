@@ -9,7 +9,13 @@
 
 private alias 54 : TYPE_STATICPLATFORM
 
+// Time Period Aliases
+private alias object[9].propertyValue : hud.currentTimePeriod
 
+private alias 0 : TIME_PRESENT
+private alias 1 : TIME_PAST
+private alias 2 : TIME_GOOD_FUTURE
+private alias 3 : TIME_BAD_FUTURE
 
 event ObjectUpdate
 	switch object.propertyValue
@@ -71,8 +77,8 @@ end event
 
 
 event ObjectStartup
-	switch object[9].propertyValue
-	case 0
+	switch hud.currentTimePeriod
+	case TIME_PRESENT
 		LoadSpriteSheet("R5/Objects.gif")
 		SpriteFrame(-16, -16, 32, 32, 1, 51)
 		SpriteFrame(-32, -16, 64, 32, 34, 51)
@@ -81,7 +87,7 @@ event ObjectStartup
 		SpriteFrame(-32, -16, 64, 16, 1, 208)
 		SpriteFrame(-48, -16, 96, 16, 1, 191)
 		break
-	case 1
+	case TIME_PAST
 		LoadSpriteSheet("R5/Objects3.gif")
 		SpriteFrame(-16, -16, 32, 32, 1, 170)
 		SpriteFrame(-32, -16, 64, 32, 34, 170)
@@ -90,7 +96,7 @@ event ObjectStartup
 		SpriteFrame(-32, -16, 64, 16, 159, 148)
 		SpriteFrame(-48, -16, 96, 16, 159, 131)
 		break
-	case 2
+	case TIME_GOOD_FUTURE
 		LoadSpriteSheet("R5/Objects3.gif")
 		SpriteFrame(-16, -16, 32, 32, 1, 170)
 		SpriteFrame(-32, -16, 64, 32, 34, 170)
@@ -99,7 +105,7 @@ event ObjectStartup
 		SpriteFrame(-32, -16, 64, 16, 159, 182)
 		SpriteFrame(-48, -16, 96, 16, 159, 165)
 		break
-	case 3
+	case TIME_BAD_FUTURE
 		LoadSpriteSheet("R5/Objects3.gif")
 		SpriteFrame(-16, -16, 32, 32, 1, 170)
 		SpriteFrame(-32, -16, 64, 32, 34, 170)

@@ -9,7 +9,13 @@
 
 private alias 39 : TYPE_TITLECARD
 
+// Time Period Aliases
+private alias object[9].propertyValue : hud.currentTimePeriod
 
+private alias 0 : TIME_PRESENT
+private alias 1 : TIME_PAST
+private alias 2 : TIME_GOOD_FUTURE
+private alias 3 : TIME_BAD_FUTURE
 
 event ObjectDraw
 	object[0].value1 = 0
@@ -119,39 +125,41 @@ event ObjectStartup
 		LoadSpriteSheet("Global/Display_t.gif")
 	end if
 	if options.soundtrack == 0
-		switch object[9].propertyValue
-		case 0
+		switch hud.currentTimePeriod
+		case TIME_PRESENT
 			SetMusicTrack("JP/R3A.ogg", 0, 358725)
 			break
-		case 1
+		case TIME_PAST
 			SetMusicTrack("R3B.ogg", 0, 166278)
 			break
-		case 2
+		case TIME_GOOD_FUTURE
 			SetMusicTrack("JP/R3C.ogg", 0, 1)
 			break
-		case 3
+		case TIME_BAD_FUTURE
 			SetMusicTrack("JP/R3D.ogg", 0, 717648)
 			break
 		end switch
 	else
-		switch object[9].propertyValue
-		case 0
+		switch hud.currentTimePeriod
+		case TIME_PRESENT
 			SetMusicTrack("US/R3A.ogg", 0, 1)
 			break
-		case 1
+		case TIME_PAST
 			SetMusicTrack("R3B.ogg", 0, 166278)
 			break
-		case 2
+		case TIME_GOOD_FUTURE
 			SetMusicTrack("US/R3C.ogg", 0, 173494)
 			break
-		case 3
+		case TIME_BAD_FUTURE
 			SetMusicTrack("US/R3D.ogg", 0, 1)
 			break
 		end switch
 	end if
+
 	flowerType = TypeName[Flower]
 
 	object[20].type = TypeName[Title Card]
+	
 	if warp.xpos > 0
 		object[20].value3 = 256
 	else

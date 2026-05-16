@@ -9,6 +9,15 @@
 
 private alias 50 : TYPE_HPLATFORMSMALL
 
+// Time Period Aliases
+private alias object[9].propertyValue : hud.currentTimePeriod
+
+private alias 0 : TIME_PRESENT
+private alias 1 : TIME_PAST
+private alias 2 : TIME_GOOD_FUTURE
+private alias 3 : TIME_BAD_FUTURE
+
+
 // Function declarations
 reserve function HPlatformSmall_DebugDraw
 reserve function HPlatformSmall_DebugSpawn
@@ -212,23 +221,23 @@ end event
 
 event ObjectStartup
 	LoadSpriteSheet("R5/Objects.gif")
-	switch object[9].propertyValue
-	case 0
+	switch hud.currentTimePeriod
+	case TIME_PRESENT
 		LoadSpriteSheet("R5/Objects.gif")
 		SpriteFrame(-16, -16, 32, 32, 1, 51)
 		SpriteFrame(-16, -16, 32, 16, 65, 208)
 		break
-	case 1
+	case TIME_PAST
 		LoadSpriteSheet("R5/Objects3.gif")
 		SpriteFrame(-16, -16, 32, 32, 1, 170)
 		SpriteFrame(-16, -16, 32, 16, 223, 148)
 		break
-	case 2
+	case TIME_GOOD_FUTURE
 		LoadSpriteSheet("R5/Objects3.gif")
 		SpriteFrame(-16, -16, 32, 32, 1, 170)
 		SpriteFrame(-16, -16, 32, 16, 223, 182)
 		break
-	case 3
+	case TIME_BAD_FUTURE
 		LoadSpriteSheet("R5/Objects3.gif")
 		SpriteFrame(-16, -16, 32, 32, 1, 170)
 		SpriteFrame(-16, -16, 32, 16, 223, 216)

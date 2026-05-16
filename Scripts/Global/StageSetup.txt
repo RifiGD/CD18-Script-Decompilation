@@ -9,6 +9,15 @@
 
 private alias 3 : TYPE_STAGESETUP
 
+// Time Period Aliases
+private alias object[9].propertyValue : hud.currentTimePeriod
+
+private alias 0 : TIME_PRESENT
+private alias 1 : TIME_PAST
+private alias 2 : TIME_GOOD_FUTURE
+private alias 3 : TIME_BAD_FUTURE
+
+
 // Function declarations
 reserve function StageSetup_CheckGoodFuture
 reserve function StageSetup_SaveStageState
@@ -22,7 +31,7 @@ public function StageSetup_CheckGoodFuture
 			object.drawOrder = 4
 			object.state = 1
 		else
-			if object[9].propertyValue > 0
+			if hud.currentTimePeriod > 0
 				ResetObjectEntity(object.entityPos, flowerType, 0, object.xpos, object.ypos)
 				object.drawOrder = 4
 				object.state = 1
@@ -35,7 +44,7 @@ end function
 public function StageSetup_SaveStageState
 	arrayPos0 = 32
 	arrayPos1 = 7168
-	temp1 = object[9].propertyValue
+	temp1 = hud.currentTimePeriod
 	temp1 += 4
 
 	// Checks and saves:
@@ -46,26 +55,26 @@ public function StageSetup_SaveStageState
 
 	while arrayPos0 < 1056
 		if object[arrayPos0].type == TypeName[Blank Object]
-			SetBit(saveRAM[arrayPos1], object[9].propertyValue, 1)
+			SetBit(saveRAM[arrayPos1], hud.currentTimePeriod, 1)
 		else
 			if object[arrayPos0].type == TypeName[Broken Monitor]
-				SetBit(saveRAM[arrayPos1], object[9].propertyValue, 1)
+				SetBit(saveRAM[arrayPos1], hud.currentTimePeriod, 1)
 			else
 				if object[arrayPos0].type == TypeName[Future Post]
 					if object[arrayPos0].state == 2
-						SetBit(saveRAM[arrayPos1], object[9].propertyValue, 1)
+						SetBit(saveRAM[arrayPos1], hud.currentTimePeriod, 1)
 					else
-						SetBit(saveRAM[arrayPos1], object[9].propertyValue, 0)
+						SetBit(saveRAM[arrayPos1], hud.currentTimePeriod, 0)
 					end if
 				else
 					if object[arrayPos0].type == TypeName[Past Post]
 						if object[arrayPos0].state == 2
-							SetBit(saveRAM[arrayPos1], object[9].propertyValue, 1)
+							SetBit(saveRAM[arrayPos1], hud.currentTimePeriod, 1)
 						else
-							SetBit(saveRAM[arrayPos1], object[9].propertyValue, 0)
+							SetBit(saveRAM[arrayPos1], hud.currentTimePeriod, 0)
 						end if
 					else
-						SetBit(saveRAM[arrayPos1], object[9].propertyValue, 0)
+						SetBit(saveRAM[arrayPos1], hud.currentTimePeriod, 0)
 						if object[arrayPos0].type == flowerType
 							SetBit(saveRAM[arrayPos1], temp1, 1)
 						else
@@ -84,7 +93,7 @@ end function
 public function StageSetup_LoadStageState
 	arrayPos0 = 32
 	arrayPos1 = 7168
-	temp1 = object[9].propertyValue
+	temp1 = hud.currentTimePeriod
 	temp1 += 4
 
 	// Checks and loads:
@@ -95,26 +104,26 @@ public function StageSetup_LoadStageState
 
 	while arrayPos0 < 1056
 		if object[arrayPos0].type == TypeName[Ring]
-			GetBit(temp0, saveRAM[arrayPos1], object[9].propertyValue)
+			GetBit(temp0, saveRAM[arrayPos1], hud.currentTimePeriod)
 			if temp0 == 1
 				object[arrayPos0].type = TypeName[Blank Object]
 			end if
 		else
 			if object[arrayPos0].type == TypeName[Monitor]
-				GetBit(temp0, saveRAM[arrayPos1], object[9].propertyValue)
+				GetBit(temp0, saveRAM[arrayPos1], hud.currentTimePeriod)
 				if temp0 == 1
 					object[arrayPos0].type = TypeName[Broken Monitor]
 					object[arrayPos0].state = 2
 				end if
 			else
 				if object[arrayPos0].type == TypeName[Future Post]
-					GetBit(temp0, saveRAM[arrayPos1], object[9].propertyValue)
+					GetBit(temp0, saveRAM[arrayPos1], hud.currentTimePeriod)
 					if temp0 == 1
 						object[arrayPos0].state = 2
 					end if
 				else
 					if object[arrayPos0].type == TypeName[Past Post]
-						GetBit(temp0, saveRAM[arrayPos1], object[9].propertyValue)
+						GetBit(temp0, saveRAM[arrayPos1], hud.currentTimePeriod)
 						if temp0 == 1
 							object[arrayPos0].state = 2
 						end if
@@ -241,7 +250,7 @@ event ObjectStartup
 		object[9].type = TypeName[HUD]
 		object[9].priority = 1
 		object[9].drawOrder = 6
-		object[9].propertyValue = object[arrayPos0].propertyValue
+		hud.currentTimePeriod = object[arrayPos0].propertyValue
 	next
 	ringExtraLife = 100
 	oscillation = 0
@@ -280,7 +289,7 @@ event ObjectStartup
 		stage.minutes = recMinutes
 		CallFunction(StageSetup_LoadStageState)
 	end if
-	if object[9].propertyValue == 2
+	if hud.currentTimePeriod == TIME_GOOD_FUTURE
 		goodFuture.enabled = 1
 		generator.destroyed = 1
 	end if

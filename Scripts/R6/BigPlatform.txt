@@ -9,7 +9,13 @@
 
 private alias 68 : TYPE_BIGPLATFORM
 
+// Time Period Aliases
+private alias object[9].propertyValue : hud.currentTimePeriod
 
+private alias 0 : TIME_PRESENT
+private alias 1 : TIME_PAST
+private alias 2 : TIME_GOOD_FUTURE
+private alias 3 : TIME_BAD_FUTURE
 
 event ObjectUpdate
 	switch object.state
@@ -83,7 +89,7 @@ end event
 
 event ObjectStartup
 	LoadSpriteSheet("R6/Objects4.gif")
-	if object[9].propertyValue == 2
+	if hud.currentTimePeriod == TIME_GOOD_FUTURE
 		SpriteFrame(-48, -80, 96, 192, 98, 1)
 	else
 		SpriteFrame(-48, -80, 96, 192, 1, 1)

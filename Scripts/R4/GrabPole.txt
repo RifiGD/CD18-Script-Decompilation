@@ -9,7 +9,13 @@
 
 private alias 74 : TYPE_GRABPOLE
 
+// Time Period Aliases
+private alias object[9].propertyValue : hud.currentTimePeriod
 
+private alias 0 : TIME_PRESENT
+private alias 1 : TIME_PAST
+private alias 2 : TIME_GOOD_FUTURE
+private alias 3 : TIME_BAD_FUTURE
 
 event ObjectUpdate
 	switch object.state
@@ -77,7 +83,7 @@ end event
 
 event ObjectStartup
 	LoadSpriteSheet("R4/Objects3.gif")
-	if object[9].propertyValue < 3
+	if hud.currentTimePeriod < TIME_BAD_FUTURE
 		SpriteFrame(-4, -46, 8, 92, 134, 46)
 		SpriteFrame(-4, -46, 16, 92, 117, 46)
 	else

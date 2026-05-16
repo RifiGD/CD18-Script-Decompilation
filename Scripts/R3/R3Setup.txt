@@ -8,6 +8,14 @@
 //-------Aliases-------//
 private alias 40 : TYPE_R3SETUP
 
+// Time Period Aliases
+private alias object[9].propertyValue : hud.currentTimePeriod
+
+private alias 0 : TIME_PRESENT
+private alias 1 : TIME_PAST
+private alias 2 : TIME_GOOD_FUTURE
+private alias 3 : TIME_BAD_FUTURE
+
 // Function declarations
 reserve function R3Setup_Function83
 reserve function R3Setup_Function84
@@ -58,122 +66,6 @@ public table R3Setup_table12
 	14721248, 14721248, 14680288, 14680288, 14680288, 14721248, 14721248, 14680288, 14680288, 14680288, 14721248, 14721248, 14680288, 14680288, 14680288
 end table
 
-
-// //Unknown Variables
-// private value value41905 = 7;
-// private value value41906 = 14737408;
-// private value value41907 = 14737408;
-// private value value41908 = 14737408;
-// private value value41909 = 14737408;
-// private value value41910 = 0;
-// private value value41911 = 0;
-// private value value41912 = 0;
-// private value value41913 = 41;
-// private value value41914 = 14737408; 
-// private value value41915 = 14737408;
-// private value value41916 = 0;
-// private value value41917 = 0;
-// private value value41918 = 0;
-// private value value41919 = 14737408;
-// private value value41920 = 14737408;
-// private value value41921 = 0;
-// private value value41922 = 0;
-// private value value41923 = 0;
-// private value value41924 = 14737408;
-// private value value41925 = 14737408;
-// private value value41926 = 0;
-// private value value41927 = 0;
-// private value value41928 = 0;
-// private value value41929 = 14737408;
-// private value value41930 = 14737408;
-// private value value41931 = 0;
-// private value value41932 = 0;
-// private value value41933 = 0;
-// private value value41934 = 14737408;
-// private value value41935 = 14737408;
-// private value value41936 = 0;
-// private value value41937 = 0;
-// private value value41938 = 0;
-// private value value41939 = 14737408;
-// private value value41940 = 14737408;
-// private value value41941 = 0;
-// private value value41942 = 0;
-// private value value41943 = 0;
-// private value value41944 = 14737408;
-// private value value41945 = 14737408;
-// private value value41946 = 0;
-// private value value41947 = 0;
-// private value value41948 = 0;
-// private value value41949 = 0;
-// private value value41950 = 0;
-// private value value41951 = 0;
-// private value value41952 = 0;
-// private value value41953 = 0;
-// private value value41954 = 0;
-// private value value41955 = 63;
-// private value value41956 = 0;
-// private value value41957 = 0;
-// private value value41958 = 0;
-// private value value41959 = 0;
-// private value value41960 = 0;
-// private value value41961 = 0;
-// private value value41962 = 0;
-// private value value41963 = 0;
-// private value value41964 = 0;
-// private value value41965 = 0;
-// private value value41966 = 0;
-// private value value41967 = 0;
-// private value value41968 = 0;
-// private value value41969 = 0;
-// private value value41970 = 0;
-// private value value41971 = 0;
-// private value value41972 = 0;
-// private value value41973 = 0;
-// private value value41974 = 0;
-// private value value41975 = 0;
-// private value value41976 = 0;
-// private value value41977 = 0;
-// private value value41978 = 0;
-// private value value41979 = 0;
-// private value value41980 = 14680288;
-// private value value41981 = 14680288;
-// private value value41982 = 14680288;
-// private value value41983 = 0;
-// private value value41984 = 0;
-// private value value41985 = 0;
-// private value value41986 = 14680288;
-// private value value41987 = 14680288;
-// private value value41988 = 14680288;
-// private value value41989 = 0;
-// private value value41990 = 0;
-// private value value41991 = 0;
-// private value value41992 = 14680288;
-// private value value41993 = 14680288;
-// private value value41994 = 14680288;
-// private value value41995 = 0;
-// private value value41996 = 0;
-// private value value41997 = 0;
-// private value value41998 = 14680288;
-// private value value41999 = 14680288;
-// private value value42000 = 14680288;
-// private value value42001 = 0;
-// private value value42002 = 0;
-// private value value42003 = 0;
-// private value value42004 = 14721248;
-// private value value42005 = 14721248;
-// private value value42006 = 14680288;
-// private value value42007 = 14680288;
-// private value value42008 = 14680288;
-// private value value42009 = 14721248;
-// private value value42010 = 14721248;
-// private value value42011 = 14680288;
-// private value value42012 = 14680288;
-// private value value42013 = 14680288;
-// private value value42014 = 14721248;
-// private value value42015 = 14721248;
-// private value value42016 = 14680288;
-// private value value42017 = 14680288;
-// private value value42018 = 14680288;
 
 public function R3Setup_Function83 // Present
 	GetTableValue(temp0, object.value5, R3Setup_table10)
@@ -246,7 +138,7 @@ event ObjectUpdate
 			object.value3 = 0
 		end if
 	end if
-	if object[9].propertyValue != 1
+	if hud.currentTimePeriod != TIME_PAST
 		R3Setup_value13++
 		R3Setup_value13 %= 20
 	end if
@@ -443,24 +335,24 @@ event ObjectStartup
 	object[29].type = TypeName[R3 Setup]
 	object[29].priority = 1
 	object[29].drawOrder = 0
-	switch object[9].propertyValue
-	case 0
+	switch hud.currentTimePeriod
+	case TIME_PRESENT
 		object[29].value4 = R3Setup_Function83
 		break
-	case 1
+	case TIME_PAST
 		object[29].value4 = R3Setup_Function84
 		break
-	case 2
+	case TIME_GOOD_FUTURE
 		object[29].value4 = R3Setup_Function85
 		break
-	case 3
+	case TIME_BAD_FUTURE
 		object[29].value4 = R3Setup_Function86
 		break
 	end switch
 	SetLayerDeformation(2, 128, 6, 0, 0, 0)
 	SetLayerDeformation(1, 64, 4, 0, 0, 0)
 	stage.waterLevel = 1472
-	if object[9].propertyValue == 1
+	if hud.currentTimePeriod == TIME_PAST
 		R3Setup_value13 = 1
 	else
 		R3Setup_value13 = 0

@@ -9,6 +9,15 @@
 
 private alias 70 : TYPE_FLOORCONTROL
 
+// Time Period Aliases
+private alias object[9].propertyValue : hud.currentTimePeriod
+
+private alias 0 : TIME_PRESENT
+private alias 1 : TIME_PAST
+private alias 2 : TIME_GOOD_FUTURE
+private alias 3 : TIME_BAD_FUTURE
+
+
 // Function declarations
 reserve function FloorControl_Function104
 reserve function FloorControl_Function105
@@ -245,7 +254,7 @@ event ObjectUpdate
 		if object.value0 == 60
 			object.value0 = 0
 			object.state++
-			if object[9].propertyValue == 2
+			if hud.currentTimePeriod == TIME_GOOD_FUTURE
 				Copy16x16Tile(739, 827)
 			else
 				Copy16x16Tile(810, 863)
@@ -254,7 +263,7 @@ event ObjectUpdate
 			temp0 = object.value0
 			temp0 >>= 1
 			temp0 %= 5
-			if object[9].propertyValue == 2
+			if hud.currentTimePeriod == TIME_GOOD_FUTURE
 				temp0 += 826
 				Copy16x16Tile(739, temp0)
 			else

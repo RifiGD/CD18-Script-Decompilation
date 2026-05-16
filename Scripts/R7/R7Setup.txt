@@ -9,6 +9,15 @@
 
 private alias 40 : TYPE_R7SETUP
 
+// Time Period Aliases
+private alias object[9].propertyValue : hud.currentTimePeriod
+
+private alias 0 : TIME_PRESENT
+private alias 1 : TIME_PAST
+private alias 2 : TIME_GOOD_FUTURE
+private alias 3 : TIME_BAD_FUTURE
+
+
 // Function declarations
 reserve function R7Setup_Function83
 reserve function R7Setup_Function84
@@ -253,8 +262,9 @@ event ObjectStartup
 	object[21].type = TypeName[R7 Setup]
 	object[21].priority = 1
 	object[21].value4 = R7Setup_Function86 // 86
-	switch object[9].propertyValue
-	case 0
+	
+	switch hud.currentTimePeriod
+	case TIME_PRESENT
 		object[21].value3 = R7Setup_Function84 // 84
 		CopyPalette(0, 0, 1, 0, 255)
 		CopyPalette(0, 0, 2, 0, 255)
@@ -271,11 +281,11 @@ event ObjectStartup
 			temp2 += 32
 		loop
 		break
-	case 1
+	case TIME_PAST
 		object[21].value3 = R7Setup_Function85 // 85
 		SetLayerDeformation(2, 128, 8, 0, 0, 0)
 		break
-	case 2
+	case TIME_GOOD_FUTURE
 		object[21].value3 = R7Setup_Function86 // 86
 		if stage.actNum == 3
 			object[21].drawOrder = 5
@@ -288,7 +298,7 @@ event ObjectStartup
 			stage.curXBoundary2 -= 288
 		end if
 		break
-	case 3
+	case TIME_BAD_FUTURE
 		object[21].value3 = R7Setup_Function87 // 87
 		CopyPalette(0, 0, 1, 0, 255)
 		CopyPalette(0, 0, 2, 0, 255)

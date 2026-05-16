@@ -9,6 +9,14 @@
 
 private alias 15 : TYPE_LAMPPOST
 
+// Time Period Aliases
+private alias object[9].propertyValue : hud.currentTimePeriod
+
+private alias 0 : TIME_PRESENT
+private alias 1 : TIME_PAST
+private alias 2 : TIME_GOOD_FUTURE
+private alias 3 : TIME_BAD_FUTURE
+
 // Function declarations
 
 reserve function LampPost_DebugDraw
@@ -103,7 +111,7 @@ event ObjectStartup
 	SpriteFrame(-8, -8, 16, 16, 1, 236)
 	SpriteFrame(-8, -8, 16, 16, 18, 236)
 	if warp.xpos == 0
-		if object[9].propertyValue == 0
+		if hud.currentTimePeriod == TIME_PRESENT
 			if lampPostID > 31
 				arrayPos0 = lampPostID
 				object[0].xpos = object[arrayPos0].xpos

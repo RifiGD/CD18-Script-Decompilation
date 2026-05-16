@@ -2492,11 +2492,6 @@ end function
 public function Player_State_SpinningTop
 	player.timer += object.value35
 	if player.gravity == GRAVITY_AIR
-#platform: USE_DECOMP
-		player.state 	 = Player_State_Air
-		player.animation = ANI_WALKING
-		player.timer	 = 0
-#endplatform
 		CallFunction(Player_HandleAirMovement)
 	else
 		CallFunction(Player_HandleOnGround)

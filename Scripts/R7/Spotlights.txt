@@ -9,6 +9,14 @@
 
 private alias 41 : TYPE_SPOTLIGHTS
 
+// Time Period Aliases
+private alias object[9].propertyValue : hud.currentTimePeriod
+
+private alias 0 : TIME_PRESENT
+private alias 1 : TIME_PAST
+private alias 2 : TIME_GOOD_FUTURE
+private alias 3 : TIME_BAD_FUTURE
+
 // Function declarations
 reserve function Spotlights_Function84
 
@@ -318,8 +326,8 @@ event ObjectStartup
 		object[arrayPos0].priority = 1
 		object[arrayPos0].drawOrder = 5
 		object[arrayPos0].value1 = screen.xcenter
-		switch object[9].propertyValue
-		case 0
+		switch hud.currentTimePeriod
+		case TIME_PRESENT
 			object[arrayPos0].value2 = 128
 			object[arrayPos0].value2 <<= 16
 			temp0 = 224
@@ -333,7 +341,7 @@ event ObjectStartup
 			object[arrayPos0].value3 += temp0
 			object[arrayPos0].value3 += 0
 			break
-		case 2
+		case TIME_GOOD_FUTURE
 			object[arrayPos0].value2 = 192
 			object[arrayPos0].value2 <<= 16
 			temp0 = 128
@@ -347,7 +355,7 @@ event ObjectStartup
 			object[arrayPos0].value3 += temp0
 			object[arrayPos0].value3 += 224
 			break
-		case 3
+		case TIME_BAD_FUTURE
 			object[arrayPos0].value2 = 224
 			object[arrayPos0].value2 <<= 16
 			temp0 = 64

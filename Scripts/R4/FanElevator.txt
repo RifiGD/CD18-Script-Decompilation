@@ -9,7 +9,13 @@
 
 private alias 75 : TYPE_FANELEVATOR
 
+// Time Period Aliases
+private alias object[9].propertyValue : hud.currentTimePeriod
 
+private alias 0 : TIME_PRESENT
+private alias 1 : TIME_PAST
+private alias 2 : TIME_GOOD_FUTURE
+private alias 3 : TIME_BAD_FUTURE
 
 event ObjectUpdate
 	if object.state == 0
@@ -66,7 +72,7 @@ end event
 
 event ObjectStartup
 	LoadSpriteSheet("R4/Objects3.gif")
-	if object[9].propertyValue < 3
+	if hud.currentTimePeriod < TIME_BAD_FUTURE
 		SpriteFrame(-32, -32, 32, 48, 84, 46)
 		SpriteFrame(-32, 16, 32, 16, 110, 144)
 		SpriteFrame(-32, -32, 32, 48, 84, 95)

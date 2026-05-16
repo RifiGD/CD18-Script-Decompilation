@@ -9,6 +9,15 @@
 
 private alias 58 : TYPE_HOTARU
 
+// Time Period Aliases
+private alias object[9].propertyValue : hud.currentTimePeriod
+
+private alias 0 : TIME_PRESENT
+private alias 1 : TIME_PAST
+private alias 2 : TIME_GOOD_FUTURE
+private alias 3 : TIME_BAD_FUTURE
+
+
 // Function declarations
 reserve function Hotaru_Function89
 
@@ -145,7 +154,7 @@ event ObjectUpdate
 					object[+5].state = 1
 				end if
 			end if
-			if object[9].propertyValue == 3
+			if hud.currentTimePeriod == TIME_BAD_FUTURE
 				if object.alpha < 176
 					object.alpha++
 				end if
@@ -288,7 +297,7 @@ event ObjectStartup
 		if object[arrayPos0].type == TypeName[Hotaru]
 			object[arrayPos0].alpha = 0
 			object[arrayPos0].inkEffect = 2
-			if object[9].propertyValue == 3
+			if hud.currentTimePeriod == TIME_BAD_FUTURE
 				object[arrayPos0].drawOrder = 2
 			end if
 			arrayPos1 = arrayPos0

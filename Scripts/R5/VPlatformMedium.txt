@@ -9,6 +9,14 @@
 
 private alias 48 : TYPE_VPLATFORMMEDIUM
 
+// Time Period Aliases
+private alias object[9].propertyValue : hud.currentTimePeriod
+
+private alias 0 : TIME_PRESENT
+private alias 1 : TIME_PAST
+private alias 2 : TIME_GOOD_FUTURE
+private alias 3 : TIME_BAD_FUTURE
+
 // Function declarations
 reserve function VPlatformMedium_DebugDraw
 reserve function VPlatformMedium_DebugSpawn
@@ -162,23 +170,23 @@ end event
 
 event ObjectStartup
 	LoadSpriteSheet("R5/Objects.gif")
-	switch object[9].propertyValue
-	case 0
+	switch hud.currentTimePeriod
+	case TIME_PRESENT
 		LoadSpriteSheet("R5/Objects.gif")
 		SpriteFrame(-32, -16, 64, 32, 34, 51)
 		SpriteFrame(-32, -16, 64, 16, 1, 208)
 		break
-	case 1
+	case TIME_PAST
 		LoadSpriteSheet("R5/Objects3.gif")
 		SpriteFrame(-32, -16, 64, 32, 34, 170)
 		SpriteFrame(-32, -16, 64, 16, 159, 148)
 		break
-	case 2
+	case TIME_GOOD_FUTURE
 		LoadSpriteSheet("R5/Objects3.gif")
 		SpriteFrame(-32, -16, 64, 32, 34, 170)
 		SpriteFrame(-32, -16, 64, 16, 159, 182)
 		break
-	case 3
+	case TIME_BAD_FUTURE
 		LoadSpriteSheet("R5/Objects3.gif")
 		SpriteFrame(-32, -16, 64, 32, 34, 170)
 		SpriteFrame(-32, -16, 64, 16, 159, 216)

@@ -9,7 +9,13 @@
 
 private alias 77 : TYPE_VOBLOCKS3
 
+// Time Period Aliases
+private alias object[9].propertyValue : hud.currentTimePeriod
 
+private alias 0 : TIME_PRESENT
+private alias 1 : TIME_PAST
+private alias 2 : TIME_GOOD_FUTURE
+private alias 3 : TIME_BAD_FUTURE
 
 event ObjectUpdate
 	object.angle = oscillation
@@ -60,26 +66,26 @@ end event
 
 
 event ObjectStartup
-	switch object[9].propertyValue
-	case 0
+	switch hud.currentTimePeriod
+	case TIME_PRESENT
 		LoadSpriteSheet("R4/Objects.gif")
 		temp0 = 163
 		temp1 = 1
 		temp2 = 196
 		break
-	case 1
+	case TIME_PAST
 		LoadSpriteSheet("R4/Objects2.gif")
 		temp0 = 1
 		temp1 = 157
 		temp2 = 34
 		break
-	case 2
+	case TIME_GOOD_FUTURE
 		LoadSpriteSheet("R4/Objects2.gif")
 		temp0 = 1
 		temp1 = 190
 		temp2 = 34
 		break
-	case 3
+	case TIME_BAD_FUTURE
 		LoadSpriteSheet("R4/Objects2.gif")
 		temp0 = 1
 		temp1 = 223

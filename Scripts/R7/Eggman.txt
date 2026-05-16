@@ -9,6 +9,14 @@
 
 private alias 53 : TYPE_EGGMAN
 
+// Time Period Aliases
+private alias object[9].propertyValue : hud.currentTimePeriod
+
+private alias 0 : TIME_PRESENT
+private alias 1 : TIME_PAST
+private alias 2 : TIME_GOOD_FUTURE
+private alias 3 : TIME_BAD_FUTURE
+
 // Function declarations
 reserve function Eggman_Function85
 
@@ -159,7 +167,7 @@ event ObjectUpdate
 		if object.value0 < 120
 			object.value0++
 		else
-			if object[9].propertyValue == 2
+			if hud.currentTimePeriod == TIME_GOOD_FUTURE
 				if options.soundtrack == 0
 					SetMusicTrack("JP/R7D.ogg", 0, 1)
 				else
@@ -333,7 +341,7 @@ event ObjectUpdate
 		if object.outOfBounds == 1
 			object.type = TypeName[Blank Object]
 			object.priority = 0
-			if object[9].propertyValue == 2
+			if hud.currentTimePeriod == TIME_GOOD_FUTURE
 				if options.soundtrack == 0
 					SetMusicTrack("JP/R7C.ogg", 0, 103060)
 				else

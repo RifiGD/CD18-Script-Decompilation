@@ -9,6 +9,13 @@
 
 private alias 6 : TYPE_ACTFINISH
 
+// Time Period Aliases
+private alias object[9].propertyValue : hud.currentTimePeriod
+
+private alias 0 : TIME_PRESENT
+private alias 1 : TIME_PAST
+private alias 2 : TIME_GOOD_FUTURE
+private alias 3 : TIME_BAD_FUTURE
 
 event ObjectUpdate
 	switch object.state
@@ -109,7 +116,7 @@ event ObjectUpdate
 				object.value0 = 0
 				object.state = 3
 				if stage.playerListPos == 0
-					if object[9].propertyValue == 2
+					if hud.currentTimePeriod == TIME_GOOD_FUTURE
 						if stage.debugMode == 0
 						end if
 					end if
@@ -120,7 +127,7 @@ event ObjectUpdate
 				object.value0 = 0
 				object.state = 3
 				if stage.playerListPos == 0
-					if object[9].propertyValue == 2
+					if hud.currentTimePeriod == TIME_GOOD_FUTURE
 						if stage.debugMode == 0
 						end if
 					end if
@@ -189,17 +196,17 @@ event ObjectUpdate
 				if stage.actNum == 3
 					goodFuture.count = 0
 				end if
-				switch object[9].propertyValue
-				case 0
+				switch hud.currentTimePeriod
+				case TIME_PRESENT
 					stage.listPos += 4
 					break
-				case 1
+				case TIME_PAST
 					stage.listPos += 3
 					break
-				case 2
+				case TIME_GOOD_FUTURE
 					stage.listPos += 2
 					break
-				case 3
+				case TIME_BAD_FUTURE
 					stage.listPos++
 					break
 				end switch
@@ -259,17 +266,17 @@ event ObjectUpdate
 				if stage.actNum == 3
 					goodFuture.count = 0
 				end if
-				switch object[9].propertyValue
-				case 0
+				switch hud.currentTimePeriod
+				case TIME_PRESENT
 					stage.listPos += 4
 					break
-				case 1
+				case TIME_PAST
 					stage.listPos += 3
 					break
-				case 2
+				case TIME_GOOD_FUTURE
 					stage.listPos += 2
 					break
-				case 3
+				case TIME_BAD_FUTURE
 					stage.listPos++
 					break
 				end switch

@@ -9,7 +9,13 @@
 
 private alias 58 : TYPE_SOLIDBARRIER
 
+// Time Period Aliases
+private alias object[9].propertyValue : hud.currentTimePeriod
 
+private alias 0 : TIME_PRESENT
+private alias 1 : TIME_PAST
+private alias 2 : TIME_GOOD_FUTURE
+private alias 3 : TIME_BAD_FUTURE
 
 event ObjectUpdate
 	switch object.propertyValue
@@ -58,23 +64,23 @@ end event
 
 
 event ObjectStartup
-	switch object[9].propertyValue
-	case 0
+	switch hud.currentTimePeriod
+	case TIME_PRESENT
 		LoadSpriteSheet("R4/Objects.gif")
 		temp2 = 163
 		temp3 = 1
 		break
-	case 1
+	case TIME_PAST
 		LoadSpriteSheet("R4/Objects2.gif")
 		temp2 = 1
 		temp3 = 157
 		break
-	case 2
+	case TIME_GOOD_FUTURE
 		LoadSpriteSheet("R4/Objects2.gif")
 		temp2 = 1
 		temp3 = 190
 		break
-	case 3
+	case TIME_BAD_FUTURE
 		LoadSpriteSheet("R4/Objects2.gif")
 		temp2 = 1
 		temp3 = 223

@@ -9,7 +9,13 @@
 
 private alias 48 : TYPE_SPIKEBALL
 
+// Time Period Aliases
+private alias object[9].propertyValue : hud.currentTimePeriod
 
+private alias 0 : TIME_PRESENT
+private alias 1 : TIME_PAST
+private alias 2 : TIME_GOOD_FUTURE
+private alias 3 : TIME_BAD_FUTURE
 
 event ObjectUpdate
 	switch object.state
@@ -98,21 +104,21 @@ event ObjectStartup
 	foreach (TypeName[Spike Ball], arrayPos0, ALL_ENTITIES)
 		if object[arrayPos0].propertyValue == 1
 			object[arrayPos0].state = 4
-			switch object[9].propertyValue
-			case 0
+			switch hud.currentTimePeriod
+			case TIME_PAST
 				object[arrayPos0].value2 = 131072
 				object[arrayPos0].value4 = 16
 				object[arrayPos0].value5 = -16
 				object[arrayPos0].value6 = 40
 				break
-			case 1
+			case TIME_PAST
 				object[arrayPos0].value2 = 262144
 				object[arrayPos0].value4 = 8
 				object[arrayPos0].value5 = -8
 				object[arrayPos0].value6 = 60
 				break
-			case 2
-			case 3
+			case TIME_GOOD_FUTURE
+			case TIME_BAD_FUTURE
 				object[arrayPos0].value2 = 65536
 				object[arrayPos0].value4 = 32
 				object[arrayPos0].value5 = -32
@@ -120,21 +126,21 @@ event ObjectStartup
 				break
 			end switch
 		else
-			switch object[9].propertyValue
-			case 0
+			switch hud.currentTimePeriod
+			case TIME_PRESENT
 				object[arrayPos0].value2 = 131072
 				object[arrayPos0].value4 = 24
 				object[arrayPos0].value5 = -24
 				object[arrayPos0].value6 = 40
 				break
-			case 1
+			case TIME_PAST
 				object[arrayPos0].value2 = 262144
 				object[arrayPos0].value4 = 12
 				object[arrayPos0].value5 = -12
 				object[arrayPos0].value6 = 60
 				break
-			case 2
-			case 3
+			case TIME_GOOD_FUTURE
+			case TIME_BAD_FUTURE
 				object[arrayPos0].value2 = 65536
 				object[arrayPos0].value4 = 48
 				object[arrayPos0].value5 = -48

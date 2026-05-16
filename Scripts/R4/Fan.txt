@@ -9,7 +9,13 @@
 
 private alias 55 : TYPE_FAN
 
+// Time Period Aliases
+private alias object[9].propertyValue : hud.currentTimePeriod
 
+private alias 0 : TIME_PRESENT
+private alias 1 : TIME_PAST
+private alias 2 : TIME_GOOD_FUTURE
+private alias 3 : TIME_BAD_FUTURE
 
 event ObjectUpdate
 	switch object.state
@@ -59,9 +65,9 @@ end event
 
 
 event ObjectStartup
-	switch object[9].propertyValue
-	case 0
-	case 1
+	switch hud.currentTimePeriod
+	case TIME_PRESENT
+	case TIME_PAST
 		LoadSpriteSheet("R4/Objects.gif")
 		SpriteFrame(-16, -8, 32, 16, 163, 35)
 		SpriteFrame(-12, -8, 24, 16, 229, 1)
@@ -74,7 +80,7 @@ event ObjectStartup
 		SpriteFrame(-8, -12, 16, 24, 239, 169)
 		SpriteFrame(-8, -16, 16, 32, 222, 136)
 		break
-	case 2
+	case TIME_GOOD_FUTURE
 		LoadSpriteSheet("R4/Objects3.gif")
 		SpriteFrame(-16, -8, 32, 16, 51, 67)
 		SpriteFrame(-16, -8, 32, 16, 51, 84)
@@ -87,7 +93,7 @@ event ObjectStartup
 		SpriteFrame(-8, -16, 16, 32, 67, 101)
 		SpriteFrame(-8, -16, 16, 32, 67, 101)
 		break
-	case 3
+	case TIME_BAD_FUTURE
 		LoadSpriteSheet("R4/Objects3.gif")
 		SpriteFrame(-16, -8, 32, 16, 62, 228)
 		SpriteFrame(-16, -8, 32, 16, 94, 228)

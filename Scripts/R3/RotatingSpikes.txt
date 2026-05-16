@@ -9,6 +9,14 @@
 
 private alias 52 : TYPE_ROTATINGSPIKES
 
+// Time Period Aliases
+private alias object[9].propertyValue : hud.currentTimePeriod
+
+private alias 0 : TIME_PRESENT
+private alias 1 : TIME_PAST
+private alias 2 : TIME_GOOD_FUTURE
+private alias 3 : TIME_BAD_FUTURE
+
 // Function declarations
 reserve function RotatingSpikes_DebugDraw
 reserve function RotatingSpikes_DebugSpawn
@@ -24,7 +32,7 @@ public function RotatingSpikes_DebugSpawn
 	switch object[tempObjectPos].propertyValue
 	case 0
 		object[tempObjectPos].speed = 2
-		if object[9].propertyValue > 1
+		if hud.currentTimePeriod > 1
 			object[tempObjectPos].value2 = 4
 		else
 			object[tempObjectPos].value2 = 3
@@ -32,7 +40,7 @@ public function RotatingSpikes_DebugSpawn
 		break
 	case 1
 		object[tempObjectPos].speed = -2
-		if object[9].propertyValue > 1
+		if hud.currentTimePeriod > 1
 			object[tempObjectPos].value2 = 4
 		else
 			object[tempObjectPos].value2 = 3
@@ -109,7 +117,7 @@ event ObjectStartup
 		switch object[arrayPos0].propertyValue
 		case 0
 			object[arrayPos0].speed = 2
-			if object[9].propertyValue > 1
+			if hud.currentTimePeriod > 1
 				object[arrayPos0].value2 = 4
 			else
 				object[arrayPos0].value2 = 3
@@ -117,7 +125,7 @@ event ObjectStartup
 			break
 		case 1
 			object[arrayPos0].speed = -2
-			if object[9].propertyValue > 1
+			if hud.currentTimePeriod > 1
 				object[arrayPos0].value2 = 4
 			else
 				object[arrayPos0].value2 = 3

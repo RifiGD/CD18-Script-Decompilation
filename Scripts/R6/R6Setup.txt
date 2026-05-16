@@ -9,6 +9,15 @@
 
 private alias 40 : TYPE_R6SETUP
 
+// Time Period Aliases
+private alias object[9].propertyValue : hud.currentTimePeriod
+
+private alias 0 : TIME_PRESENT
+private alias 1 : TIME_PAST
+private alias 2 : TIME_GOOD_FUTURE
+private alias 3 : TIME_BAD_FUTURE
+
+
 // Function declarations
 reserve function R6Setup_Function83
 reserve function R6Setup_Function84
@@ -603,15 +612,15 @@ event ObjectStartup
 	object[21].type = TypeName[R6 Setup]
 	object[21].priority = 1
 	object[21].drawOrder = 2
-	switch object[9].propertyValue
-	case 0
-	case 1
+	switch hud.currentTimePeriod
+	case TIME_PRESENT
+	case TIME_PAST
 		object[21].value8 = R6Setup_Function83 // 83
 		break
-	case 2
+	case TIME_GOOD_FUTURE
 		object[21].value8 = R6Setup_Function84 // 84
 		break
-	case 3
+	case TIME_BAD_FUTURE
 		if stage.actNum == 3
 			object[21].value8 = R6Setup_Function86 // 86
 		else

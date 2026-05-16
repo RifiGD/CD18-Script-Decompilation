@@ -9,7 +9,13 @@
 
 private alias 39 : TYPE_TITLECARD
 
+// Time Period Aliases
+private alias object[9].propertyValue : hud.currentTimePeriod
 
+private alias 0 : TIME_PRESENT
+private alias 1 : TIME_PAST
+private alias 2 : TIME_GOOD_FUTURE
+private alias 3 : TIME_BAD_FUTURE
 
 event ObjectDraw
 	object[0].value1 = 0
@@ -119,32 +125,32 @@ event ObjectStartup
 		LoadSpriteSheet("Global/Display_t.gif")
 	end if
 	if options.soundtrack == 0
-		switch object[9].propertyValue
-		case 0
+		switch hud.currentTimePeriod
+		case TIME_PRESENT
 			SetMusicTrack("JP/R8A.ogg", 0, 146030)
 			break
-		case 1
+		case TIME_PAST
 			SetMusicTrack("R8B.ogg", 0, 145748)
 			break
-		case 2
+		case TIME_GOOD_FUTURE
 			SetMusicTrack("JP/R8C.ogg", 0, 1)
 			break
-		case 3
+		case TIME_BAD_FUTURE
 			SetMusicTrack("JP/R8D.ogg", 0, 1)
 			break
 		end switch
 	else
-		switch object[9].propertyValue
-		case 0
+		switch hud.currentTimePeriod
+		case TIME_PRESENT
 			SetMusicTrack("US/R8A.ogg", 0, 1)
 			break
-		case 1
+		case TIME_PAST
 			SetMusicTrack("R8B.ogg", 0, 145748)
 			break
-		case 2
+		case TIME_GOOD_FUTURE
 			SetMusicTrack("US/R8C.ogg", 0, 1)
 			break
-		case 3
+		case TIME_BAD_FUTURE
 			SetMusicTrack("US/R8D.ogg", 0, 563962)
 			break
 		end switch

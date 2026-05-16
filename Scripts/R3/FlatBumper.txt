@@ -9,6 +9,14 @@
 
 private alias 46 : TYPE_FLATBUMPER
 
+// Time Period Aliases
+private alias object[9].propertyValue : hud.currentTimePeriod
+
+private alias 0 : TIME_PRESENT
+private alias 1 : TIME_PAST
+private alias 2 : TIME_GOOD_FUTURE
+private alias 3 : TIME_BAD_FUTURE
+
 // Function declarations
 reserve function FlatBumper_DebugDraw
 reserve function FlatBumper_DebugSpawn
@@ -128,17 +136,17 @@ end event
 
 
 event ObjectStartup
-	switch object[9].propertyValue
-	case 0
-	case 1
+	switch hud.currentTimePeriod
+	case TIME_PRESENT
+	case TIME_PAST
 		LoadSpriteSheet("R3/Objects.gif")
 		SpriteFrame(-32, -16, 64, 32, 1, 75)
 		break
-	case 2
+	case TIME_GOOD_FUTURE
 		LoadSpriteSheet("R3/Objects3.gif")
 		SpriteFrame(-32, -16, 64, 32, 132, 67)
 		break
-	case 3
+	case TIME_BAD_FUTURE
 		LoadSpriteSheet("R3/Objects3.gif")
 		SpriteFrame(-32, -16, 64, 32, 132, 100)
 		break
