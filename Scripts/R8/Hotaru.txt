@@ -84,7 +84,7 @@ event ObjectUpdate
 			end if
 			break
 		case 2
-			if object[+1].type != 58
+			if object[+1].type != TypeName[Hotaru]
 				object.state++
 			else
 				if object[+1].state < 2
@@ -118,8 +118,8 @@ event ObjectUpdate
 			end if
 			break
 		case 4
-			if object[+2].type != 58
-				if object[+3].type != 58
+			if object[+2].type != TypeName[Hotaru]
+				if object[+3].type != TypeName[Hotaru]
 					temp0 = 3840
 					temp0 -= screen.xcenter
 					stage.newXBoundary1 = temp0

@@ -48,7 +48,7 @@ event ObjectUpdate
 	case 0
 		if object.state == 0
 			foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
-				if object.type != 0
+				if object.type != TypeName[Blank Object]
 					BoxCollisionTest(C_PLATFORM, object.entityPos, -40, -24, 40, -8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
 					if checkResult == 1
 						temp0 = 1
@@ -95,12 +95,12 @@ event ObjectUpdate
 					end if
 				end if
 #platform: USE_ORIGINAL_CODE
-			// What... This might be what causes the crash known as the antichrist (the R11C/D bug).
+			// What... This is what causes a crash in PPZ Act 2
 			// However, it doesn't happen in the decompilation... Strange.
 			end if
 #endplatform
 #platform: USE_DECOMP
-			// fixed here just in case, however I was hesitant when adding this platform marker.
+			// you never know
 			next
 #endplatform
 		end if

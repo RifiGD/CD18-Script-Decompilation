@@ -104,7 +104,7 @@ event ObjectStartup
 	object[0].priority = 1
 	GetTextInfo(temp1, 0, 2, 0, 0)
 	arrayPos0 = 32
-	while object[arrayPos0].type != 0
+	while object[arrayPos0].type != TypeName[Blank Object]
 		arrayPos0++
 	loop
 	temp0 = 0

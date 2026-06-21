@@ -28,7 +28,7 @@ event ObjectUpdate
 		if object.value0 > 139
 			object.value0 = 0
 		end if
-		if object[0].type != 7
+		if object[0].type != TypeName[Debug Mode]
 			BoxCollisionTest(C_TOUCH, object.entityPos, -96, -360, 96, 360, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
 			if checkResult == 1
 				object.xvel = 0

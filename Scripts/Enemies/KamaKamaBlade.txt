@@ -19,7 +19,7 @@ event ObjectUpdate
 	switch object.state
 	case 0
 		arrayPos0 = object.value1
-		if object[arrayPos0].type != 55
+		if object[arrayPos0].type != TypeName[Kama Kama]
 			object.type = TypeName[Blank Object]
 		end if
 		if object.propertyValue > 0

@@ -36,7 +36,7 @@ event ObjectUpdate
 					object[4].value1--
 					if object[4].value1 < 20
 						arrayPos0 = object[4].value6
-						if object[arrayPos0].type != 5
+						if object[arrayPos0].type != TypeName[UFO]
 							PlaySfx(SfxName[Time UFO], 0)
 							arrayPos1 = arrayPos0
 							arrayPos1++
@@ -72,13 +72,13 @@ event ObjectUpdate
 							object[2].controlMode = -1
 						end if
 					else
-						if object[3].type != 9
+						if object[3].type != TypeName[Water Splash]
 							object[4].value7 = 0
 						end if
 					end if
 					object[4].value7--
 				else
-					if object[3].type != 9
+					if object[3].type != TypeName[Water Splash]
 						object[4].value7 = 0
 					else
 						temp0 = object[4].value2

@@ -134,7 +134,6 @@ event ObjectUpdate
 			end if
 
 			// the MOBILE code is missing here, for obvious reasons...
-
 		end if
 		break
 	end switch

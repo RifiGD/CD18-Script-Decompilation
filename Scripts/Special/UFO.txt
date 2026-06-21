@@ -14,7 +14,7 @@ private alias 5 : TYPE_UFO
 event ObjectUpdate
 	if object.value3 == 0
 		arrayPos0 = object.value0
-		if object[arrayPos0].type != 6
+		if object[arrayPos0].type != TypeName[UFO Node]
 			object.value0 = object.entityPos
 			object.value0++
 			arrayPos0 = object.value0
@@ -25,7 +25,7 @@ event ObjectUpdate
 		object.value3 *= 2
 		arrayPos0++
 		object.value0++
-		if object[arrayPos0].type != 6
+		if object[arrayPos0].type != TypeName[UFO Node]
 			object.value0 = object.entityPos
 			object.value0++
 			arrayPos0 = object.value0

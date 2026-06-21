@@ -9,34 +9,31 @@
 
 private alias 55 : TYPE_SPINNINGTOP
 
+// Player Aliases
+private alias object.controlLock : player.controlLock
+private alias object.gravity : player.gravity
+private alias object.value26 : player.jumpStrength
+private alias object.value24 : player.gravityStrength
+private alias object.yvel : player.yvel
+private alias object.speed: player.speed
+private alias object.scrollTracking : player.scrollTracking
+private alias object.animation : player.animation
+private alias object.angle : player.angle
+private alias object.collisionMode : player.collisionMode
+private alias object.value1 : player.timer
+private alias object.state : player.state
+private alias object.value33 : player.collisionDisabled
+private alias object.value34 : player.jumpAbilityState
+private alias object.xpos : player.xpos
+private alias object.xvel : player.xvel
+private alias object.left : player.left
+private alias object.right : player.right
+private alias object.jumpPress : player.jumpPress
+
 // Function declarations
 reserve function SpinningTop_DebugDraw
 reserve function SpinningTop_DebugSpawn
-reserve function SpinningTop_Function111
-
-//Unknown Variables
-// private value value50872 = 16;
-// private value value50873 = 0; 1
-// private value value50874 = 0; 2
-// private value value50875 = 0; 3
-// private value value50876 = 1; 4
-// private value value50877 = 1; 5
-// private value value50878 = 2; 6
-// private value value50879 = 2; 7
-// private value value50880 = 2; 8
-// private value value50881 = 3; 9 
-// private value value50882 = 3; 10
-// private value value50883 = 3; 11
-// private value value50884 = 4; 12
-// private value value50885 = 4; 13
-// private value value50886 = 5; 14
-// private value value50887 = 5; 15
-// private value value50888 = 5; 16
-// private value value50889 = 4;
-// private value value50890 = 0; 1
-// private value value50891 = 0; 2
-// private value value50892 = 0; 3
-// private value value50893 = 0; 4
+reserve function SpinningTop_Player_Jump
 
 public table SpinningTop_table11
 	0, 0, 0, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 5, 5, 5
@@ -57,24 +54,24 @@ public function SpinningTop_DebugSpawn
 end function
 
 
-public function SpinningTop_Function111
+public function SpinningTop_Player_Jump
 	temp1 = 0
 	if temp1 == 0
-		object[currentPlayer].controlLock = 0
-		object[currentPlayer].gravity = 1
-		temp1 = object[currentPlayer].value26
-		temp1 += object[currentPlayer].value24
-		object[currentPlayer].yvel = object[currentPlayer].value26
-		FlipSign(object[currentPlayer].yvel)
-		GetTableValue(object[currentPlayer].speed, temp7, SpinningTop_table10)
-		object[currentPlayer].scrollTracking = 1
-		object[currentPlayer].animation = ANI_JUMPING
-		object[currentPlayer].angle = 0
-		object[currentPlayer].collisionMode = 0
-		object[currentPlayer].value1 = 1
-		object[currentPlayer].state = Player_State_Air
-		object[currentPlayer].value33 = 1
-		object[currentPlayer].value34 = 1
+		player[currentPlayer].controlLock = 0
+		player[currentPlayer].gravity = GRAVITY_AIR
+		temp1 = player[currentPlayer].jumpStrength
+		temp1 += player[currentPlayer].gravityStrength
+		player[currentPlayer].yvel = player[currentPlayer].jumpStrength
+		FlipSign(player[currentPlayer].yvel)
+		GetTableValue(player[currentPlayer].speed, temp7, SpinningTop_table10)
+		player[currentPlayer].scrollTracking = 1
+		player[currentPlayer].animation = ANI_JUMPING
+		player[currentPlayer].angle = 0
+		player[currentPlayer].collisionMode = CMODE_FLOOR
+		player[currentPlayer].timer = 1
+		player[currentPlayer].state = Player_State_Air
+		player[currentPlayer].collisionDisabled = true
+		player[currentPlayer].jumpAbilityState = 1
 	end if
 end function
 
@@ -100,9 +97,9 @@ event ObjectUpdate
 		BoxCollisionTest(C_SOLID, object.entityPos, -16, -8, 16, 24, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
 		if checkResult == 1
 			SetBit(object.value0, temp7, 1)
-			if object[currentPlayer].state != Player_State_SpinningTop
-				object[currentPlayer].state = Player_State_SpinningTop
-				temp0 = object[currentPlayer].xpos
+			if player[currentPlayer].state != Player_State_SpinningTop
+				player[currentPlayer].state = Player_State_SpinningTop
+				temp0 = player[currentPlayer].xpos
 				temp0 -= object.xpos
 				temp0 >>= 16
 				if temp0 < 0
@@ -112,17 +109,17 @@ event ObjectUpdate
 					temp5 = 0
 				end if
 				temp4 = temp0
-				SetTableValue(object[currentPlayer].speed, temp7, SpinningTop_table10)
-				object[currentPlayer].animation = ANI_SPINNING_TOP
+				SetTableValue(player[currentPlayer].speed, temp7, SpinningTop_table10)
+				player[currentPlayer].animation = ANI_SPINNING_TOP
 			end if
-			object[currentPlayer].xvel = 0
-			object[currentPlayer].speed = 0
+			player[currentPlayer].xvel = 0
+			player[currentPlayer].speed = 0
 			temp5 += 8
 			Cos256(temp0, temp5)
 			temp0 *= temp4
 			temp0 <<= 8
 			temp0 += object.xpos
-			object[currentPlayer].xpos = temp0
+			player[currentPlayer].xpos = temp0
 			temp0 = temp5
 			temp0 >>= 4
 			GetTableValue(object[0].frame, temp0, SpinningTop_table11)
@@ -131,39 +128,39 @@ event ObjectUpdate
 			if temp0 == 0
 				temp4++
 			end if
-			if object[currentPlayer].xpos < object.xpos
-				if object[currentPlayer].left == 1
+			if player[currentPlayer].xpos < object.xpos
+				if player[currentPlayer].left == 1
 					temp4++
 				end if
-				if object[currentPlayer].right == 1
+				if player[currentPlayer].right == 1
 					temp4--
 					if object.value1 == -1
 						temp4 = 0
 					end if
 				end if
 			else
-				if object[currentPlayer].left == 1
+				if player[currentPlayer].left == 1
 					temp4--
 					if temp4 == -1
 						temp4 = 0
 					end if
 				end if
-				if object[currentPlayer].right == 1
+				if player[currentPlayer].right == 1
 					temp4++
 				end if
 			end if
-			if object[currentPlayer].jumpPress == true
-				CallFunction(SpinningTop_Function111)
-				if object[currentPlayer].state == Player_State_Air
+			if player[currentPlayer].jumpPress == true
+				CallFunction(SpinningTop_Player_Jump)
+				if player[currentPlayer].state == Player_State_Air
 					PlaySfx(SfxName[Shot], 0)
 					SetBit(object.value0, temp7, 0)
 				end if
 			end if
 		else
 			if temp6 == 1
-				object[currentPlayer].state = Player_State_Air
-				object[currentPlayer].animation = ANI_WALKING
-				GetTableValue(object[currentPlayer].speed, temp7, SpinningTop_table10)
+				player[currentPlayer].state = Player_State_Air
+				player[currentPlayer].animation = ANI_WALKING
+				GetTableValue(player[currentPlayer].speed, temp7, SpinningTop_table10)
 			end if
 		end if
 		temp4 &= 255

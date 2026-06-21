@@ -90,13 +90,17 @@ event ObjectUpdate
 							end if
 						end if
 					end if
+
+					// Is Tails Unlocked?
 					if saveRAM[36] == false
+						// If he isn't, go to the unlock screen
 						saveRAM[36] = true
 						WriteSaveRAM()
 						stage.activeList = PRESENTATION_STAGE
 						stage.listPos = 8
 						LoadStage()
 					else
+					// If he is, just go back to the menu
 						engine.state = 8
 					end if
 				else

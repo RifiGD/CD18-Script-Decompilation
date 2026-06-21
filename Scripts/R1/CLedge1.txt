@@ -48,7 +48,7 @@ event ObjectUpdate
 	case 0
 		if object.state == 0
 			foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
-				if object.type != 0
+				if object.type != TypeName[Blank Object]
 					BoxCollisionTest(C_PLATFORM, object.entityPos, -40, -24, 40, -8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
 					if checkResult == 1
 						temp0 = 1

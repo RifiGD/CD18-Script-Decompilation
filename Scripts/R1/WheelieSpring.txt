@@ -59,7 +59,15 @@ event ObjectUpdate
 				PlaySfx(SfxName[Spring], 0)
 			end if
 		end if
+#platform: USE_ORIGINAL_CODE
+	// The Antichrist
+	// R11C and R11D bug, crashes in SEGA Classics
 	end if
+#endplatform
+
+#platform: USE_DECOMP
+	next
+#endplatform
 end event
 
 

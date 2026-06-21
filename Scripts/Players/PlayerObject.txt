@@ -33,6 +33,12 @@ private alias 4 : SHIELD_LIGHTNING
 public alias 0 : GRAVITY_GROUND
 public alias 1 : GRAVITY_AIR
 
+// Collision Modes
+public alias 0 : CMODE_FLOOR
+public alias 1 : CMODE_LWALL
+public alias 2 : CMODE_ROOF
+public alias 3 : CMODE_RWALL
+
 // Priority Aliases
 private alias 0 : PRIORITY_BOUNDS         // Object updates within 128 pixels of the screen border left/right and 256 pixels up/down
 private alias 1 : PRIORITY_ACTIVE         // Object will always update, unless paused/frozen
