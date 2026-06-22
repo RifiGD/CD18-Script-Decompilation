@@ -11,9 +11,9 @@ TO-DO -> Make the script decompilation more readable in general, this means:
 * Give unnamed functions or raw function IDs their proper names
 * Add proper comments to help clarify what a specific part of an object does
 * Make sure functions are in the proper order
-* Add back default aliases have been where possible
+* Add back default aliases where possible
 * Re-add any static variables and tables
-* Add editor renders and variables for (almost) every object
+* Add editor renders and variables for most objects
 
 If you want to, and you can, you may create a pull request to try and finish any of the TO-DOs above.
 
