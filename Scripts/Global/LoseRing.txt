@@ -70,7 +70,18 @@ event ObjectUpdate
 					if object[0].value0 >= ringExtraLife
 						if options.gameMode != 2
 							player.lives++
+#platform: USE_ORIGINAL_CODE
 							PlaySfx(SfxName[1 Up], 0)
+#endplatform
+
+#platform: USE_DECOMP
+							// you never know
+							if stage.playerListPos == 0
+								PlaySfx(SfxName[1 Up], 0)
+							else
+								PlaySfx(SfxName[Achievement], 0)
+							end if
+#endplatform
 							ringExtraLife += 100
 							if ringExtraLife > 300
 								ringExtraLife = 1000

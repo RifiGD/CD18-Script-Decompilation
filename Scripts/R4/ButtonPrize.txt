@@ -7,6 +7,11 @@
 
 //-------Aliases-------//
 
+// States
+private alias 0	:	BUTTONPRIZE_USED
+private alias 1	:	BUTTONPRIZE_CREATE_BUBBLES
+private alias 2	:	BUTTONPRIZE_CREATE_RINGS
+
 // Property Values
 private alias 0	:	BUTTONPRIZE_SPIKES
 private alias 1	:	BUTTONPRIZE_SCORE
@@ -21,13 +26,13 @@ private alias 75 : TYPE_BUTTONPRIZE
 
 event ObjectUpdate
 	switch object.state
-	case 0
+	case BUTTONPRIZE_USED
 		if object[-1].propertyValue == 1
 			switch object.propertyValue
 			case BUTTONPRIZE_SPIKES
 			// Bug Details:
 			// -> When porting CD to v4, Moving Spikes was moved to a Property Value of Spikes
-			// Since it doesn't exist as a separate object, it defaulted to Blank Object
+			// Since it doesn't exist as a separate object, the compiler saw the unresolved type name and defaulted to Blank Object
 				object[-1].type = TypeName[Blank Object]
 				object[+1].type = TypeName[Blank Object]
 				object[+3].type = TypeName[Blank Object]
@@ -62,9 +67,6 @@ event ObjectUpdate
 				player.score += 5000
 				break
 			case BUTTONPRIZE_BUBBLES
-			// Crash Details:
-			// -> This case and BUBBLES_2 crash the game, don't ask me why
-#platform: USE_ORIGINAL_CODE
 				object[-5].type = TypeName[Button Prize]
 				object[-3].type = TypeName[Button Prize]
 				object[-1].type = TypeName[Button Prize]
@@ -83,12 +85,8 @@ event ObjectUpdate
 				CreateTempObject(TypeName[Explosion], 0, object[+1].xpos, object[+1].ypos)
 				CreateTempObject(TypeName[Explosion], 0, object[+3].xpos, object[+3].ypos)
 				CreateTempObject(TypeName[Explosion], 0, object[+5].xpos, object[+5].ypos)
-#endplatform
 				break
 			case BUTTONPRIZE_BUBBLES_2
-			// Crash Details:
-			// -> This case and BUBBLES crash the game, don't ask me why
-#platform: USE_ORIGINAL_CODE
 				object[-7].type = TypeName[Button Prize]
 				object[-5].type = TypeName[Button Prize]
 				object[-3].type = TypeName[Button Prize]
@@ -107,7 +105,6 @@ event ObjectUpdate
 				CreateTempObject(TypeName[Explosion], 0, object[-1].xpos, object[-1].ypos)
 				CreateTempObject(TypeName[Explosion], 0, object[+1].xpos, object[+1].ypos)
 				CreateTempObject(TypeName[Explosion], 0, object[+3].xpos, object[+3].ypos)
-#endplatform
 				break
 			case BUTTONPRIZE_RINGS
 				object[-9].type = TypeName[Blank Object]
@@ -144,27 +141,61 @@ event ObjectUpdate
 			object.type = TypeName[Blank Object]
 		end if
 		break
-	case 1
+	case BUTTONPRIZE_CREATE_BUBBLES
+		// Crash Details (take your time reading this one):
+		// As you can see, it spawns the Air Bubble, then writes some of it's values.
+		// HOWEVER, CD18 uses S1/S2's Air Bubble object rather than CD11's. The value/alias layout is different.
+		// The crash itself comes from the fact that it writes value2 to the object's current xpos,
+		// back then, value 2 was the air bubble's X Velocity.
+		// If you head over to Air Bubble, you'll see that the first thing it does in ObjectUpdate is set
+		// the currentPlayer array to this value2, which is now a REALLY FUCKING LARGE value,
+		// so now, EVERY reference to this array is some BIGASS VALUE, which is far OUTSIDE the max entity count for a single scene.
+		// Now the game can rest in value2's piss.
+
+		// I decided to go ahead and do a rewrite of this logic under the USE_DECOMP flag, to match what the v3 version did
+		// The crash still exists under USE_ORIGINAL_CODE, I wouldn't like to see it become lost media lol
 		object.value0++
 		if object.value0 == 60
+#platform: USE_ORIGINAL_CODE
 			CreateTempObject(TypeName[Air Bubble], 5, object.xpos, object.ypos)
 			object[tempObjectPos].value2 = object[tempObjectPos].xpos
 			Rand(object[tempObjectPos].value1, 256)
 			object[tempObjectPos].value1 <<= 1
 			object[tempObjectPos].drawOrder = 4
-			object[tempObjectPos].value3 = -34816
+			object[tempObjectPos].value3 = -0x8800
+#endplatform
+
+#platform: USE_DECOMP
+			CreateTempObject(TypeName[Air Bubble], 6, object.xpos, object.ypos)
+			object[tempObjectPos].value1 = object[tempObjectPos].xpos
+			Rand(object[tempObjectPos].angle, 256)
+			object[tempObjectPos].angle <<= 1
+			object[tempObjectPos].drawOrder = 4
+			object[tempObjectPos].yvel = -0x8800
+#endplatform
 		end if
 		if object.value0 == 120
+#platform: USE_ORIGINAL_CODE
 			CreateTempObject(TypeName[Air Bubble], 5, object.xpos, object.ypos)
 			object[tempObjectPos].value2 = object[tempObjectPos].xpos
 			Rand(object[tempObjectPos].value1, 256)
 			object[tempObjectPos].value1 <<= 1
 			object[tempObjectPos].drawOrder = 4
-			object[tempObjectPos].value3 = -34816
+			object[tempObjectPos].value3 = -0x8800
+#endplatform
+
+#platform: USE_DECOMP
+			CreateTempObject(TypeName[Air Bubble], 6, object.xpos, object.ypos)
+			object[tempObjectPos].value1 = object[tempObjectPos].xpos
+			Rand(object[tempObjectPos].angle, 256)
+			object[tempObjectPos].angle <<= 1
+			object[tempObjectPos].drawOrder = 4
+			object[tempObjectPos].yvel = -0x8800
+#endplatform
 			object.type = TypeName[Blank Object]
 		end if
 		break
-	case 2
+	case BUTTONPRIZE_CREATE_RINGS
 		object.value0++
 		if object.value0 == 360
 			object.type = TypeName[Blank Object]
