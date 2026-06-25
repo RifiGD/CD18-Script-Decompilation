@@ -528,7 +528,7 @@ event ObjectUpdate
 	end switch
 	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 		BoxCollisionTest(C_TOUCH, object.entityPos, -8, -10, 8, 8, currentPlayer, object[currentPlayer].value41, object[currentPlayer].value39, object[currentPlayer].value42, object[currentPlayer].value40)
-		if checkResult == 1
+		if checkResult == true
 			CallFunction(Player_BadnikBreak)
 		else
 			temp1 = object.xpos
@@ -581,7 +581,13 @@ event ObjectUpdate
 		end if
 	next
 	CallFunction(StageSetup_CheckGoodFuture)
+
+#platform: USE_ORIGINAL_CODE
+// "What?"
+// // Doesn't seem to crash, how strange
 end if
+#endplatform
+
 end event
 
 

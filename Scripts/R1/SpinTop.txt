@@ -9,6 +9,14 @@
 
 private alias 55 : TYPE_SPINNINGTOP
 
+
+// Collision Modes
+public alias 0 : CMODE_FLOOR
+public alias 1 : CMODE_LWALL
+public alias 2 : CMODE_ROOF
+public alias 3 : CMODE_RWALL
+
+
 // Player Aliases
 private alias object.controlLock : player.controlLock
 private alias object.gravity : player.gravity

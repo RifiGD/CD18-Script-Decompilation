@@ -9,20 +9,43 @@
 
 private alias 71 : TYPE_STATUEBOMB
 
-
+private alias object.value0 : object.timer
+private alias object.value1 : object.oldYLandingPos
+private alias object.value2 : object.yLandingPos
 
 event ObjectUpdate
 	object.yvel += 1024
 	object.ypos += object.yvel
-	if object.ypos >= object.value1
-		object.ypos = object.value1
+
+	// Bug Details:
+	// in v3, yvel was an alias instead of an actual object field
+	// Since it doesnt require an alias in v4, the Object.YVelocity alias used was gone.
+	// This (presumably) led to Object.YLandingPos to use value1 as it was unoccupied
+	// However, Eggman Statue still writes the Y Landing Position to value 2, so the bombs never land lol
+	// Easier to fix here rather than in Eggman Statue
+#platform: USE_ORIGINAL_CODE
+	if object.ypos >= object.oldYLandingPos
+		object.ypos = object.oldYLandingPos
 		object.type = TypeName[Blank Object]
+
 		CreateTempObject(TypeName[Explosion], 0, object.xpos, object.ypos)
 		PlaySfx(SfxName[Explosion], 0)
 	end if
+#endplatform
+
+#platform: USE_DECOMP
+	if object.ypos >= object.yLandingPos
+		object.ypos = object.yLandingPos
+		object.type = TypeName[Blank Object]
+
+		CreateTempObject(TypeName[Explosion], 0, object.xpos, object.ypos)
+		PlaySfx(SfxName[Explosion], 0)
+	end if
+#endplatform
+
 	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 		BoxCollisionTest(C_TOUCH, object.entityPos, -8, -8, 8, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-		if checkResult == 1
+		if checkResult == true
 			CallFunction(Player_Hit)
 		end if
 	next
@@ -30,11 +53,12 @@ end event
 
 
 event ObjectDraw
-	temp0 = object.value0
+	temp0 = object.timer
 	temp0 >>= 1
 	DrawSprite(temp0)
-	object.value0++
-	object.value0 &= 3
+
+	object.timer++
+	object.timer &= 3
 end event
 
 

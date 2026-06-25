@@ -26,6 +26,17 @@ private alias 12 : MONITOR_EGGMAN
 private alias 13 : MONITOR_DEBUG_SHIELD
 private alias 14 : MONITOR_DEBUG_TIMESTONES
 
+// Player Aliases
+private alias object.value38 : player.shield
+
+// Shield Aliases
+private alias 0 : SHIELD_NONE
+private alias 1 : SHIELD_NORMAL
+private alias 2 : SHIELD_BUBBLE
+private alias 3 : SHIELD_FIRE
+private alias 4 : SHIELD_LIGHTNING
+
+
 event ObjectUpdate
 	switch object.state
 	case 0
@@ -85,7 +96,7 @@ event ObjectUpdate
 				PlaySfx(SfxName[Blue Shield], 0)
 				arrayPos0 = playerCount
 				currentPlayer = 0
-				object[currentPlayer].value38 = 1
+				player[currentPlayer].shield = SHIELD_NORMAL
 				if object[arrayPos0].type != invincibilityType
 					CallFunction(Player_ApplyShield)
 				end if
@@ -121,7 +132,7 @@ event ObjectUpdate
 				PlaySfx(SfxName[Lightning Shield], 0)
 				arrayPos0 = playerCount
 				currentPlayer = 0
-				object[currentPlayer].value38 = 4
+				player[currentPlayer].shield = SHIELD_LIGHTNING
 				if object[arrayPos0].type != invincibilityType
 					CallFunction(Player_ApplyShield)
 				end if
@@ -130,7 +141,7 @@ event ObjectUpdate
 				PlaySfx(SfxName[Fire Shield], 0)
 				arrayPos0 = playerCount
 				currentPlayer = 0
-				object[currentPlayer].value38 = 3
+				player[currentPlayer].shield = SHIELD_FIRE
 				if object[arrayPos0].type != invincibilityType
 					CallFunction(Player_ApplyShield)
 				end if
@@ -139,7 +150,7 @@ event ObjectUpdate
 				PlaySfx(SfxName[Bubble Shield], 0)
 				arrayPos0 = playerCount
 				currentPlayer = 0
-				object[currentPlayer].value38 = 2
+				player[currentPlayer].shield = SHIELD_BUBBLE
 				if object[arrayPos0].type != invincibilityType
 					CallFunction(Player_ApplyShield)
 				end if

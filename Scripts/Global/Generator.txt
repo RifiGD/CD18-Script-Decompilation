@@ -54,10 +54,13 @@ public function Generator_Function79
 					temp0--
 					SetBit(goodFuture.list, temp0, 1)
 				end if
+				
+				// Saviour of the Planet Unlock Criteria
 				if stage.playerListPos == 0
-					if stage.debugMode == 0
-						if goodFuture.list > 16382
+					if stage.debugMode == false
+						if goodFuture.list > 16382 // 0b11111111111110
 							if metalSonic.list > 11
+							// SetAchievement(11, 100)
 							end if
 						end if
 					end if
@@ -65,7 +68,7 @@ public function Generator_Function79
 			end if
 		else
 			BoxCollisionTest(C_SOLID, object.entityPos, -38, -33, 38, 36, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				object[currentPlayer].ypos += 65536
 			end if
 		end if

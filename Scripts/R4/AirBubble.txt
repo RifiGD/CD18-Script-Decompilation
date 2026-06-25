@@ -7,6 +7,17 @@
 
 //-------Aliases-------//
 
+// Player Aliases
+private alias object.value38 : player.shield
+
+// Shield Aliases
+private alias 0 : SHIELD_NONE
+private alias 1 : SHIELD_NORMAL
+private alias 2 : SHIELD_BUBBLE
+private alias 3 : SHIELD_FIRE
+private alias 4 : SHIELD_LIGHTNING
+
+
 private alias 43 : TYPE_AIRBUBBLE
 
 
@@ -81,7 +92,7 @@ event ObjectUpdate
 	if object.frame == 6
 		foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 			if object[currentPlayer].animation != ANI_DYING
-				if object[currentPlayer].value38 != 2
+				if player[currentPlayer].shield != SHIELD_BUBBLE
 					BoxCollisionTest(C_TOUCH, object.entityPos, -2, -2, 2, 2, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
 					if checkResult == 1
 						object.frame = 7

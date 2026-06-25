@@ -9,6 +9,17 @@
 
 private alias 41 : TYPE_WATER
 
+// Player Aliases
+private alias object.value38 : player.shield
+
+// Shield Aliases
+private alias 0 : SHIELD_NONE
+private alias 1 : SHIELD_NORMAL
+private alias 2 : SHIELD_BUBBLE
+private alias 3 : SHIELD_FIRE
+private alias 4 : SHIELD_LIGHTNING
+
+
 // Function declarations
 reserve function Water_Function85
 reserve function Water_Function86
@@ -127,7 +138,7 @@ event ObjectUpdate
 				object[currentPlayer].value3 = 0
 			end if
 		else
-			if object[currentPlayer].value38 == 3
+			if player[currentPlayer].shield == SHIELD_FIRE
 				temp2 = 0
 				while temp2 < 8
 					Rand(temp0, 32)
@@ -145,19 +156,19 @@ event ObjectUpdate
 					object[tempObjectPos].yvel = object[currentPlayer].yvel
 					temp2++
 				loop
-				object[currentPlayer].value38 = 0
+				player[currentPlayer].shield = SHIELD_NONE
 				arrayPos0 = currentPlayer
 				arrayPos0 += playerCount
 				CallFunction(Player_ApplyShield)
 			end if
-			if object[currentPlayer].value38 == 4
-				object[currentPlayer].value38 = 0
+			if player[currentPlayer].shield == SHIELD_LIGHTNING
+				player[currentPlayer].shield = SHIELD_NONE
 				arrayPos0 = currentPlayer
 				arrayPos0 += playerCount
 				CallFunction(Player_ApplyShield)
 				R4Setup_value13 = 4
 			end if
-			if object[currentPlayer].value38 != 2
+			if player[currentPlayer].shield != SHIELD_BUBBLE
 				if object[currentPlayer].value3 == 0
 					object[currentPlayer].value4 = 0
 				end if

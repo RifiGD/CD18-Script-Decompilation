@@ -19,13 +19,15 @@ end table
 
 
 event ObjectUpdate
-	if object[-playerCount].state == 26
+	if object[-playerCount].state == Player_State_Death
 		object.type = TypeName[Blank Object]
 	end if
-	if object[-playerCount].state == 27
+	if object[-playerCount].state == Player_State_Drown
 		object.type = TypeName[Blank Object]
 	end if
+
 	object.drawOrder = object[-playerCount].drawOrder
+	
 	switch object.state
 	case 0
 		object.animationTimer = 0

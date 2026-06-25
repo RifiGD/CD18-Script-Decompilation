@@ -54,10 +54,13 @@ event ObjectDraw
 			SetScreenFade(208, 255, 224, object.value1)
 			object.value1 += 10
 		else
+		
 			if stage.playerListPos == 0
-				if stage.debugMode == 0
+				if stage.debugMode == false
+				// 88 Miles Per Hour achievement would go here
 				end if
 			end if
+
 			StopSfx(SfxName[Flying])
 			StopSfx(SfxName[Tired])
 			stage.state = STAGE_RUNNING
