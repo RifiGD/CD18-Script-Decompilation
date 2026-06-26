@@ -133,6 +133,7 @@ private alias object.value31 : player.actionPeelout 	// which Peelout is active
 private alias object.value32 : player.actionSpindash 	// which Spindash is active
 private alias object.value33 : player.collisionDisabled
 private alias object.value34 : player.jumpAbilityState
+private alias object.value35 : player.minRollSpeed // This doesnt exist in S1/S2, it's only used by Player_State_SpinningTop
 private alias object.value36 : player.skidSpeed
 private alias object.value37 : player.rollingDeceleration
 private alias object.value38 : player.shield
@@ -662,35 +663,35 @@ end function
 // Amy Rose's favorite function
 // NOTE: This state was transplanted from the v3 scripts due to it not existing when decompiling this script
 public function Player_State_Hugged
-	if Player.Gravity == GRAVITY_AIR	// No hugs if you're in the air
+	if player.gravity == GRAVITY_AIR	// No hugs if you're in the air
 
-		Player.State = Player_State_Air
+		player.state = Player_State_Air
 
-		Player.Animation = ANI_WALKING
-		Player.Timer	 = 0
+		player.animation = ANI_WALKING
+		player.timer	 = 0
 		CallFunction(Player_HandleAirMovement)
 	else
 		CallFunction(Player_HandleOnGround)
 		// Yes, the only thing the function does is make you wait
-		if Player.Timer < 240
-			Player.Animation = ANI_STOPPED
-			Player.Timer++
+		if player.timer < 240
+			player.animation = ANI_STOPPED
+			player.timer++
 		else
-			Player.Animation = ANI_WAITING
+			player.animation = ANI_WAITING
 		end if
 
 		// Warp cancel check
-		if Warp.Destination > WARPDEST_NONE
-			if Warp.Timer > 99
-				if Warp.Timer < 204
-					Warp.Destination = WARPDEST_NONE
+		if warp.destination > WARPDEST_NONE
+			if warp.timer > 99
+				if warp.timer < 204
+					warp.destination = WARPDEST_NONE
 				end if
 			end if
-			Warp.Timer = 0
+			warp.timer = 0
 		end if
 
 		// Get free from Amy
-		if Player.JumpPress == true
+		if player.jumpPress == true
 			CallFunction(Player_Action_Jump)
 		end if
 	end if
@@ -958,8 +959,8 @@ public function Player_HandleGroundMovement
 			temp0 *= 0x2000
 			temp0 >>= 8
 			player.speed += temp0
-			if player.right == 1
-				if player.left == 0
+			if player.right == true
+				if player.left == false
 					if player.angle > 192
 						if player.angle < 228
 							if player.speed < 163840
@@ -971,7 +972,7 @@ public function Player_HandleGroundMovement
 					end if
 				end if
 			else
-				if player.left == 1
+				if player.left == true
 					if player.angle > 28
 						if player.angle < 64
 							if player.speed > -163840
@@ -1035,34 +1036,34 @@ public function Player_HandleAirFriction
 	temp0 = player.topSpeed
 	FlipSign(temp0)
 	if player.speed > temp0
-		if player.left == 1
+		if player.left == true
 			player.speed -= player.airAcceleration
 			player.direction = FACING_LEFT
 		end if
 	else
-		if player.left == 1
+		if player.left == true
 			player.direction = FACING_LEFT
 		end if
 	end if
 	if player.speed < player.topSpeed
-		if player.right == 1
+		if player.right == true
 			player.speed += player.airAcceleration
 			player.direction = FACING_RIGHT
 		end if
 	else
-		if player.right == 1
+		if player.right == true
 			player.direction = FACING_RIGHT
 		end if
 	end if
-	if options.originalControls == 1
-		if player.left == 1
+	if options.originalControls == true
+		if player.left == true
 			temp0 = player.topSpeed
 			FlipSign(temp0)
 			if player.speed < temp0
 				player.speed = temp0
 			end if
 		end if
-		if player.right == 1
+		if player.right == true
 			if player.speed > player.topSpeed
 				player.speed = player.topSpeed
 			end if
@@ -1072,12 +1073,12 @@ end function
 
 
 public function Player_HandleRollDeceleration
-	if player.right == 1
+	if player.right == true
 		if player.speed < 0
 			player.speed += player.rollingDeceleration
 		end if
 	end if
-	if player.left == 1
+	if player.left == true
 		if player.speed > 0
 			player.speed -= player.rollingDeceleration
 		end if
@@ -1578,10 +1579,10 @@ public function Player_State_Ground
 				player.animationSpeed = 0
 			end if
 		end if
-		if player.jumpPress == 1
+		if player.jumpPress == true
 			CallFunction(Player_Action_Jump)
 		else
-			if player.up == 1
+			if player.up == true
 				if player.speed == 0
 					if player.animation != ANI_FLAILING1
 						if player.animation != ANI_FLAILING2
@@ -1597,7 +1598,7 @@ public function Player_State_Ground
 					end if
 				end if
 			end if
-			if player.down == 1
+			if player.down == true
 				if player.speed == 0
 					if player.animation != ANI_FLAILING1
 						if player.animation != ANI_FLAILING2
@@ -1612,8 +1613,8 @@ public function Player_State_Ground
 						player.down = 0
 					end if
 				else
-					if player.left == 0
-						if player.right == 0
+					if player.left == false
+						if player.right == false
 							if player.speed > 0
 								if player.speed > 34816
 									player.state = Player_State_Roll
@@ -1818,7 +1819,7 @@ public function Player_State_Lookup
 			player.state = Player_State_Air
 			player.timer = 0
 		else
-			if player.jumpPress == 1
+			if player.jumpPress == true
 				CallFunction(player.actionPeelout)
 			end if
 		end if
@@ -1827,7 +1828,7 @@ end function
 
 
 public function Player_State_Crouch
-	if player.down == 0
+	if player.down == false
 		player.state = Player_State_Ground
 		player.timer = 0
 	else
@@ -1847,8 +1848,8 @@ public function Player_State_Crouch
 			player.state = Player_State_Air
 			player.timer = 0
 		else
-			if player.jumpPress == 1
-				CallFunction(player.actionSpindash )
+			if player.jumpPress == true
+				CallFunction(player.actionSpindash)
 			end if
 		end if
 	end if
@@ -1873,7 +1874,7 @@ public function Player_State_Spindash_S2
 		temp0 >>= 5
 		player.abilityTimer -= temp0
 	end if
-	if player.down == 0
+	if player.down == false
 		player.timer = 0
 		player.state = Player_State_Roll
 		player.animation = ANI_JUMPING
@@ -1919,7 +1920,7 @@ public function Player_State_Spindash_CD
 			player.abilityTimer += 24576
 		end if
 	end if
-	if player.down == 0
+	if player.down == false
 		screen[0].cameraStyle = 1
 		player.timer = 0
 		if player.abilityTimer < 195297
@@ -1971,7 +1972,7 @@ public function Player_State_Peelout_S2
 			player.animation = ANI_RUNNING
 		end if
 	end if
-	if player.up == 0
+	if player.up == false
 		player.scrollDelay = 15
 		screen[0].cameraStyle = 4
 		player.state = Player_State_Ground
@@ -2028,7 +2029,7 @@ public function Player_State_Peelout_CD
 			player.animation = ANI_RUNNING
 		end if
 	end if
-	if player.up == 0
+	if player.up == false
 		screen[0].cameraStyle = 1
 		player.state = Player_State_Ground
 		if player.abilityTimer < 390594
@@ -2094,7 +2095,7 @@ public function Player_State_Fly
 					player.animation = ANI_SWIMMINGTIRED
 				end if
 			else
-				if player.jumpPress == 1
+				if player.jumpPress == true
 					if player.gravityStrength == 14336
 						player.flightVelocity = -0x2000
 						player.abilityTimer = 0
@@ -2502,7 +2503,7 @@ end function
 
 // Palmtree Panic and Wacky Workbench Spinning Platforms
 public function Player_State_SpinningTop
-	player.timer += object.value35
+	player.timer += player.minRollSpeed
 	if player.gravity == GRAVITY_AIR
 		CallFunction(Player_HandleAirMovement)
 	else
@@ -2549,7 +2550,10 @@ public function Player_State_SizeChange
 				break
 			case PLAYER_TAILS
 				LoadAnimation("MiniTails.Ani")
+#platform: USE_ORIGINAL_CODE
+				// Causes Tails to not only be at normal size but also bugs out his tails
 				player.type = TypeName[Player Object]
+#endplatform
 				break
 			end switch
 		else
@@ -2744,7 +2748,7 @@ event ObjectStartup
 		screen[0].cameraY = object[0].iypos
 		object[0].groupID = GROUP_PLAYERS
 		player[0].state = Player_State_Air
-		player[0].priority = 1
+		player[0].priority = PRIORITY_ACTIVE
 		player[0].drawOrder = 4
 		player[0].rollingDeceleration = 0x2000
 
@@ -2774,6 +2778,7 @@ event ObjectStartup
 				player[0].actionSpindash = Player_Action_Spindash_CD
 			end if
 			break
+
 		case PLAYER_TAILS
 			object[0].type = TypeName[Tails Object]
 			player[0].character = PLAYER_TAILS
@@ -2791,6 +2796,7 @@ event ObjectStartup
 				player[0].actionSpindash = Player_State_Spindash_CD
 			end if
 			break
+			
 		end switch
 		
 		playerCount = 1
