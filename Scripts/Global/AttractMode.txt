@@ -6,7 +6,7 @@
 // ----------------------------------
 
 //-------Aliases-------//
-private alias 73 : TYPE_ATTRACTMODE
+
 
 //---Object Values---//
 private alias object.value0 : 	object.setupTimer // wows
@@ -106,7 +106,7 @@ event ObjectUpdate
 			// the Haptics check here was removed
 		end if
 		if object.demoTime >= object.demoInput
-			// Fade outOfBounds
+			// Fade out
 
 			music.volume -= 2
 

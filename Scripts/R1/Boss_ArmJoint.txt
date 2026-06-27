@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 59 : TYPE_BOSSARMJOINT
+
 
 // Function declarations
 reserve function BossArmJoint_Function114

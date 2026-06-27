@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 44 : TYPE_BRIDGE
+
 
 // Time Period Aliases
 private alias object[9].propertyValue : hud.currentTimePeriod
@@ -148,7 +148,7 @@ event ObjectUpdate
 							temp4 += 8
 						end if
 						BoxCollisionTest(C_TOUCH, object.entityPos, -1024, temp3, 1024, temp4, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-						if checkResult == 1
+						if checkResult == true
 							object.value0++
 							object[currentPlayer].ypos = object[currentPlayer].collisionBottom
 							FlipSign(object[currentPlayer].ypos)

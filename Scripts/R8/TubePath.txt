@@ -7,14 +7,14 @@
 
 //-------Aliases-------//
 
-private alias 59 : TYPE_TUBEPATH
+
 
 
 
 event ObjectUpdate
 	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 		BoxCollisionTest(C_TOUCH, object.entityPos, -4, -4, 4, 4, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-		if checkResult == 1
+		if checkResult == true
 			switch object.propertyValue
 			case 0
 				if object.value0 == 0
@@ -25,22 +25,22 @@ event ObjectUpdate
 				end if
 				if object[currentPlayer].xvel == 0
 					if object[currentPlayer].yvel == 0
-						if object[currentPlayer].up == 1
+						if object[currentPlayer].up == true
 							object[currentPlayer].xvel = 0
 							object[currentPlayer].yvel = -1048576
 							PlaySfx(SfxName[Release], 0)
 						end if
-						if object[currentPlayer].down == 1
+						if object[currentPlayer].down == true
 							object[currentPlayer].xvel = 0
 							object[currentPlayer].yvel = 1048576
 							PlaySfx(SfxName[Release], 0)
 						end if
-						if object[currentPlayer].left == 1
+						if object[currentPlayer].left == true
 							object[currentPlayer].xvel = -1048576
 							object[currentPlayer].yvel = 0
 							PlaySfx(SfxName[Release], 0)
 						end if
-						if object[currentPlayer].right == 1
+						if object[currentPlayer].right == true
 							object[currentPlayer].xvel = 1048576
 							object[currentPlayer].yvel = 0
 							PlaySfx(SfxName[Release], 0)

@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 47 : TYPE_TUBESWITCH
+
 
 
 // Property Values
@@ -25,7 +25,7 @@ private alias 8	:	EXIT_BOOST_TUBE
 event ObjectUpdate
 	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 		BoxCollisionTest(C_TOUCH, object.entityPos, -16, -16, 16, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-		if checkResult == 1
+		if checkResult == true
 			switch object.propertyValue
 			case HORIZONTAL_TUBE
 				if object[currentPlayer].speed > 0

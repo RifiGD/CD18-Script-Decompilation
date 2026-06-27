@@ -6,272 +6,363 @@
 // ----------------------------------
 
 //-------Aliases-------//
-private alias 1 : BACK_TO_MENU
 
-private alias 3 : TYPE_MENUCONTROL
+// Little Planet Aliases
+private alias object[32].frame : littlePlanet.frame
+
+// Music Selector Aliases
+private alias object[33].frame 		: musicSelector.frame
+private alias object[33].xpos  		: musicSelector.xpos
+private alias object[33].state 		: musicSelector.state
+private alias object[33].drawOrder	: musicSelector.drawOrder
+private alias object[33].priority	: musicSelector.priority
+
+// Touch Buttons Aliases
+private alias object[35].propertyValue	:	object.button1Value
+private alias object[36].propertyValue	:	object.button2Value
+private alias object[37].propertyValue	:	object.button3Value
+
+// Little Planet Sprite Frame Aliases
+private alias  0 : LPFRAME_PRESENT
+private alias 11 : LPFRAME_GOODFUTURE
+private alias 22 : LPFRAME_BADFUTURE
+
+// Priority
+private alias 0	: PRIORITY_BOUNDS
+private alias 1	: PRIORITY_ACTIVE
+
+// States
+private alias 0	: MENUCONTROL_SETUP
+private alias 1	: MENUCONTROL_FADE_IN
+private alias 2	: MENUCONTROL_IDLE
+private alias 3	: MENUCONTROL_MUSIC_CONTROLS
+private alias 4	: MENUCONTROL_SET_MUSIC
+private alias 5	: MENUCONTROL_TIMETRAVEL
+private alias 6	: MENUCONTROL_EXIT
+
+// Music Selector States
+private alias 0	: MUSICSELECTOR_BLANK
+private alias 1	: MUSICSELECTOR_STOP_MOVE_L
+private alias 2	: MUSICSELECTOR_MOVE_L
+private alias 4	: MUSICSELECTOR_MOVE_R
+
+// Object Aliases
+private alias object.value0 : object.fade // also used as a timer
+
+// Presentation Stage
+private alias 1 : STAGE_P_MENU
+
 
 // Function declarations
-reserve function MenuControl_Function0
+reserve function MenuControl_ChangeTrack
 
 
-public function MenuControl_Function0
-	switch object[33].frame
+public function MenuControl_ChangeTrack
+	switch musicSelector.frame
 	case 0
 		SetMusicTrack("JP/R1A.ogg", 0, 142428)
 		SetMusicTrack("US/R1A.ogg", 1, 153038)
-		object[32].frame = 0
+		littlePlanet.frame = LPFRAME_PRESENT
 		break
+
 	case 1
 		SetMusicTrack("JP/R1C.ogg", 0, 142902)
 		SetMusicTrack("US/R1C.ogg", 1, 152346)
-		object[32].frame = 11
+		littlePlanet.frame = LPFRAME_GOODFUTURE
 		break
+
 	case 2
 		SetMusicTrack("JP/R1D.ogg", 0, 1)
 		SetMusicTrack("US/R1D.ogg", 1, 774998)
-		object[32].frame = 22
+		littlePlanet.frame = LPFRAME_BADFUTURE
 		break
+
 	case 3
 		SetMusicTrack("JP/R3A.ogg", 0, 358725)
 		SetMusicTrack("US/R3A.ogg", 1, 1)
-		object[32].frame = 0
+		littlePlanet.frame = LPFRAME_PRESENT
 		break
+
 	case 4
 		SetMusicTrack("JP/R3C.ogg", 0, 1)
 		SetMusicTrack("US/R3C.ogg", 1, 173494)
-		object[32].frame = 11
+		littlePlanet.frame = LPFRAME_GOODFUTURE
 		break
+
 	case 5
 		SetMusicTrack("JP/R3D.ogg", 0, 717648)
 		SetMusicTrack("US/R3D.ogg", 1, 1)
-		object[32].frame = 22
+		littlePlanet.frame = LPFRAME_BADFUTURE
 		break
+
 	case 6
 		SetMusicTrack("JP/R4A.ogg", 0, 1)
 		SetMusicTrack("US/R4A.ogg", 1, 415148)
-		object[32].frame = 0
+		littlePlanet.frame = LPFRAME_PRESENT
 		break
+
 	case 7
 		SetMusicTrack("JP/R4C.ogg", 0, 1)
 		SetMusicTrack("US/R4C.ogg", 1, 1)
-		object[32].frame = 11
+		littlePlanet.frame = LPFRAME_GOODFUTURE
 		break
+
 	case 8
 		SetMusicTrack("JP/R4D.ogg", 0, 1)
 		SetMusicTrack("US/R4D.ogg", 1, 145616)
-		object[32].frame = 22
+		littlePlanet.frame = LPFRAME_BADFUTURE
 		break
+
 	case 9
 		SetMusicTrack("JP/R5A.ogg", 0, 1)
 		SetMusicTrack("US/R5A.ogg", 1, 1)
-		object[32].frame = 0
+		littlePlanet.frame = LPFRAME_PRESENT
 		break
+
 	case 10
 		SetMusicTrack("JP/R5C.ogg", 0, 367046)
 		SetMusicTrack("US/R5C.ogg", 1, 705830)
-		object[32].frame = 11
+		littlePlanet.frame = LPFRAME_GOODFUTURE
 		break
+
 	case 11
 		SetMusicTrack("JP/R5D.ogg", 0, 1)
 		SetMusicTrack("US/R5D.ogg", 1, 93672)
-		object[32].frame = 22
+		littlePlanet.frame = LPFRAME_BADFUTURE
 		break
+
 	case 12
 		SetMusicTrack("JP/R6A.ogg", 0, 1)
 		SetMusicTrack("US/R6A.ogg", 1, 926048)
-		object[32].frame = 0
+		littlePlanet.frame = LPFRAME_PRESENT
 		break
+
 	case 13
 		SetMusicTrack("JP/R6C.ogg", 0, 1)
 		SetMusicTrack("US/R6C.ogg", 1, 181704)
-		object[32].frame = 11
+		littlePlanet.frame = LPFRAME_GOODFUTURE
 		break
+
 	case 14
 		SetMusicTrack("JP/R6D.ogg", 0, 1)
 		SetMusicTrack("US/R6D.ogg", 1, 45355)
-		object[32].frame = 22
+		littlePlanet.frame = LPFRAME_BADFUTURE
 		break
+
 	case 15
 		SetMusicTrack("JP/R7A.ogg", 0, 1)
 		SetMusicTrack("US/R7A.ogg", 1, 617728)
-		object[32].frame = 0
+		littlePlanet.frame = LPFRAME_PRESENT
 		break
+
 	case 16
 		SetMusicTrack("JP/R7C.ogg", 0, 103060)
 		SetMusicTrack("US/R7C.ogg", 1, 136670)
-		object[32].frame = 11
+		littlePlanet.frame = LPFRAME_GOODFUTURE
 		break
+
 	case 17
 		SetMusicTrack("JP/R7D.ogg", 0, 1)
 		SetMusicTrack("US/R7D.ogg", 1, 92324)
-		object[32].frame = 22
+		littlePlanet.frame = LPFRAME_BADFUTURE
 		break
+
 	case 18
 		SetMusicTrack("JP/R8A.ogg", 0, 146030)
 		SetMusicTrack("US/R8A.ogg", 1, 1)
-		object[32].frame = 0
+		littlePlanet.frame = LPFRAME_PRESENT
 		break
+
 	case 19
 		SetMusicTrack("JP/R8C.ogg", 0, 1)
 		SetMusicTrack("US/R8C.ogg", 1, 1)
-		object[32].frame = 11
+		littlePlanet.frame = LPFRAME_GOODFUTURE
 		break
+
 	case 20
 		SetMusicTrack("JP/R8D.ogg", 0, 1)
 		SetMusicTrack("US/R8D.ogg", 1, 563962)
-		object[32].frame = 22
+		littlePlanet.frame = LPFRAME_BADFUTURE
 		break
+
 	case 21
 		SetMusicTrack("JP/FinalBoss.ogg", 0, 1)
 		SetMusicTrack("US/FinalBoss.ogg", 1, 1)
-		object[32].frame = 0
+		littlePlanet.frame = LPFRAME_PRESENT
 		break
+
 	case 22
 		SetMusicTrack("JP/DAGarden.ogg", 0, 1)
 		SetMusicTrack("US/DAGarden.ogg", 1, 117382)
-		object[32].frame = 0
+		littlePlanet.frame = LPFRAME_PRESENT
 		break
+
 	case 23
 		SetMusicTrack("JP/GameOver.ogg", 0, 0)
 		SetMusicTrack("US/GameOver.ogg", 1, 0)
-		object[32].frame = 0
+		littlePlanet.frame = LPFRAME_PRESENT
 		break
+
 	case 24
 		SetMusicTrack("JP/ZoneComplete.ogg", 0, 0)
 		SetMusicTrack("US/ZoneComplete.ogg", 1, 0)
-		object[32].frame = 0
+		littlePlanet.frame = LPFRAME_PRESENT
 		break
+
 	case 25
 		SetMusicTrack("JP/Boss.ogg", 0, 1)
 		SetMusicTrack("US/Boss.ogg", 1, 196526)
-		object[32].frame = 0
+		littlePlanet.frame = LPFRAME_PRESENT
 		break
+
 	case 26
 		SetMusicTrack("JP/Invincibility.ogg", 0, 0)
 		SetMusicTrack("US/Invincibility.ogg", 1, 0)
-		object[32].frame = 0
+		littlePlanet.frame = LPFRAME_PRESENT
 		break
+
 	case 27
 		SetMusicTrack("JP/SpeedShoes.ogg", 0, 0)
 		SetMusicTrack("US/SpeedShoes.ogg", 1, 0)
-		object[32].frame = 0
+		littlePlanet.frame = LPFRAME_PRESENT
 		break
+
 	case 28
 		SetMusicTrack("JP/Titlescreen.ogg", 0, 0)
 		SetMusicTrack("US/Titlescreen.ogg", 1, 0)
-		object[32].frame = 0
+		littlePlanet.frame = LPFRAME_PRESENT
 		break
+
 	case 29
 		SetMusicTrack("JP/Specialstage.ogg", 0, 1)
 		SetMusicTrack("US/Specialstage.ogg", 1, 270972)
-		object[32].frame = 0
+		littlePlanet.frame = LPFRAME_PRESENT
 		break
+
 	case 30
 		SetMusicTrack("JP/TimeAttack.ogg", 0, 100512)
 		SetMusicTrack("US/DAGarden.ogg", 1, 117382)
-		object[32].frame = 0
+		littlePlanet.frame = LPFRAME_PRESENT
 		break
 	end switch
+
 	PlayMusic(options.soundtrack)
 end function
 
 
 event ObjectUpdate
 	switch object.state
-	case 0
-		object.state = 1
-		object.value0 = 384
+	case MENUCONTROL_SETUP
+		object.state = MENUCONTROL_FADE_IN
+		object.fade = 384
 		SetScreenFade(0, 0, 0, 255)
 		PlayMusic(options.soundtrack)
 		break
-	case 1
-		if object.value0 > 0
-			object.value0 -= 8
+
+	case MENUCONTROL_FADE_IN
+		if object.fade > 0
+			object.fade -= 8
 		else
-			object.state = 2
+			object.state = MENUCONTROL_IDLE
 		end if
-		SetScreenFade(0, 0, 0, object.value0)
+		SetScreenFade(0, 0, 0, object.fade)
 		break
-	case 2
-		if keyPress[0].buttonB == 1
+
+	case MENUCONTROL_IDLE
+		if keyPress[0].buttonB == true
 			StopMusic()
-			object.state = 6
+			object.state = MENUCONTROL_EXIT
 		end if
-		if keyPress[0].buttonA == 1
-			object.state = 3
-			object[33].xpos = screen.xsize
-			object[33].xpos += 96
-			object[33].xpos <<= 16
-			object[33].state = 1
-			object[33].drawOrder = 5
-			object[33].priority = 1
-			object[35].propertyValue = 4
-			object[36].propertyValue = 5
-			object[37].propertyValue = 6
+
+		if keyPress[0].buttonA == true
+			object.state = MENUCONTROL_MUSIC_CONTROLS
+			musicSelector.xpos = screen.xsize
+			musicSelector.xpos += 96
+			musicSelector.xpos <<= 16
+
+			musicSelector.state 	= MUSICSELECTOR_STOP_MOVE_L
+			musicSelector.drawOrder = 5
+			musicSelector.priority 	= PRIORITY_ACTIVE
+
+			object.button1Value = 4
+			object.button2Value = 5
+			object.button3Value = 6
 		end if
 		break
-	case 3
-		if object[33].state == 0
-			if keyPress[0].left == 1
-				object[33].state = 2
+
+	case MENUCONTROL_MUSIC_CONTROLS
+		if musicSelector.state == MUSICSELECTOR_BLANK
+			if keyPress[0].left == true
+				musicSelector.state = MUSICSELECTOR_MOVE_L
 			end if
-			if keyPress[0].right == 1
-				object[33].state = 4
+
+			if keyPress[0].right == true
+				musicSelector.state = MUSICSELECTOR_MOVE_R
 			end if
-			if keyPress[0].buttonA == 1
-				object.state = 4
+
+			if keyPress[0].buttonA == true
+				object.state = MENUCONTROL_SET_MUSIC
 				StopMusic()
 			end if
-			if keyPress[0].start == 1
-				object.state = 4
+
+			if keyPress[0].start == true
+				object.state = MENUCONTROL_SET_MUSIC
 				StopMusic()
 			end if
-			if keyPress[0].buttonC == 1
-				object.state = 4
+
+			if keyPress[0].buttonC == true
+				object.state = MENUCONTROL_SET_MUSIC
 				StopMusic()
 			end if
 		end if
-		if keyPress[0].buttonB == 1
+
+		if keyPress[0].buttonB == true
 			StopMusic()
-			object.state = 6
+			object.state = MENUCONTROL_EXIT
 		end if
 		break
-	case 4
-		if object.value0 < 288
-			object.value0 += 8
+
+	case MENUCONTROL_SET_MUSIC
+		if object.fade < 288
+			object.fade += 8
 		else
-			object[33].xpos = screen.xsize
-			object[33].xpos += 96
-			object[33].xpos <<= 16
-			object[33].state = 0
-			object[33].priority = 0
-			object[35].propertyValue = 0
-			object[36].propertyValue = 2
-			object[37].propertyValue = 7
-			CallFunction(MenuControl_Function0)
+			musicSelector.xpos = screen.xsize
+			musicSelector.xpos += 96
+			musicSelector.xpos <<= 16
+
+			musicSelector.state = MUSICSELECTOR_BLANK
+			musicSelector.priority = PRIORITY_BOUNDS
+
+			object.button1Value = 0
+			object.button2Value = 2
+			object.button3Value = 7
+
+			CallFunction(MenuControl_ChangeTrack)
 			object.state++
 		end if
-		SetScreenFade(208, 255, 224, object.value0)
+		SetScreenFade(208, 255, 224, object.fade)
 		break
-	case 5
-		if object.value0 > 0
-			object.value0 -= 8
+
+	case MENUCONTROL_TIMETRAVEL
+		if object.fade > 0
+			object.fade -= 8
 		else
-			object.state = 2
+			object.state = MENUCONTROL_IDLE
 		end if
-		SetScreenFade(208, 255, 224, object.value0)
+		SetScreenFade(208, 255, 224, object.fade)
 		break
-	case 6
-		if object.value0 < 384
-			object.value0 += 8
+
+	case MENUCONTROL_EXIT
+		if object.fade < 384
+			object.fade += 8
 		else
 		// CD11 Leftover:
-		// -> listPos 1 is the MENU in the GameConfig.
-		// However, in CD18, it just redirects to the Title Screen
-			stage.listPos = BACK_TO_MENU
+		// Inside the GameConfig, ID 1 leads to the Menu
+		// However, in CD18, "MENU" just redirects to the Title Screen
+			stage.listPos = STAGE_P_MENU
 			LoadStage()
 		end if
-		SetScreenFade(0, 0, 0, object.value0)
+		SetScreenFade(0, 0, 0, object.fade)
 		break
 	end switch
 end event
@@ -282,24 +373,33 @@ event ObjectStartup
 	SetMusicTrack("US/DAGarden.ogg", 1, 117382)
 	object[0].type = TypeName[Menu Control]
 	object[0].drawOrder = 1
-	object[0].priority = 1
+	object[0].priority = PRIORITY_ACTIVE
+	
+	// If we're on a MOBILE platform, setup all the Touch Buttons for the player to tap.
 	if engine.deviceType == MOBILE
 		object[34].drawOrder = 5
 		object[35].drawOrder = 5
 		object[36].drawOrder = 5
 		object[37].drawOrder = 5
+
 		temp0 = screen.xsize
 		temp0 >>= 2
+
 		temp1 = temp0
 		temp1 >>= 1
 		object[34].ixpos = temp1
+
 		temp1 += temp0
 		object[35].ixpos = temp1
+
 		temp1 += temp0
 		object[36].ixpos = temp1
+
 		temp1 += temp0
 		object[37].ixpos = temp1
+
 	else
+		// Otherwise, touch controls aren't needed
 		object[34].type = TypeName[Blank Object]
 		object[35].type = TypeName[Blank Object]
 		object[36].type = TypeName[Blank Object]

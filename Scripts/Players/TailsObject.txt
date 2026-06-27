@@ -13,7 +13,7 @@ public alias 1 : PLAYER_TAILS
 public alias 2 : PLAYER_KNUCKLES
 public alias 3 : PLAYER_SONIC_TAILS
 
-private alias 2 : TYPE_TAILSOBJECT
+
 
 // Function declarations
 reserve function TailsObject_ProcessTailSprite
@@ -105,10 +105,10 @@ event ObjectUpdate
 				ProcessObjectMovement()
 				checkResult |= object.value43
 				object.value43 ^= 1
-				if checkResult == 1
+				if checkResult == true
 					object.value18 = 0
 					if object.animation == ANI_JUMPING
-						if object.down == 0
+						if object.down == false
 							if object.state != Player_State_Roll
 								if object.state != Player_State_TubeRoll
 									object.animation = ANI_WALKING
@@ -151,7 +151,7 @@ event ObjectUpdate
 				if object.value43 == 0
 					object.value18 = 0
 					if object.animation == ANI_JUMPING
-						if object.down == 0
+						if object.down == false
 							if object.state != Player_State_Roll
 								if object.state != Player_State_TubeRoll
 									object.animation = ANI_WALKING

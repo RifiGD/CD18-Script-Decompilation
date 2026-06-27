@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 17 : TYPE_PASTPOST
+
 
 // Time Period Aliases
 private alias object[9].propertyValue : hud.currentTimePeriod
@@ -39,7 +39,7 @@ event ObjectUpdate
 		foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 			if object[currentPlayer].collisionPlane == object.collisionPlane
 				BoxCollisionTest(C_TOUCH, object.entityPos, -8, -24, 8, 32, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-				if checkResult == 1
+				if checkResult == true
 					warp.destination = 1
 					object.state = 1
 					if object.priority != 4

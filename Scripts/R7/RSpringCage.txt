@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 51 : TYPE_RSPRINGCAGE
+
 
 
 
@@ -70,7 +70,7 @@ event ObjectUpdate
 				object[0].ypos += 1572864
 				break
 			end switch
-			if object[0].jumpPress == 1
+			if object[0].jumpPress == true
 				PlaySfx(SfxName[Large Booster], 0)
 				object[0].state = 13
 				object[0].gravity = 1
@@ -171,7 +171,7 @@ event ObjectUpdate
 	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 		if object.state == 0
 			BoxCollisionTest(C_TOUCH, object.entityPos, -24, -24, 24, 24, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				object.state = 1
 				object[currentPlayer].xpos = object.xpos
 				object[currentPlayer].ypos = object.ypos

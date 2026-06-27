@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 53 : TYPE_VERTICALDOOR
+
 
 // Function declarations
 reserve function VerticalDoor_DebugDraw

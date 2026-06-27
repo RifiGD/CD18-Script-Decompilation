@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 42 : TYPE_MOSQUI
+
 
 // Function declarations
 reserve function Mosqui_DebugDraw
@@ -111,7 +111,7 @@ event ObjectUpdate
 		case 3
 			object.ypos += 393216
 			ObjectTileCollision(0, 0, 14, 0)
-			if checkResult == 1
+			if checkResult == true
 				object.state = 4
 				PlaySfx(SfxName[Jab], 0)
 			end if
@@ -199,7 +199,7 @@ event ObjectUpdate
 		case 3
 			object.ypos += 393216
 			ObjectTileCollision(0, 0, 14, 0)
-			if checkResult == 1
+			if checkResult == true
 				object.state = 4
 			end if
 			break
@@ -235,7 +235,7 @@ event ObjectUpdate
 	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 		if object.state < 5
 			BoxCollisionTest(C_TOUCH, object.entityPos, -15, -10, 15, 10, currentPlayer, object[currentPlayer].value41, object[currentPlayer].value39, object[currentPlayer].value42, object[currentPlayer].value40)
-			if checkResult == 1
+			if checkResult == true
 				CallFunction(Player_BadnikBreak)
 			end if
 		end if

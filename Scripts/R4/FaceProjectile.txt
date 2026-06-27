@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 70 : TYPE_FACEPROJECTILE
+
 
 
 
@@ -19,26 +19,26 @@ event ObjectUpdate
 	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 		if object[currentPlayer].yvel > -917504
 			BoxCollisionTest(C_TOUCH, object.entityPos, -13, -8, 13, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				if object.direction == 0
-					if object[currentPlayer].left == 1
+					if object[currentPlayer].left == true
 						if object[currentPlayer].speed > -196608
 							object[currentPlayer].speed = -196608
 						end if
 					else
-						if object[currentPlayer].right == 1
+						if object[currentPlayer].right == true
 							object[currentPlayer].speed = -131072
 						else
 							object[currentPlayer].speed = -196608
 						end if
 					end if
 				else
-					if object[currentPlayer].right == 1
+					if object[currentPlayer].right == true
 						if object[currentPlayer].speed < 196608
 							object[currentPlayer].speed = 196608
 						end if
 					else
-						if object[currentPlayer].left == 1
+						if object[currentPlayer].left == true
 							object[currentPlayer].speed = 131072
 						else
 							object[currentPlayer].speed = 196608

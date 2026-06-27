@@ -7,14 +7,14 @@
 
 //-------Aliases-------//
 
-private alias 63 : TYPE_TUBESW
+
 
 
 
 event ObjectUpdate
 	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 		BoxCollisionTest(C_TOUCH, object.entityPos, object.value2, object.value2, object.value3, object.value3, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-		if checkResult == 1
+		if checkResult == true
 			switch object.propertyValue
 			case 0
 				if object[currentPlayer].speed > -1
@@ -77,16 +77,16 @@ event ObjectUpdate
 				break
 			case 5
 				if object[currentPlayer].state == Player_State_TubeAirRoll
-					if object[currentPlayer].jumpPress == 1
+					if object[currentPlayer].jumpPress == true
 						object.value1 = 1
 					else
-						if object[currentPlayer].jumpHold == 0
+						if object[currentPlayer].jumpHold == false
 							object.value1 = 0
 						end if
 					end if
 					if object.value1 == 1
 						BoxCollisionTest(C_TOUCH, object.entityPos, -16, -16, 16, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-						if checkResult == 1
+						if checkResult == true
 							object[currentPlayer].state = Player_State_Air
 							object[currentPlayer].gravity = 1
 							object[currentPlayer].xpos = object.xpos
@@ -100,7 +100,7 @@ event ObjectUpdate
 					end if
 				else
 					BoxCollisionTest(C_TOUCH, object.entityPos, -16, -16, 16, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-					if checkResult == 1
+					if checkResult == true
 						if object.value4 == 0
 							object[currentPlayer].gravity = 0
 							object[currentPlayer].value43 = 0
@@ -124,16 +124,16 @@ event ObjectUpdate
 				break
 			case 6
 				if object[currentPlayer].state == Player_State_TubeAirRoll
-					if object[currentPlayer].jumpPress == 1
+					if object[currentPlayer].jumpPress == true
 						object.value1 = 1
 					else
-						if object[currentPlayer].jumpHold == 0
+						if object[currentPlayer].jumpHold == false
 							object.value1 = 0
 						end if
 					end if
 					if object.value1 == 1
 						BoxCollisionTest(C_TOUCH, object.entityPos, -16, -16, 16, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-						if checkResult == 1
+						if checkResult == true
 							object[currentPlayer].state = Player_State_Air
 							object[currentPlayer].gravity = 1
 							object[currentPlayer].xpos = object.xpos
@@ -147,7 +147,7 @@ event ObjectUpdate
 					end if
 				else
 					BoxCollisionTest(C_TOUCH, object.entityPos, -16, -16, 16, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-					if checkResult == 1
+					if checkResult == true
 						if object.value4 == 0
 							object[currentPlayer].gravity = 0
 							object[currentPlayer].value43 = 0
@@ -185,16 +185,16 @@ event ObjectUpdate
 				break
 			case 8
 				if object[currentPlayer].state == Player_State_TubeAirRoll
-					if object[currentPlayer].jumpPress == 1
+					if object[currentPlayer].jumpPress == true
 						object.value1 = 1
 					else
-						if object[currentPlayer].jumpHold == 0
+						if object[currentPlayer].jumpHold == false
 							object.value1 = 0
 						end if
 					end if
 					if object.value1 == 1
 						BoxCollisionTest(C_TOUCH, object.entityPos, -16, -16, 16, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-						if checkResult == 1
+						if checkResult == true
 							object[currentPlayer].state = Player_State_Air
 							object[currentPlayer].gravity = 1
 							object[currentPlayer].xpos = object.xpos
@@ -208,7 +208,7 @@ event ObjectUpdate
 					end if
 				else
 					BoxCollisionTest(C_TOUCH, object.entityPos, -16, -16, 16, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-					if checkResult == 1
+					if checkResult == true
 						if object.value4 == 0
 							object[currentPlayer].speed = -524288
 							object[currentPlayer].gravity = 0

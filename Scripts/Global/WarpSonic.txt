@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 34 : TYPE_WARPSONIC
+
 
 
 event ObjectUpdate

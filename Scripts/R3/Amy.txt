@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 63 : TYPE_AMYROSE
+
 
 
 
@@ -30,7 +30,7 @@ event ObjectUpdate
 		end if
 		if object[0].type != TypeName[Debug Mode]
 			BoxCollisionTest(C_TOUCH, object.entityPos, -96, -360, 96, 360, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				object.xvel = 0
 				object.state = 1
 				object.frame = 4
@@ -148,7 +148,7 @@ event ObjectUpdate
 		object.yvel += 16384
 		object.ypos += object.yvel
 		ObjectTileCollision(0, 0, 19, 0)
-		if checkResult == 1
+		if checkResult == true
 			object.yvel = 0
 			object.gravity = 0
 		end if

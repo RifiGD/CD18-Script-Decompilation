@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 78 : TYPE_TUNNELPATH7
+
 
 
 
@@ -17,7 +17,7 @@ event ObjectUpdate
 			foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 				if object[currentPlayer].state != Player_State_Static
 					BoxCollisionTest(C_TOUCH, object.entityPos, -16, -16, 16, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-					if checkResult == 1
+					if checkResult == true
 						object[currentPlayer].state = Player_State_Static
 						object[currentPlayer].interaction = 0
 						if object[currentPlayer].value8 > 0

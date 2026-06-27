@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 49 : TYPE_SPIKELAUNCHER
+
 
 
 
@@ -86,7 +86,7 @@ event ObjectUpdate
 				break
 			end switch
 			BoxCollisionTest(C_TOUCH, object.entityPos, -12, -12, 12, 12, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				CallFunction(Player_Hit)
 			end if
 			object.xpos = temp0

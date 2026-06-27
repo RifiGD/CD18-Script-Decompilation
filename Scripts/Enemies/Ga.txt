@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 59 : TYPE_GA
+
 
 // Function declarations
 reserve function Ga_DebugDraw
@@ -39,7 +39,7 @@ event ObjectUpdate
 	switch object.state
 	case 0
 		BoxCollisionTest(C_TOUCH, object.entityPos, -96, -256, 96, 256, 0, C_BOX, C_BOX, C_BOX, C_BOX)
-		if checkResult == 1
+		if checkResult == true
 			object.drawOrder = 5
 			object.state = 2
 			object.animationTimer = 0
@@ -121,7 +121,7 @@ event ObjectUpdate
 	if object.state > 2
 		foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 			BoxCollisionTest(C_TOUCH, object.entityPos, -16, -8, 16, 8, currentPlayer, object[currentPlayer].value41, object[currentPlayer].value39, object[currentPlayer].value42, object[currentPlayer].value40)
-			if checkResult == 1
+			if checkResult == true
 				CallFunction(Player_BadnikBreak)
 			end if
 		next

@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 61 : TYPE_SASURISHOT
+
 
 
 
@@ -25,7 +25,7 @@ event ObjectUpdate
 	end if
 	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 		BoxCollisionTest(C_TOUCH, object.entityPos, -6, -6, 6, 6, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-		if checkResult == 1
+		if checkResult == true
 			CallFunction(Player_Hit)
 		end if
 	next

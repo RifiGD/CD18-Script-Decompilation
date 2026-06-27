@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 68 : TYPE_AMYROSE
+
 
 // Function declarations
 reserve function AmyRose_DebugDraw
@@ -183,7 +183,7 @@ event ObjectUpdate
 		end if
 		if object[0].type != TypeName[Debug Mode]
 			BoxCollisionTest(C_TOUCH, object.entityPos, -96, -360, 96, 360, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				object.xvel = 0
 				object.state = 1
 				object.frame = 4
@@ -217,11 +217,11 @@ event ObjectUpdate
 				object.xvel += 4096
 			end if
 			BoxCollisionTest(C_TOUCH, object.entityPos, -32, -360, 4, 360, 0, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				if object[0].gravity == 0
 					if object[0].direction == object.direction
 						BoxCollisionTest(C_TOUCH, object.entityPos, -32, -20, 4, 20, 0, C_BOX, C_BOX, C_BOX, C_BOX)
-						if checkResult == 1
+						if checkResult == true
 							CheckEqual(object[0].animation, ANI_SPINDASH)
 							temp0 = checkResult
 							CheckEqual(object[1].type, TypeName[Blue Shield])
@@ -274,11 +274,11 @@ event ObjectUpdate
 				object.xvel -= 4096
 			end if
 			BoxCollisionTest(C_TOUCH, object.entityPos, -4, -360, 32, 360, 0, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				if object[0].gravity == 0
 					if object[0].direction == object.direction
 						BoxCollisionTest(C_TOUCH, object.entityPos, -32, -20, 4, 20, 0, C_BOX, C_BOX, C_BOX, C_BOX)
-						if checkResult == 1
+						if checkResult == true
 							CheckEqual(object[0].animation, ANI_SPINDASH)
 							temp0 = checkResult
 							CheckEqual(object[1].type, TypeName[Blue Shield])
@@ -440,7 +440,7 @@ event ObjectUpdate
 			object.frame = 0
 		end if
 		BoxCollisionTest(C_TOUCH, object.entityPos, -4, -360, 4, 360, 0, C_BOX, C_BOX, C_BOX, C_BOX)
-		if checkResult == 0
+		if checkResult == false
 			if object[0].gravity == 0
 				object.state = 1
 				object.frame = 4
@@ -519,7 +519,7 @@ event ObjectUpdate
 		object.yvel += 16384
 		object.ypos += object.yvel
 		ObjectTileCollision(0, 0, 19, 0)
-		if checkResult == 1
+		if checkResult == true
 			object.yvel = 0
 			object.gravity = 0
 		end if

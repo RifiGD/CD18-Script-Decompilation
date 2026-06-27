@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 44 : TYPE_SPEEDBOOSTER
+
 
 
 
@@ -56,7 +56,7 @@ event ObjectUpdate
 		if object.state == 0
 			if object[currentPlayer].state != Player_State_Air
 				BoxCollisionTest(C_TOUCH, object.entityPos, -32, -12, 32, 4, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-				if checkResult == 1
+				if checkResult == true
 					object.priority = 1
 					PlaySfx(SfxName[Large Booster], 0)
 					if object[currentPlayer].speed > 0

@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 8 : TYPE_SMOKEPUFF
+
 
 
 

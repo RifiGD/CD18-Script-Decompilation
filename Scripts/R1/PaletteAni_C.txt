@@ -7,16 +7,23 @@
 
 //-------Aliases-------//
 
-private alias 52 : TYPE_PALANIMATION
+// Priority Aliases
+private alias 1 : PRIORITY_ACTIVE
+
+// Object Aliases
+private alias object.value0 : object.timer
+private alias object.value1 : object.currentPalette // unused, leftover from 2011
+
+
 
 
 
 event ObjectUpdate
-	object.value0++
-	if object.value0 == 8
-		object.value0 = 0
-		object.value1++
-		object.value1 %= 3
+	object.timer++
+	if object.timer == 8
+		object.timer = 0
+		object.currentPalette++
+		object.currentPalette %= 3
 		RotatePalette(0, 181, 183, 1)
 		RotatePalette(0, 172, 174, 0)
 	end if
@@ -25,7 +32,7 @@ end event
 
 event ObjectStartup
 	object[19].type = TypeName[Pal Animation]
-	object[19].priority = 1
+	object[19].priority = PRIORITY_ACTIVE
 end event
 
 event RSDKDraw

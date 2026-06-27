@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 56 : TYPE_BOSSBUBBLE2
+
 
 
 
@@ -42,7 +42,7 @@ event ObjectUpdate
 		foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 			if object[currentPlayer].animation == ANI_JUMPING
 				BoxCollisionTest(C_TOUCH, object.entityPos, -2, -2, 2, 2, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-				if checkResult == 1
+				if checkResult == true
 					object.state = 3
 					FlipSign(object[currentPlayer].speed)
 					FlipSign(object[currentPlayer].xvel)
@@ -55,7 +55,7 @@ event ObjectUpdate
 			end if
 			if object[currentPlayer].animation == ANI_FLYING
 				BoxCollisionTest(C_TOUCH, object.entityPos, -2, -2, 2, 2, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-				if checkResult == 1
+				if checkResult == true
 					object.state = 3
 					FlipSign(object[currentPlayer].speed)
 					FlipSign(object[currentPlayer].xvel)

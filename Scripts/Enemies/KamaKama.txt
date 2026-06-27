@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 55 : TYPE_KAMAKAMA
+
 
 // Function declarations
 reserve function KamaKama_DebugDraw
@@ -46,7 +46,7 @@ event ObjectUpdate
 	switch object.state
 	case 0
 		ObjectTileCollision(0, 0, 19, 0)
-		if checkResult == 1
+		if checkResult == true
 			object.state = 1
 		else
 			object.ypos += 131072
@@ -60,7 +60,7 @@ event ObjectUpdate
 			object.direction = 1
 		end if
 		BoxCollisionTest(C_TOUCH, object.entityPos, -96, -48, 96, 48, 0, C_BOX, C_BOX, C_BOX, C_BOX)
-		if checkResult == 1
+		if checkResult == true
 			object.state = 2
 			object.priority = 1
 			if object.propertyValue == 0
@@ -115,7 +115,7 @@ event ObjectUpdate
 		object.frame &= 31
 		object.xpos += object.xvel
 		ObjectTileGrip(0, 0, 19, 0)
-		if checkResult == 0
+		if checkResult == false
 			object.state = 5
 			object.value0 = 60
 		end if
@@ -147,7 +147,7 @@ event ObjectUpdate
 	end if
 	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 		BoxCollisionTest(C_TOUCH, object.entityPos, -16, -16, 16, 20, currentPlayer, object[currentPlayer].value41, object[currentPlayer].value39, object[currentPlayer].value42, object[currentPlayer].value40)
-		if checkResult == 1
+		if checkResult == true
 			CallFunction(Player_BadnikBreak)
 		end if
 	next

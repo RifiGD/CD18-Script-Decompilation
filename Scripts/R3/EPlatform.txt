@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 54 : TYPE_EPLATFORM
+
 
 
 
@@ -16,7 +16,7 @@ event ObjectUpdate
 	case 0
 		if object.propertyValue == 8
 			BoxCollisionTest(C_TOUCH, object.entityPos, -64, -64, 64, -48, 0, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				object.state = 1
 				stage.newYBoundary2 = object.iypos
 				stage.newYBoundary2 += 24

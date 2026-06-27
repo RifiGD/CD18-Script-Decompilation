@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 70 : TYPE_BLOCKROWSA
+
 
 // Time Period Aliases
 private alias object[9].propertyValue : hud.currentTimePeriod

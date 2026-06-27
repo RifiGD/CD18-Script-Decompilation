@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 54 : TYPE_R8SPIKES
+
 
 
 
@@ -18,7 +18,7 @@ event ObjectUpdate
 			if object[currentPlayer].yvel > -1
 				if object[currentPlayer].value7 == 0
 					BoxCollisionTest(C_TOUCH, object.entityPos, -15, -13, 15, -12, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-					if checkResult == 1
+					if checkResult == true
 						object[currentPlayer].state = Player_State_GotHit
 						if object[currentPlayer].xpos > object.xpos
 							object[currentPlayer].speed = 131072

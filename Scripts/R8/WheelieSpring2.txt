@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 73 : TYPE_WHEELIESPRING2
+
 
 
 
@@ -37,7 +37,7 @@ event ObjectUpdate
 			if object[currentPlayer].yvel >= 0
 				BoxCollisionTest(C_SOLID, object.entityPos, -16, -16, 16, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
 				BoxCollisionTest(C_TOUCH, object.entityPos, -15, -18, 15, -12, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-				if checkResult == 1
+				if checkResult == true
 					object.frame = 1
 					object[currentPlayer].state = Player_State_Air
 					object[currentPlayer].gravity = 1
@@ -57,7 +57,7 @@ event ObjectUpdate
 			if object[currentPlayer].gravity == 0
 				BoxCollisionTest(C_SOLID, object.entityPos, -16, -20, 16, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
 				BoxCollisionTest(C_TOUCH, object.entityPos, -15, -18, 15, -12, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-				if checkResult == 1
+				if checkResult == true
 					object.frame = 1
 					object[currentPlayer].state = Player_State_Air
 					object[currentPlayer].gravity = 1

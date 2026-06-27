@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 52 : TYPE_RPLANESHIFTER
+
 
 
 
@@ -192,7 +192,7 @@ event ObjectUpdate
 			temp1 = checkResult
 			BoxCollisionTest(C_SOLID, object.entityPos, -40, -184, 40, -168, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
 			BoxCollisionTest(C_TOUCH, object.entityPos, -4, -48, 4, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				if object.value2 == 0
 					if temp1 == 1
 						object.value2 = 1

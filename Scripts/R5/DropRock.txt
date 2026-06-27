@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 43 : TYPE_DROPROCK
+
 
 // Function declarations
 reserve function DropRock_DebugDraw
@@ -34,7 +34,7 @@ event ObjectUpdate
 		object.ypos += object.yvel
 		if object.yvel > 131072
 			ObjectTileCollision(0, 0, 12, 0)
-			if checkResult == 1
+			if checkResult == true
 				PlaySfx(SfxName[Explosion], 0)
 				object.state = 2
 				CreateTempObject(TypeName[Drop Rock], 1, object.xpos, object.ypos)
@@ -93,7 +93,7 @@ event ObjectUpdate
 		case 0
 			BoxCollisionTest(C_SOLID, object.entityPos, -16, -16, 16, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
 			BoxCollisionTest(C_TOUCH, object.entityPos, -4, 0, 4, 96, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				object.value0 = object.ypos
 				if object.priority != 4
 					object.priority = 1

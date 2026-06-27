@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 54 : TYPE_POHBEE
+
 
 // Function declarations
 reserve function PohBee_DebugDraw
@@ -129,7 +129,7 @@ event ObjectUpdate
 	object.value7 += 851968
 	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 		BoxCollisionTest(C_TOUCH, object.entityPos, -20, -16, 20, 14, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-		if checkResult == 1
+		if checkResult == true
 			CallFunction(Player_BadnikBreak)
 		end if
 		temp0 = object.xpos
@@ -141,7 +141,7 @@ event ObjectUpdate
 		object.ypos *= 10752
 		object.ypos += object.value7
 		BoxCollisionTest(C_TOUCH, object.entityPos, -9, -9, 9, 9, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-		if checkResult == 1
+		if checkResult == true
 			CallFunction(Player_Hit)
 		end if
 		if object.propertyValue == 0
@@ -152,7 +152,7 @@ event ObjectUpdate
 			object.ypos *= 4608
 			object.ypos += object.value7
 			BoxCollisionTest(C_TOUCH, object.entityPos, -9, -9, 9, 9, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				CallFunction(Player_Hit)
 			end if
 		end if

@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 41 : TYPE_BLOCK
+
 
 // Function declarations
 reserve function Block_DebugDraw

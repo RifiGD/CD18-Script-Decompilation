@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 76 : TYPE_BOMBCARRIER
+
 
 
 

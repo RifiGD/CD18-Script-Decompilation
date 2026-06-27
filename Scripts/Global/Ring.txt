@@ -18,7 +18,7 @@ private alias 3 : SHIELD_FIRE
 private alias 4 : SHIELD_LIGHTNING
 
 
-private alias 8 : TYPE_RING
+
 
 // Function declarations
 reserve function Ring_DebugDraw
@@ -46,7 +46,7 @@ event ObjectUpdate
 		temp0 |= checkResult
 		if temp0 == 0
 			BoxCollisionTest(C_TOUCH, object.entityPos, -8, -8, 8, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				object.type = TypeName[Ring Sparkle]
 				object[0].value0++
 				if object[0].value0 > 999

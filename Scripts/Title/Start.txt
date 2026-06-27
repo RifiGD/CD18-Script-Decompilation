@@ -39,7 +39,7 @@ private alias 10 : LANGUAGE_ZS
 // General
 private alias object.value0 : screen.fade
 
-private alias 6 : TYPE_START
+
 
 // Function declarations
 reserve function Start_HandleCheatCodes
@@ -258,16 +258,16 @@ event ObjectUpdate
 		//This still has touchscreen support?
 		CheckTouchRect(0, 0, screen.xsize, 240)
 		if keyPress[0].start == true
-			checkResult = 0
+			checkResult = false
 		end if
 		if keyPress[0].buttonA == true
-			checkResult = 0
+			checkResult = false
 		end if
 		if keyPress[0].buttonB == true
-			checkResult = 0
+			checkResult = false
 		end if
 		if keyPress[0].buttonC == true
-			checkResult = 0
+			checkResult = false
 		end if
 		if checkResult > -1
 			object.state = START_NEWGAME

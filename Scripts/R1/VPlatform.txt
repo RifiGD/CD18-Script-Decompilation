@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 50 : TYPE_VERTPLATFORM
+
 
 // Function declarations
 reserve function VertPlatform_DebugDraw
@@ -41,7 +41,7 @@ event ObjectUpdate
 	object.ypos = object.value1
 	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 		BoxCollisionTest(C_PLATFORM, object.entityPos, -32, -9, 32, 12, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-		if checkResult == 1
+		if checkResult == true
 			object[currentPlayer].ypos += object.value2
 		end if
 	next

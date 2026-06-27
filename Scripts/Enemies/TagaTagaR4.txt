@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 60 : TYPE_TAGATAGA
+
 
 // Function declarations
 reserve function TagaTaga_DebugDraw
@@ -51,7 +51,7 @@ event ObjectUpdate
 			end if
 			foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 				BoxCollisionTest(C_TOUCH, object.entityPos, -128, -32, 0, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-				if checkResult == 1
+				if checkResult == true
 					object.state = 2
 					object.value0 = 0
 					object.priority = 1
@@ -69,7 +69,7 @@ event ObjectUpdate
 			end if
 			foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 				BoxCollisionTest(C_TOUCH, object.entityPos, 0, -32, 128, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-				if checkResult == 1
+				if checkResult == true
 					object.state = 3
 					object.value0 = 0
 					object.priority = 1
@@ -200,7 +200,7 @@ event ObjectUpdate
 	if object.state < 4
 		foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 			BoxCollisionTest(C_TOUCH, object.entityPos, -12, -8, 12, 8, currentPlayer, object[currentPlayer].value41, object[currentPlayer].value39, object[currentPlayer].value42, object[currentPlayer].value40)
-			if checkResult == 1
+			if checkResult == true
 				CallFunction(Player_BadnikBreak)
 			end if
 		next

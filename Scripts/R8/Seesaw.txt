@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 52 : TYPE_SEESAW
+
 
 
 
@@ -163,7 +163,7 @@ event ObjectUpdate
 	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 		if object.state == 0
 			BoxCollisionTest(C_PLATFORM, object.entityPos, -40, -56, 40, -36, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				object.state = 1
 				object.priority = 1
 				object.yvel = -786432
@@ -187,7 +187,7 @@ event ObjectUpdate
 				break
 			end switch
 			if object.state < 3
-				if checkResult == 1
+				if checkResult == true
 					object.value6 = 1
 					if object.value2 > 0
 						object[currentPlayer].ypos += object.value2
@@ -200,7 +200,7 @@ event ObjectUpdate
 				temp0 = object.ypos
 				object.ypos = object.value3
 				BoxCollisionTest(C_TOUCH, object.entityPos, -24, -24, 24, 24, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-				if checkResult == 1
+				if checkResult == true
 					CallFunction(Player_Hit)
 				end if
 				object.ypos = temp0

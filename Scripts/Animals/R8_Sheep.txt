@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 69 : TYPE_SHEEP
+
 
 // Time Period Aliases
 private alias object[9].propertyValue : hud.currentTimePeriod
@@ -25,7 +25,7 @@ event ObjectUpdate
 		object.xpos += 65536
 		if object.yvel > 0
 			ObjectTileCollision(0, 0, 8, 0)
-			if checkResult == 1
+			if checkResult == true
 				object.direction = 1
 				object.yvel = -327680
 				object.state = 1
@@ -36,7 +36,7 @@ event ObjectUpdate
 		object.xpos -= 65536
 		if object.yvel > 0
 			ObjectTileCollision(0, 0, 8, 0)
-			if checkResult == 1
+			if checkResult == true
 				object.direction = 0
 				object.yvel = -327680
 				object.state = 0

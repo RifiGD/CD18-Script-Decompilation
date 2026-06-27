@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 42 : TYPE_BUMPER
+
 
 // Function declarations
 reserve function Bumper_DebugDraw
@@ -97,7 +97,7 @@ event ObjectUpdate
 	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 		if object[currentPlayer].animation != ANI_HURT
 			BoxCollisionTest(C_TOUCH, object.entityPos, -14, -14, 14, 14, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				if object.state == 0
 					PlaySfx(SfxName[Bumper], 0)
 					if object.value1 < 5

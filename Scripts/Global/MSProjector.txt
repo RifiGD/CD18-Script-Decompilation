@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 36 : TYPE_MSPROJECTOR
+
 
 // Function declarations
 reserve function MSProjector_DebugDraw
@@ -37,7 +37,7 @@ public function MSProjector_Function82
 	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 		if object[currentPlayer].animation == ANI_JUMPING
 			BoxCollisionTest(C_TOUCH, object.entityPos, -13, -13, 13, 13, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				object.value0 = 0
 				metalSonic.destroyed = 1
 				object.priority = 1

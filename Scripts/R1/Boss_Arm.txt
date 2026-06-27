@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 60 : TYPE_BOSSARM
+
 
 // Function declarations
 reserve function BossArm_Function115

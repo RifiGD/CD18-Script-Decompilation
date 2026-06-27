@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 72 : TYPE_FADESCREEN
+
 
 
 

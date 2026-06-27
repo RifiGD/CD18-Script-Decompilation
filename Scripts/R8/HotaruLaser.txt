@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 60 : TYPE_HOTARULASER
+
 
 
 
@@ -16,7 +16,7 @@ event ObjectUpdate
 	case 0
 		object.ypos += 524288
 		ObjectTileCollision(0, 0, 8, 0)
-		if checkResult == 1
+		if checkResult == true
 			object.value1 = object.ypos
 			object.state++
 		end if
@@ -34,7 +34,7 @@ event ObjectUpdate
 		arrayPos0 = object.value2
 		if object[arrayPos0].type == TypeName[Hotaru]
 			BoxCollisionTest(C_TOUCH, object.entityPos, -4, -8, 4, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				CallFunction(Player_Hit)
 			end if
 		end if

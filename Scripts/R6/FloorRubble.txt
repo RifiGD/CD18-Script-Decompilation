@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 75 : TYPE_FLOORRUBBLE
+
 
 
 
@@ -17,7 +17,7 @@ event ObjectUpdate
 	object.ypos += object.yvel
 	if object.propertyValue == 0
 		ObjectTileCollision(0, 0, 8, 0)
-		if checkResult == 1
+		if checkResult == true
 			object.type = TypeName[Blank Object]
 			CreateTempObject(TypeName[Floor Rubble], 2, object.xpos, object.ypos)
 			object[tempObjectPos].xpos -= 262144

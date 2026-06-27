@@ -7,8 +7,6 @@
 
 //-------Aliases-------//
 
-private alias 50 : TYPE_FLYINGBIRD
-
 // Time Period Aliases
 private alias object[9].propertyValue : hud.currentTimePeriod
 

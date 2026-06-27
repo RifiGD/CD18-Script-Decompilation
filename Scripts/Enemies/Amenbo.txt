@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 58 : TYPE_AMENBO
+
 
 // Function declarations
 reserve function Amenbo_DebugDraw
@@ -204,18 +204,18 @@ event ObjectUpdate
 	object.ypos <<= 16
 	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 		BoxCollisionTest(C_TOUCH, object.entityPos, -12, -8, 12, 8, currentPlayer, object[currentPlayer].value41, object[currentPlayer].value39, object[currentPlayer].value42, object[currentPlayer].value40)
-		if checkResult == 1
+		if checkResult == true
 			CallFunction(Player_BadnikBreak)
 		end if
 		if object.value1 == 0
 			if object.direction == 0
 				BoxCollisionTest(C_TOUCH, object.entityPos, -96, -16, 0, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-				if checkResult == 1
+				if checkResult == true
 					object.value1 = 120
 				end if
 			else
 				BoxCollisionTest(C_TOUCH, object.entityPos, 0, -16, 96, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-				if checkResult == 1
+				if checkResult == true
 					object.value1 = 120
 				end if
 			end if

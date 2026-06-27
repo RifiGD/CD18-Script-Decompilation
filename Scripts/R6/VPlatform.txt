@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 44 : TYPE_VPLATFORM
+
 
 
 
@@ -26,7 +26,7 @@ event ObjectUpdate
 		temp0 = object.ypos
 		object.ypos = object.value1
 		BoxCollisionTest(C_PLATFORM, object.entityPos, -24, -12, 24, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-		if checkResult == 1
+		if checkResult == true
 			object[currentPlayer].ypos += object.value2
 			if object[currentPlayer].state == Player_State_SpinningTop
 				object[currentPlayer].state = Player_State_Ground

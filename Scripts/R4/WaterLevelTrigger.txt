@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 51 : TYPE_WATERLTRIGGER
+
 
 
 
@@ -25,7 +25,7 @@ event ObjectUpdate
 		break
 	case 2
 		BoxCollisionTest(C_TOUCH, object.entityPos, -128, -128, 128, 128, 0, C_BOX, C_BOX, C_BOX, C_BOX)
-		if checkResult == 1
+		if checkResult == true
 			stage.newWaterLevel = 62914560
 		end if
 		break

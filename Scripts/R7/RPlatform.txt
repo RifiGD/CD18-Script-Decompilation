@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 53 : TYPE_RPLATFORM
+
 
 
 
@@ -97,7 +97,7 @@ event ObjectUpdate
 			CallFunction(Player_Hit)
 		case 4
 			BoxCollisionTest(C_TOUCH, object.entityPos, -16, -8, 16, 9, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				if object[currentPlayer].state != Player_State_Hurt
 					temp3 = object[currentPlayer].xvel
 					if temp3 < 0

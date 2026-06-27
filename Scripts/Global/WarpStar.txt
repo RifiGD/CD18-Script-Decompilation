@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 32 : TYPE_WARPSTAR
+
 
 
 event ObjectUpdate

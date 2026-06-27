@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 75 : TYPE_EGGMAN
+
 
 
 

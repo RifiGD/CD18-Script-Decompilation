@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 55 : TYPE_SCARAB
+
 
 // Function declarations
 reserve function Scarab_DebugDraw
@@ -113,7 +113,7 @@ event ObjectUpdate
 			if object.value4 == 0
 				if object.direction == 0
 					BoxCollisionTest(C_TOUCH, object.entityPos, -32, -12, -12, 12, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-					if checkResult == 1
+					if checkResult == true
 						if object.value6 == 0
 							object.value4 = 120
 							object[currentPlayer].animation = ANI_JUMPING
@@ -139,13 +139,13 @@ event ObjectUpdate
 					else
 						object.value6 = 0
 						BoxCollisionTest(C_TOUCH, object.entityPos, -12, -12, 20, 12, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-						if checkResult == 1
+						if checkResult == true
 							CallFunction(Player_BadnikBreak)
 						end if
 					end if
 				else
 					BoxCollisionTest(C_TOUCH, object.entityPos, 12, -12, 32, 12, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-					if checkResult == 1
+					if checkResult == true
 						if object.value6 == 0
 							object.value4 = 120
 							object[currentPlayer].animation = ANI_JUMPING
@@ -171,7 +171,7 @@ event ObjectUpdate
 					else
 						object.value6 = 0
 						BoxCollisionTest(C_TOUCH, object.entityPos, -20, -12, 12, 12, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-						if checkResult == 1
+						if checkResult == true
 							CallFunction(Player_BadnikBreak)
 						end if
 					end if

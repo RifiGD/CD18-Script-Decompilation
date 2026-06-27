@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 53 : TYPE_BOSSFACE
+
 
 // Function declarations
 reserve function BossFace_Function95
@@ -392,7 +392,7 @@ event ObjectUpdate
 			if object[currentPlayer].animation != 3
 				if object.value3 < 3
 					BoxCollisionTest(C_TOUCH, object.entityPos, -28, -28, 28, 28, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-					if checkResult == 1
+					if checkResult == true
 						if object[currentPlayer].animation == ANI_JUMPING
 							object[currentPlayer].xvel = object[currentPlayer].xpos
 							object[currentPlayer].xvel -= object.xpos

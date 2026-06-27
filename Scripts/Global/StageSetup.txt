@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 3 : TYPE_STAGESETUP
+
 
 // Time Period Aliases
 private alias object[9].propertyValue : hud.currentTimePeriod
@@ -191,7 +191,7 @@ event ObjectUpdate
 			temp1 = stage.curXBoundary1
 			temp1 <<= 16
 			if temp0 < temp1
-				if object[currentPlayer].right == 1
+				if object[currentPlayer].right == true
 					object[currentPlayer].xvel = 65536
 					object[currentPlayer].speed = 65536
 				else

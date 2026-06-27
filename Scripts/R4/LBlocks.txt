@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 75 : TYPE_LBLOCKS
+
 
 
 
@@ -66,7 +66,7 @@ event ObjectUpdate
 			case 0
 				BoxCollisionTest(C_SOLID, object.entityPos, -16, -48, 16, -16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
 				BoxCollisionTest(C_SOLID, object.entityPos, -48, -16, -16, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-				if checkResult == 1
+				if checkResult == true
 					if temp1 == 0
 						object.state = 1
 					end if
@@ -75,7 +75,7 @@ event ObjectUpdate
 			case 1
 				BoxCollisionTest(C_SOLID, object.entityPos, -16, 16, 16, 48, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
 				BoxCollisionTest(C_SOLID, object.entityPos, -48, -16, -16, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-				if checkResult == 1
+				if checkResult == true
 					if temp1 == 0
 						object.state = 1
 					end if
@@ -84,7 +84,7 @@ event ObjectUpdate
 			case 2
 				BoxCollisionTest(C_SOLID, object.entityPos, -16, 16, 16, 48, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
 				BoxCollisionTest(C_SOLID, object.entityPos, 16, -16, 48, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-				if checkResult == 1
+				if checkResult == true
 					if temp1 == 0
 						object.state = 2
 					end if
@@ -93,7 +93,7 @@ event ObjectUpdate
 			case 3
 				BoxCollisionTest(C_SOLID, object.entityPos, -16, -48, 16, -16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
 				BoxCollisionTest(C_SOLID, object.entityPos, 16, -16, 48, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-				if checkResult == 1
+				if checkResult == true
 					if temp1 == 0
 						object.state = 2
 					end if

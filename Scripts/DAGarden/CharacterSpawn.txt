@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 6 : TYPE_CHARACTERSPAWN
+
 
 // Function declarations
 reserve function CharacterSpawn_Function1

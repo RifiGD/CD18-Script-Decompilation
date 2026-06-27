@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 19 : TYPE_GOALPOST
+
 
 
 event ObjectUpdate
@@ -24,7 +24,7 @@ event ObjectUpdate
 				object.state = 1
 				if object.propertyValue == 1
 					BoxCollisionTest(C_TOUCH, object.entityPos, -32, -256, 32, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-					if checkResult == 1
+					if checkResult == true
 						if stage.playerListPos == 0
 							if stage.debugMode == 0
 							end if

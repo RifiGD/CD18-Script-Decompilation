@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 55 : TYPE_BOSSLEGJOINT
+
 
 // Function declarations
 reserve function BossLegJoint_Function105

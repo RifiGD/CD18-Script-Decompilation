@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 66 : TYPE_POLETRIGGER
+
 
 
 
@@ -15,7 +15,7 @@ event ObjectUpdate
 	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 		if object.state == 0
 			BoxCollisionTest(C_TOUCH, object.entityPos, -4, object.value0, 4, object.value1, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				if object[currentPlayer].state != Player_State_Hurt
 					object.state = 1
 					object.value3 = 0
@@ -34,7 +34,7 @@ event ObjectUpdate
 			end if
 		else
 			if object[currentPlayer].state == Player_State_Static
-				if object[currentPlayer].jumpPress == 1
+				if object[currentPlayer].jumpPress == true
 					object.value3 = 1
 				end if
 				object.angle += 16

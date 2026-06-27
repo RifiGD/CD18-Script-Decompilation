@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 57 : TYPE_TONBO
+
 
 // Function declarations
 reserve function Tonbo_DebugDraw
@@ -94,7 +94,7 @@ event ObjectUpdate
 	object.animationTimer %= 6
 	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 		BoxCollisionTest(C_TOUCH, object.entityPos, -20, -10, 20, 10, currentPlayer, object[currentPlayer].value41, object[currentPlayer].value39, object[currentPlayer].value42, object[currentPlayer].value40)
-		if checkResult == 1
+		if checkResult == true
 			CallFunction(Player_BadnikBreak)
 		end if
 	next

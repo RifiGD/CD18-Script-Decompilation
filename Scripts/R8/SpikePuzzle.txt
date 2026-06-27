@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 53 : TYPE_SPIKEPUZZLE
+
 
 // Function declarations
 reserve function SpikePuzzle_Function86
@@ -63,7 +63,7 @@ event ObjectUpdate
 			break
 		case 1
 			BoxCollisionTest(C_TOUCH, object.entityPos, -80, -8, 80, 224, 0, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				object.priority = 1
 				object.state++
 				object[+1].yvel = 32768
@@ -96,7 +96,7 @@ event ObjectUpdate
 	else
 		object.ypos += object.yvel
 		ObjectTileCollision(0, 0, object.value3, 0)
-		if checkResult == 1
+		if checkResult == true
 			object.yvel = 0
 		end if
 	end if

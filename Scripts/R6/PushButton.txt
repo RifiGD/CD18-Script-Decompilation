@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 51 : TYPE_PUSHBUTTON
+
 
 // Function declarations
 reserve function PushButton_DebugDraw
@@ -29,7 +29,7 @@ event ObjectUpdate
 		if object.propertyValue == 0
 			if object[currentPlayer].yvel >= 0
 				BoxCollisionTest(C_SOLID, object.entityPos, -16, -8, 16, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-				if checkResult == 1
+				if checkResult == true
 					object.propertyValue = 1
 					object[currentPlayer].ypos += 524288
 					PlaySfx(SfxName[Switch], 0)
@@ -41,7 +41,7 @@ event ObjectUpdate
 			end if
 		else
 			BoxCollisionTest(C_TOUCH, object.entityPos, -16, -2, 16, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				if object[currentPlayer].yvel > -1
 					object.propertyValue = 1
 					object[currentPlayer].gravity = 0

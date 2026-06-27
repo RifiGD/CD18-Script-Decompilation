@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 63 : TYPE_BOSSBARRIER2
+
 
 
 

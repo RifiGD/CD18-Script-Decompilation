@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 74 : TYPE_GRABPOLE
+
 
 // Time Period Aliases
 private alias object[9].propertyValue : hud.currentTimePeriod
@@ -22,7 +22,7 @@ event ObjectUpdate
 	case 0
 		foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 			BoxCollisionTest(C_TOUCH, object.entityPos, 16, -28, 32, 28, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				object.state = 1
 				object[currentPlayer].state = Player_State_Static
 				object[currentPlayer].animation = ANI_CLINGING
@@ -57,13 +57,13 @@ event ObjectUpdate
 					object[currentPlayer].state = Player_State_Air
 				end if
 			end if
-			if object[currentPlayer].up == 1
+			if object[currentPlayer].up == true
 				object[currentPlayer].ypos -= 65536
 			end if
-			if object[currentPlayer].down == 1
+			if object[currentPlayer].down == true
 				object[currentPlayer].ypos += 65536
 			end if
-			if object[currentPlayer].jumpPress == 1
+			if object[currentPlayer].jumpPress == true
 				object.frame = 1
 				object.state = 2
 				object[currentPlayer].state = Player_State_Air

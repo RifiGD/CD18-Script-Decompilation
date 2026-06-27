@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 56 : TYPE_KAMAKAMABLADE
+
 
 
 
@@ -51,7 +51,7 @@ event ObjectUpdate
 	if object.state == 1
 		foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 			BoxCollisionTest(C_TOUCH, object.entityPos, -8, -6, 8, 6, currentPlayer, object[currentPlayer].value41, object[currentPlayer].value39, object[currentPlayer].value42, object[currentPlayer].value40)
-			if checkResult == 1
+			if checkResult == true
 				CheckEqual(object[currentPlayer].animation, ANI_JUMPING)
 				temp0 = checkResult
 				CheckEqual(object[currentPlayer].animation, ANI_SPINDASH)

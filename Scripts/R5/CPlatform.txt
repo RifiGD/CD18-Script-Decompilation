@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 45 : TYPE_CPLATFORM
+
 
 // Function declarations
 reserve function CPlatform_DebugDraw
@@ -147,7 +147,7 @@ event ObjectUpdate
 	if object.state == 0
 		foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 			BoxCollisionTest(C_PLATFORM, object.entityPos, object.value0, object.value4, object.value1, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				object.value2 = 1
 				object.priority = 1
 				if object[currentPlayer].xpos > object.xpos

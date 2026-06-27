@@ -7,14 +7,14 @@
 
 //-------Aliases-------//
 
-private alias 73 : TYPE_SPIKEBALL
+
 
 
 
 event ObjectUpdate
 	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 		BoxCollisionTest(C_TOUCH, object.entityPos, -12, -12, 12, 12, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-		if checkResult == 1
+		if checkResult == true
 			CallFunction(Player_Hit)
 		end if
 	next

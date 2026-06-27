@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 56 : TYPE_BOSSBODY
+
 
 // Function declarations
 reserve function BossBody_Function99
@@ -205,7 +205,7 @@ event ObjectUpdate
 		case 1
 		case 3
 			BoxCollisionTest(C_TOUCH, object.entityPos, -64, -16, 64, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				object[currentPlayer].yvel = 0
 				object.value2 -= 4718592
 				object.value5 = 1
@@ -216,7 +216,7 @@ event ObjectUpdate
 			break
 		case 5
 			BoxCollisionTest(C_TOUCH, object.entityPos, -64, -16, 64, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				object[currentPlayer].yvel = 0
 				object.value2 -= 8388608
 				object.value5 = 1

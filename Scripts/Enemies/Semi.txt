@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 56 : TYPE_SEMI
+
 
 // Function declarations
 reserve function Semi_DebugDraw
@@ -87,7 +87,7 @@ event ObjectUpdate
 		switch object.state
 		case 0
 			BoxCollisionTest(C_TOUCH, object.entityPos, -96, -128, 96, 128, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				object.state = 1
 				if object.xpos > object[currentPlayer].xpos
 					if object.propertyValue == 0
@@ -111,7 +111,7 @@ event ObjectUpdate
 		case 1
 		case 2
 			BoxCollisionTest(C_TOUCH, object.entityPos, -14, -12, 14, 12, currentPlayer, object[currentPlayer].value41, object[currentPlayer].value39, object[currentPlayer].value42, object[currentPlayer].value40)
-			if checkResult == 1
+			if checkResult == true
 				CallFunction(Player_BadnikBreak)
 			end if
 			break

@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 11 : TYPE_SHOOTINGSTAR
+
 
 
 

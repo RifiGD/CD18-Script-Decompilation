@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 55 : TYPE_SPINNINGTOP
+
 
 
 // Collision Modes
@@ -103,7 +103,7 @@ event ObjectUpdate
 		temp5 &= 255
 		object.value2 &= temp2
 		BoxCollisionTest(C_SOLID, object.entityPos, -16, -8, 16, 24, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-		if checkResult == 1
+		if checkResult == true
 			SetBit(object.value0, temp7, 1)
 			if player[currentPlayer].state != Player_State_SpinningTop
 				player[currentPlayer].state = Player_State_SpinningTop
@@ -137,23 +137,23 @@ event ObjectUpdate
 				temp4++
 			end if
 			if player[currentPlayer].xpos < object.xpos
-				if player[currentPlayer].left == 1
+				if player[currentPlayer].left == true
 					temp4++
 				end if
-				if player[currentPlayer].right == 1
+				if player[currentPlayer].right == true
 					temp4--
 					if object.value1 == -1
 						temp4 = 0
 					end if
 				end if
 			else
-				if player[currentPlayer].left == 1
+				if player[currentPlayer].left == true
 					temp4--
 					if temp4 == -1
 						temp4 = 0
 					end if
 				end if
-				if player[currentPlayer].right == 1
+				if player[currentPlayer].right == true
 					temp4++
 				end if
 			end if

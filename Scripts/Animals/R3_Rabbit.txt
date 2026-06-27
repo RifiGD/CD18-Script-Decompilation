@@ -7,8 +7,6 @@
 
 //-------Aliases-------//
 
-private alias 51 : TYPE_RABBIT
-
 // Time Period Aliases
 private alias object[9].propertyValue : hud.currentTimePeriod
 
@@ -25,7 +23,7 @@ event ObjectUpdate
 		object.xpos += 65536
 		if object.yvel > 262144
 			ObjectTileCollision(0, 0, 8, 0)
-			if checkResult == 1
+			if checkResult == true
 				object.yvel = -327680
 				object.value0++
 				if object.value0 == 2
@@ -40,7 +38,7 @@ event ObjectUpdate
 		object.xpos -= 65536
 		if object.yvel > 262144
 			ObjectTileCollision(0, 0, 8, 0)
-			if checkResult == 1
+			if checkResult == true
 				object.yvel = -327680
 				object.value0++
 				if object.value0 == 2

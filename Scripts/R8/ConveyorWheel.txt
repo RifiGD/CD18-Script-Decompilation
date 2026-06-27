@@ -7,14 +7,14 @@
 
 //-------Aliases-------//
 
-private alias 56 : TYPE_CONVEYORWHEEL
+
 
 
 
 event ObjectUpdate
 	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 		BoxCollisionTest(C_TOUCH, object.entityPos, -64, -64, 64, 64, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-		if checkResult == 1
+		if checkResult == true
 			if object[currentPlayer].gravity == 0
 				if object[currentPlayer].speed < 327680
 					object[currentPlayer].speed = 327680

@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 27 : TYPE_LIGHTNINGSHIELD
+
 
 // Tables
 public table LightningShield_table6

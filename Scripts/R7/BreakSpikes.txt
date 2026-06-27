@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 57 : TYPE_BREAKSPIKES
+
 
 
 
@@ -62,7 +62,7 @@ event ObjectUpdate
 			if object[currentPlayer].yvel > -1
 				if object[currentPlayer].value7 == 0
 					BoxCollisionTest(C_TOUCH, object.entityPos, -15, -16, 15, -12, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-					if checkResult == 1
+					if checkResult == true
 						object[currentPlayer].state = Player_State_GotHit
 						MetalSonic_value15 = 0
 						if object[currentPlayer].xpos > object.xpos

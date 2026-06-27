@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 58 : TYPE_TENTOUBOMB
+
 
 
 
@@ -30,7 +30,7 @@ event ObjectUpdate
 	ObjectTileGrip(0, 0, 8, 0)
 	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 		BoxCollisionTest(C_TOUCH, object.entityPos, -8, -8, 8, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-		if checkResult == 1
+		if checkResult == true
 			CallFunction(Player_Hit)
 		end if
 	next

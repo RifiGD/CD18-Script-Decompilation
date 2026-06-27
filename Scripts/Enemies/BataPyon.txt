@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 53 : TYPE_BATAPYON
+
 
 // Function declarations
 reserve function BataPyon_DebugDraw
@@ -51,12 +51,12 @@ event ObjectUpdate
 		object.ypos += object.value2
 		object.value2 += 8192
 		ObjectTileCollision(3, 0, -18, 0)
-		if checkResult == 1
+		if checkResult == true
 			object.value2 = 0
 		end if
 		if object.value2 > 0
 			ObjectTileCollision(0, 0, 20, 0)
-			if checkResult == 1
+			if checkResult == true
 				if object.propertyValue == 0
 					object.state = 1
 					object.priority = 1
@@ -82,14 +82,14 @@ event ObjectUpdate
 		end if
 		if object.value1 > 0
 			ObjectTileCollision(1, 16, 0, 0)
-			if checkResult == 1
+			if checkResult == true
 				object.value5 = 0
 				object.direction = 0
 				FlipSign(object.value1)
 			end if
 		else
 			ObjectTileCollision(2, -16, 0, 0)
-			if checkResult == 1
+			if checkResult == true
 				object.value5 = 0
 				object.direction = 1
 				FlipSign(object.value1)
@@ -170,7 +170,7 @@ event ObjectUpdate
 	if object.state < 7
 		foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 			BoxCollisionTest(C_TOUCH, object.entityPos, -14, -12, 14, 12, currentPlayer, object[currentPlayer].value41, object[currentPlayer].value39, object[currentPlayer].value42, object[currentPlayer].value40)
-			if checkResult == 1
+			if checkResult == true
 				CallFunction(Player_BadnikBreak)
 			end if
 		next

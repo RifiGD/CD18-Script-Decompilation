@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 58 : TYPE_MINOMUSI
+
 
 // Function declarations
 reserve function Minomusi_DebugDraw
@@ -188,14 +188,14 @@ event ObjectUpdate
 	CallFunction(StageSetup_CheckGoodFuture)
 	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 		BoxCollisionTest(C_TOUCH, object.entityPos, -8, -6, 8, 22, currentPlayer, object[currentPlayer].value41, object[currentPlayer].value39, object[currentPlayer].value42, object[currentPlayer].value40)
-		if checkResult == 1
+		if checkResult == true
 			CallFunction(Player_BadnikBreak)
 		end if
 		if object.propertyValue == 0
 			if object.type == TypeName[Minomusi]
 				if object.frame > 2
 					BoxCollisionTest(C_TOUCH, object.entityPos, -17, -4, 17, 20, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-					if checkResult == 1
+					if checkResult == true
 						CallFunction(Player_Hit)
 					end if
 				end if
@@ -204,7 +204,7 @@ event ObjectUpdate
 		if object.state == 0
 			if object.value0 == 0
 				BoxCollisionTest(C_TOUCH, object.entityPos, -64, 0, 64, 128, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-				if checkResult == 1
+				if checkResult == true
 					object.state = 1
 					object.priority = 1
 				end if

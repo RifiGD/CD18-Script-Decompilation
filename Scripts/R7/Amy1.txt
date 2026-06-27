@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 58 : TYPE_AMY1
+
 
 
 
@@ -16,7 +16,7 @@ event ObjectUpdate
 		object.ypos += object.yvel
 		object.yvel += 8192
 		ObjectTileCollision(0, 0, 19, 0)
-		if checkResult == 1
+		if checkResult == true
 			ResetObjectEntity(object.entityPos, TypeName[Amy 2], 0, object.xpos, object.ypos)
 			object.frame = 4
 			object.drawOrder = 4
@@ -28,7 +28,7 @@ event ObjectUpdate
 		if object.state == 0
 			if object.type == TypeName[Amy 1]
 				BoxCollisionTest(C_TOUCH, object.entityPos, -8, -16, 8, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-				if checkResult == 1
+				if checkResult == true
 					FlipSign(object[currentPlayer].yvel)
 					object[currentPlayer].yvel >>= 1
 					object.state = 1

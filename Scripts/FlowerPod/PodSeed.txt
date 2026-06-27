@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 64 : TYPE_PODSEED
+
 
 
 
@@ -21,7 +21,7 @@ event ObjectUpdate
 	object.yvel += 16384
 	if object.yvel > 393216
 		ObjectTileCollision(0, 0, 8, 0)
-		if checkResult == 1
+		if checkResult == true
 			if object.propertyValue == 1
 				arrayPos0 = object.value1
 				object[arrayPos0].state++

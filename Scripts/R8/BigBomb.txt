@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 67 : TYPE_BIGBOMB
+
 
 
 
@@ -16,7 +16,7 @@ event ObjectUpdate
 	case 0
 		object.priority = 1
 		ObjectTileCollision(0, 0, 27, 0)
-		if checkResult == 1
+		if checkResult == true
 			if object.propertyValue == 1
 				object.state = 3
 				object.direction = 1
@@ -41,7 +41,7 @@ event ObjectUpdate
 		end if
 		ObjectTileGrip(0, 0, 27, 0)
 		BoxCollisionTest(C_TOUCH, object.entityPos, -96, -128, 96, 27, 0, C_BOX, C_BOX, C_BOX, C_BOX)
-		if checkResult == 1
+		if checkResult == true
 			object.state = 5
 			object.animation = 2
 		end if
@@ -54,14 +54,14 @@ event ObjectUpdate
 		end if
 		ObjectTileGrip(0, 0, 27, 0)
 		BoxCollisionTest(C_TOUCH, object.entityPos, -96, -128, 96, 27, 0, C_BOX, C_BOX, C_BOX, C_BOX)
-		if checkResult == 1
+		if checkResult == true
 			object.state = 5
 			object.animation = 2
 		end if
 		break
 	case 3
 		BoxCollisionTest(C_TOUCH, object.entityPos, -96, -128, 96, 27, 0, C_BOX, C_BOX, C_BOX, C_BOX)
-		if checkResult == 1
+		if checkResult == true
 			object.animation = 1
 			object.state++
 		end if
@@ -69,7 +69,7 @@ event ObjectUpdate
 	case 4
 		object.xpos += 131072
 		ObjectTileGrip(0, 24, 27, 0)
-		if checkResult == 0
+		if checkResult == false
 			object.state = 5
 			object.animation = 2
 		end if
@@ -120,7 +120,7 @@ event ObjectUpdate
 	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 		if object[currentPlayer].collisionPlane == 0
 			BoxCollisionTest(C_TOUCH, object.entityPos, -18, -18, 18, 18, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				CallFunction(Player_Hit)
 			end if
 		end if

@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 63 : TYPE_SGLASER
+
 
 
 
@@ -24,7 +24,7 @@ event ObjectUpdate
 		end if
 		if object.value0 == 0
 			BoxCollisionTest(C_TOUCH, object.entityPos, -96, -128, 96, 128, 0, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				if object.propertyValue == 0
 					PlaySfx(SfxName[Shrink Lazer], 0)
 				else
@@ -38,7 +38,7 @@ event ObjectUpdate
 	case 1
 		object.ypos += 262144
 		ObjectTileCollision(0, 0, 8, 0)
-		if checkResult == 1
+		if checkResult == true
 			object.value1 = object.ypos
 			object.state++
 		end if
@@ -57,7 +57,7 @@ event ObjectUpdate
 			if object.propertyValue == Mini_PlayerFlag
 				if object[currentPlayer].state != Player_State_SizeChange
 					BoxCollisionTest(C_TOUCH, object.entityPos, -4, -8, 4, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-					if checkResult == 1
+					if checkResult == true
 						object[currentPlayer].state = Player_State_SizeChange
 						object[currentPlayer].animation = ANI_SIZE_CHANGE
 						object[currentPlayer].yvel = -262144

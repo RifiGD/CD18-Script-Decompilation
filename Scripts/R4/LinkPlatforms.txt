@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 66 : TYPE_LINKPLATFORMS
+
 
 
 
@@ -37,7 +37,7 @@ event ObjectUpdate
 		object.ypos = object.value2
 		foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 			BoxCollisionTest(C_PLATFORM, object.entityPos, -32, -8, 32, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				object[currentPlayer].xpos += object.value3
 				object[currentPlayer].ypos += object.value4
 			end if

@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 42 : TYPE_BOUNCEPLATFORM
+
 
 
 
@@ -17,7 +17,7 @@ event ObjectUpdate
 	object.yvel += object.value3
 	object.ypos += object.yvel
 	ObjectTileCollision(0, 0, 16, 0)
-	if checkResult == 1
+	if checkResult == true
 		if object.value3 == 4096
 			PlaySfx(SfxName[Impact1], 0)
 		end if
@@ -43,7 +43,7 @@ event ObjectUpdate
 			BoxCollisionTest(C_SOLID, object.entityPos, -32, -16, 32, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
 		end if
 		BoxCollisionTest(C_PLATFORM, object.entityPos, -32, -18, 32, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-		if checkResult == 1
+		if checkResult == true
 			object[currentPlayer].ypos += object.value2
 			object[currentPlayer].ypos += 131072
 		end if

@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 3 : TYPE_MENUCONTROL
+
 
 // Function declarations
 reserve function MenuControl_Function0
@@ -288,23 +288,23 @@ event ObjectUpdate
 		if options.physicalControls == 1
 			arrayPos0 = 32
 			arrayPos0 += object.value3
-			checkResult = 0
+			checkResult = false
 			if object[arrayPos0].state != 1
-				if keyPress[0].left == 1
+				if keyPress[0].left == true
 					object.value3--
 					if object.value3 < 0
 						object.value3 = 7
 					end if
 					PlaySfx(SfxName[Menu Button], 0)
 				end if
-				if keyPress[0].right == 1
+				if keyPress[0].right == true
 					object.value3++
 					if object.value3 > 7
 						object.value3 = 0
 					end if
 					PlaySfx(SfxName[Menu Button], 0)
 				end if
-				if keyPress[0].up == 1
+				if keyPress[0].up == true
 					object.value3 -= 4
 					if object.value3 < 0
 						object.value3 += 8
@@ -314,7 +314,7 @@ event ObjectUpdate
 					end if
 					PlaySfx(SfxName[Menu Button], 0)
 				end if
-				if keyPress[0].down == 1
+				if keyPress[0].down == true
 					object.value3 += 4
 					if object.value3 > 7
 						object.value3 -= 8
@@ -324,14 +324,14 @@ event ObjectUpdate
 					end if
 					PlaySfx(SfxName[Menu Button], 0)
 				end if
-				if keyPress[0].start == 1
-					checkResult = 1
+				if keyPress[0].start == true
+					checkResult = true
 				end if
-				if keyPress[0].buttonA == 1
-					checkResult = 1
+				if keyPress[0].buttonA == true
+					checkResult = true
 				end if
 			end if
-			if checkResult == 1
+			if checkResult == true
 				arrayPos0 = 32
 				arrayPos0 += object.value3
 				if object[arrayPos0].value4 == 0
@@ -394,28 +394,28 @@ event ObjectUpdate
 			else
 				object.value3 = -1
 			end if
-			if keyPress[0].left == 1
+			if keyPress[0].left == true
 				object.value3 = 7
 				object.value2 = -1
 				options.physicalControls = 1
 			end if
-			if keyPress[0].right == 1
+			if keyPress[0].right == true
 				object.value3 = 0
 				object.value2 = -1
 				options.physicalControls = 1
 			end if
-			if keyPress[0].up == 1
+			if keyPress[0].up == true
 				object.value3 = 7
 				object.value2 = -1
 				options.physicalControls = 1
 			end if
-			if keyPress[0].down == 1
+			if keyPress[0].down == true
 				object.value3 = 0
 				object.value2 = -1
 				options.physicalControls = 1
 			end if
 		end if
-		if keyPress[0].buttonB == 1
+		if keyPress[0].buttonB == true
 			object.value3 = 7
 			arrayPos0 = 32
 			arrayPos0 += object.value3
@@ -475,46 +475,46 @@ event ObjectUpdate
 	case 7
 		if options.physicalControls == 1
 			if timeAttack.menuSection == 0
-				if keyPress[0].up == 1
+				if keyPress[0].up == true
 					object.state = 9
 				end if
-				if keyPress[0].down == 1
+				if keyPress[0].down == true
 					object.state = 8
 				end if
-				if keyPress[0].left == 1
+				if keyPress[0].left == true
 					object.value5--
 					if object.value5 < 0
 						object.value5 = 2
 					end if
 				end if
-				if keyPress[0].right == 1
+				if keyPress[0].right == true
 					object.value5++
 					if object.value5 > 2
 						object.value5 = 0
 					end if
 				end if
 			else
-				if keyPress[0].left == 1
+				if keyPress[0].left == true
 					object.value5 -= 2
 					if object.value5 < 0
 						object.value5 = 2
 					end if
 				end if
-				if keyPress[0].right == 1
+				if keyPress[0].right == true
 					object.value5 += 2
 					if object.value5 > 2
 						object.value5 = 0
 					end if
 				end if
 			end if
-			checkResult = 0
-			if keyPress[0].start == 1
-				checkResult = 1
+			checkResult = false
+			if keyPress[0].start == true
+				checkResult = true
 			end if
-			if keyPress[0].buttonA == 1
-				checkResult = 1
+			if keyPress[0].buttonA == true
+				checkResult = true
 			end if
-			if keyPress[0].buttonB == 1
+			if keyPress[0].buttonB == true
 				PlaySfx(SfxName[Back Button], 0)
 				object[40].state = 2
 				object.state = 13
@@ -526,7 +526,7 @@ event ObjectUpdate
 				arrayPos0 += 40
 				object[arrayPos0].drawOrder = 2
 			end if
-			if checkResult == 1
+			if checkResult == true
 				switch object.value5
 				case 0
 					PlaySfx(SfxName[Back Button], 0)
@@ -585,7 +585,7 @@ event ObjectUpdate
 					end if
 				end if
 			end if
-			if keyPress[0].buttonB == 1
+			if keyPress[0].buttonB == true
 				PlaySfx(SfxName[Back Button], 0)
 				object[40].state = 2
 				object.state = 13
@@ -636,11 +636,11 @@ event ObjectUpdate
 					end if
 				end if
 			end if
-			if keyPress[0].left == 1
+			if keyPress[0].left == true
 				object.value5 = 2
 				options.physicalControls = 1
 			end if
-			if keyPress[0].right == 1
+			if keyPress[0].right == true
 				object.value5 = 0
 				options.physicalControls = 1
 			end if

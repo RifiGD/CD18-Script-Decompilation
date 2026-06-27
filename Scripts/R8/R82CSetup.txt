@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 40 : TYPE_R8SETUP
+
 
 
 

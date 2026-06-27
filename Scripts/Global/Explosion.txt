@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 23 : TYPE_EXPLOSION
+
 
 event ObjectUpdate
 	object.value0++

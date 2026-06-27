@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 42 : TYPE_CPLATFORMS
+
 
 
 
@@ -105,7 +105,7 @@ event ObjectUpdate
 		if object.propertyValue == 1
 			if object.value6 == 1
 				BoxCollisionTest(C_PLATFORM, object.entityPos, -16, -5, 16, 11, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-				if checkResult == 1
+				if checkResult == true
 					object[currentPlayer].xpos += object.value4
 					object[currentPlayer].ypos += object.value5
 				end if

@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 37 : TYPE_OBJECTSCORE
+
 
 
 event ObjectUpdate

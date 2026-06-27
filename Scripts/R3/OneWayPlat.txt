@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 44 : TYPE_ONEWAYPLATFORM
+
 
 // Function declarations
 reserve function OneWayPlatform_DebugDraw

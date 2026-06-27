@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 59 : TYPE_AMENBOSHOT
+
 
 
 
@@ -18,7 +18,7 @@ event ObjectUpdate
 	end if
 	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 		BoxCollisionTest(C_TOUCH, object.entityPos, -4, -4, 4, 4, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-		if checkResult == 1
+		if checkResult == true
 			CallFunction(Player_Hit)
 		end if
 	next

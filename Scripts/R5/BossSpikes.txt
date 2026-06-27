@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 71 : TYPE_BOSSSPIKES
+
 
 // Time Period Aliases
 private alias object[9].propertyValue : hud.currentTimePeriod
@@ -69,14 +69,14 @@ event ObjectUpdate
 			BoxCollisionTest(C_SOLID, object.entityPos, -24, -32, 0, 32, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
 		else
 			BoxCollisionTest(C_TOUCH, object.entityPos, -64, -32, 0, 32, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				object[currentPlayer].xpos = object[currentPlayer].collisionRight
 				object[currentPlayer].xpos <<= 16
 				object[currentPlayer].xpos += object.xpos
 			end if
 		end if
 		BoxCollisionTest(C_TOUCH, object.entityPos, 0, -32, 24, 32, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-		if checkResult == 1
+		if checkResult == true
 			CallFunction(Player_Hit)
 			if object[currentPlayer].state == Player_State_GotHit
 				object[+6].value3 = 49152

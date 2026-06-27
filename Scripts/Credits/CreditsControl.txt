@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 1 : TYPE_CREDITSCONTROL
+
 
 public alias 256 : GROUP_PLAYERS
 public alias arrayPos6 : currentPlayer
@@ -42,10 +42,10 @@ event ObjectUpdate
 		break
 	case 2
 		object.value2++
-		if keyDown[0].buttonA == 1
+		if keyDown[0].buttonA == true
 			object.value2++
 		end if
-		if keyDown[0].buttonC == 1
+		if keyDown[0].buttonC == true
 			object.value2++
 		end if
 		temp0 = object.value2
@@ -55,11 +55,11 @@ event ObjectUpdate
 			object.state = 3
 			object.value0 = 0
 		end if
-		if keyPress[0].start == 1
+		if keyPress[0].start == true
 			object.state = 3
 			object.value0 = 0
 		end if
-		if keyPress[0].buttonB == 1
+		if keyPress[0].buttonB == true
 			object.state = 3
 			object.value0 = 0
 		end if

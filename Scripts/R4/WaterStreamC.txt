@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 81 : TYPE_WATERSTREAMC
+
 
 
 
@@ -16,7 +16,7 @@ event ObjectUpdate
 		object.propertyValue = 1
 		foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 			BoxCollisionTest(C_TOUCH, object.entityPos, object.value2, object.value4, object.value3, object.value5, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				if object[currentPlayer].state != Player_State_Hurt
 					if object[currentPlayer].state != Player_State_Death
 						if object[currentPlayer].state != Player_State_Drown
@@ -42,10 +42,10 @@ event ObjectUpdate
 			else
 				if object[currentPlayer].state == Player_State_WaterCurrent
 					if player.waterStream == 0
-						if object[currentPlayer].left == 1
+						if object[currentPlayer].left == true
 							object[currentPlayer].xvel = -131072
 						end if
-						if object[currentPlayer].right == 1
+						if object[currentPlayer].right == true
 							object[currentPlayer].xvel = 131072
 						end if
 						object[currentPlayer].speed = object[currentPlayer].xvel

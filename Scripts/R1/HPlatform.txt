@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 49 : TYPE_HORZPLATFORM
+
 
 // Function declarations
 reserve function HorzPlatform_DebugDraw
@@ -69,7 +69,7 @@ event ObjectUpdate
 	object.xpos = object.value3
 	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 		BoxCollisionTest(C_PLATFORM, object.entityPos, -32, -9, 32, 12, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-		if checkResult == 1
+		if checkResult == true
 			object.value0 = 1
 			object[currentPlayer].xpos += object.value4
 			object[currentPlayer].ypos += object.value2

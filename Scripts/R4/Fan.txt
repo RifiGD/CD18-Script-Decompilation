@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 55 : TYPE_FAN
+
 
 // Time Period Aliases
 private alias object[9].propertyValue : hud.currentTimePeriod

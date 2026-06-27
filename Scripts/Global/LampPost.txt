@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 15 : TYPE_LAMPPOST
+
 
 // Time Period Aliases
 private alias object[9].propertyValue : hud.currentTimePeriod
@@ -37,18 +37,18 @@ event ObjectUpdate
 	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 		if object.state == 0
 			BoxCollisionTest(C_TOUCH, object.entityPos, -8, -32, 8, 32, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				lampPostID = object.entityPos
 				if object[0].xpos < object.xpos
 					lampPostSide = -1572864
 					ObjectTileCollision(2, -24, 0, 0)
-					if checkResult == 1
+					if checkResult == true
 						lampPostSide = 0
 					end if
 				else
 					lampPostSide = 1572864
 					ObjectTileCollision(1, 24, 0, 0)
-					if checkResult == 1
+					if checkResult == true
 						lampPostSide = 0
 					end if
 				end if

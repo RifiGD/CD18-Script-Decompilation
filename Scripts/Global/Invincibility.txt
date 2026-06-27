@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 31 : TYPE_INVINCIBILITY
+
 
 
 event ObjectUpdate

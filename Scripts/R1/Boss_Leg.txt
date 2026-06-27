@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 56 : TYPE_BOSSLEG
+
 
 // Function declarations
 reserve function BossLeg_Function108
@@ -158,7 +158,7 @@ event ObjectUpdate
 		foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 			if object[currentPlayer].value7 == 0
 				BoxCollisionTest(C_TOUCH, object.entityPos, -12, -20, 12, -20, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-				if checkResult == 1
+				if checkResult == true
 					arrayPos0 = object.value0
 					arrayPos1 = object[arrayPos0].value0
 					arrayPos0 = object[arrayPos1].value0

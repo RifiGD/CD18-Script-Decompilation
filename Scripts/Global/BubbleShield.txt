@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 30 : TYPE_BUBBLESHIELD
+
 
 // Tables
 public table BubbleShield_table9

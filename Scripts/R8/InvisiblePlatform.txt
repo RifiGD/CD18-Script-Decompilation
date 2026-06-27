@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 48 : TYPE_INVPLATFORM
+
 
 // Function declarations
 reserve function InvPlatform_Function83

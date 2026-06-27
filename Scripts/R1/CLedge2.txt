@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 58 : TYPE_CRUMBLELEDGE2
+
 
 // Function declarations
 reserve function CrumbleLedge2_DebugDraw
@@ -50,7 +50,7 @@ event ObjectUpdate
 			foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 				if object.type != TypeName[Blank Object]
 					BoxCollisionTest(C_PLATFORM, object.entityPos, -40, -24, 40, -8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-					if checkResult == 1
+					if checkResult == true
 						temp0 = 1
 						temp1 = 0
 						object.value1 = object.xpos

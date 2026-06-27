@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 12 : TYPE_UFO
+
 
 
 

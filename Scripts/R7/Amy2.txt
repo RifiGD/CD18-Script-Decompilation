@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 59 : TYPE_AMY2
+
 
 
 
@@ -57,11 +57,11 @@ event ObjectUpdate
 				object.xvel += 8192
 			end if
 			BoxCollisionTest(C_TOUCH, object.entityPos, -32, -360, 4, 360, 0, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				if object[0].gravity == 0
 					if object[0].direction == object.direction
 						BoxCollisionTest(C_TOUCH, object.entityPos, -32, -20, 4, 20, 0, C_BOX, C_BOX, C_BOX, C_BOX)
-						if checkResult == 1
+						if checkResult == true
 							if object[0].animation == 9
 								object.state = 3
 								object.frame = 9
@@ -108,11 +108,11 @@ event ObjectUpdate
 				object.xvel -= 8192
 			end if
 			BoxCollisionTest(C_TOUCH, object.entityPos, -4, -360, 32, 360, 0, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				if object[0].gravity == 0
 					if object[0].direction == object.direction
 						BoxCollisionTest(C_TOUCH, object.entityPos, -32, -20, 4, 20, 0, C_BOX, C_BOX, C_BOX, C_BOX)
-						if checkResult == 1
+						if checkResult == true
 							if object[0].animation == 9
 								object.state = 3
 								object.frame = 9
@@ -166,7 +166,7 @@ event ObjectUpdate
 			object.frame = 0
 		end if
 		BoxCollisionTest(C_TOUCH, object.entityPos, -4, -360, 4, 360, 0, C_BOX, C_BOX, C_BOX, C_BOX)
-		if checkResult == 0
+		if checkResult == false
 			if object[0].gravity == 0
 				object.state = 0
 				object.frame = 4
@@ -261,7 +261,7 @@ event ObjectUpdate
 		object.yvel += 16384
 		object.ypos += object.yvel
 		ObjectTileCollision(0, 0, 19, 0)
-		if checkResult == 1
+		if checkResult == true
 			object.yvel = 0
 			object.value5 = 0
 		end if

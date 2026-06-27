@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 57 : TYPE_SEMIBOMB
+
 
 
 
@@ -19,7 +19,7 @@ event ObjectUpdate
 		object.ypos += object.value1
 		object.value1 += 8192
 		ObjectTileCollision(0, 0, 8, 0)
-		if checkResult == 1
+		if checkResult == true
 			object.state = 1
 		end if
 	else
@@ -38,7 +38,7 @@ event ObjectUpdate
 	end if
 	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 		BoxCollisionTest(C_TOUCH, object.entityPos, -8, -8, 8, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-		if checkResult == 1
+		if checkResult == true
 			CallFunction(Player_Hit)
 		end if
 	next

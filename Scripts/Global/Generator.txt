@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 35 : TYPE_GENERATOR
+
 
 // Function declarations
 reserve function Generator_DebugDraw
@@ -39,7 +39,7 @@ public function Generator_Function79
 	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 		if object[currentPlayer].animation == ANI_JUMPING
 			BoxCollisionTest(C_TOUCH, object.entityPos, -38, -32, 38, 32, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				object.state = 2
 				object.ypos = object.value1
 				generator.destroyed = 1

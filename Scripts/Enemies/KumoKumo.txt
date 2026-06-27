@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 63 : TYPE_KUMOKUMO
+
 
 // Function declarations
 reserve function KumoKumo_DebugDraw
@@ -42,7 +42,7 @@ event ObjectUpdate
 		object.ypos += object.yvel
 		if object.yvel > 0
 			ObjectTileCollision(0, 0, 24, 0)
-			if checkResult == 1
+			if checkResult == true
 				object.ypos += 524288
 				object.frame = 0
 				object.drawOrder = 3
@@ -108,13 +108,13 @@ event ObjectUpdate
 	end switch
 	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 		BoxCollisionTest(C_TOUCH, object.entityPos, -24, -16, 24, 16, currentPlayer, object[currentPlayer].value41, object[currentPlayer].value39, object[currentPlayer].value42, object[currentPlayer].value40)
-		if checkResult == 1
+		if checkResult == true
 			CallFunction(Player_BadnikBreak)
 		end if
 		if object.state == 1
 			if object.direction == 0
 				BoxCollisionTest(C_TOUCH, object.entityPos, -64, -32, 0, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-				if checkResult == 1
+				if checkResult == true
 					object.direction = 1
 					object.state = 3
 					object.frame = 0
@@ -122,7 +122,7 @@ event ObjectUpdate
 				end if
 			else
 				BoxCollisionTest(C_TOUCH, object.entityPos, 0, -32, 64, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-				if checkResult == 1
+				if checkResult == true
 					object.direction = 0
 					object.state = 3
 					object.frame = 0

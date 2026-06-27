@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 65 : TYPE_FALLINGBLOCKS
+
 
 
 
@@ -17,7 +17,7 @@ event ObjectUpdate
 		foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 			if object.state == 0
 				BoxCollisionTest(C_TOUCH, object.entityPos, -16, -64, 16, 192, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-				if checkResult == 1
+				if checkResult == true
 					object.priority = 1
 					object.yvel = 0
 					object.value2 = object.ypos
@@ -48,7 +48,7 @@ event ObjectUpdate
 		object.yvel += 8192
 		object.ypos += object.yvel
 		ObjectTileCollision(0, 0, 32, 0)
-		if checkResult == 1
+		if checkResult == true
 			object.state++
 		end if
 		break

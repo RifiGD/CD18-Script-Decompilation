@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 59 : TYPE_HOTARUTRAIL
+
 
 
 

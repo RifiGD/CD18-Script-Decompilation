@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 51 : TYPE_BLADEPOLE
+
 
 
 
@@ -15,7 +15,7 @@ event ObjectUpdate
 	switch object.state
 	case 0
 		ObjectTileGrip(0, 0, 48, 0)
-		if checkResult == 1
+		if checkResult == true
 			object.state = 1
 			object.value0 = -64
 		else
@@ -27,7 +27,7 @@ event ObjectUpdate
 			object.value0++
 			object.xpos += 65536
 			ObjectTileGrip(0, 0, 48, 0)
-			if checkResult == 0
+			if checkResult == false
 				object.state = 2
 				object.value0 = -64
 			end if
@@ -41,7 +41,7 @@ event ObjectUpdate
 			object.value0++
 			object.xpos -= 65536
 			ObjectTileGrip(0, 0, 48, 0)
-			if checkResult == 0
+			if checkResult == false
 				object.state = 1
 				object.value0 = -64
 			end if
@@ -82,13 +82,13 @@ event ObjectUpdate
 		switch object.frame
 		case 1
 			BoxCollisionTest(C_TOUCH, object.entityPos, -28, -48, 28, -40, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				CallFunction(Player_Hit)
 			end if
 			break
 		case 3
 			BoxCollisionTest(C_TOUCH, object.entityPos, -28, 16, 28, 24, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				CallFunction(Player_Hit)
 			end if
 			break

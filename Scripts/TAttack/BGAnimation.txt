@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 1 : TYPE_BGANIMATION
+
 
 public alias 256 : GROUP_PLAYERS
 public alias arrayPos6 : currentPlayer

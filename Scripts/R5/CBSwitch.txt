@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 46 : TYPE_CBSWITCH
+
 
 // Time Period Aliases
 private alias object[9].propertyValue : hud.currentTimePeriod
@@ -39,7 +39,7 @@ event ObjectUpdate
 			if object[currentPlayer].xpos > object.xpos
 				BoxCollisionTest(C_TOUCH, object.entityPos, 0, -12, 16, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
 				object.value1 = checkResult
-				if checkResult == 1
+				if checkResult == true
 					switch object.state
 					case 0
 					case 3
@@ -56,7 +56,7 @@ event ObjectUpdate
 			else
 				BoxCollisionTest(C_TOUCH, object.entityPos, -16, -12, 0, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
 				object.value1 = checkResult
-				if checkResult == 1
+				if checkResult == true
 					switch object.state
 					case 0
 					case 3

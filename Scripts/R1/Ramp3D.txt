@@ -7,7 +7,10 @@
 
 //-------Aliases-------//
 
-private alias 70 : TYPE_3DRAMP
+
+
+// Priority Aliases
+private alias 1 : PRIORITY_ACTIVE
 
 // Aliases
 private alias 0	:	RAMP3D_RUN
@@ -594,7 +597,7 @@ event ObjectUpdate
 	case RAMP3D_EXIT
 		if object[0].state == Player_State_Static
 			BoxCollisionTest(C_TOUCH, object.entityPos, -16, -16, 16, 16, 0, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				object[0].state = Player_State_Air
 				object[0].tileCollisions = true
 				object[0].speed = 262144
@@ -685,10 +688,10 @@ event ObjectUpdate
 		end if
 		object.value1 = object[0].xpos
 		break
-	case 5
+	case RAMP3D_DROP
 		if object[0].state == Player_State_Air
 			BoxCollisionTest(C_TOUCH, object.entityPos, -16, -16, 16, 16, 0, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				object[0].animation = ANI_DROPPING
 				object.value1 = object[0].xpos
 			end if
@@ -699,7 +702,7 @@ event ObjectUpdate
 			end if
 		end if
 		break
-	case 6
+	case RAMP3D_SET_YBOUND2
 		if object[0].ypos < object.ypos
 			if object[0].xpos > object.xpos
 				stage.curYBoundary2 = 792
@@ -710,7 +713,7 @@ event ObjectUpdate
 			end if
 		end if
 		break
-	case 7
+	case RAMP3D_RUN_FROM_TOP
 		if object[0].xpos > object.xpos
 			stage.curYBoundary2 = 1024
 			if object[0].gravity == 0
@@ -723,9 +726,9 @@ event ObjectUpdate
 			stage.deathBoundary = 51904512
 		end if
 		break
-	case 8
+	case RAMP3D_EXIT_BOOST
 		BoxCollisionTest(C_TOUCH, object.entityPos, -16, -16, 16, 16, 0, C_BOX, C_BOX, C_BOX, C_BOX)
-		if checkResult == 1
+		if checkResult == true
 			object[0].value1 = 0
 			object[0].state = 13
 			object[0].tileCollisions = 1
@@ -771,7 +774,7 @@ event ObjectStartup
 	if object[0].xpos > 131072000
 		stage.curYBoundary2 = 1280
 		object[15].type = TypeName[Background FX]
-		object[15].priority = 1
+		object[15].priority = PRIORITY_ACTIVE
 		object[15].drawOrder = 0
 	end if
 	if object[0].xpos > 262144000

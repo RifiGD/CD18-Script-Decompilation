@@ -7,9 +7,9 @@
 
 //-------Aliases-------//
 
-private alias 2 : TYPE_SPECIALSETUP
 
-// TextInfo aliases
+
+// Tile Layer aliases
 private alias 0 : TILELAYER_NOSCROLL
 private alias 1 : TILELAYER_HSCROLL
 private alias 2 : TILELAYER_VSCROLL
@@ -133,10 +133,15 @@ event ObjectStartup
 		SetMusicTrack("US/ZoneComplete.ogg", 1, 0)
 	end if
 	stage.pauseEnabled = true
-	stage.timeEnabled = 0
+	stage.timeEnabled = false
+
+	// "What... again"
+	// in CD11, it just cycled through Blank Objects and blanked them... for some reason
+	// Perhaps this implies that it was meant to be like this but they accidentally typed a wrong name in 2011?
 	foreach (TypeName[Special Setup], arrayPos0, ALL_ENTITIES)
 		ResetObjectEntity(arrayPos0, TypeName[Blank Object], 0, 0, 0)
 	next
+
 	object[23].type = TypeName[Special Setup]
 	object[23].priority = 1
 	object[23].drawOrder = 2

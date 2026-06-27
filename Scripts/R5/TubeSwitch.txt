@@ -7,14 +7,14 @@
 
 //-------Aliases-------//
 
-private alias 67 : TYPE_TUBESWITCH
+
 
 
 
 event ObjectUpdate
 	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 		BoxCollisionTest(C_TOUCH, object.entityPos, -16, -16, 16, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-		if checkResult == 1
+		if checkResult == true
 			switch object.propertyValue
 			case 0
 				if object[currentPlayer].speed >= 0

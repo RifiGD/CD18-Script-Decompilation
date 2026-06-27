@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 61 : TYPE_BOUNCEPOLE
+
 
 // Function declarations
 reserve function BouncePole_DebugDraw
@@ -27,7 +27,7 @@ end function
 event ObjectUpdate
 	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 		BoxCollisionTest(C_TOUCH, object.entityPos, -16, -8, 16, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-		if checkResult == 1
+		if checkResult == true
 			if object[currentPlayer].gravity == 1
 				if object[currentPlayer].yvel > 0
 					object[currentPlayer].state = Player_State_Air

@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 70 : TYPE_EGGMANSTATUE
+
 
 private alias object.value0 : object.timer
 

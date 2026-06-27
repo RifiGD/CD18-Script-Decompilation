@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 66 : TYPE_AMYROSE
+
 
 
 
@@ -36,7 +36,7 @@ event ObjectUpdate
 		if object.yvel > 0
 			object.frame = 7
 		end if
-		if checkResult == 1
+		if checkResult == true
 			object.frame = 6
 			object.yvel = -196608
 			object.state++
@@ -49,7 +49,7 @@ event ObjectUpdate
 		if object.yvel > 0
 			object.frame = 7
 		end if
-		if checkResult == 1
+		if checkResult == true
 			object.yvel = 0
 			object.state++
 		end if

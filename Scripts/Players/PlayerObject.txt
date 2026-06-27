@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 1 : TYPE_PLAYEROBJECT
+
 
 public alias 256 : GROUP_PLAYERS
 public alias arrayPos6 : currentPlayer
@@ -657,7 +657,7 @@ end function
 
 
 public function Player_State_Static
-	checkResult = 0
+	checkResult = false
 end function
 
 // Amy Rose's favorite function
@@ -1163,7 +1163,7 @@ public function Player_HandleAirMovement
 		player.yvel = 1048576
 	end if
 	if player.yvel < player.jumpCap
-		if player.jumpHold == 0
+		if player.jumpHold == false
 			if player.timer > 0
 				player.yvel = player.jumpCap
 				temp0 = player.speed

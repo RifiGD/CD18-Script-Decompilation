@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 14 : TYPE_YELLOWSPRING
+
 
 // Function declarations
 reserve function YellowSpring_DebugDraw
@@ -55,7 +55,7 @@ event ObjectUpdate
 			if temp0 == 0
 				BoxCollisionTest(C_SOLID, object.entityPos, -16, -8, 16, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
 				BoxCollisionTest(C_TOUCH, object.entityPos, -16, -10, 16, -6, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-				if checkResult == 1
+				if checkResult == true
 					object[currentPlayer].value9 = ANI_WALKING
 					if object[currentPlayer].animation == ANI_RUNNING
 						object[currentPlayer].value9 = ANI_RUNNING
@@ -76,7 +76,7 @@ event ObjectUpdate
 				if object[currentPlayer].yvel >= 0
 					BoxCollisionTest(C_PLATFORM, object.entityPos, -16, -8, 16, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
 					BoxCollisionTest(C_TOUCH, object.entityPos, -16, -10, 16, -6, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-					if checkResult == 1
+					if checkResult == true
 						object[currentPlayer].value9 = ANI_WALKING
 						if object[currentPlayer].animation == ANI_RUNNING
 							object[currentPlayer].value9 = ANI_RUNNING
@@ -99,7 +99,7 @@ event ObjectUpdate
 			BoxCollisionTest(C_SOLID, object.entityPos, -8, -16, 8, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
 			if object[currentPlayer].gravity == 0
 				BoxCollisionTest(C_TOUCH, object.entityPos, 6, -15, 11, 15, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-				if checkResult == 1
+				if checkResult == true
 					object.animationTimer = 2
 					object[currentPlayer].angle = 0
 					object[currentPlayer].speed = 655360
@@ -112,7 +112,7 @@ event ObjectUpdate
 			else
 				if object.value7 == 1
 					BoxCollisionTest(C_TOUCH, object.entityPos, 6, -15, 11, 15, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-					if checkResult == 1
+					if checkResult == true
 						object.animationTimer = 2
 						object[currentPlayer].angle = 0
 						object[currentPlayer].speed = 655360
@@ -129,7 +129,7 @@ event ObjectUpdate
 			BoxCollisionTest(C_SOLID, object.entityPos, -8, -16, 8, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
 			if object[currentPlayer].gravity == 0
 				BoxCollisionTest(C_TOUCH, object.entityPos, -10, -15, -6, 15, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-				if checkResult == 1
+				if checkResult == true
 					object.animationTimer = 2
 					object[currentPlayer].speed = -655360
 					object[currentPlayer].collisionMode = 0
@@ -141,7 +141,7 @@ event ObjectUpdate
 			else
 				if object.value7 == 1
 					BoxCollisionTest(C_TOUCH, object.entityPos, -10, -15, -6, 15, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-					if checkResult == 1
+					if checkResult == true
 						object.animationTimer = 2
 						object[currentPlayer].speed = -655360
 						object[currentPlayer].yvel = 131072
@@ -157,7 +157,7 @@ event ObjectUpdate
 		case 3
 			BoxCollisionTest(C_SOLID, object.entityPos, -16, -8, 16, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
 			BoxCollisionTest(C_TOUCH, object.entityPos, -15, 6, 15, 10, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				if object[currentPlayer].collisionMode == 2
 					FlipSign(object[currentPlayer].speed)
 					FlipSign(object[currentPlayer].xvel)
@@ -172,7 +172,7 @@ event ObjectUpdate
 			break
 		case 4
 			BoxCollisionTest(C_TOUCH, object.entityPos, -12, -16, 12, 12, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				if object[currentPlayer].gravity == 0
 					object.animationTimer = 2
 					object[currentPlayer].state = Player_State_Air
@@ -199,7 +199,7 @@ event ObjectUpdate
 			break
 		case 5
 			BoxCollisionTest(C_TOUCH, object.entityPos, -12, -16, 12, 12, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				if object[currentPlayer].yvel >= 0
 					object.animationTimer = 2
 					object[currentPlayer].state = Player_State_Air
@@ -226,7 +226,7 @@ event ObjectUpdate
 			break
 		case 6
 			BoxCollisionTest(C_TOUCH, object.entityPos, -12, -12, 12, 12, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				object.animationTimer = 2
 				object[currentPlayer].state = Player_State_Air
 				object[currentPlayer].gravity = 1
@@ -238,7 +238,7 @@ event ObjectUpdate
 			break
 		case 7
 			BoxCollisionTest(C_TOUCH, object.entityPos, -12, -12, 12, 12, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				object.animationTimer = 2
 				object[currentPlayer].state = Player_State_Air
 				object[currentPlayer].gravity = 1

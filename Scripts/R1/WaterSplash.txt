@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 72 : TYPE_WATERSPLASH
+
 
 
 
@@ -15,7 +15,7 @@ event ObjectUpdate
 	if object.state == 0
 		foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 			BoxCollisionTest(C_TOUCH, object.entityPos, -16, 0, 16, 32, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				object.value0 = 4
 				object.state = 1
 				object.drawOrder = 4

@@ -7,8 +7,6 @@
 
 //-------Aliases-------//
 
-private alias 62 : TYPE_REDFISH
-
 // Time Period Aliases
 private alias object[9].propertyValue : hud.currentTimePeriod
 

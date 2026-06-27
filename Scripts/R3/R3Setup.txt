@@ -6,7 +6,7 @@
 // ----------------------------------
 
 //-------Aliases-------//
-private alias 40 : TYPE_R3SETUP
+
 
 // Time Period Aliases
 private alias object[9].propertyValue : hud.currentTimePeriod

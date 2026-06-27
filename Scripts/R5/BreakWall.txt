@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 58 : TYPE_BREAKABLEWALL
+
 
 // Time Period Aliases
 private alias object[9].propertyValue : hud.currentTimePeriod
@@ -44,7 +44,7 @@ event ObjectUpdate
 	else
 		if object.state == 1
 			BoxCollisionTest(C_TOUCH, object.entityPos, -384, -256, 384, 256, 0, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 0
+			if checkResult == false
 				object.state = 0
 				if object.priority != 4
 					object.priority = 0
@@ -54,7 +54,7 @@ event ObjectUpdate
 			foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 				if object[currentPlayer].animation == ANI_JUMPING
 					BoxCollisionTest(C_TOUCH, object.entityPos, -18, -48, 18, 48, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-					if checkResult == 1
+					if checkResult == true
 						object.state = 1
 						if object.priority != 4
 							object.priority = 1

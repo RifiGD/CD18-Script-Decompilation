@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 53 : TYPE_EGGMAN
+
 
 // Time Period Aliases
 private alias object[9].propertyValue : hud.currentTimePeriod
@@ -24,13 +24,13 @@ reserve function Eggman_Function85
 public function Eggman_Function85
 	object.ypos -= 2097152
 	ObjectTileGrip(0, 6, 176, 0)
-	if checkResult == 0
+	if checkResult == false
 		object.ypos += 1048576
 		ObjectTileGrip(0, 6, 176, 0)
-		if checkResult == 0
+		if checkResult == false
 			object.ypos += 1048576
 			ObjectTileGrip(0, 6, 176, 0)
-			if checkResult == 0
+			if checkResult == false
 				object.ypos += 1048576
 			end if
 		end if
@@ -47,7 +47,7 @@ event ObjectUpdate
 		temp0 -= screen.xsize
 		stage.newXBoundary1 = temp0
 		BoxCollisionTest(C_TOUCH, object.entityPos, -256, -256, 0, 256, 0, C_BOX, C_BOX, C_BOX, C_BOX)
-		if checkResult == 1
+		if checkResult == true
 			CreateTempObject(TypeName[Fade Music], 0, object.xpos, object.ypos)
 			object.direction = 1
 			object.priority = 1
@@ -398,7 +398,7 @@ event ObjectUpdate
 		if object.value2 == 1
 			if object.state < 12
 				BoxCollisionTest(C_TOUCH, object.entityPos, -12, 48, 12, 176, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-				if checkResult == 1
+				if checkResult == true
 					CallFunction(Player_Hit)
 				end if
 			else
@@ -414,7 +414,7 @@ event ObjectUpdate
 				else
 					BoxCollisionTest(C_TOUCH, object.entityPos, -64, -256, 16, 176, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
 				end if
-				if checkResult == 1
+				if checkResult == true
 					CallFunction(Player_Kill)
 				end if
 			end if

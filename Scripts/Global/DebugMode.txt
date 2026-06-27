@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 7 : TYPE_DEBUGMODE
+
 
 // Function declarations
 reserve function DebugMode_SpawnBlank
@@ -93,19 +93,19 @@ event ObjectUpdate
 	// if the timer is disabled
 	if DebugMode_unusedTimer == 0
 		temp0 = 0
-		if keyDown[0].left == 1
+		if keyDown[0].left == true
 			object.xpos -= object.yvel
 			temp0 = 1
 		end if
-		if keyDown[0].right == 1
+		if keyDown[0].right == true
 			object.xpos += object.yvel
 			temp0 = 1
 		end if
-		if keyDown[0].up == 1
+		if keyDown[0].up == true
 			object.ypos -= object.yvel
 			temp0 = 1
 		end if
-		if keyDown[0].down == 1
+		if keyDown[0].down == true
 			object.ypos += object.yvel
 			temp0 = 1
 		end if
@@ -119,7 +119,7 @@ event ObjectUpdate
 		end if
 		object.value3 = 0
 		object.value4 = 0
-		if keyPress[0].buttonB == 1
+		if keyPress[0].buttonB == true
 			if DebugMode_unusedTimer == 0
 				if stage.playerListPos == 1
 					object.type = TypeName[Tails Object]
@@ -141,21 +141,21 @@ event ObjectUpdate
 				object.visible = 1
 			end if
 		else
-			if keyPress[0].buttonA == 1
+			if keyPress[0].buttonA == true
 				object.value16++
 				if object.value16 >= DebugMode_ObjCount
 					object.value16 = 0
 				end if
 			end if
-			if keyDown[0].buttonA == 1
-				if keyPress[0].buttonC == 1
+			if keyDown[0].buttonA == true
+				if keyPress[0].buttonC == true
 					object.value16--
 					if object.value16 < 0
 						object.value16 += DebugMode_ObjCount
 					end if
 				end if
 			else
-				if keyPress[0].buttonC == 1
+				if keyPress[0].buttonC == true
 					GetTableValue(temp0, object.value16, DebugMode_SpawnTable)
 					CallFunction(temp0)
 					object[tempObjectPos].priority = 4
@@ -168,7 +168,7 @@ event ObjectUpdate
 		DebugMode_unusedTimer += 8
 		SetScreenFade(0, 0, 0, DebugMode_unusedTimer)
 		
-		// fun fact it never loads this stage, which is R12A lol.
+		//this loadsis D.A Garden lol
 		if DebugMode_unusedTimer == 384
 			lampPostID = 0
 			stage.activeList = PRESENTATION_STAGE

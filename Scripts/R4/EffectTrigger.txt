@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 46 : TYPE_EFFECTTRIGGER
+
 
 
 
@@ -38,7 +38,7 @@ event ObjectUpdate
 		break
 	case 4
 		BoxCollisionTest(C_TOUCH, object.entityPos, -10, -16, 10, 16, 0, C_BOX, C_BOX, C_BOX, C_BOX)
-		if checkResult == 1
+		if checkResult == true
 			if object[0].state != Player_State_Death
 				if object[0].state != Player_State_Drown
 					warp.timer = 0
@@ -56,12 +56,12 @@ event ObjectUpdate
 		else
 			if object[0].state == Player_State_WaterCurrent
 				BoxCollisionTest(C_TOUCH, object.entityPos, -64, -16, -32, 16, 0, C_BOX, C_BOX, C_BOX, C_BOX)
-				if checkResult == 1
+				if checkResult == true
 					object[0].state = Player_State_Air
 					object[0].animation = ANI_WALKING
 				end if
 				BoxCollisionTest(C_TOUCH, object.entityPos, 32, -16, 64, 16, 0, C_BOX, C_BOX, C_BOX, C_BOX)
-				if checkResult == 1
+				if checkResult == true
 					object[0].state = Player_State_Air
 					object[0].animation = ANI_WALKING
 				end if
@@ -70,7 +70,7 @@ event ObjectUpdate
 		break
 	case 5
 		BoxCollisionTest(C_TOUCH, object.entityPos, -10, -16, 10, 16, 0, C_BOX, C_BOX, C_BOX, C_BOX)
-		if checkResult == 1
+		if checkResult == true
 			if object[0].state != Player_State_Death
 				if object[0].state != Player_State_Drown
 					warp.timer = 0
@@ -88,12 +88,12 @@ event ObjectUpdate
 		else
 			if object[0].state == Player_State_WaterCurrent
 				BoxCollisionTest(C_TOUCH, object.entityPos, -64, -16, -32, 16, 0, C_BOX, C_BOX, C_BOX, C_BOX)
-				if checkResult == 1
+				if checkResult == true
 					object[0].state = Player_State_Ground
 					object[0].animation = ANI_WALKING
 				end if
 				BoxCollisionTest(C_TOUCH, object.entityPos, 32, -16, 64, 16, 0, C_BOX, C_BOX, C_BOX, C_BOX)
-				if checkResult == 1
+				if checkResult == true
 					object[0].state = Player_State_Ground
 					object[0].animation = ANI_WALKING
 				end if
@@ -102,7 +102,7 @@ event ObjectUpdate
 		break
 	case 6
 		BoxCollisionTest(C_TOUCH, object.entityPos, -16, -16, 16, 16, 0, C_BOX, C_BOX, C_BOX, C_BOX)
-		if checkResult == 1
+		if checkResult == true
 			if object[0].state != Player_State_Death
 				if object[0].state != Player_State_Drown
 					object[0].xvel = -262144
@@ -113,7 +113,7 @@ event ObjectUpdate
 		break
 	case 7
 		BoxCollisionTest(C_TOUCH, object.entityPos, -16, -16, 16, 16, 0, C_BOX, C_BOX, C_BOX, C_BOX)
-		if checkResult == 1
+		if checkResult == true
 			if object[0].state != Player_State_Death
 				if object[0].state != Player_State_Drown
 					object[0].xvel = 262144
@@ -124,7 +124,7 @@ event ObjectUpdate
 		break
 	case 8
 		BoxCollisionTest(C_TOUCH, object.entityPos, -16, -16, 16, 16, 0, C_BOX, C_BOX, C_BOX, C_BOX)
-		if checkResult == 1
+		if checkResult == true
 			if object[0].state != Player_State_Death
 				if object[0].state != Player_State_Drown
 					object[0].yvel = -262144
@@ -135,7 +135,7 @@ event ObjectUpdate
 		break
 	case 9
 		BoxCollisionTest(C_TOUCH, object.entityPos, -16, -16, 16, 16, 0, C_BOX, C_BOX, C_BOX, C_BOX)
-		if checkResult == 1
+		if checkResult == true
 			if object[0].state != Player_State_Death
 				if object[0].state != Player_State_Drown
 					object[0].yvel = 262144
@@ -146,7 +146,7 @@ event ObjectUpdate
 		break
 	case 10
 		BoxCollisionTest(C_TOUCH, object.entityPos, -16, -16, 16, 16, 0, C_BOX, C_BOX, C_BOX, C_BOX)
-		if checkResult == 1
+		if checkResult == true
 			if object[0].state != Player_State_Death
 				if object[0].state != Player_State_Drown
 					object[0].xvel = 0
@@ -156,7 +156,7 @@ event ObjectUpdate
 		break
 	case 11
 		BoxCollisionTest(C_TOUCH, object.entityPos, -16, -16, 16, 16, 0, C_BOX, C_BOX, C_BOX, C_BOX)
-		if checkResult == 1
+		if checkResult == true
 			if object[0].state != Player_State_Death
 				if object[0].state != Player_State_Drown
 					object[0].yvel = 0
@@ -166,7 +166,7 @@ event ObjectUpdate
 		break
 	case 12
 		BoxCollisionTest(C_TOUCH, object.entityPos, -16, -16, 16, 16, 0, C_BOX, C_BOX, C_BOX, C_BOX)
-		if checkResult == 1
+		if checkResult == true
 			if object[0].state != Player_State_Death
 				if object[0].state != Player_State_Drown
 					object[0].yvel = 262144

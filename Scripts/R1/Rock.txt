@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 40 : TYPE_ROCK
+
 
 // Function declarations
 reserve function Rock_DebugDraw
@@ -39,6 +39,7 @@ end event
 event ObjectStartup
 	LoadSpriteSheet("R1/Objects.gif")
 	SpriteFrame(-20, -16, 40, 32, 216, 1)
+	
 	SetTableValue(TypeName[Rock], DebugMode_ObjCount, DebugMode_TypesTable)
 	SetTableValue(Rock_DebugDraw, DebugMode_ObjCount, DebugMode_DrawTable)
 	SetTableValue(Rock_DebugSpawn, DebugMode_ObjCount, DebugMode_SpawnTable)

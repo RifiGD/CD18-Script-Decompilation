@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 63 : TYPE_FLOWERPOD
+
 
 
 
@@ -141,7 +141,7 @@ event ObjectUpdate
 		if object.state == 0
 			if object[currentPlayer].animation == ANI_JUMPING
 				BoxCollisionTest(C_TOUCH, object.entityPos, -28, -46, 28, 6, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-				if checkResult == 1
+				if checkResult == true
 					stage.timeEnabled = 0
 					object.state = 1
 					object.frame = 3

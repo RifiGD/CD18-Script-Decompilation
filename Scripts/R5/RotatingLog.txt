@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 57 : TYPE_ROTATINGLOG
+
 
 // Time Period Aliases
 private alias object[9].propertyValue : hud.currentTimePeriod
@@ -78,7 +78,7 @@ event ObjectUpdate
 	object.ypos = object.value2
 	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 		BoxCollisionTest(C_SOLID, object.entityPos, -8, -8, 8, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-		if checkResult == 1
+		if checkResult == true
 			object[currentPlayer].xpos += object.value3
 			object[currentPlayer].ypos += object.value4
 		end if

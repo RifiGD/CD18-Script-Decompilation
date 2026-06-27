@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 8 : TYPE_SRECORDS
+
 
 // Function declarations
 reserve function SRecords_Function6

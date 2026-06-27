@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 77 : TYPE_VOBLOCKS3
+
 
 // Time Period Aliases
 private alias object[9].propertyValue : hud.currentTimePeriod

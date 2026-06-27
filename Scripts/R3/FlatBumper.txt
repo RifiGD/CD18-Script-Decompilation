@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 46 : TYPE_FLATBUMPER
+
 
 // Time Period Aliases
 private alias object[9].propertyValue : hud.currentTimePeriod
@@ -102,7 +102,7 @@ event ObjectUpdate
 			temp0 = 1
 		end if
 		BoxCollisionTest(C_TOUCH, object.entityPos, -16, -14, 16, 0, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-		if checkResult == 1
+		if checkResult == true
 			if object[currentPlayer].state == Player_State_Fly
 				object[currentPlayer].yvel = -262144
 			else
@@ -113,7 +113,7 @@ event ObjectUpdate
 			temp0 = 1
 		end if
 		BoxCollisionTest(C_TOUCH, object.entityPos, -16, 0, 16, 14, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-		if checkResult == 1
+		if checkResult == true
 			if object[currentPlayer].state == Player_State_Fly
 				object[currentPlayer].yvel = 262144
 			else

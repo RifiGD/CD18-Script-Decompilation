@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 51 : TYPE_ROTATINGSPIKES
+
 
 // Function declarations
 reserve function RotatingSpikes_DebugDraw
@@ -75,7 +75,7 @@ event ObjectUpdate
 		object.ypos <<= 7
 		object.ypos += temp3
 		BoxCollisionTest(C_TOUCH, object.entityPos, -12, -12, 12, 12, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-		if checkResult == 1
+		if checkResult == true
 			CallFunction(Player_Hit)
 		end if
 	next

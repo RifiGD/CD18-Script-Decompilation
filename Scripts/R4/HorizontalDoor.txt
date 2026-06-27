@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 54 : TYPE_HORIZONTALDOOR
+
 
 // Function declarations
 reserve function HorizontalDoor_DebugDraw

@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 58 : TYPE_HOTARU
+
 
 // Function declarations
 reserve function Hotaru_DebugDraw
@@ -443,7 +443,7 @@ event ObjectUpdate
 		case 0
 		case 1
 			BoxCollisionTest(C_TOUCH, object.entityPos, -64, -64, 64, 64, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				object.state = 2
 			end if
 			break
@@ -466,7 +466,7 @@ event ObjectUpdate
 				temp0 += 8
 				temp1 -= 8
 				BoxCollisionTest(C_TOUCH, object.entityPos, temp0, -60, temp1, 60, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-				if checkResult == 1
+				if checkResult == true
 					object.value6 = 1
 				end if
 			end if
@@ -479,7 +479,7 @@ event ObjectUpdate
 				object.xpos += object.value3
 				object.ypos -= object.value7
 				BoxCollisionTest(C_TOUCH, object.entityPos, -8, -8, 8, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-				if checkResult == 1
+				if checkResult == true
 					arrayPos1 = object.entityPos
 					arrayPos1++
 					CallFunction(Hotaru_Function98)
@@ -495,7 +495,7 @@ event ObjectUpdate
 				object.xpos += object.value4
 				object.ypos += object.value7
 				BoxCollisionTest(C_TOUCH, object.entityPos, -8, -8, 8, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-				if checkResult == 1
+				if checkResult == true
 					arrayPos1 = object.entityPos
 					arrayPos1 += 2
 					CallFunction(Hotaru_Function98)
@@ -510,7 +510,7 @@ event ObjectUpdate
 						object.xpos = temp6
 						object.ypos = temp7
 						BoxCollisionTest(C_TOUCH, object.entityPos, -12, -12, 12, 12, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-						if checkResult == 1
+						if checkResult == true
 							CallFunction(Player_Hit)
 						end if
 						object.xpos = temp6
@@ -526,7 +526,7 @@ event ObjectUpdate
 						temp1 >>= 1
 						object.ypos += temp1
 						BoxCollisionTest(C_TOUCH, object.entityPos, -12, -12, 12, 12, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-						if checkResult == 1
+						if checkResult == true
 							CallFunction(Player_Hit)
 						end if
 						object.xpos = temp6
@@ -542,7 +542,7 @@ event ObjectUpdate
 						temp1 >>= 1
 						object.ypos += temp1
 						BoxCollisionTest(C_TOUCH, object.entityPos, -12, -12, 12, 12, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-						if checkResult == 1
+						if checkResult == true
 							CallFunction(Player_Hit)
 						end if
 					end if
@@ -563,7 +563,7 @@ event ObjectDraw
 	switch object.state
 	case 0
 		GetBit(checkResult, object.value5, 0)
-		if checkResult == 1
+		if checkResult == true
 			temp0 = object.value3
 			temp0 += object.xpos
 			temp1 = object.ypos
@@ -572,7 +572,7 @@ event ObjectDraw
 			DrawSpriteFX(object.frame, FX_FLIP, temp0, temp1)
 		end if
 		GetBit(checkResult, object.value5, 1)
-		if checkResult == 1
+		if checkResult == true
 			temp0 = object.value4
 			temp0 += object.xpos
 			temp1 = object.ypos
@@ -583,7 +583,7 @@ event ObjectDraw
 		break
 	case 1
 		GetBit(checkResult, object.value5, 0)
-		if checkResult == 1
+		if checkResult == true
 			temp0 = object.value3
 			temp0 += object.xpos
 			temp1 = object.ypos
@@ -592,7 +592,7 @@ event ObjectDraw
 			DrawSpriteFX(object.frame, FX_FLIP, temp0, temp1)
 		end if
 		GetBit(checkResult, object.value5, 1)
-		if checkResult == 1
+		if checkResult == true
 			temp0 = object.value4
 			temp0 += object.xpos
 			temp1 = object.ypos
@@ -608,7 +608,7 @@ event ObjectDraw
 			object.direction = 1
 		end if
 		GetBit(checkResult, object.value5, 0)
-		if checkResult == 1
+		if checkResult == true
 			temp0 = object.value3
 			temp0 += object.xpos
 			temp1 = object.ypos
@@ -616,7 +616,7 @@ event ObjectDraw
 			DrawSpriteFX(object.frame, FX_FLIP, temp0, temp1)
 		end if
 		GetBit(checkResult, object.value5, 1)
-		if checkResult == 1
+		if checkResult == true
 			temp0 = object.value4
 			temp0 += object.xpos
 			temp1 = object.ypos
@@ -632,7 +632,7 @@ event ObjectDraw
 		object.ypos += 104
 		object.ypos <<= 16
 		GetBit(checkResult, object.value5, 0)
-		if checkResult == 1
+		if checkResult == true
 			temp0 = object.value3
 			temp0 += object.xpos
 			temp1 = object.ypos
@@ -640,7 +640,7 @@ event ObjectDraw
 			DrawSpriteFX(object.frame, FX_FLIP, temp0, temp1)
 		end if
 		GetBit(checkResult, object.value5, 1)
-		if checkResult == 1
+		if checkResult == true
 			temp0 = object.value4
 			temp0 += object.xpos
 			temp1 = object.ypos
@@ -653,7 +653,7 @@ event ObjectDraw
 	case 8
 	case 11
 		GetBit(checkResult, object.value5, 0)
-		if checkResult == 1
+		if checkResult == true
 			temp0 = object.value3
 			temp0 += object.xpos
 			temp1 = object.ypos
@@ -662,7 +662,7 @@ event ObjectDraw
 			DrawSpriteFX(object.frame, FX_FLIP, temp0, temp1)
 		end if
 		GetBit(checkResult, object.value5, 1)
-		if checkResult == 1
+		if checkResult == true
 			temp0 = object.value4
 			temp0 += object.xpos
 			temp1 = object.ypos
@@ -675,7 +675,7 @@ event ObjectDraw
 	case 7
 	case 9
 		GetBit(checkResult, object.value5, 0)
-		if checkResult == 1
+		if checkResult == true
 			temp0 = object.value3
 			temp0 += object.xpos
 			temp1 = object.ypos
@@ -683,7 +683,7 @@ event ObjectDraw
 			DrawSpriteFX(object.frame, FX_FLIP, temp0, temp1)
 		end if
 		GetBit(checkResult, object.value5, 1)
-		if checkResult == 1
+		if checkResult == true
 			temp0 = object.value4
 			temp0 += object.xpos
 			temp1 = object.ypos
@@ -693,7 +693,7 @@ event ObjectDraw
 		break
 	case 10
 		GetBit(checkResult, object.value5, 0)
-		if checkResult == 1
+		if checkResult == true
 			temp0 = object.value3
 			temp0 += object.xpos
 			temp1 = object.ypos
@@ -702,7 +702,7 @@ event ObjectDraw
 			DrawSpriteFX(object.frame, FX_FLIP, temp0, temp1)
 		end if
 		GetBit(checkResult, object.value5, 1)
-		if checkResult == 1
+		if checkResult == true
 			temp0 = object.value4
 			temp0 += object.xpos
 			temp1 = object.ypos

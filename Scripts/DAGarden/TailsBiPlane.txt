@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 7 : TYPE_TAILSBIPLANE
+
 
 
 

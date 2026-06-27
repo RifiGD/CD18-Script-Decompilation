@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 72 : TYPE_RISINGFLOAT
+
 
 
 
@@ -26,14 +26,14 @@ event ObjectUpdate
 				if object[currentPlayer].ypos > 96337920
 					if object[currentPlayer].ypos < object.ypos
 						ObjectTileCollision(1, 16, 6, 0)
-						if checkResult == 1
+						if checkResult == true
 							if object[currentPlayer].speed > 65536
 								object[currentPlayer].speed = 65536
 								object[currentPlayer].xvel = 65536
 							end if
 						end if
 						ObjectTileCollision(2, -16, 6, 0)
-						if checkResult == 1
+						if checkResult == true
 							if object[currentPlayer].speed < -65536
 								object[currentPlayer].speed = -65536
 								object[currentPlayer].xvel = -65536
@@ -63,7 +63,7 @@ event ObjectUpdate
 	end if
 	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 		BoxCollisionTest(C_PLATFORM, object.entityPos, -16, -10, 16, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-		if checkResult == 1
+		if checkResult == true
 			object[currentPlayer].ypos += 131072
 			if object.state == 0
 				object[currentPlayer].speed = 0

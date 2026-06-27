@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 67 : TYPE_BURSTSPLASH
+
 
 
 

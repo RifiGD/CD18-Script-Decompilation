@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 18 : TYPE_SIGNPOST
+
 
 // Function declarations
 reserve function SignPost_DebugDraw

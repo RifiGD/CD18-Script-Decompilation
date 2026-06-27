@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 5 : TYPE_DEATHEVENT
+
 
 
 event ObjectUpdate
@@ -59,13 +59,13 @@ event ObjectUpdate
 			music.volume -= 2
 			SetScreenFade(0, 0, 0, object.value3)
 		else
-			if keyPress[0].buttonA == 1
+			if keyPress[0].buttonA == true
 				object.value3 = 0
 			end if
-			if keyPress[0].buttonB == 1
+			if keyPress[0].buttonB == true
 				object.value3 = 0
 			end if
-			if keyPress[0].buttonC == 1
+			if keyPress[0].buttonC == true
 				object.value3 = 0
 			end if
 		end if

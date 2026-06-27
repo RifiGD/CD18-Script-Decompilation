@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 50 : TYPE_GLASSBUMPER
+
 
 // Time Period Aliases
 private alias object[9].propertyValue : hud.currentTimePeriod
@@ -28,7 +28,7 @@ event ObjectUpdate
 		if object[currentPlayer].animation != ANI_HURT
 			if object.state == 0
 				BoxCollisionTest(C_TOUCH, object.entityPos, -14, -14, 14, 14, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-				if checkResult == 1
+				if checkResult == true
 					PlaySfx(SfxName[Glass Smash], 0)
 					CreateTempObject(TypeName[Object Score], 0, object.xpos, object.ypos)
 					player.score += 100

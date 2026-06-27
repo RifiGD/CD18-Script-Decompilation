@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 52 : TYPE_VERTICALDOOR
+
 
 
 
@@ -31,7 +31,7 @@ event ObjectUpdate
 			if object.state == 1
 				BoxCollisionTest(C_SOLID, object.entityPos, -8, -32, 8, 32, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
 				BoxCollisionTest(C_TOUCH, object.entityPos, -64, -128, -32, 128, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-				if checkResult == 1
+				if checkResult == true
 					object.state = 0
 				end if
 			else
@@ -41,7 +41,7 @@ event ObjectUpdate
 			if object.state == 1
 				BoxCollisionTest(C_SOLID, object.entityPos, -8, -32, 8, 32, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
 				BoxCollisionTest(C_TOUCH, object.entityPos, 32, -128, 64, 128, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-				if checkResult == 1
+				if checkResult == true
 					object.state = 0
 				end if
 			else

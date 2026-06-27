@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 51 : TYPE_DIAGPLATFORM
+
 
 // Function declarations
 reserve function DiagPlatform_DebugDraw
@@ -50,7 +50,7 @@ event ObjectUpdate
 	object.ypos = object.value3
 	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 		BoxCollisionTest(C_PLATFORM, object.entityPos, -32, -9, 32, 12, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-		if checkResult == 1
+		if checkResult == true
 			object[currentPlayer].xpos += object.value2
 			object[currentPlayer].ypos += object.value4
 		end if

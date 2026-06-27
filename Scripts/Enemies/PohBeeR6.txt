@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 54 : TYPE_POHBEE
+
 
 // Function declarations
 reserve function PohBee_DebugDraw
@@ -209,7 +209,7 @@ event ObjectUpdate
 			if object.state < 4
 				if object.value3 == 0
 					BoxCollisionTest(C_TOUCH, object.entityPos, -96, -64, 96, 64, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-					if checkResult == 1
+					if checkResult == true
 						if object.xpos > object[currentPlayer].xpos
 							object.direction = 0
 							object.state = 4
@@ -223,7 +223,7 @@ event ObjectUpdate
 		end if
 		if object.state < 6
 			BoxCollisionTest(C_TOUCH, object.entityPos, -20, -16, 20, 14, currentPlayer, object[currentPlayer].value41, object[currentPlayer].value39, object[currentPlayer].value42, object[currentPlayer].value40)
-			if checkResult == 1
+			if checkResult == true
 				CallFunction(Player_BadnikBreak)
 			end if
 		end if

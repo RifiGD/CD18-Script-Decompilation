@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 1 : TYPE_PLAYEROBJECT
+
 
 public alias 256 : GROUP_PLAYERS
 public alias arrayPos6 : currentPlayer
@@ -47,13 +47,13 @@ end function
 
 
 public function SSPlayer_HandleMovement
-	if object.left == 1
+	if object.left == true
 		object.value7--
 		if object.value7 < -8
 			object.value7 = -8
 		end if
 	else
-		if object.right == 1
+		if object.right == true
 			object.value7++
 			if object.value7 > 8
 				object.value7 = 8
@@ -67,10 +67,10 @@ public function SSPlayer_HandleMovement
 			end if
 		end if
 	end if
-	if object.left == 1
+	if object.left == true
 		object.angle += 2
 	end if
-	if object.right == 1
+	if object.right == true
 		object.angle -= 2
 	end if
 	if object.angle < 0
@@ -301,7 +301,7 @@ public function SSPlayer_HandleTileInteractions
 		object.value9 = -786432
 		object.value10 = 0
 		Get16x16TileInfo(checkResult, temp0, temp1, 1)
-		if checkResult == 1
+		if checkResult == true
 			FlipSign(object.value9)
 		else
 			if checkResult == 3
@@ -323,7 +323,7 @@ public function SSPlayer_HandleTileInteractions
 		object.value9 = 786432
 		object.value10 = 0
 		Get16x16TileInfo(checkResult, temp0, temp1, 1)
-		if checkResult == 1
+		if checkResult == true
 			FlipSign(object.value9)
 		else
 			if checkResult == 3
@@ -392,7 +392,7 @@ public function SSPlayer_HandleTileInteractions
 		object.value9 = -524288
 		object.value10 = 0
 		Get16x16TileInfo(checkResult, temp0, temp1, 1)
-		if checkResult == 1
+		if checkResult == true
 			FlipSign(object.value9)
 		else
 			if checkResult == 3
@@ -408,7 +408,7 @@ public function SSPlayer_HandleTileInteractions
 		object.value9 = 524288
 		object.value10 = 0
 		Get16x16TileInfo(checkResult, temp0, temp1, 1)
-		if checkResult == 1
+		if checkResult == true
 			FlipSign(object.value9)
 		else
 			if checkResult == 3
@@ -489,7 +489,7 @@ event ObjectUpdate
 		else
 			object.speed = 327680
 		end if
-		if keyDown[0].down == 1
+		if keyDown[0].down == true
 			object.speed -= 3072
 			if object.speed < 122880
 				object.speed = 122880
@@ -507,7 +507,7 @@ event ObjectUpdate
 			object.value0 += object.value10
 		end if
 		CallFunction(SSPlayer_HandleTileInteractions)
-		if object.jumpPress == 1
+		if object.jumpPress == true
 			object.state = 3
 			object.value6 = 0
 			object.frame = 39
@@ -524,13 +524,13 @@ event ObjectUpdate
 		if object.speed < 327680
 			object.speed += 2048
 		end if
-		if keyDown[0].down == 1
+		if keyDown[0].down == true
 			object.speed -= 3072
 			if object.speed < 122880
 				object.speed = 122880
 			end if
 		end if
-		if object.jumpHold == 0
+		if object.jumpHold == false
 			if object.yvel > 196608
 				object.yvel = 196608
 			end if
@@ -568,7 +568,7 @@ event ObjectUpdate
 		if object.speed < 327680
 			object.speed += 2048
 		end if
-		if keyDown[0].down == 1
+		if keyDown[0].down == true
 			object.speed -= 3072
 			if object.speed < 122880
 				object.speed = 122880
@@ -597,7 +597,7 @@ event ObjectUpdate
 			end if
 		end if
 		CallFunction(SSPlayer_HandleTileInteractions)
-		if object.jumpPress == 1
+		if object.jumpPress == true
 			object.state = 3
 			object.value6 = 0
 			object.frame = 39
@@ -683,7 +683,7 @@ event ObjectUpdate
 		if object.speed < 458752
 			object.speed += 4096
 		end if
-		if keyDown[0].down == 1
+		if keyDown[0].down == true
 			object.speed -= 3072
 			if object.speed < 122880
 				object.speed = 122880
@@ -697,7 +697,7 @@ event ObjectUpdate
 			object.value0 += object.value10
 		end if
 		CallFunction(SSPlayer_HandleTileInteractions)
-		if object.jumpPress == 1
+		if object.jumpPress == true
 			object.state = 3
 			object.value6 = 0
 			object.frame = 39
@@ -752,7 +752,7 @@ event ObjectUpdate
 		if object.speed < 327680
 			object.speed += 2048
 		end if
-		if keyDown[0].down == 1
+		if keyDown[0].down == true
 			object.speed -= 3072
 			if object.speed < 122880
 				object.speed = 122880
@@ -881,6 +881,7 @@ event ObjectStartup
 	object[2].value1 = 5
 	object[2].value2 = 8
 	object[2].animationSpeed = 30
+	
 	SpriteFrame(-20, -4, 40, 8, 210, 377)
 	SpriteFrame(-20, -48, 40, 48, 1, 197)
 	SpriteFrame(-20, -48, 40, 48, 83, 197)

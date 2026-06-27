@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 25 : TYPE_BLUESHIELD
+
 
 
 event ObjectUpdate

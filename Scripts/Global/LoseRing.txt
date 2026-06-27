@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 9 : TYPE_LOSERING
+
 
 
 event ObjectUpdate
@@ -16,7 +16,7 @@ event ObjectUpdate
 	object.ypos += object.yvel
 	if object.yvel >= 0
 		ObjectTileCollision(0, 0, 8, 0)
-		if checkResult == 1
+		if checkResult == true
 			temp0 = object.yvel
 			temp0 >>= 2
 			object.yvel -= temp0
@@ -52,7 +52,7 @@ event ObjectUpdate
 		foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 			if object[currentPlayer].state != Player_State_Hurt
 				BoxCollisionTest(C_TOUCH, object.entityPos, -8, -8, 8, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-				if checkResult == 1
+				if checkResult == true
 					object.type = TypeName[Ring Sparkle]
 					if object.propertyValue == 0
 						object.drawOrder = 4

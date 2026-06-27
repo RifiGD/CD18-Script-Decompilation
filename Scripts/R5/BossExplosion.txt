@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 79 : TYPE_BOSSEXPLOSION
+
 
 
 

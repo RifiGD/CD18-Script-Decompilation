@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 49 : TYPE_RPLATFORM
+
 
 // Function declarations
 reserve function RPlatform_DebugDraw
@@ -46,13 +46,13 @@ event ObjectUpdate
 	object.ypos = object.value2
 	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 		BoxCollisionTest(C_PLATFORM, object.entityPos, -32, -8, 32, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-		if checkResult == 1
+		if checkResult == true
 			object[currentPlayer].xpos += object.value3
 			object[currentPlayer].ypos += object.value4
 		end if
 		if object.propertyValue == 0
 			BoxCollisionTest(C_SOLID, object.entityPos, 0, -24, 32, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				if object.propertyValue == 0
 					PlaySfx(SfxName[Switch], 0)
 				end if
@@ -65,7 +65,7 @@ event ObjectUpdate
 			end if
 		else
 			BoxCollisionTest(C_SOLID, object.entityPos, 0, -16, 32, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				object.propertyValue = 1
 				object[currentPlayer].xpos += object.value3
 				object[currentPlayer].ypos += object.value4

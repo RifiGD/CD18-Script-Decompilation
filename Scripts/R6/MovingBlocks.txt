@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 50 : TYPE_MOVINGBLOCKS
+
 
 // Function declarations
 reserve function MovingBlocks_Function88
@@ -489,25 +489,25 @@ event ObjectUpdate
 		object.xpos = object.value0
 		object.ypos = object.value1
 		BoxCollisionTest(C_SOLID, object.entityPos, -16, -17, 16, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-		if checkResult == 1
+		if checkResult == true
 			object[currentPlayer].ypos += 65536
 		end if
 		object.xpos = object.value2
 		object.ypos = object.value3
 		BoxCollisionTest(C_SOLID, object.entityPos, -16, -17, 16, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-		if checkResult == 1
+		if checkResult == true
 			object[currentPlayer].ypos += 65536
 		end if
 		object.xpos = object.value4
 		object.ypos = object.value5
 		BoxCollisionTest(C_SOLID, object.entityPos, -16, -17, 16, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-		if checkResult == 1
+		if checkResult == true
 			object[currentPlayer].ypos += 65536
 		end if
 		object.xpos = object.value6
 		object.ypos = object.value7
 		BoxCollisionTest(C_SOLID, object.entityPos, -16, -17, 16, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-		if checkResult == 1
+		if checkResult == true
 			object[currentPlayer].ypos += 65536
 		end if
 		object.xpos = temp0

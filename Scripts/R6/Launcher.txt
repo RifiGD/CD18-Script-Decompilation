@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 53 : TYPE_LAUNCHER
+
 
 
 
@@ -24,7 +24,7 @@ event ObjectUpdate
 		foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 			BoxCollisionTest(C_SOLID, object.entityPos, -24, -26, -18, 4, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
 			BoxCollisionTest(C_TOUCH, object.entityPos, -20, -16, 20, 4, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				object.state = 1
 				object.value2 = currentPlayer
 				object[currentPlayer].state = Player_State_Static
@@ -51,7 +51,7 @@ event ObjectUpdate
 		object[currentPlayer].ypos -= 196608
 		object[currentPlayer].ypos += object.ypos
 		ObjectTileGrip(0, 32, 4, 0)
-		if checkResult == 0
+		if checkResult == false
 			object.state++
 		end if
 		break

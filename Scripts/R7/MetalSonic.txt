@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 56 : TYPE_METALSONIC
+
 
 // Function declarations
 reserve function MetalSonic_Function86
@@ -17,10 +17,10 @@ public value MetalSonic_value15 = 0
 public function MetalSonic_Function86
 	object.ypos -= 2097152
 	ObjectTileGrip(0, 0, 20, 0)
-	if checkResult == 0
+	if checkResult == false
 		object.ypos += 1048576
 		ObjectTileGrip(0, 0, 20, 0)
-		if checkResult == 0
+		if checkResult == false
 			object.ypos += 1048576
 			ObjectTileGrip(0, 0, 20, 0)
 		end if
@@ -32,7 +32,7 @@ event ObjectUpdate
 	switch object.state
 	case 0
 		if object.animation == 0
-			if object[0].jumpPress == 1
+			if object[0].jumpPress == true
 				object.value0 = 120
 				object.animation = 1
 			end if
@@ -204,7 +204,7 @@ event ObjectUpdate
 			object.xpos += object.xvel
 			CallFunction(MetalSonic_Function86)
 		end if
-		if checkResult == 1
+		if checkResult == true
 			object.yvel = 0
 		else
 			object.yvel += 14336
@@ -267,7 +267,7 @@ event ObjectUpdate
 		case 5
 		case 7
 			BoxCollisionTest(C_TOUCH, object.entityPos, -16, -12, 16, 12, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				CallFunction(Player_Hit)
 				MetalSonic_value15 = 0
 			end if

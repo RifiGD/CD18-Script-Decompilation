@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 45 : TYPE_WHEELIESPRING
+
 
 
 
@@ -17,12 +17,12 @@ event ObjectUpdate
 			object.value0++
 			object.xpos += 65536
 			ObjectTileGrip(0, 8, 15, 0)
-			if checkResult == 0
+			if checkResult == false
 				object.state = 1
 				object.value0 = -64
 			else
 				ObjectTileCollision(1, 40, -16, 0)
-				if checkResult == 1
+				if checkResult == true
 					object.state = 1
 					object.value0 = -64
 				end if
@@ -37,12 +37,12 @@ event ObjectUpdate
 			object.value0++
 			object.xpos -= 65536
 			ObjectTileGrip(0, -8, 15, 0)
-			if checkResult == 0
+			if checkResult == false
 				object.state = 0
 				object.value0 = -64
 			else
 				ObjectTileCollision(3, -40, -16, 0)
-				if checkResult == 1
+				if checkResult == true
 					object.state = 0
 					object.value0 = -64
 				end if
@@ -58,7 +58,7 @@ event ObjectUpdate
 			if object[currentPlayer].yvel >= 0
 				BoxCollisionTest(C_SOLID, object.entityPos, -16, -16, 16, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
 				BoxCollisionTest(C_TOUCH, object.entityPos, -15, -18, 15, -12, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-				if checkResult == 1
+				if checkResult == true
 					object.frame = 1
 					object[currentPlayer].state = Player_State_Air
 					object[currentPlayer].gravity = 1
@@ -82,7 +82,7 @@ event ObjectUpdate
 			if object[currentPlayer].gravity == 0
 				BoxCollisionTest(C_SOLID, object.entityPos, -16, -20, 16, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
 				BoxCollisionTest(C_TOUCH, object.entityPos, -15, -18, 15, -12, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-				if checkResult == 1
+				if checkResult == true
 					object.frame = 1
 					object[currentPlayer].state = Player_State_Air
 					object[currentPlayer].gravity = 1

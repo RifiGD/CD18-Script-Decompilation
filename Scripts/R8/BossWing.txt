@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 63 : TYPE_BOSSWING
+
 
 
 
@@ -27,7 +27,7 @@ event ObjectUpdate
 			else
 				ObjectTileCollision(0, 0, 16, 0)
 			end if
-			if checkResult == 1
+			if checkResult == true
 				object.state = 3
 				object.value0 = 0
 				PlaySfx(SfxName[Impact 1], 0)

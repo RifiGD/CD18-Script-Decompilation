@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 57 : TYPE_BOSSBULLET
+
 
 
 
@@ -118,7 +118,7 @@ event ObjectUpdate
 	if object.state > 0
 		foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 			BoxCollisionTest(C_TOUCH, object.entityPos, -4, -4, 4, 4, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				CallFunction(Player_Hit)
 				if object[currentPlayer].state == Player_State_GotHit
 					arrayPos0 = object.value4

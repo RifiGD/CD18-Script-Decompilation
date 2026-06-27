@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 33 : TYPE_TIMEWARP
+
 
 // Time Period Aliases
 private alias object[9].propertyValue : hud.currentTimePeriod

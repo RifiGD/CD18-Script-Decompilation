@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 61 : TYPE_RECOVERYBARRIER
+
 
 
 
@@ -45,7 +45,7 @@ event ObjectUpdate
 	if object.state == 2
 		foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 			BoxCollisionTest(C_TOUCH, object.entityPos, -16, -8, 16, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				object[currentPlayer].yvel = -262144
 			end if
 		next

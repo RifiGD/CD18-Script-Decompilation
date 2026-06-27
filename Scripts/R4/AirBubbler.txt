@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 44 : TYPE_AIRBUBBLER
+
 
 // Function declarations
 reserve function AirBubbler_DebugDraw

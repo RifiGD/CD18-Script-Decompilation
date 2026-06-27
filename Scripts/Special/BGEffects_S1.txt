@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 14 : TYPE_BGEFFECTS
+
 
 
 // Tables

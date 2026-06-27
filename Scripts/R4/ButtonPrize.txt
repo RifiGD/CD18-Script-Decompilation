@@ -20,7 +20,7 @@ private alias 3	:	BUTTONPRIZE_BUBBLES_2	// No real difference to the normal one,
 private alias 4	:	BUTTONPRIZE_RINGS
 private alias 5	:	BUTTONPRIZE_RINGS_2		// No real difference to the normal one, just uses some different objects
 
-private alias 75 : TYPE_BUTTONPRIZE
+
 
 
 

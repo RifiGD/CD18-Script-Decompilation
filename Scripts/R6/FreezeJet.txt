@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 48 : TYPE_FREEZEJET
+
 
 
 
@@ -105,7 +105,7 @@ event ObjectUpdate
 	if object.state == 1
 		foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 			BoxCollisionTest(C_TOUCH, object.entityPos, -16, 0, 16, 60, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				if object[currentPlayer].value7 == 0
 					if warp.destination > 0
 						if warp.timer > 99

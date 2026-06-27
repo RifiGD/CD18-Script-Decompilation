@@ -7,14 +7,14 @@
 
 //-------Aliases-------//
 
-private alias 20 : TYPE_SPECIALRING
+
 
 
 event ObjectUpdate
 	if object.state == 0
 		if object[0].value0 > 49
 			BoxCollisionTest(C_TOUCH, object.entityPos, -16, -16, 16, 16, 0, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				object[0].type = TypeName[Blank Object]
 				object[playerCount].type = TypeName[Blank Object]
 				object[0].controlMode = -1

@@ -7,14 +7,14 @@
 
 //-------Aliases-------//
 
-private alias 49 : TYPE_INVISIBLEBARRIER
+
 
 
 
 event ObjectUpdate
 	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 		BoxCollisionTest(C_TOUCH, object.entityPos, -16, -14, 16, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-		if checkResult == 1
+		if checkResult == true
 			if object[currentPlayer].xpos < object.xpos
 				object[currentPlayer].xpos = object[currentPlayer].collisionLeft
 				object[currentPlayer].xpos <<= 16

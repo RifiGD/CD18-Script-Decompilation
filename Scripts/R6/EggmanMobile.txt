@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 65 : TYPE_EGGMANMOBILE
+
 
 // Function declarations
 reserve function EggmanMobile_Function99
@@ -280,7 +280,7 @@ event ObjectUpdate
 	end switch
 	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 		BoxCollisionTest(C_TOUCH, object.entityPos, -22, 40, 22, 64, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-		if checkResult == 1
+		if checkResult == true
 			CallFunction(Player_Hit)
 		end if
 		if object[currentPlayer].animation != ANI_HURT

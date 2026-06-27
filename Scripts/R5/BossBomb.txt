@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 77 : TYPE_BOSSBOMB
+
 
 
 
@@ -16,7 +16,7 @@ event ObjectUpdate
 		if object.state == 1
 			object.ypos += 131072
 			ObjectTileCollision(0, 0, 10, 0)
-			if checkResult == 1
+			if checkResult == true
 				if object.value0 < 4
 					object.value0++
 				else
@@ -63,7 +63,7 @@ event ObjectUpdate
 	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 		if object.state == 1
 			BoxCollisionTest(C_TOUCH, object.entityPos, -10, -10, 10, 10, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				if object[currentPlayer].value0 == 0
 					object.state = 0
 					CreateTempObject(TypeName[Explosion], 0, object.xpos, object.ypos)
@@ -79,7 +79,7 @@ event ObjectUpdate
 		else
 			if object.propertyValue == 1
 				BoxCollisionTest(C_TOUCH, object.entityPos, -7, -7, 7, 7, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-				if checkResult == 1
+				if checkResult == true
 					if object[currentPlayer].value0 == 0
 						object.state = 0
 						CreateTempObject(TypeName[Explosion], 0, object.xpos, object.ypos)

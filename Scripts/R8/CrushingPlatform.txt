@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 42 : TYPE_CRUSHPLATFORM
+
 
 
 
@@ -68,7 +68,7 @@ event ObjectUpdate
 		object.ypos = object.value1
 		if object.value5 == 0
 			BoxCollisionTest(C_SOLID, object.entityPos, -32, -32, 32, 32, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				object[currentPlayer].ypos += object.value2
 			else
 				if checkResult == 4
@@ -83,7 +83,7 @@ event ObjectUpdate
 			end if
 		else
 			BoxCollisionTest(C_SOLID, object.entityPos, -32, -96, 32, 96, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				object[currentPlayer].ypos += object.value2
 				if object.angle == 320
 					object[currentPlayer].state = Player_State_Air

@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 61 : TYPE_BOSSBUMPER
+
 
 
 
@@ -45,7 +45,7 @@ event ObjectUpdate
 				arrayPos0 = object.value0
 				if object[arrayPos0].frame == 0
 					BoxCollisionTest(C_TOUCH, object.entityPos, -10, -16, 14, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-					if checkResult == 1
+					if checkResult == true
 						object[currentPlayer].speed = -262144
 						object[currentPlayer].xvel = -262144
 						if object.frame == 0

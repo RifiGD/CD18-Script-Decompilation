@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 53 : TYPE_HPLATFORMLARGE
+
 
 // Time Period Aliases
 private alias object[9].propertyValue : hud.currentTimePeriod
@@ -156,7 +156,7 @@ event ObjectUpdate
 		case 0
 		case 3
 			BoxCollisionTest(C_PLATFORM, object.entityPos, -48, -16, 48, 12, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				object.value0 = 1
 				object[currentPlayer].xpos += object.value4
 				object[currentPlayer].ypos += object.value2
@@ -166,7 +166,7 @@ event ObjectUpdate
 		case 5
 			if object.value6 == 0
 				BoxCollisionTest(C_PLATFORM, object.entityPos, -48, -16, 48, 12, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-				if checkResult == 1
+				if checkResult == true
 					object.value0 = 1
 					object[currentPlayer].xpos += object.value4
 					object[currentPlayer].ypos += object.value2

@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 62 : TYPE_KEMUSI
+
 
 // Function declarations
 reserve function Kemusi_DebugDraw
@@ -60,7 +60,7 @@ event ObjectUpdate
 		GetBit(temp3, object.value7, 3)
 		if temp0 == 0
 			ObjectTileCollision(0, 0, 8, 0)
-			if checkResult == 0
+			if checkResult == false
 				object.ypos += 65536
 			else
 				temp0 = checkResult
@@ -72,7 +72,7 @@ event ObjectUpdate
 			object.xpos = object.value1
 			object.ypos = object.value4
 			ObjectTileCollision(0, 0, 8, 0)
-			if checkResult == 0
+			if checkResult == false
 				object.value4 += 65536
 			else
 				temp1 = checkResult
@@ -83,7 +83,7 @@ event ObjectUpdate
 			object.xpos = object.value2
 			object.ypos = object.value5
 			ObjectTileCollision(0, 0, 8, 0)
-			if checkResult == 0
+			if checkResult == false
 				object.value5 += 65536
 			else
 				temp2 = checkResult
@@ -94,7 +94,7 @@ event ObjectUpdate
 			object.xpos = object.value3
 			object.ypos = object.value6
 			ObjectTileCollision(0, 0, 8, 0)
-			if checkResult == 0
+			if checkResult == false
 				object.value6 += 65536
 			else
 				temp3 = checkResult
@@ -128,7 +128,7 @@ event ObjectUpdate
 			if temp0 == 0
 				object.xpos -= 32768
 				ObjectTileGrip(0, 0, 8, 0)
-				if checkResult == 1
+				if checkResult == true
 					if object.xpos < object.value8
 						SetBit(object.value7, 0, 1)
 					end if
@@ -138,7 +138,7 @@ event ObjectUpdate
 			else
 				object.xpos += 32768
 				ObjectTileGrip(0, 0, 8, 0)
-				if checkResult == 1
+				if checkResult == true
 					if object.xpos > object.value9
 						SetBit(object.value7, 0, 0)
 					end if
@@ -154,7 +154,7 @@ event ObjectUpdate
 				object.xpos = object.value1
 				object.ypos = object.value4
 				ObjectTileGrip(0, 0, 8, 0)
-				if checkResult == 1
+				if checkResult == true
 					object.value4 = object.ypos
 					if object.value1 < object.value8
 						SetBit(object.value7, 1, 1)
@@ -167,7 +167,7 @@ event ObjectUpdate
 				object.xpos = object.value1
 				object.ypos = object.value4
 				ObjectTileGrip(0, 0, 8, 0)
-				if checkResult == 1
+				if checkResult == true
 					object.value4 = object.ypos
 					if object.value1 > object.value9
 						SetBit(object.value7, 1, 0)
@@ -182,7 +182,7 @@ event ObjectUpdate
 				object.xpos = object.value2
 				object.ypos = object.value5
 				ObjectTileGrip(0, 0, 8, 0)
-				if checkResult == 1
+				if checkResult == true
 					object.value5 = object.ypos
 					if object.value2 < object.value8
 						SetBit(object.value7, 2, 1)
@@ -195,7 +195,7 @@ event ObjectUpdate
 				object.xpos = object.value2
 				object.ypos = object.value5
 				ObjectTileGrip(0, 0, 8, 0)
-				if checkResult == 1
+				if checkResult == true
 					object.value5 = object.ypos
 					if object.value2 > object.value9
 						SetBit(object.value7, 2, 0)
@@ -238,7 +238,7 @@ event ObjectUpdate
 				object.xpos = object.value1
 				object.ypos = object.value4
 				ObjectTileGrip(0, 0, 8, 0)
-				if checkResult == 1
+				if checkResult == true
 					object.value4 = object.ypos
 					if object.value1 < object.value8
 						SetBit(object.value7, 1, 1)
@@ -251,7 +251,7 @@ event ObjectUpdate
 				object.xpos = object.value1
 				object.ypos = object.value4
 				ObjectTileGrip(0, 0, 8, 0)
-				if checkResult == 1
+				if checkResult == true
 					object.value4 = object.ypos
 					if object.value1 > object.value9
 						SetBit(object.value7, 1, 0)
@@ -266,7 +266,7 @@ event ObjectUpdate
 				object.xpos = object.value2
 				object.ypos = object.value5
 				ObjectTileGrip(0, 0, 8, 0)
-				if checkResult == 1
+				if checkResult == true
 					object.value5 = object.ypos
 					if object.value2 < object.value8
 						SetBit(object.value7, 2, 1)
@@ -279,7 +279,7 @@ event ObjectUpdate
 				object.xpos = object.value2
 				object.ypos = object.value5
 				ObjectTileGrip(0, 0, 8, 0)
-				if checkResult == 1
+				if checkResult == true
 					object.value5 = object.ypos
 					if object.value2 > object.value9
 						SetBit(object.value7, 2, 0)
@@ -294,7 +294,7 @@ event ObjectUpdate
 				object.xpos = object.value3
 				object.ypos = object.value6
 				ObjectTileGrip(0, 0, 8, 0)
-				if checkResult == 1
+				if checkResult == true
 					object.value6 = object.ypos
 					if object.value3 < object.value8
 						SetBit(object.value7, 3, 1)
@@ -307,7 +307,7 @@ event ObjectUpdate
 				object.xpos = object.value3
 				object.ypos = object.value6
 				ObjectTileGrip(0, 0, 8, 0)
-				if checkResult == 1
+				if checkResult == true
 					object.value6 = object.ypos
 					if object.value3 > object.value9
 						SetBit(object.value7, 3, 0)
@@ -330,7 +330,7 @@ event ObjectUpdate
 			if temp0 == 0
 				object.xpos -= 16384
 				ObjectTileGrip(0, 0, 8, 0)
-				if checkResult == 1
+				if checkResult == true
 					if object.xpos < object.value8
 						SetBit(object.value7, 0, 1)
 					end if
@@ -340,7 +340,7 @@ event ObjectUpdate
 			else
 				object.xpos += 16384
 				ObjectTileGrip(0, 0, 8, 0)
-				if checkResult == 1
+				if checkResult == true
 					if object.xpos > object.value9
 						SetBit(object.value7, 0, 0)
 					end if
@@ -356,7 +356,7 @@ event ObjectUpdate
 				object.xpos = object.value1
 				object.ypos = object.value4
 				ObjectTileGrip(0, 0, 8, 0)
-				if checkResult == 1
+				if checkResult == true
 					object.value4 = object.ypos
 					if object.value1 < object.value8
 						SetBit(object.value7, 1, 1)
@@ -369,7 +369,7 @@ event ObjectUpdate
 				object.xpos = object.value1
 				object.ypos = object.value4
 				ObjectTileGrip(0, 0, 8, 0)
-				if checkResult == 1
+				if checkResult == true
 					object.value4 = object.ypos
 					if object.value1 > object.value9
 						SetBit(object.value7, 1, 0)
@@ -384,7 +384,7 @@ event ObjectUpdate
 				object.xpos = object.value2
 				object.ypos = object.value5
 				ObjectTileGrip(0, 0, 8, 0)
-				if checkResult == 1
+				if checkResult == true
 					object.value5 = object.ypos
 					if object.value2 < object.value8
 						SetBit(object.value7, 2, 1)
@@ -397,7 +397,7 @@ event ObjectUpdate
 				object.xpos = object.value2
 				object.ypos = object.value5
 				ObjectTileGrip(0, 0, 8, 0)
-				if checkResult == 1
+				if checkResult == true
 					object.value5 = object.ypos
 					if object.value2 > object.value9
 						SetBit(object.value7, 2, 0)
@@ -440,7 +440,7 @@ event ObjectUpdate
 				object.xpos = object.value1
 				object.ypos = object.value4
 				ObjectTileGrip(0, 0, 8, 0)
-				if checkResult == 1
+				if checkResult == true
 					object.value4 = object.ypos
 					if object.value1 < object.value8
 						SetBit(object.value7, 1, 1)
@@ -453,7 +453,7 @@ event ObjectUpdate
 				object.xpos = object.value1
 				object.ypos = object.value4
 				ObjectTileGrip(0, 0, 8, 0)
-				if checkResult == 1
+				if checkResult == true
 					object.value4 = object.ypos
 					if object.value1 > object.value9
 						SetBit(object.value7, 1, 0)
@@ -468,7 +468,7 @@ event ObjectUpdate
 				object.xpos = object.value2
 				object.ypos = object.value5
 				ObjectTileGrip(0, 0, 8, 0)
-				if checkResult == 1
+				if checkResult == true
 					object.value5 = object.ypos
 					if object.value2 < object.value8
 						SetBit(object.value7, 2, 1)
@@ -481,7 +481,7 @@ event ObjectUpdate
 				object.xpos = object.value2
 				object.ypos = object.value5
 				ObjectTileGrip(0, 0, 8, 0)
-				if checkResult == 1
+				if checkResult == true
 					object.value5 = object.ypos
 					if object.value2 > object.value9
 						SetBit(object.value7, 2, 0)
@@ -496,7 +496,7 @@ event ObjectUpdate
 				object.xpos = object.value3
 				object.ypos = object.value6
 				ObjectTileGrip(0, 0, 8, 0)
-				if checkResult == 1
+				if checkResult == true
 					object.value6 = object.ypos
 					if object.value3 < object.value8
 						SetBit(object.value7, 3, 1)
@@ -509,7 +509,7 @@ event ObjectUpdate
 				object.xpos = object.value3
 				object.ypos = object.value6
 				ObjectTileGrip(0, 0, 8, 0)
-				if checkResult == 1
+				if checkResult == true
 					object.value6 = object.ypos
 					if object.value3 > object.value9
 						SetBit(object.value7, 3, 0)
@@ -537,19 +537,19 @@ event ObjectUpdate
 				object.xpos = object.value1
 				object.ypos = object.value4
 				BoxCollisionTest(C_TOUCH, object.entityPos, -8, -10, 8, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-				if checkResult == 1
+				if checkResult == true
 					CallFunction(Player_Hit)
 				else
 					object.xpos = object.value2
 					object.ypos = object.value5
 					BoxCollisionTest(C_TOUCH, object.entityPos, -8, -10, 8, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-					if checkResult == 1
+					if checkResult == true
 						CallFunction(Player_Hit)
 					else
 						object.xpos = object.value3
 						object.ypos = object.value6
 						BoxCollisionTest(C_TOUCH, object.entityPos, -8, -10, 8, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-						if checkResult == 1
+						if checkResult == true
 							CallFunction(Player_Hit)
 						end if
 					end if
@@ -558,19 +558,19 @@ event ObjectUpdate
 				object.xpos = object.value1
 				object.ypos = object.value4
 				BoxCollisionTest(C_TOUCH, object.entityPos, -8, -10, 8, 8, currentPlayer, object[currentPlayer].value41, object[currentPlayer].value39, object[currentPlayer].value42, object[currentPlayer].value40)
-				if checkResult == 1
+				if checkResult == true
 					CallFunction(Player_BadnikBreak)
 				else
 					object.xpos = object.value2
 					object.ypos = object.value5
 					BoxCollisionTest(C_TOUCH, object.entityPos, -8, -8, 8, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-					if checkResult == 1
+					if checkResult == true
 						CallFunction(Player_BadnikBreak)
 					else
 						object.xpos = object.value3
 						object.ypos = object.value6
 						BoxCollisionTest(C_TOUCH, object.entityPos, -8, -8, 8, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-						if checkResult == 1
+						if checkResult == true
 							CallFunction(Player_BadnikBreak)
 						end if
 					end if

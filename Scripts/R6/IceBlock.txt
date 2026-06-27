@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 49 : TYPE_ICEBLOCK
+
 
 // Function declarations
 reserve function IceBlock_Function87
@@ -68,7 +68,7 @@ event ObjectUpdate
 				object.yvel = 1310720
 			end if
 			ObjectTileCollision(0, 0, 24, 0)
-			if checkResult == 1
+			if checkResult == true
 				object.state = 1
 				object.yvel = 0
 				PlaySfx(SfxName[Glass Smash], 0)
@@ -79,7 +79,7 @@ event ObjectUpdate
 			if object.value0 < 16
 				object.value0++
 				if object[0].type == TypeName[Player Object]
-					if object[0].jumpPress == 1
+					if object[0].jumpPress == true
 						CallFunction(IceBlock_Function87)
 						object.type = TypeName[Blank Object]
 						arrayPos1 = stage.entityPos

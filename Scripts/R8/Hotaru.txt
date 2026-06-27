@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 58 : TYPE_HOTARU
+
 
 // Time Period Aliases
 private alias object[9].propertyValue : hud.currentTimePeriod
@@ -164,7 +164,7 @@ event ObjectUpdate
 				end if
 			end if
 			BoxCollisionTest(C_TOUCH, object.entityPos, -192, -256, 420, 256, 0, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 0
+			if checkResult == false
 				ResetObjectEntity(object.entityPos, TypeName[Blank Object], 0, 0, 0)
 			end if
 			break
@@ -233,7 +233,7 @@ event ObjectUpdate
 			if object.state == 3
 				if object.value0 > 1
 					BoxCollisionTest(C_TOUCH, object.entityPos, -5, -5, 5, 5, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-					if checkResult == 1
+					if checkResult == true
 						CallFunction(Player_BadnikBreak)
 					end if
 				end if

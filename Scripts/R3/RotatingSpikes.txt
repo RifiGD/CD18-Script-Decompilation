@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 52 : TYPE_ROTATINGSPIKES
+
 
 // Time Period Aliases
 private alias object[9].propertyValue : hud.currentTimePeriod
@@ -79,7 +79,7 @@ event ObjectUpdate
 			object.ypos <<= 7
 			object.ypos += temp3
 			BoxCollisionTest(C_TOUCH, object.entityPos, -8, -8, 8, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				CallFunction(Player_Hit)
 			end if
 			temp0++

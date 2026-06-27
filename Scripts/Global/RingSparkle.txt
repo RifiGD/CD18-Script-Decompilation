@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 10 : TYPE_RINGSPARKLE
+
 
 
 event ObjectUpdate

@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 21 : TYPE_SPIKES
+
 
 // Function declarations
 reserve function Spikes_DebugDraw
@@ -44,7 +44,7 @@ event ObjectUpdate
 			temp1 = temp0
 			FlipSign(temp0)
 			BoxCollisionTest(C_TOUCH, object.entityPos, temp0, -128, temp1, 128, 0, 0, 0, 0, 0)
-			if checkResult == 1
+			if checkResult == true
 				PlaySfx(SfxName[Spikes Move], 0)
 			end if
 		end if
@@ -69,7 +69,7 @@ event ObjectUpdate
 			temp1 = temp0
 			FlipSign(temp0)
 			BoxCollisionTest(C_TOUCH, object.entityPos, temp0, -128, temp1, 128, 0, 0, 0, 0, 0)
-			if checkResult == 1
+			if checkResult == true
 				PlaySfx(SfxName[Spikes Move], 0)
 			end if
 		end if
@@ -96,7 +96,7 @@ event ObjectUpdate
 				end if
 				if object[currentPlayer].yvel > -1
 					BoxCollisionTest(C_TOUCH, object.entityPos, -15, -17, 15, -12, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-					if checkResult == 1
+					if checkResult == true
 						CallFunction(Player_Hit)
 					end if
 				end if
@@ -114,7 +114,7 @@ event ObjectUpdate
 				end if
 				if object[currentPlayer].xvel <= 0
 					BoxCollisionTest(C_TOUCH, object.entityPos, 12, -15, 16, 15, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-					if checkResult == 1
+					if checkResult == true
 						CallFunction(Player_Hit)
 					end if
 				end if
@@ -131,7 +131,7 @@ event ObjectUpdate
 					end if
 				end if
 				BoxCollisionTest(C_TOUCH, object.entityPos, -16, -15, -12, 15, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-				if checkResult == 1
+				if checkResult == true
 					CallFunction(Player_Hit)
 				end if
 			end if
@@ -157,7 +157,7 @@ event ObjectUpdate
 				end if
 				if temp0 < 1
 					BoxCollisionTest(C_TOUCH, object.entityPos, -15, 12, 15, 14, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-					if checkResult == 1
+					if checkResult == true
 						CallFunction(Player_Hit)
 					end if
 				end if

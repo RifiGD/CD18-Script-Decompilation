@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 48 : TYPE_WATERTRIGGER
+
 
 
 
@@ -17,7 +17,7 @@ event ObjectUpdate
 		case 0
 			if object[-1].propertyValue == 1
 				BoxCollisionTest(C_TOUCH, object.entityPos, -112, -64, 0, 160, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-				if checkResult == 1
+				if checkResult == true
 					if object[currentPlayer].state != Player_State_Death
 						if object[currentPlayer].state != Player_State_Drown
 							object[currentPlayer].state = Player_State_WaterCurrent
@@ -48,7 +48,7 @@ event ObjectUpdate
 			break
 		case 1
 			BoxCollisionTest(C_TOUCH, object.entityPos, -128, 0, 112, 64, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				if object[currentPlayer].state != Player_State_Death
 					if object[currentPlayer].state != Player_State_Drown
 						object[currentPlayer].state = Player_State_WaterCurrent
@@ -77,7 +77,7 @@ event ObjectUpdate
 			break
 		case 2
 			BoxCollisionTest(C_TOUCH, object.entityPos, -128, 0, 112, 64, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				if object[currentPlayer].state != Player_State_Death
 					if object[currentPlayer].state != Player_State_Drown
 						object[currentPlayer].state = Player_State_WaterCurrent
@@ -106,7 +106,7 @@ event ObjectUpdate
 			break
 		case 3
 			BoxCollisionTest(C_TOUCH, object.entityPos, -128, 0, 112, 64, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				if object[currentPlayer].state != Player_State_Death
 					if object[currentPlayer].state != Player_State_Drown
 						object[currentPlayer].state = Player_State_WaterCurrent
@@ -133,7 +133,7 @@ event ObjectUpdate
 			break
 		case 4
 			BoxCollisionTest(C_TOUCH, object.entityPos, 0, -64, 256, 64, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				if object[currentPlayer].state != Player_State_Death
 					if object[currentPlayer].state != Player_State_Drown
 						object[currentPlayer].state = Player_State_WaterCurrent
@@ -147,7 +147,7 @@ event ObjectUpdate
 			break
 		case 5
 			BoxCollisionTest(C_TOUCH, object.entityPos, -64, -160, 64, 0, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				if object[currentPlayer].state != Player_State_Death
 					if object[currentPlayer].state != Player_State_Drown
 						object[currentPlayer].state = Player_State_WaterCurrent

@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 60 : TYPE_FLIPDOOR
+
 
 
 
@@ -25,7 +25,7 @@ event ObjectUpdate
 			object.frame = 0
 			foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 				BoxCollisionTest(C_TOUCH, object.entityPos, -48, -32, 0, 32, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-				if checkResult == 1
+				if checkResult == true
 					object.state = 1
 					PlaySfx(SfxName[Door], 0)
 				end if
@@ -44,7 +44,7 @@ event ObjectUpdate
 			object.frame = 2
 			foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 				BoxCollisionTest(C_TOUCH, object.entityPos, -48, -32, 64, 64, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-				if checkResult == 0
+				if checkResult == false
 					object.state = 3
 				end if
 			next
@@ -65,7 +65,7 @@ event ObjectUpdate
 			object.frame = 0
 			foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 				BoxCollisionTest(C_TOUCH, object.entityPos, 0, -32, 48, 32, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-				if checkResult == 1
+				if checkResult == true
 					object.state = 1
 					PlaySfx(SfxName[Door], 0)
 				end if
@@ -84,7 +84,7 @@ event ObjectUpdate
 			object.frame = 2
 			foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 				BoxCollisionTest(C_TOUCH, object.entityPos, -64, -32, 48, 64, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-				if checkResult == 0
+				if checkResult == false
 					object.state = 3
 				end if
 			next

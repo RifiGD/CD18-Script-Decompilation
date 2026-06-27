@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 69 : TYPE_HANGINGTRIGGER
+
 
 
 
@@ -16,7 +16,7 @@ event ObjectUpdate
 		BoxCollisionTest(C_TOUCH, object.entityPos, -8, -2, 8, 20, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
 		if object[currentPlayer].yvel > -1
 			if object[currentPlayer].xpos > object.xpos
-				if checkResult == 1
+				if checkResult == true
 					if object[currentPlayer].animation != ANI_HANGING
 						object[currentPlayer].state = Player_State_HangBar
 						object[currentPlayer].yvel = 0

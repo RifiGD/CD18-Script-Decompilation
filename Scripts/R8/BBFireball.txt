@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 68 : TYPE_BBFIREBALL
+
 
 
 
@@ -19,7 +19,7 @@ event ObjectUpdate
 		if object[currentPlayer].collisionPlane == 0
 			if object[currentPlayer].state != Player_State_Static
 				BoxCollisionTest(C_TOUCH, object.entityPos, -8, -8, 8, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-				if checkResult == 1
+				if checkResult == true
 					CallFunction(Player_Hit)
 				end if
 			end if

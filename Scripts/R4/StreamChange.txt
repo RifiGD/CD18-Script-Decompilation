@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 82 : TYPE_STREAMCHANGE
+
 
 
 

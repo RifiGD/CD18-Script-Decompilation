@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 54 : TYPE_DANGO
+
 
 // Function declarations
 reserve function Dango_DebugDraw
@@ -50,7 +50,7 @@ event ObjectUpdate
 			else
 				ObjectTileGrip(0, 5, 15, 0)
 			end if
-			if checkResult == 0
+			if checkResult == false
 				FlipSign(object.xvel)
 				object.direction++
 				object.direction &= 1
@@ -58,7 +58,7 @@ event ObjectUpdate
 			else
 				if object.xvel > 0
 					ObjectTileCollision(1, 16, 8, 0)
-					if checkResult == 1
+					if checkResult == true
 						FlipSign(object.xvel)
 						object.direction++
 						object.direction &= 1
@@ -66,7 +66,7 @@ event ObjectUpdate
 					end if
 				else
 					ObjectTileCollision(2, -16, 8, 0)
-					if checkResult == 1
+					if checkResult == true
 						FlipSign(object.xvel)
 						object.direction++
 						object.direction &= 1
@@ -123,19 +123,19 @@ event ObjectUpdate
 			else
 				ObjectTileGrip(0, 5, 15, 0)
 			end if
-			if checkResult == 0
+			if checkResult == false
 				object.state++
 				object.value3++
 			else
 				if object.xvel > 0
 					ObjectTileCollision(1, 16, 8, 0)
-					if checkResult == 1
+					if checkResult == true
 						object.state++
 						object.value3++
 					end if
 				else
 					ObjectTileCollision(2, -16, 8, 0)
-					if checkResult == 1
+					if checkResult == true
 						object.state++
 						object.value3++
 					end if
@@ -201,7 +201,7 @@ event ObjectUpdate
 			else
 				ObjectTileGrip(0, 5, 15, 0)
 			end if
-			if checkResult == 0
+			if checkResult == false
 				FlipSign(object.xvel)
 				object.direction++
 				object.direction &= 1
@@ -209,7 +209,7 @@ event ObjectUpdate
 			else
 				if object.xvel > 0
 					ObjectTileCollision(1, 16, 8, 0)
-					if checkResult == 1
+					if checkResult == true
 						FlipSign(object.xvel)
 						object.direction++
 						object.direction &= 1
@@ -217,7 +217,7 @@ event ObjectUpdate
 					end if
 				else
 					ObjectTileCollision(2, -16, 8, 0)
-					if checkResult == 1
+					if checkResult == true
 						FlipSign(object.xvel)
 						object.direction++
 						object.direction &= 1
@@ -274,19 +274,19 @@ event ObjectUpdate
 			else
 				ObjectTileGrip(0, 5, 15, 0)
 			end if
-			if checkResult == 0
+			if checkResult == false
 				object.state++
 				object.value3++
 			else
 				if object.xvel > 0
 					ObjectTileCollision(1, 16, 8, 0)
-					if checkResult == 1
+					if checkResult == true
 						object.state++
 						object.value3++
 					end if
 				else
 					ObjectTileCollision(2, -16, 8, 0)
-					if checkResult == 1
+					if checkResult == true
 						object.state++
 						object.value3++
 					end if
@@ -345,7 +345,7 @@ event ObjectUpdate
 			else
 				BoxCollisionTest(C_TOUCH, object.entityPos, 0, -128, 112, 128, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
 			end if
-			if checkResult == 1
+			if checkResult == true
 				object.state = 1
 			end if
 		end if
@@ -357,13 +357,13 @@ event ObjectUpdate
 		case 6
 		case 7
 			BoxCollisionTest(C_TOUCH, object.entityPos, -14, -10, 14, 10, currentPlayer, object[currentPlayer].value41, object[currentPlayer].value39, object[currentPlayer].value42, object[currentPlayer].value40)
-			if checkResult == 1
+			if checkResult == true
 				CallFunction(Player_BadnikBreak)
 			end if
 			break
 		case 3
 			BoxCollisionTest(C_TOUCH, object.entityPos, -14, -10, 14, 10, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				CheckEqual(object[currentPlayer].animation, ANI_JUMPING)
 				temp0 = checkResult
 				CheckEqual(object[currentPlayer].animation, ANI_SPINDASH)
@@ -385,7 +385,7 @@ event ObjectUpdate
 			break
 		case 4
 			BoxCollisionTest(C_TOUCH, object.entityPos, -14, -10, 14, 10, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				CheckEqual(object[currentPlayer].animation, ANI_JUMPING)
 				temp0 = checkResult
 				CheckEqual(object[currentPlayer].animation, ANI_SPINDASH)

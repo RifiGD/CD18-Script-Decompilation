@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 68 : TYPE_FGPIECE
+
 
 
 

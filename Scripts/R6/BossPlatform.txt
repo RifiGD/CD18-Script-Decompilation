@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 67 : TYPE_BOSSPLATFORM
+
 
 // Time Period Aliases
 private alias object[9].propertyValue : hud.currentTimePeriod
@@ -36,7 +36,7 @@ event ObjectUpdate
 		if object[arrayPos0].state == 4
 			if object[arrayPos0].value0 > 29
 				BoxCollisionTest(C_TOUCH, object.entityPos, -16, -512, 16, 512, 0, C_BOX, C_BOX, C_BOX, C_BOX)
-				if checkResult == 1
+				if checkResult == true
 					object.value2 = 3584
 				else
 					object.value2 = 2816
@@ -55,7 +55,7 @@ event ObjectUpdate
 			temp0 = object.ypos
 			object.ypos = object.value1
 			BoxCollisionTest(C_SOLID, object.entityPos, -16, -18, 16, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				object[currentPlayer].ypos += object.value4
 				object[currentPlayer].ypos += 131072
 			else
@@ -68,9 +68,9 @@ event ObjectUpdate
 					end if
 				end if
 				BoxCollisionTest(C_TOUCH, object.entityPos, -16, -32, 16, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-				if checkResult == 1
+				if checkResult == true
 					if object[currentPlayer].yvel < -262144
-						if object[currentPlayer].jumpPress == 1
+						if object[currentPlayer].jumpPress == true
 							temp1 = object.yvel
 							temp1 >>= 1
 							object[currentPlayer].yvel += temp1

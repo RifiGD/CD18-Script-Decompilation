@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 11 : TYPE_DUSTPUFF
+
 
 
 
@@ -47,10 +47,10 @@ event ObjectUpdate
 		if object.value0 == 9
 			object.type = TypeName[Blank Object]
 		end if
-		if object[2].left == 1
+		if object[2].left == true
 			object.xpos += 65536
 		end if
-		if object[2].right == 1
+		if object[2].right == true
 			object.xpos -= 65536
 		end if
 	end if

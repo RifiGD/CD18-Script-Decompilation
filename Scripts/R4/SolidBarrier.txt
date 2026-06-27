@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 58 : TYPE_SOLIDBARRIER
+
 
 // Time Period Aliases
 private alias object[9].propertyValue : hud.currentTimePeriod
@@ -21,7 +21,7 @@ event ObjectUpdate
 	switch object.propertyValue
 	case 1
 		BoxCollisionTest(C_TOUCH, object.entityPos, 112, -64, 256, 256, 0, C_BOX, C_BOX, C_BOX, C_BOX)
-		if checkResult == 1
+		if checkResult == true
 			object.propertyValue = 2
 		end if
 		break

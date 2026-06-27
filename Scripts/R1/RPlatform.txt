@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 52 : TYPE_RISEPLATFORM
+
 
 
 
@@ -89,7 +89,7 @@ event ObjectUpdate
 	object.ypos += object.yvel
 	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 		BoxCollisionTest(C_PLATFORM, object.entityPos, -32, -9, 32, 12, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-		if checkResult == 1
+		if checkResult == true
 			object.value0 = 1
 			object[currentPlayer].ypos += object.value2
 		end if

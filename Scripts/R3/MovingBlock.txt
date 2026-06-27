@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 66 : TYPE_MOVINGBLOCK
+
 
 
 

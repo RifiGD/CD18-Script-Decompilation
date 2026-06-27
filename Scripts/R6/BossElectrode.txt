@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 62 : TYPE_BOSSELECTRODE
+
 
 
 

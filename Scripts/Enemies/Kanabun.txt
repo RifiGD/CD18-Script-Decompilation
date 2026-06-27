@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 55 : TYPE_KANABUN
+
 
 // Function declarations
 reserve function Kanabun_DebugDraw
@@ -148,13 +148,13 @@ event ObjectUpdate
 		if object.state < 2
 			if object.value3 == 0
 				BoxCollisionTest(C_TOUCH, object.entityPos, -14, -14, 14, 14, currentPlayer, object[currentPlayer].value41, object[currentPlayer].value39, object[currentPlayer].value42, object[currentPlayer].value40)
-				if checkResult == 1
+				if checkResult == true
 					CallFunction(Player_BadnikBreak)
 				end if
 			else
 				if object[currentPlayer].animation == ANI_JUMPING
 					BoxCollisionTest(C_TOUCH, object.entityPos, -14, -14, 14, 14, currentPlayer, object[currentPlayer].value41, object[currentPlayer].value39, object[currentPlayer].value42, object[currentPlayer].value40)
-					if checkResult == 1
+					if checkResult == true
 						CallFunction(Player_BadnikBreak)
 					end if
 				end if

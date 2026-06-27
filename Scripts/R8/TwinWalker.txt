@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 61 : TYPE_TWINWALKER
+
 
 
 
@@ -50,7 +50,7 @@ event ObjectUpdate
 		object.xpos = object.value3
 		object.ypos = object.value4
 		ObjectTileCollision(0, 0, 40, 0)
-		if checkResult == 1
+		if checkResult == true
 			object.value1 = temp0
 			object.value2 = temp1
 			object.value3 = 0
@@ -86,7 +86,7 @@ event ObjectUpdate
 			object.xpos = object.value1
 			object.ypos = object.value2
 			BoxCollisionTest(C_PLATFORM, object.entityPos, -24, -40, 24, -24, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				object[currentPlayer].xpos += object.value3
 				object[currentPlayer].ypos += object.value4
 				temp2 = object.value1

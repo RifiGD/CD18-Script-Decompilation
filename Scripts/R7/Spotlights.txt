@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 41 : TYPE_SPOTLIGHTS
+
 
 // Time Period Aliases
 private alias object[9].propertyValue : hud.currentTimePeriod

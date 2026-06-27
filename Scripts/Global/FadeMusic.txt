@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 65 : TYPE_FADEMUSIC
+
 
 
 

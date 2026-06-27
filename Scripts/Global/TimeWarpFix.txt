@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 73 : TYPE_TIMEWARPFIX
+
 
 
 
@@ -15,7 +15,7 @@ event ObjectUpdate
 	switch object.propertyValue
 	case 0
 		BoxCollisionTest(C_TOUCH, object.entityPos, -16, -16, 16, 16, 0, C_BOX, C_BOX, C_BOX, C_BOX)
-		if checkResult == 1
+		if checkResult == true
 			if warp.destination > 0
 				if warp.timer > 99
 					if warp.timer < 220
@@ -34,7 +34,7 @@ event ObjectUpdate
 		break
 	case 2
 		BoxCollisionTest(C_TOUCH, object.entityPos, -48, -48, 48, 48, 0, C_BOX, C_BOX, C_BOX, C_BOX)
-		if checkResult == 1
+		if checkResult == true
 			object.type = TypeName[Blank Object]
 			object[0].xpos = object[+1].xpos
 			object[0].ypos = object[+1].ypos
@@ -46,7 +46,7 @@ event ObjectUpdate
 		break
 	case 3
 		BoxCollisionTest(C_TOUCH, object.entityPos, -96, -96, 96, 96, 0, C_BOX, C_BOX, C_BOX, C_BOX)
-		if checkResult == 1
+		if checkResult == true
 			object.type = TypeName[Blank Object]
 			object[0].xpos = object[+1].xpos
 			object[0].ypos = object[+1].ypos

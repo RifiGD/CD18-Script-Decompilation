@@ -7,16 +7,23 @@
 
 //-------Aliases-------//
 
-private alias 68 : TYPE_PALANIMATION
+// Priority Aliases
+private alias 1 : PRIORITY_ACTIVE
+
+// Object Aliases
+private alias object.value0 : object.timer
+private alias object.value1 : object.currentPalette // unused, leftover from 2011
+
+
 
 
 
 event ObjectUpdate
-	object.value0++
-	if object.value0 == 8
-		object.value0 = 0
-		object.value1++
-		object.value1 %= 3
+	object.timer++
+	if object.timer == 8
+		object.timer = 0
+		object.currentPalette++
+		object.currentPalette %= 3
 		RotatePalette(0, 177, 179, 1)
 		RotatePalette(0, 172, 174, 0)
 	end if

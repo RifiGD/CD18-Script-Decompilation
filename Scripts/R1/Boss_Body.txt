@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 54 : TYPE_BOSSBODY
+
 
 // Function declarations
 reserve function BossBody_Function96
@@ -272,7 +272,7 @@ event ObjectUpdate
 		arrayPos0 = object.value2
 		GetBit(temp0, object[arrayPos0].value4, 0)
 		checkResult &= temp0
-		if checkResult == 1
+		if checkResult == true
 			arrayPos0 = object.value1
 			SetBit(object[arrayPos0].value4, 0, 0)
 			arrayPos1 = object[arrayPos0].value1
@@ -338,7 +338,7 @@ event ObjectUpdate
 		arrayPos0 = object.value2
 		GetBit(temp0, object[arrayPos0].value4, 0)
 		checkResult &= temp0
-		if checkResult == 1
+		if checkResult == true
 			GetBit(temp0, object.value4, 1)
 			if temp0 == 0
 				SetBit(object.value4, 1, 1)
@@ -431,7 +431,7 @@ event ObjectUpdate
 		arrayPos0 = object.value2
 		GetBit(temp0, object[arrayPos0].value4, 0)
 		checkResult &= temp0
-		if checkResult == 1
+		if checkResult == true
 			arrayPos0 = object.value1
 			SetBit(object[arrayPos0].value4, 0, 0)
 			arrayPos1 = object[arrayPos0].value1

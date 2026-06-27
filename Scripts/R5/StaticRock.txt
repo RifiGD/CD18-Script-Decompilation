@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 42 : TYPE_STATICROCK
+
 
 // Function declarations
 reserve function StaticRock_DebugDraw
@@ -34,7 +34,7 @@ event ObjectUpdate
 	case 1
 		foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 			BoxCollisionTest(C_TOUCH, object.entityPos, -16, -14, 16, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				if object[currentPlayer].xpos < object.xpos
 					object[currentPlayer].xpos = object[currentPlayer].collisionLeft
 					object[currentPlayer].xpos <<= 16
@@ -53,7 +53,7 @@ event ObjectUpdate
 		foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 			if object[currentPlayer].collisionMode == 1
 				BoxCollisionTest(C_TOUCH, object.entityPos, -16, -16, 16, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-				if checkResult == 1
+				if checkResult == true
 					object[currentPlayer].ypos = object[currentPlayer].collisionBottom
 					object[currentPlayer].ypos <<= 16
 					object[currentPlayer].ypos += object.ypos
@@ -63,7 +63,7 @@ event ObjectUpdate
 			end if
 			if object[currentPlayer].collisionMode == 3
 				BoxCollisionTest(C_TOUCH, object.entityPos, -16, -16, 16, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-				if checkResult == 1
+				if checkResult == true
 					object[currentPlayer].ypos = object[currentPlayer].collisionBottom
 					object[currentPlayer].ypos <<= 16
 					object[currentPlayer].ypos += object.ypos

@@ -18,7 +18,7 @@ private alias 3 : SHIELD_FIRE
 private alias 4 : SHIELD_LIGHTNING
 
 
-private alias 43 : TYPE_AIRBUBBLE
+
 
 
 
@@ -94,7 +94,7 @@ event ObjectUpdate
 			if object[currentPlayer].animation != ANI_DYING
 				if player[currentPlayer].shield != SHIELD_BUBBLE
 					BoxCollisionTest(C_TOUCH, object.entityPos, -2, -2, 2, 2, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-					if checkResult == 1
+					if checkResult == true
 						object.frame = 7
 						object.state = 1
 						object.value0 = 0

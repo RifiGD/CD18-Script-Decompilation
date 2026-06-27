@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 50 : TYPE_PISTON
+
 
 // Time Period Aliases
 private alias object[9].propertyValue : hud.currentTimePeriod
@@ -123,7 +123,7 @@ event ObjectUpdate
 		temp0 >>= 16
 		BoxCollisionTest(C_SOLID, object.entityPos, -16, -12, 16, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
 		BoxCollisionTest(C_PLATFORM, object.entityPos, -16, temp0, 16, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-		if checkResult == 1
+		if checkResult == true
 			if object.yoffset == 2097152
 				if object.state == PISTON_EMERGE
 					object[currentPlayer].yvel = -458752

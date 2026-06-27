@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 2 : TYPE_TEXTFONT1
+
 
 
 

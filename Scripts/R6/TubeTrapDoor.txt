@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 47 : TYPE_TUBETRAPDOOR
+
 
 
 
@@ -50,7 +50,7 @@ event ObjectUpdate
 	end switch
 	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 		BoxCollisionTest(C_TOUCH, object.entityPos, -33, -40, 33, 20, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-		if checkResult == 1
+		if checkResult == true
 			if object[currentPlayer].xpos < object.xpos
 				temp0 = object.xpos
 				temp0 -= object[currentPlayer].xpos
@@ -115,7 +115,7 @@ event ObjectUpdate
 				BoxCollisionTest(C_PLATFORM, object.entityPos, -30, -40, 30, -20, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
 			else
 				BoxCollisionTest(C_TOUCH, object.entityPos, -16, -40, 16, 20, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-				if checkResult == 1
+				if checkResult == true
 					object[currentPlayer].speed >>= 1
 					object[currentPlayer].xvel >>= 1
 					BoxCollisionTest(C_SOLID, object.entityPos, -48, -80, -32, 20, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
@@ -129,7 +129,7 @@ event ObjectUpdate
 			break
 		case 2
 			BoxCollisionTest(C_PLATFORM, object.entityPos, -30, -41, 30, -20, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-			if checkResult == 1
+			if checkResult == true
 				object[currentPlayer].ypos += 65536
 			end if
 			break

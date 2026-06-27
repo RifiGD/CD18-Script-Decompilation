@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 58 : TYPE_PINBALLBOMB
+
 
 
 
@@ -25,11 +25,11 @@ event ObjectUpdate
 	else
 		ObjectTileCollision(3, -8, 0, 0)
 	end if
-	if checkResult == 1
+	if checkResult == true
 		FlipSign(object.xvel)
 	end if
 	ObjectTileCollision(0, 0, 8, 0)
-	if checkResult == 1
+	if checkResult == true
 		FlipSign(object.yvel)
 		object.yvel >>= 1
 		if object.value3 < 1
@@ -41,7 +41,7 @@ event ObjectUpdate
 	end if
 	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 		BoxCollisionTest(C_TOUCH, object.entityPos, -8, -8, 8, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-		if checkResult == 1
+		if checkResult == true
 			PlaySfx(SfxName[Explosion], 0)
 			ResetObjectEntity(object.entityPos, TypeName[Explosion], 0, object.xpos, object.ypos)
 			object.priority = 1

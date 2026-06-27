@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 51 : TYPE_ROTATINGSPIKES2
+
 
 
 
@@ -35,7 +35,7 @@ event ObjectUpdate
 				object.ypos <<= 13
 				object.ypos += temp1
 				BoxCollisionTest(C_TOUCH, object.entityPos, -12, -12, 12, 12, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-				if checkResult == 1
+				if checkResult == true
 					CallFunction(Player_Hit)
 				end if
 				temp2 += 16
@@ -51,7 +51,7 @@ event ObjectUpdate
 				object.ypos <<= 13
 				object.ypos += temp1
 				BoxCollisionTest(C_TOUCH, object.entityPos, -12, -12, 12, 12, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-				if checkResult == 1
+				if checkResult == true
 					CallFunction(Player_Hit)
 				end if
 				temp2 -= 16

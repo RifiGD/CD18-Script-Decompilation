@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 54 : TYPE_INVPLATFORM
+
 
 // Time Period Aliases
 private alias object[9].propertyValue : hud.currentTimePeriod

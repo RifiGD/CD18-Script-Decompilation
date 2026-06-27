@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 68 : TYPE_TUNNELPATH1
+
 
 
 
@@ -301,7 +301,7 @@ event ObjectUpdate
 		foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
 			if object[currentPlayer].state != Player_State_Static
 				BoxCollisionTest(C_TOUCH, object.entityPos, -8, -16, 8, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-				if checkResult == 1
+				if checkResult == true
 					object[currentPlayer].state = Player_State_Static
 					object.state = 1
 					object.value0 = 0

@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 43 : TYPE_FLIPPER
+
 
 // Function declarations
 reserve function Flipper_DebugDraw
@@ -83,9 +83,9 @@ event ObjectUpdate
 				end if
 			else
 				BoxCollisionTest(C_TOUCH, object.entityPos, -32, -24, 32, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-				if checkResult == 1
+				if checkResult == true
 					if object[currentPlayer].yvel < -262144
-						if object[currentPlayer].jumpPress == 1
+						if object[currentPlayer].jumpPress == true
 							object[currentPlayer].speed = object[currentPlayer].xpos
 							object[currentPlayer].speed -= object.xpos
 							object[currentPlayer].speed >>= 2
@@ -137,9 +137,9 @@ event ObjectUpdate
 				end if
 			else
 				BoxCollisionTest(C_TOUCH, object.entityPos, -32, -24, 32, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
-				if checkResult == 1
+				if checkResult == true
 					if object[currentPlayer].yvel < -262144
-						if object[currentPlayer].jumpPress == 1
+						if object[currentPlayer].jumpPress == true
 							object[currentPlayer].speed = object[currentPlayer].xpos
 							object[currentPlayer].speed -= object.xpos
 							object[currentPlayer].speed >>= 2

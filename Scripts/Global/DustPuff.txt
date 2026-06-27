@@ -7,7 +7,7 @@
 
 //-------Aliases-------//
 
-private alias 24 : TYPE_DUSTPUFF
+
 
 
 event ObjectUpdate
