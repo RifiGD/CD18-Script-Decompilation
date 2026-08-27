@@ -15,12 +15,43 @@ public alias arrayPos7 : playerCount
 
 private alias 0 : WARPDEST_NONE
 
+// Gravity
+public alias 0 : GRAVITY_GROUND
+public alias 1 : GRAVITY_AIR
+
+// Priority Aliases
+public alias 0 : PRIORITY_BOUNDS         // Object updates within 128 pixels of the screen border left/right and 256 pixels up/down
+public alias 1 : PRIORITY_ACTIVE         // Object will always update, unless paused/frozen
+public alias 2 : PRIORITY_ALWAYS         // Object will always update
+public alias 3 : PRIORITY_XBOUNDS        // Object updates within 128 pixels of the screen border left/right
+public alias 4 : PRIORITY_BOUNDS_DESTROY // Object updates within 128 pixels of the screen border left/right, object will be set to Blank Object if the check fails
+public alias 5 : PRIORITY_INACTIVE       // Object never updates
+public alias 6 : PRIORITY_BOUNDS_SMALL   // Object updates within 32 pixels of the screen border left/right and 128 pixels up/down
+public alias 7 : PRIORITY_ACTIVE_SMALL   // Object will always update, unless paused/frozen. The bounds ofobject.outOfBounds are much smaller
+
+// Control Modes
+public alias -1 : CONTROLMODE_NONE
+public alias  0 : CONTROLMODE_P1
+
+// Camera Styles
+public alias 0 : CAMERASTYLE_FOLLOW
+public alias 1 : CAMERASTYLE_EXTENDED
+public alias 2 : CAMERASTYLE_EXTENDED_OFFSET_L
+public alias 3 : CAMERASTYLE_EXTENDED_OFFSET_R
+public alias 4 : CAMERASTYLE_HLOCKED
+
 // Ink Effect Aliases
-private alias 0 : INK_NONE   // Disables transparency
-private alias 1 : INK_BLEND  // Uses half transparency
-private alias 2 : INK_ALPHA  // Uses transparency value of Object.Alpha
-private alias 3 : INK_ADD    // Uses transparency value of Object.Alpha, and a bright tint
-private alias 4 : INK_SUB    // Uses transparency value of Object.Alpha, and a dark tint
+public alias 0 : INK_NONE   // Disables transparency
+public alias 1 : INK_BLEND  // Uses half transparency
+public alias 2 : INK_ALPHA  // Uses transparency value of Object.Alpha
+public alias 3 : INK_ADD    // Uses transparency value of Object.Alpha, and a bright tint
+public alias 4 : INK_SUB    // Uses transparency value of Object.Alpha, and a dark tint
+
+// Flip Directions
+public alias 0 : FLIP_NONE
+public alias 1 : FLIP_X
+public alias 2 : FLIP_Y
+public alias 3 : FLIP_XY
 
 // Shield Aliases
 private alias 0 : SHIELD_NONE
@@ -29,9 +60,13 @@ private alias 2 : SHIELD_BUBBLE
 private alias 3 : SHIELD_FIRE
 private alias 4 : SHIELD_LIGHTNING
 
-// Gravity
-public alias 0 : GRAVITY_GROUND
-public alias 1 : GRAVITY_AIR
+// Collision Sides
+public alias 0 : CSIDE_FLOOR
+public alias 1 : CSIDE_LWALL
+public alias 2 : CSIDE_RWALL
+public alias 3 : CSIDE_ROOF
+public alias 4 : CSIDE_LENTITY // Origins only
+public alias 5 : CSIDE_RENTITY // Origins only
 
 // Collision Modes
 public alias 0 : CMODE_FLOOR
@@ -39,21 +74,24 @@ public alias 1 : CMODE_LWALL
 public alias 2 : CMODE_ROOF
 public alias 3 : CMODE_RWALL
 
-// Priority Aliases
-private alias 0 : PRIORITY_BOUNDS         // Object updates within 128 pixels of the screen border left/right and 256 pixels up/down
-private alias 1 : PRIORITY_ACTIVE         // Object will always update, unless paused/frozen
-private alias 2 : PRIORITY_ALWAYS         // Object will always update
-private alias 3 : PRIORITY_XBOUNDS        // Object updates within 128 pixels of the screen border left/right
-private alias 4 : PRIORITY_BOUNDS_DESTROY // Object updates within 128 pixels of the screen border left/right, object will be set to Blank Object if the check fails
-private alias 5 : PRIORITY_INACTIVE       // Object never updates
-private alias 6 : PRIORITY_BOUNDS_SMALL   // Object updates within 32 pixels of the screen border left/right and 128 pixels up/down
-private alias 7 : PRIORITY_ACTIVE_SMALL   // Object will always update, unless paused/frozen. The bounds ofobject.outOfBounds are much smaller
+// Collision Directions
+public alias 0 : COL_NONE
+public alias 1 : COL_TOP
+public alias 2 : COL_LEFT
+public alias 3 : COL_RIGHT
+public alias 4 : COL_BOTTOM
 
 // Player List Pos Aliases
 public alias 0 : PLAYER_SONIC
 public alias 1 : PLAYER_TAILS
 public alias 2 : PLAYER_KNUCKLES
 public alias 3 : PLAYER_SONIC_TAILS
+
+// Time zones
+public alias 0 : TIME_PRESENT
+public alias 1 : TIME_PAST
+public alias 2 : TIME_GOOD_FUTURE
+public alias 3 : TIME_BAD_FUTURE
 
 //Variables
 private alias object.type : player.type
@@ -142,6 +180,9 @@ private alias object.value40 : player.hitboxBottom
 private alias object.value41 : player.hitboxLeft
 private alias object.value42 : player.hitboxRight
 private alias object.value43 : player.prevGravity
+
+// Time Period Aliases
+public alias object[9].propertyValue : hud.currentTimePeriod
 
 // Function declarations
 reserve function Player_ProcessUpdate // Function0

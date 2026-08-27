@@ -5,27 +5,27 @@
 // Unpacked by Rubberduckycooly's script unpacker
 // ----------------------------------
 
-//-------Aliases-------//
+// ========================
+// Aliases
+// ========================
 
-// Priority Aliases
-private alias 1 : PRIORITY_ACTIVE
-
-// Object Aliases
 private alias object.value0 : object.timer
-private alias object.value1 : object.currentPalette // unused, leftover from 2011
+// Used to be 'currentPalette' in v3, but goes unused in here
+private alias object.value1 : object.unused
 
 
-
-
+// ========================
+// Events
+// ========================
 
 event ObjectUpdate
 	object.timer++
 	if object.timer == 8
 		object.timer = 0
-		object.currentPalette++
-		object.currentPalette %= 3
-		RotatePalette(0, 181, 183, 1)
-		RotatePalette(0, 172, 174, 0)
+		object.unused++
+		object.unused %= 3
+		RotatePalette(0, 181, 183, true)
+		RotatePalette(0, 172, 174, false)
 	end if
 end event
 
@@ -34,6 +34,10 @@ event ObjectStartup
 	object[19].type = TypeName[Pal Animation]
 	object[19].priority = PRIORITY_ACTIVE
 end event
+
+// ========================
+// Editor Events
+// ========================
 
 event RSDKDraw
 	DrawSprite(0)

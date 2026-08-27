@@ -12,7 +12,7 @@
 
 
 event ObjectUpdate
-	temp0 = R3Setup_value13
+	temp0 = R3Setup_rotoDrumTimer
 	temp0 /= 10
 	temp0 += 340
 	temp0 += object.propertyValue

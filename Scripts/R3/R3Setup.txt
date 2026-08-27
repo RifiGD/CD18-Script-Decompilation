@@ -5,275 +5,355 @@
 // Unpacked by Rubberduckycooly's script unpacker
 // ----------------------------------
 
-//-------Aliases-------//
+// ========================
+// Aliases
+// ========================
+
+private alias object.value0  : object.timer
+
+private alias object.value2  : object.bumperOscillation
+private alias object.value3  : object.turnDirection
+
+private alias object.value4  : object.drawFunction
+private alias object.value5  : object.palIndexA
+private alias object.value6  : object.palIndexB
+private alias object.value7  : object.palIndexC
+private alias object.value8  : object.palIndexD
+
+private alias object.value9  : object.palTimerA
+private alias object.value10 : object.palTimerB
+
+//Player Aliases
+private alias object.xpos  : player.xpos
+private alias object.ypos  : player.ypos
+private alias object.xvel  : player.xvel
+private alias object.yvel  : player.yvel
+private alias object.speed  : player.speed
+private alias object.state  : player.state
+private alias object.gravity  : player.gravity
+private alias object.collisionTop  : player.collisionTop
+private alias object.collisionBottom  : player.collisionBottom
+
+private alias object.value1  : player.timer
+
+// Tileinfo aliases
+private alias 1 : TILEINFO_DIRECTION
+private alias 6 : TILEINFO_ANGLEA
+
+// Deformation Layer Aliases
+private alias 1 : DEFORM_FG_WATER
+private alias 2 : DEFORM_BG
+
+// Object Slot
+private alias 29 : SLOT_SETUP
 
 
-// Time Period Aliases
-private alias object[9].propertyValue : hud.currentTimePeriod
+// ========================
+// Function Declarations
+// ========================
 
-private alias 0 : TIME_PRESENT
-private alias 1 : TIME_PAST
-private alias 2 : TIME_GOOD_FUTURE
-private alias 3 : TIME_BAD_FUTURE
+reserve function R3Setup_drawFunctionPresent
+reserve function R3Setup_drawFunctionPast
+reserve function R3Setup_drawFunctionGoodFuture
+reserve function R3Setup_drawFunctionBadFuture
 
-// Function declarations
-reserve function R3Setup_Function83
-reserve function R3Setup_Function84
-reserve function R3Setup_Function85
-reserve function R3Setup_Function86
+// ========================
+// Function Declarations
+// ========================
 
-// Static Values
-public value R3Setup_value13 = 0;
+public value R3Setup_rotoDrumTimer = 0;
 
+// ========================
 // Tables
-public table R3Setup_table13
-	57568, 57568, 0, 0, 0
+// ========================
+
+public table R3Setup_palCycleA
+	0x00E0E0, 0x00E0E0, 0x000000, 0x000000, 0x000000
 end table
 
-public table R3Setup_table14
-	0, 0, 14733536, 14733536, 14680288, 14680288, 14680288
+public table R3Setup_palCycleB
+	0x000000
+	0x000000
+	0xE0D0E0
+	0xE0D0E0
+	0xE000E0
+	0xE000E0
+	0xE000E0
 end table
 
-public table R3Setup_table15
-	0, 0, 0, 57568, 57568, 57568, 49248, 49248
+public table R3Setup_palCycleC
+	0x000000, 0x000000, 0x000000, 0x00E0E0, 0x00E0E0, 0x00E0E0, 0x00C060, 0x00C060
 end table
 
-public table R3Setup_table16
-	0, 0, 0, 0, 0, 0, 4194304, 4194304, 6299648, 6299648, 8404992, 8404992, 10510336, 10510336, 12615680, 12615680
-	14721024, 14721024, 14737408, 14737408, 14737408, 14721024, 14721024, 12615680, 12615680, 10510336, 10510336, 8404992, 8404992, 6299648, 6299648, 4194304
-	4194304
+public table R3Setup_palCycleD
+	0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x400000, 0x400000
+	0x602000, 0x602000, 0x804000, 0x804000, 0xA06000, 0xA06000, 0xC08000, 0xC08000
+	0xE0A000, 0xE0A000, 0xE0E000, 0xE0E000, 0xE0E000, 0xE0A000, 0xE0A000, 0xC08000
+	0xC08000, 0xA06000, 0xA06000, 0x804000, 0x804000, 0x602000, 0x602000, 0x40000
+	0x400000
 end table
 
-public table R3Setup_table17
-	57344, 8445952, 14737408, 14737536, 14737408, 57344, 57472, 57568, 32992, 8388832, 14680288, 14680288, 8388832, 32992, 57568, 57472
+public table R3Setup_palCycleE
+	0x00E000, 0x80E000, 0xE0E000, 0xE0E080, 0xE0E000, 0x00E000, 0x00E080, 0x00E0E0
+	0x0080E0, 0x8000E0, 0xE000E0, 0xE000E0, 0x8000E0, 0x0080E0, 0x00E0E0, 0x00E080
 end table
 
-public table R3Setup_table10
-	14737408, 14737408, 14737408, 14737408, 0, 0, 0
+public table R3Setup_palCycleF
+	0xE0E000, 0xE0E000, 0xE0E000, 0xE0E000, 0x000000, 0x000000, 0x000000
 end table
 
-public table R3Setup_table11
-	14737408, 14737408, 0, 0, 0, 14737408, 14737408, 0, 0, 0
-	14737408, 14737408, 0, 0, 0, 14737408, 14737408, 0, 0, 0
-	14737408, 14737408, 0, 0, 0, 14737408, 14737408, 0, 0, 0
-	14737408, 14737408, 0, 0, 0, 0, 0, 0, 0, 0, 0
+public table R3Setup_palCycleG
+	0xE0E000, 0xE0E000, 0x000000, 0x000000, 0x000000, 0xE0E000, 0xE0E000, 0x000000
+	0x000000, 0x000000, 0xE0E000, 0xE0E000, 0x000000, 0x000000, 0x000000, 0xE0E000
+	0xE0E000, 0x000000, 0x000000, 0x000000, 0xE0E000, 0xE0E000, 0x000000, 0x000000
+	0x000000, 0xE0E000, 0xE0E000, 0x000000, 0x000000, 0x000000, 0xE0E000, 0xE0E000
+	0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000
+	0x000000
 end table
 
-public table R3Setup_table12
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-	0, 0, 0, 0, 0, 0, 0, 0, 14680288, 14680288, 14680288, 0, 0, 0, 14680288, 14680288
-	14680288, 0, 0, 0, 14680288, 14680288, 14680288, 0, 0, 0, 14680288, 14680288, 14680288, 0, 0, 0
-	14721248, 14721248, 14680288, 14680288, 14680288, 14721248, 14721248, 14680288, 14680288, 14680288, 14721248, 14721248, 14680288, 14680288, 14680288
+public table R3Setup_palCycleH
+	0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000
+	0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000
+	0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000
+	0xE000E0, 0xE000E0, 0xE000E0, 0x000000, 0x000000, 0x000000, 0xE000E0, 0xE000E0
+	0xE000E0, 0x000000, 0x000000, 0x000000, 0xE000E0, 0xE000E0, 0xE000E0, 0x000000
+	0x000000, 0x000000, 0xE000E0, 0xE000E0, 0xE000E0, 0x000000, 0x000000, 0x000000
+	14721248, 14721248, 0xE000E0, 0xE000E0, 0xE000E0, 14721248, 14721248, 0xE000E0
+	0xE000E0, 0xE000E0, 14721248, 14721248, 0xE000E0, 0xE000E0, 0xE000E0
 end table
 
+// ========================
+// Function Definitions
+// ========================
 
-public function R3Setup_Function83 // Present
-	GetTableValue(temp0, object.value5, R3Setup_table10)
-	object.value5++
-	object.value5 %= 7
+private function R3Setup_drawFunctionPresent
+	GetTableValue(temp0, object.palIndexA, R3Setup_palCycleF)
+	object.palIndexA++
+	object.palIndexA %= 7
 	SetPaletteEntry(0, 175, temp0)
-	GetTableValue(temp0, object.value6, R3Setup_table11)
-	object.value6++
-	object.value6 %= 41
+
+	GetTableValue(temp0, object.palIndexB, R3Setup_palCycleG)
+	object.palIndexB++
+	object.palIndexB %= 41
 	SetPaletteEntry(0, 188, temp0)
-	GetTableValue(temp0, object.value7, R3Setup_table12)
-	object.value7++
-	object.value7 %= 63
+
+	GetTableValue(temp0, object.palIndexC, R3Setup_palCycleH)
+	object.palIndexC++
+	object.palIndexC %= 63
 	SetPaletteEntry(0, 189, temp0)
-	GetTableValue(temp0, object.value8, R3Setup_table13)
-	object.value8++
-	object.value8 %= 5
+
+	GetTableValue(temp0, object.palIndexD, R3Setup_palCycleA)
+	object.palIndexD++
+	object.palIndexD %= 5
 	SetPaletteEntry(0, 191, temp0)
 end function
 
 
-public function R3Setup_Function84 // Past, handled in ObjectUpdate like v3
+private function R3Setup_drawFunctionPast
+	//There is nothing here lol
 end function
 
 
-public function R3Setup_Function85 // Good Future
-	GetTableValue(temp0, object.value5, R3Setup_table14)
-	object.value5++
-	object.value5 %= 7
+private function R3Setup_drawFunctionGoodFuture
+	GetTableValue(temp0, object.palIndexA, R3Setup_palCycleB)
+	object.palIndexA++
+	object.palIndexA %= 7
 	SetPaletteEntry(0, 172, temp0)
 end function
 
 
-public function R3Setup_Function86 // Bad Future
-	GetTableValue(temp0, object.value5, R3Setup_table15)
-	object.value5++
-	object.value5 &= 7
+private function R3Setup_drawFunctionBadFuture
+	GetTableValue(temp0, object.palIndexA, R3Setup_palCycleC)
+	object.palIndexA++
+	object.palIndexA &= 7
 	SetPaletteEntry(0, 170, temp0)
-	object.value9++
-	if object.value9 == 5
-		object.value9 = 0
-		GetTableValue(temp0, object.value6, R3Setup_table16)
-		object.value6++
-		object.value6 %= 33
+
+	object.palTimerA++
+	if object.palTimerA == 5
+		object.palTimerA = 0
+		GetTableValue(temp0, object.palIndexB, R3Setup_palCycleD)
+		object.palIndexB++
+		object.palIndexB %= 33
 		SetPaletteEntry(0, 189, temp0)
 	end if
-	object.value10++
-	if object.value10 == 10
-		object.value10 = 0
-		GetTableValue(temp0, object.value7, R3Setup_table17)
-		object.value7++
-		object.value7 &= 15
+
+	object.palTimerB++
+	if object.palTimerB == 10
+		object.palTimerB = 0
+		GetTableValue(temp0, object.palIndexC, R3Setup_palCycleE)
+		object.palIndexC++
+		object.palIndexC &= 15
 		SetPaletteEntry(0, 187, temp0)
 	end if
 end function
 
+// ========================
+// Events
+// ========================
 
 event ObjectUpdate
-	CallFunction(object.value4)
-	if object.value3 == 0
-		if object.value2 < 3145728
-			object.value2 += 65536
+	CallFunction(object.drawFunction)
+	
+	if object.turnDirection == false
+		if object.bumperOscillation < 0x300000
+			object.bumperOscillation += 0x10000
 		else
-			object.value3 = 1
+			object.turnDirection = true
 		end if
 	else
-		if object.value2 > -3145728
-			object.value2 -= 65536
+		if object.bumperOscillation > -0x300000
+			object.bumperOscillation -= 0x10000
 		else
-			object.value3 = 0
+			object.turnDirection = false
 		end if
 	end if
+	
 	if hud.currentTimePeriod != TIME_PAST
-		R3Setup_value13++
-		R3Setup_value13 %= 20
+		R3Setup_rotoDrumTimer++
+		R3Setup_rotoDrumTimer %= 20
 	end if
+
 	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
-		temp2 = object[currentPlayer].xpos
+		temp2 = player[currentPlayer].xpos
 		temp2 >>= 16
 		temp4 = temp2
 		temp2 -= 8
 		temp4 += 8
-		temp3 = object[currentPlayer].ypos
+		temp3 = player[currentPlayer].ypos
 		temp3 >>= 16
-		if object[currentPlayer].yvel >= 0
-			temp3 += object[currentPlayer].collisionBottom
+		if player[currentPlayer].yvel >= 0
+			temp3 += player[currentPlayer].collisionBottom
 			temp3 -= 2
 		else
-			temp3 += object[currentPlayer].collisionTop
+			temp3 += player[currentPlayer].collisionTop
 			temp3 += 2
 		end if
+
 		temp5 = temp3
 		temp7 = 0
-		Get16x16TileInfo(temp0, temp2, temp3, 6)
+		Get16x16TileInfo(temp0, temp2, temp3, TILEINFO_ANGLEA)
 		switch temp0
 		case 1
 			temp7 = 1
 			break
 		case 3
 			temp7 = 3
-			Get16x16TileInfo(temp6, temp2, temp3, 1)
+			Get16x16TileInfo(temp6, temp2, temp3, TILEINFO_DIRECTION)
 			break
 		case 5
 			temp7 = 2
 			break
 		end switch
-		Get16x16TileInfo(temp0, temp4, temp5, 6)
+
+		Get16x16TileInfo(temp0, temp4, temp5, TILEINFO_ANGLEA)
 		switch temp0
 		case 1
 			temp7 = 1
 			break
 		case 3
 			temp7 = 3
-			Get16x16TileInfo(temp6, temp4, temp5, 1)
+			Get16x16TileInfo(temp6, temp4, temp5, TILEINFO_DIRECTION)
 			break
 		case 5
 			temp7 = 2
 			break
 		end switch
+
 		switch temp7
 		case 1
-			if object[currentPlayer].yvel >= 0
-				object[currentPlayer].gravity = 1
+			if player[currentPlayer].yvel >= 0
+				player[currentPlayer].gravity = 1
 				PlaySfx(SfxName[Bumper 2], 0)
-				if object[currentPlayer].state == Player_State_Fly
-					object[currentPlayer].yvel = -262144
+				if player[currentPlayer].state == Player_State_Fly
+					player[currentPlayer].yvel = -0x40000
 				else
-					object[currentPlayer].yvel = -458752
+					player[currentPlayer].yvel = -0x70000
 				end if
-				if object[currentPlayer].state == Player_State_Hurt
-					object[currentPlayer].state = Player_State_Air
-					object[currentPlayer].value1 = 0
+				if player[currentPlayer].state == Player_State_Hurt
+					player[currentPlayer].state = Player_State_Air
+					player[currentPlayer].timer = 0
 				end if
 			else
-				if object[currentPlayer].gravity == 1
-					object[currentPlayer].yvel = 262144
+				if player[currentPlayer].gravity == 1
+					player[currentPlayer].yvel = 0x40000
 					PlaySfx(SfxName[Bumper 2], 0)
 				end if
 			end if
 			break
+
 		case 2
-			if object[currentPlayer].gravity == 1
+			if player[currentPlayer].gravity == 1
 				PlaySfx(SfxName[Mini Bumper], 0)
-				if object[currentPlayer].yvel >= 0
-					object[currentPlayer].yvel = -262144
+				if player[currentPlayer].yvel >= 0
+					player[currentPlayer].yvel = -0x40000
 				else
-					object[currentPlayer].yvel = 262144
+					player[currentPlayer].yvel = 0x40000
 				end if
 			end if
 			break
+
 		case 3
-			if object[currentPlayer].gravity == 1
+			if player[currentPlayer].gravity == 1
 				PlaySfx(SfxName[Bumper 2], 0)
-				if object[currentPlayer].yvel >= 0
-					if object[currentPlayer].state == Player_State_Fly
-						object[currentPlayer].yvel = -262144
+				if player[currentPlayer].yvel >= 0
+					if player[currentPlayer].state == Player_State_Fly
+						player[currentPlayer].yvel = -0x40000
 					else
-						object[currentPlayer].yvel = -458752
+						player[currentPlayer].yvel = -0x70000
 					end if
 				else
-					object[currentPlayer].yvel = 262144
+					player[currentPlayer].yvel = 0x40000
 				end if
 				if temp6 == 0
-					if object[currentPlayer].xvel > 0
+					if player[currentPlayer].xvel > 0
 						FlipSign(object[currentPlayer].xvel)
-						object[currentPlayer].xvel *= 5
-						object[currentPlayer].xvel >>= 2
-						if object[currentPlayer].xvel > -131072
-							object[currentPlayer].xvel = -131072
+						player[currentPlayer].xvel *= 5
+						player[currentPlayer].xvel >>= 2
+						if player[currentPlayer].xvel > -0x20000
+							player[currentPlayer].xvel = -0x20000
 						end if
 					else
-						if object[currentPlayer].xvel > -131072
-							object[currentPlayer].xvel = -131072
+						if player[currentPlayer].xvel > -0x20000
+							player[currentPlayer].xvel = -0x20000
 						end if
 					end if
 				else
-					if object[currentPlayer].xvel < 0
-						FlipSign(object[currentPlayer].xvel)
-						object[currentPlayer].xvel *= 5
-						object[currentPlayer].xvel >>= 2
-						if object[currentPlayer].xvel < 131072
-							object[currentPlayer].xvel = 131072
+					if player[currentPlayer].xvel < 0
+						FlipSign(player[currentPlayer].xvel)
+						player[currentPlayer].xvel *= 5
+						player[currentPlayer].xvel >>= 2
+						if player[currentPlayer].xvel < 0x20000
+							player[currentPlayer].xvel = 0x20000
 						end if
 					else
-						if object[currentPlayer].xvel < 131072
-							object[currentPlayer].xvel = 131072
+						if player[currentPlayer].xvel < 0x20000
+							player[currentPlayer].xvel = 0x20000
 						end if
 					end if
 				end if
-				object[currentPlayer].speed = object[currentPlayer].xvel
+				player[currentPlayer].speed = player[currentPlayer].xvel
 			end if
 			break
+
 		end switch
-		temp3 = object[currentPlayer].ypos
+
+		temp3 = player[currentPlayer].ypos
 		temp3 >>= 16
 		temp5 = temp3
 		temp3 -= 6
 		temp5 += 6
-		temp2 = object[currentPlayer].xpos
+		temp2 = player[currentPlayer].xpos
 		temp2 >>= 16
-		if object[currentPlayer].xvel > 0
+
+		if player[currentPlayer].xvel > 0
 			temp2 += 8
 		else
 			temp2 -= 8
 		end if
 		temp4 = temp2
+
 		temp7 = 0
-		Get16x16TileInfo(temp0, temp2, temp3, 6)
+		Get16x16TileInfo(temp0, temp2, temp3, TILEINFO_ANGLEA)
 		switch temp0
 		case 3
 			temp7 = 1
@@ -285,7 +365,8 @@ event ObjectUpdate
 			temp7 = 1
 			break
 		end switch
-		Get16x16TileInfo(temp0, temp4, temp5, 6)
+
+		Get16x16TileInfo(temp0, temp4, temp5, TILEINFO_ANGLEA)
 		switch temp0
 		case 3
 			temp7 = 1
@@ -297,23 +378,24 @@ event ObjectUpdate
 			temp7 = 1
 			break
 		end switch
+
 		switch temp7
 		case 1
-			if object[currentPlayer].xvel > 0
-				object[currentPlayer].xvel = -327680
+			if player[currentPlayer].xvel > 0
+				player[currentPlayer].xvel = -0x50000
 			else
-				object[currentPlayer].xvel = 327680
+				player[currentPlayer].xvel = 0x50000
 			end if
-			object[currentPlayer].speed = object[currentPlayer].xvel
+			player[currentPlayer].speed = player[currentPlayer].xvel
 			PlaySfx(SfxName[Bumper 2], 0)
 			break
 		case 2
-			if object[currentPlayer].xvel > 0
-				object[currentPlayer].xvel = -262144
+			if player[currentPlayer].xvel > 0
+				player[currentPlayer].xvel = -0x40000
 			else
-				object[currentPlayer].xvel = 262144
+				player[currentPlayer].xvel = 0x40000
 			end if
-			object[currentPlayer].speed = object[currentPlayer].xvel
+			player[currentPlayer].speed = player[currentPlayer].xvel
 			PlaySfx(SfxName[Mini Bumper], 0)
 			break
 		end switch
@@ -322,48 +404,64 @@ end event
 
 
 event ObjectDraw
-	object.value0++
-	if object.value0 > 3
+	object.timer++
+	if object.timer > 3
 		tileLayer[0].deformationOffsetW++
 		tileLayer[1].deformationOffset++
-		object.value0 = 0
+		object.timer = 0
 	end if
 end event
 
 
 event ObjectStartup
-	object[29].type = TypeName[R3 Setup]
-	object[29].priority = 1
-	object[29].drawOrder = 0
+	object[SLOT_SETUP].type = TypeName[R3 Setup]
+
+	object[SLOT_SETUP].priority = PRIORITY_ACTIVE
+	object[SLOT_SETUP].drawOrder = 0
+
 	switch hud.currentTimePeriod
 	case TIME_PRESENT
-		object[29].value4 = R3Setup_Function83
+		object[SLOT_SETUP].drawFunction = R3Setup_drawFunctionPresent
 		break
+
 	case TIME_PAST
-		object[29].value4 = R3Setup_Function84
+		object[SLOT_SETUP].drawFunction = R3Setup_drawFunctionPast
 		break
+
 	case TIME_GOOD_FUTURE
-		object[29].value4 = R3Setup_Function85
+		object[SLOT_SETUP].drawFunction = R3Setup_drawFunctionGoodFuture
 		break
+
 	case TIME_BAD_FUTURE
-		object[29].value4 = R3Setup_Function86
+		object[SLOT_SETUP].drawFunction = R3Setup_drawFunctionBadFuture
 		break
+
 	end switch
-	SetLayerDeformation(2, 128, 6, 0, 0, 0)
-	SetLayerDeformation(1, 64, 4, 0, 0, 0)
+
+	SetLayerDeformation(DEFORM_BG, 128, 6, 0, 0, 0)
+	SetLayerDeformation(DEFORM_FG_WATER, 64, 4, 0, 0, 0)
+
 	stage.waterLevel = 1472
+
 	if hud.currentTimePeriod == TIME_PAST
-		R3Setup_value13 = 1
+		R3Setup_rotoDrumTimer = 1
 	else
-		R3Setup_value13 = 0
+		R3Setup_rotoDrumTimer = 0
 	end if
+
 end event
+
+// ========================
+// Editor Events
+// ========================
 
 event RSDKDraw
 	DrawSprite(0)
 end event
 
 event RSDKLoad
-	LoadSpriteSheet("Global/Display.gif")
-	SpriteFrame(-16, -16, 32, 32, 1, 143)
+    LoadSpriteSheet("Global/Display.gif")
+    SpriteFrame(-16, -16, 32, 32, 1, 143)		// #0 - "Script" Icon
+    
+    SetVariableAlias(ALIAS_VAR_PROPVAL, "unused")
 end event

@@ -5,25 +5,24 @@
 // Unpacked by Rubberduckycooly's script unpacker
 // ----------------------------------
 
-//-------Aliases-------//
+// ========================
+// Aliases
+// ========================
 
-// Priority Aliases
-private alias 1 : PRIORITY_ACTIVE
-
-// Object Aliases
 private alias object.value0 : object.timer
 
 
-
-
+// ========================
+// Events
+// ========================
 
 event ObjectUpdate
 	object.timer++
 	if object.timer == 8
 		object.timer = 0
-		RotatePalette(0, 181, 183, 1)
-		RotatePalette(0, 172, 174, 0)
-		RotatePalette(0, 192, 197, 0)
+		RotatePalette(0, 181, 183, true)
+		RotatePalette(0, 172, 174, false)
+		RotatePalette(0, 192, 197, false)
 	end if
 end event
 
@@ -33,11 +32,18 @@ event ObjectStartup
 	object[19].priority = PRIORITY_ACTIVE
 end event
 
+
+// ========================
+// Editor Events
+// ========================
+
 event RSDKDraw
 	DrawSprite(0)
 end event
 
 event RSDKLoad
-	LoadSpriteSheet("Global/Display.gif")
-	SpriteFrame(-16, -16, 32, 32, 1, 143)
+    LoadSpriteSheet("Global/Display.gif")
+    SpriteFrame(-16, -16, 32, 32, 1, 143)		// #0 - "Script" Icon
+    
+    SetVariableAlias(ALIAS_VAR_PROPVAL, "unused")
 end event
