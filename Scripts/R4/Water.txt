@@ -166,7 +166,7 @@ event ObjectUpdate
 				arrayPos0 = currentPlayer
 				arrayPos0 += playerCount
 				CallFunction(Player_ApplyShield)
-				R4Setup_value13 = 4
+				Water_flashTimer = 4
 			end if
 			if player[currentPlayer].shield != SHIELD_BUBBLE
 				if object[currentPlayer].value3 == 0

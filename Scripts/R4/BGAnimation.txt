@@ -211,8 +211,9 @@ end event
 
 event ObjectStartup
 	object[19].type = TypeName[Blank Object]
-	object[19].priority = 1
+	object[19].priority = PRIORITY_ACTIVE
 	object[19].value2 = 534
+
 	temp0 = 0
 	temp1 = 0
 	temp2 = 16

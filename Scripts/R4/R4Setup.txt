@@ -5,28 +5,39 @@
 // Unpacked by Rubberduckycooly's script unpacker
 // ----------------------------------
 
-//-------Aliases-------//
+// ========================
+// Aliases
+// ========================
 
+private alias object.value0 : object.deformTimer
+private alias object.value1 : object.cycleTimer
+private alias object.value2 : object.cycleIndex
+private alias object.value3 : object.cycleEndIndex
+private alias object.value4 : object.palCycleEnabled
 
+// Deformation Layer Aliases
+private alias 3 : DEFORM_BG_WATER
 
-// Time Period Aliases
-private alias object[9].propertyValue : hud.currentTimePeriod
+private alias 21 : SLOT_ZONESETUP
 
-private alias 0 : TIME_PRESENT
-private alias 1 : TIME_PAST
-private alias 2 : TIME_GOOD_FUTURE
-private alias 3 : TIME_BAD_FUTURE
+// ========================
+// Function Declarations
+// ========================
 
+reserve function R4Setup_deformLeft
+reserve function R4Setup_deformRight
 
-// Function declarations
-reserve function R4Setup_Function83
-reserve function R4Setup_Function84
-
+// ========================
 // Static Values
-public value R4Setup_value13 = 0;
+// ========================
 
+public value Water_flashTimer = 0;
 
-public function R4Setup_Function83
+// ========================
+// Function Definitions
+// ========================
+
+private function R4Setup_deformLeft
 	stage[arrayPos0].deformationData1 = 1
 	arrayPos0++
 	stage[arrayPos0].deformationData1 = 1
@@ -54,7 +65,7 @@ public function R4Setup_Function83
 end function
 
 
-public function R4Setup_Function84
+private function R4Setup_deformRight
 	stage[arrayPos0].deformationData1 = -1
 	arrayPos0++
 	stage[arrayPos0].deformationData1 = -1
@@ -81,25 +92,33 @@ public function R4Setup_Function84
 	arrayPos0++
 end function
 
+// ========================
+// Events
+// ========================
 
 event ObjectUpdate
-	object.value0++
-	if object.value0 > 1
+	object.deformTimer++
+	if object.deformTimer > 1
 		tileLayer[0].deformationOffsetW++
 		tileLayer[1].deformationOffsetW++
-		object.value0 = 0
+		object.deformTimer = 0
 	end if
-	if object.value4 == 1
-		object.value1++
-		if object.value1 == 3
-			object.value1 = 0
-			CopyPalette(3, object.value2, 0, 176, 16)
-			object.value2 += 16
-			object.value2 %= object.value3
+
+	// Don't know why it checks for this...
+	// It always true...
+	if object.palCycleEnabled == true
+		object.cycleTimer++
+		if object.cycleTimer == 3
+			object.cycleTimer = 0
+
+			CopyPalette(3, object.cycleIndex, 0, 176, 16)
+			object.cycleIndex += 16
+			object.cycleIndex %= object.cycleEndIndex
 		end if
 	end if
-	if R4Setup_value13 > 0
-		R4Setup_value13--
+
+	if Water_flashTimer > 0
+		Water_flashTimer--
 	end if
 end event
 
@@ -110,29 +129,36 @@ event ObjectDraw
 	if temp0 < 0
 		temp0 = 0
 	end if
+
 	if temp0 > screen.ysize
 		temp0 = screen.ysize
 	end if
+
 	SetActivePalette(0, 0, temp0)
-	if R4Setup_value13 > 0
+	if Water_flashTimer > 0
 		SetActivePalette(2, temp0, screen.ysize)
 	else
 		SetActivePalette(1, temp0, screen.ysize)
 	end if
+
 	player.waterStream = 0
 end event
 
 
 event ObjectStartup
-	object[21].type = TypeName[R4 Setup]
-	object[21].priority = 1
-	object[21].drawOrder = 0
+	object[SLOT_ZONESETUP].type = TypeName[R4 Setup]
+	object[SLOT_ZONESETUP].priority = PRIORITY_ACTIVE
+	object[SLOT_ZONESETUP].drawOrder = 0
+
 	arrayPos0 = 0
-	CallFunction(R4Setup_Function83)
+	CallFunction(R4Setup_deformLeft)
+
 	arrayPos0 = 128
-	CallFunction(R4Setup_Function83)
+	CallFunction(R4Setup_deformLeft)
+
 	arrayPos0 = 160
-	CallFunction(R4Setup_Function84)
+	CallFunction(R4Setup_deformRight)
+
 	arrayPos0 = 256
 	while arrayPos0 < 576
 		arrayPos1 = arrayPos0
@@ -140,46 +166,59 @@ event ObjectStartup
 		stage[arrayPos0].deformationData1 = stage[arrayPos1].deformationData1
 		arrayPos0++
 	loop
-	SetLayerDeformation(3, 128, 4, 0, 0, 0)
+
+	SetLayerDeformation(DEFORM_BG_WATER, 128, 4, 0, 0, 0)
+
 	switch hud.currentTimePeriod
 	case TIME_PRESENT
 		LoadPalette("R4A_WaterPal.act", 1, 0, 0, 256)
 		if stage.actNum == 2
 			LoadPalette("R4A_PalCycle.act", 3, 0, 0, 64)
-			object[21].value4 = 1
-			object[21].value3 = 64
+			object[SLOT_ZONESETUP].palCycleEnabled = true
+			object[SLOT_ZONESETUP].cycleEndIndex = 64
 		end if
 		break
+
 	case TIME_PAST
 		LoadPalette("R4B_WaterPal.act", 1, 0, 0, 256)
 		if stage.actNum == 2
 			LoadPalette("R4B_PalCycle.act", 3, 0, 0, 48)
-			object[21].value4 = 1
-			object[21].value3 = 48
+			object[SLOT_ZONESETUP].palCycleEnabled = true
+			object[SLOT_ZONESETUP].cycleEndIndex = 48
 		end if
 		break
+
 	case TIME_GOOD_FUTURE
 		LoadPalette("R4C_WaterPal.act", 1, 0, 0, 256)
 		LoadPalette("R4C_PalCycle.act", 3, 0, 0, 64)
-		object[21].value4 = 1
-		object[21].value3 = 64
+		object[SLOT_ZONESETUP].palCycleEnabled = true
+		object[SLOT_ZONESETUP].cycleEndIndex = 64
 		break
+
 	case TIME_BAD_FUTURE
 		LoadPalette("R4D_WaterPal.act", 1, 0, 0, 256)
 		LoadPalette("R4D_PalCycle.act", 3, 0, 0, 48)
-		object[21].value4 = 1
-		object[21].value3 = 48
+		object[21].palCycleEnabled = true
+		object[21].cycleEndIndex = 48
 		break
 	end switch
+
 	LoadPalette("ElectricFlash.act", 2, 0, 0, 256)
-	R4Setup_value13 = 0
+	Water_flashTimer = 0
 end event
+
+// ========================
+// Editor Events
+// ========================
 
 event RSDKDraw
-	DrawSprite(0)
+    DrawSprite(0)
 end event
 
+
 event RSDKLoad
-	LoadSpriteSheet("Global/Display.gif")
-	SpriteFrame(-16, -16, 32, 32, 1, 143)
+    LoadSpriteSheet("Global/Display.gif")
+    SpriteFrame(-16, -16, 32, 32, 1, 143)		// #0 - "Script" Icon
+    
+    SetVariableAlias(ALIAS_VAR_PROPVAL, "unused")
 end event

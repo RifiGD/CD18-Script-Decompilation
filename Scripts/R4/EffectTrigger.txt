@@ -17,25 +17,28 @@ event ObjectUpdate
 		if object[0].xpos < 41943040
 			stage[0].activeLayer = 2
 			object.type = TypeName[Blank Object]
-			object[19].type = TypeName[Blank Object]
+			object[19].type = TypeName[BG Animation]
 		end if
 		break
+
 	case 1
 		if object[0].ypos > object.ypos
 			stage[0].activeLayer = 1
-			object[19].type = TypeName[Blank Object]
+			object[19].type = TypeName[BG Animation]
 		else
 			stage[0].activeLayer = 2
-			object[19].type = TypeName[Blank Object]
+			object[19].type = TypeName[BG Animation]
 		end if
 		break
+
 	case 2
 		if object[0].xpos > object.xpos
-			stage.newWaterLevel = 40108032
+			stage.newWaterLevel = 0x264 0000	// Y - 612 in map coords
 		else
-			stage.newWaterLevel = 42205184
+			stage.newWaterLevel = 0x284 0000	// Y - 644 in map coords
 		end if
 		break
+
 	case 4
 		BoxCollisionTest(C_TOUCH, object.entityPos, -10, -16, 10, 16, 0, C_BOX, C_BOX, C_BOX, C_BOX)
 		if checkResult == true
@@ -68,6 +71,7 @@ event ObjectUpdate
 			end if
 		end if
 		break
+
 	case 5
 		BoxCollisionTest(C_TOUCH, object.entityPos, -10, -16, 10, 16, 0, C_BOX, C_BOX, C_BOX, C_BOX)
 		if checkResult == true
@@ -100,6 +104,7 @@ event ObjectUpdate
 			end if
 		end if
 		break
+
 	case 6
 		BoxCollisionTest(C_TOUCH, object.entityPos, -16, -16, 16, 16, 0, C_BOX, C_BOX, C_BOX, C_BOX)
 		if checkResult == true
@@ -111,6 +116,7 @@ event ObjectUpdate
 			end if
 		end if
 		break
+
 	case 7
 		BoxCollisionTest(C_TOUCH, object.entityPos, -16, -16, 16, 16, 0, C_BOX, C_BOX, C_BOX, C_BOX)
 		if checkResult == true
@@ -122,6 +128,7 @@ event ObjectUpdate
 			end if
 		end if
 		break
+
 	case 8
 		BoxCollisionTest(C_TOUCH, object.entityPos, -16, -16, 16, 16, 0, C_BOX, C_BOX, C_BOX, C_BOX)
 		if checkResult == true
@@ -133,6 +140,7 @@ event ObjectUpdate
 			end if
 		end if
 		break
+
 	case 9
 		BoxCollisionTest(C_TOUCH, object.entityPos, -16, -16, 16, 16, 0, C_BOX, C_BOX, C_BOX, C_BOX)
 		if checkResult == true
@@ -144,6 +152,7 @@ event ObjectUpdate
 			end if
 		end if
 		break
+
 	case 10
 		BoxCollisionTest(C_TOUCH, object.entityPos, -16, -16, 16, 16, 0, C_BOX, C_BOX, C_BOX, C_BOX)
 		if checkResult == true
@@ -154,6 +163,7 @@ event ObjectUpdate
 			end if
 		end if
 		break
+
 	case 11
 		BoxCollisionTest(C_TOUCH, object.entityPos, -16, -16, 16, 16, 0, C_BOX, C_BOX, C_BOX, C_BOX)
 		if checkResult == true
@@ -164,6 +174,7 @@ event ObjectUpdate
 			end if
 		end if
 		break
+
 	case 12
 		BoxCollisionTest(C_TOUCH, object.entityPos, -16, -16, 16, 16, 0, C_BOX, C_BOX, C_BOX, C_BOX)
 		if checkResult == true
@@ -176,13 +187,15 @@ event ObjectUpdate
 			end if
 		end if
 		break
+
 	case 13
 		if object[0].xpos > object.xpos
-			stage.newWaterLevel = 125829120
+			stage.newWaterLevel = 0x780 0000	// Y - 1920 in map coords
 		else
-			stage.newWaterLevel = 87293952
+			stage.newWaterLevel = 0x534 0000	// Y - 1332 in map coords
 		end if
 		break
+
 	end switch
 end event
 
@@ -192,5 +205,11 @@ end event
 
 event RSDKLoad
 	LoadSpriteSheet("Global/Display.gif")
-	SpriteFrame(-16, -16, 32, 32, 1, 143)
+	SpriteFrame(-16, -16, 32, 32, 1, 143)		// #0 - "Script" Icon
+	SpriteFrame(-8, -8, 16, 16, 173,  67)		// #1 - "T" Icon
+
+	LoadSpriteSheet("Players/Sonic3.gif")
+	SpriteFrame(-28, -12, 56, 24, 199, 75)		// #2 - Sonic Fan Rotate frame 0
+	SpriteFrame(-24, -12, 48, 24, 207, 125)		// #3 - Sonic Fan Rotate frame 1
+	SpriteFrame(-28, -12, 56, 24, 199, 100)		// #4 - Sonic Fan Rotate frame 2
 end event
