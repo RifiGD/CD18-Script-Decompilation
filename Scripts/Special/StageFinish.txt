@@ -34,8 +34,10 @@ event ObjectUpdate
 		end if
 		object.value6 = object[4].value3
 		object.value6 *= 200
+		
 		stage.listPos = specialStage.nextZone
 		stage.activeList = REGULAR_STAGE
+
 		if specialStage.timeStones < 127
 			temp0 = 0
 			while temp0 == 0
@@ -58,6 +60,7 @@ event ObjectUpdate
 			if stage.playerListPos == 0
 			end if
 		end if
+
 		if options.gameMode == 1
 			arrayPos1 = options.saveSlot
 			arrayPos1 <<= 3

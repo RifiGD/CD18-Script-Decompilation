@@ -1,0 +1,11 @@
+/Data
+*.py
+*.dll
+/Mods
+/Bytecode
+*.exe
+log.txt
+*.ini
+*.bin
+*.ilk
+*.pdb

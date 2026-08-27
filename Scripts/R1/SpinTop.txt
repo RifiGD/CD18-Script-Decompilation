@@ -7,16 +7,6 @@
 
 //-------Aliases-------//
 
-
-
-
-// Collision Modes
-public alias 0 : CMODE_FLOOR
-public alias 1 : CMODE_LWALL
-public alias 2 : CMODE_ROOF
-public alias 3 : CMODE_RWALL
-
-
 // Player Aliases
 private alias object.controlLock : player.controlLock
 private alias object.gravity : player.gravity
@@ -72,7 +62,7 @@ public function SpinningTop_Player_Jump
 		player[currentPlayer].yvel = player[currentPlayer].jumpStrength
 		FlipSign(player[currentPlayer].yvel)
 		GetTableValue(player[currentPlayer].speed, temp7, SpinningTop_table10)
-		player[currentPlayer].scrollTracking = 1
+		player[currentPlayer].scrollTracking = true
 		player[currentPlayer].animation = ANI_JUMPING
 		player[currentPlayer].angle = 0
 		player[currentPlayer].collisionMode = CMODE_FLOOR
