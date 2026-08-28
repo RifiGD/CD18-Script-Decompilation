@@ -5,34 +5,38 @@
 // Unpacked by Rubberduckycooly's script unpacker
 // ----------------------------------
 
-//-------Aliases-------//
+// ========================
+// Aliases
+// ========================
 
+private alias object.value0 : object.timer
+private alias object.value6 : object.drawFunction
 
-
-// Time Period Aliases
-private alias object[9].propertyValue : hud.currentTimePeriod
-
-private alias 0 : TIME_PRESENT
-private alias 1 : TIME_PAST
-private alias 2 : TIME_GOOD_FUTURE
-private alias 3 : TIME_BAD_FUTURE
-
-// Function declarations
-reserve function R5Setup_Function83
-reserve function R5Setup_Function84
-reserve function R5Setup_Function85
-reserve function R5Setup_Function86
-
+// ========================
 // Static Values
+// ========================
+
 public value R5Setup_value13 = 0;
 public value R5Setup_value14 = 0;
 public value R5Setup_value15 = 0;
 public value R5Setup_value16 = 0;
 
+// ========================
+// Function Declarations
+// ========================
 
-public function R5Setup_Function83
+reserve function R5Setup_drawFunctionPresent
+reserve function R5Setup_drawFunctionPast
+reserve function R5Setup_drawFunctionGoodFuture
+reserve function R5Setup_drawFunctionBadFuture
+
+// ========================
+// Function Definitions
+// ========================
+
+private function R5Setup_drawFunctionPresent
 	if stage[0].activeLayer == 1
-		temp0 = object.value0
+		temp0 = object.timer
 		temp0 /= 6
 		switch temp0
 		case 0
@@ -59,25 +63,34 @@ public function R5Setup_Function83
 			CopyPalette(1, 48, 0, 176, 16)
 			break
 		end switch
-		object.value0++
-		object.value0 %= 54
+		
+		object.timer++
+		object.timer %= 54
+
+#platform: USE_DECOMP
+	else
+ 		CopyPalette(3, temp0, 0, 192, 16)
+ #endplatform
 	end if
+
+#platform: USE_ORIGINAL_CODE
 	CopyPalette(3, temp0, 0, 192, 16)
+#endplatform
 end function
 
 
-public function R5Setup_Function84
+private function R5Setup_drawFunctionPast
 end function
 
 
-public function R5Setup_Function85
+private function R5Setup_drawFunctionGoodFuture
 end function
 
 
-public function R5Setup_Function86
-	object.value0++
-	if object.value0 > 3
-		object.value0 = 0
+private function R5Setup_drawFunctionBadFuture
+	object.timer++
+	if object.timer > 3
+		object.timer = 0
 		object.frame++
 		object.frame &= 3
 		switch object.frame
@@ -200,23 +213,28 @@ event ObjectUpdate
 			object.value5 %= 3
 		end if
 	end if
+
 	temp0 = object.value5
 	temp0 += R5Setup_value14
 	temp0 <<= 4
 	CopyPalette(2, temp0, 0, 160, 16)
-	CallFunction(object.value6)
+
+	CallFunction(object.drawFunction)
 end event
 
 
 event ObjectStartup
 	object[21].type = TypeName[R5 Setup]
 	object[21].priority = 1
+
 	R5Setup_value13 = 1
 	R5Setup_value14 = 0
 	R5Setup_value15 = 0
+
 	switch hud.currentTimePeriod
 	case TIME_PRESENT
 		R5Setup_value16 = 65536
+
 		temp0 = 0
 		temp1 = 0
 		temp2 = 16
@@ -229,32 +247,45 @@ event ObjectStartup
 			temp2 += 16
 			temp0 += 16
 		loop
-		object[21].value6 = R5Setup_Function83 // 83
+
+		object[21].drawFunction = R5Setup_drawFunctionPresent // 83
 		LoadPalette("R5A_GlowEffect.act", 1, 0, 0, 80)
 		break
+
 	case TIME_PAST
 		R5Setup_value16 = 32768
 		LoadPalette("R5B_PalCycle.act", 2, 0, 0, 96)
-		object[21].value6 = R5Setup_Function84 // 84
+		object[21].drawFunction = R5Setup_drawFunctionPast // 84
 		break
+
 	case TIME_GOOD_FUTURE
 		R5Setup_value16 = 131072
 		LoadPalette("R5C_PalCycle.act", 2, 0, 0, 96)
-		object[21].value6 = R5Setup_Function85 // 85
+		object[21].drawFunction = R5Setup_drawFunctionGoodFuture // 85
 		break
+
 	case TIME_BAD_FUTURE
 		R5Setup_value16 = 131072
 		LoadPalette("R5D_PalCycle.act", 2, 0, 0, 96)
-		object[21].value6 = R5Setup_Function86 // 86
+		object[21].drawFunction = R5Setup_drawFunctionBadFuture // 86
 		break
+
 	end switch
 end event
 
+
+// ========================
+// Editor Events
+// ========================
+
 event RSDKDraw
-	DrawSprite(0)
+    DrawSprite(0)
 end event
 
+
 event RSDKLoad
-	LoadSpriteSheet("Global/Display.gif")
-	SpriteFrame(-16, -16, 32, 32, 1, 143)
+    LoadSpriteSheet("Global/Display.gif")
+    SpriteFrame(-16, -16, 32, 32, 1, 143)		// #0 - "Script" Icon
+    
+    SetVariableAlias(ALIAS_VAR_PROPVAL, "unused")
 end event
