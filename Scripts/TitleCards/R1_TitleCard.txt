@@ -125,7 +125,7 @@ event ObjectDraw
 			object.textPos += 16
 			object.barPos -= 16
 		else
-			player[currentPlayer].controlMode = CONTROLMODE_NORMAL
+			player[currentPlayer].controlMode = CONTROLMODE_P1
 			stage.timeEnabled = true
 			ResetObjectEntity(20, TypeName[Blank Object], 0, 0, 0)
 			warp.xpos = 0
