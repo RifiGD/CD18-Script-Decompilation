@@ -119,9 +119,9 @@ end event
 
 
 event ObjectStartup
-	stage.curXBoundary1 = 41943040
-	stage.curXBoundary2 = 226492416
-	stage.curYBoundary1 = 50331648
+	stage.curXBoundary1 = 0x280 0000
+	stage.curXBoundary2 = 0xD80 0000
+	stage.curYBoundary1 = 0x300 0000
 	stage.curYBoundary2 = 218103808
 	SetLayerDeformation(2, 64, 64, 0, 0, 0)
 	foreach (TypeName[BG Effects], arrayPos0, ALL_ENTITIES)

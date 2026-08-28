@@ -5,27 +5,38 @@
 // Unpacked by RifiGD's UnScriptR
 // ----------------------------------
 
-//-------Aliases-------//
+// ========================
+// Aliases
+// ========================
 
+private alias object.value3 : object.boundsLeft
+private alias object.value4 : object.boundsRight
 
+private alias 0 : Amy1_State_Caught
+private alias 1 : Amy1_State_Falling
 
+// Collision Sides
+private alias 0  : CSIDE_FLOOR
 
+// Game Mode Aliases
+private alias 2 : MODE_TIMEATTACK
 
 event ObjectUpdate
-	if object.state == 1
+	if object.state == Amy1_State_Falling
 		object.ypos += object.yvel
-		object.yvel += 8192
-		ObjectTileCollision(0, 0, 19, 0)
+		object.yvel += 0x2000
+		ObjectTileCollision(CSIDE_FLOOR, 0, 19, 0)
 		if checkResult == true
 			ResetObjectEntity(object.entityPos, TypeName[Amy 2], 0, object.xpos, object.ypos)
 			object.frame = 4
 			object.drawOrder = 4
-			object.value3 = 1050935296
-			object.value4 = 1073741824
+			object.boundsLeft = 0x3EA4 0000
+			object.boundsRight = 0x4000 0000
 		end if
 	end if
+
 	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
-		if object.state == 0
+		if object.state == Amy1_State_Caught
 			if object.type == TypeName[Amy 1]
 				BoxCollisionTest(C_TOUCH, object.entityPos, -8, -16, 8, 16, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
 				if checkResult == true
@@ -44,10 +55,11 @@ end event
 
 
 event ObjectDraw
-	if object.state == 0
+	if object.state == Amy1_State_Caught
 		temp0 = object.frame
 		temp0 >>= 3
 		DrawSprite(temp0)
+
 		object.frame++
 		object.frame &= 31
 	else
@@ -58,9 +70,10 @@ end event
 
 event ObjectStartup
 	LoadSpriteSheet("R7/Objects2.gif")
+
 	foreach (TypeName[Amy 1], arrayPos0, ALL_ENTITIES)
-		if stage.playerListPos == 0
-			if options.gameMode == 2
+		if stage.playerListPos == PLAYER_SONIC
+			if options.gameMode == MODE_TIMEATTACK
 				object[arrayPos0].type = TypeName[Blank Object]
 			else
 				object[arrayPos0].drawOrder = 4
@@ -69,6 +82,7 @@ event ObjectStartup
 			object[arrayPos0].type = TypeName[Blank Object]
 		end if
 	next
+
 	SpriteFrame(-12, -20, 24, 40, 1, 170)
 	SpriteFrame(-12, -20, 24, 40, 1, 211)
 	SpriteFrame(-12, -20, 24, 40, 124, 109)

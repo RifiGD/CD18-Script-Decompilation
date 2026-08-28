@@ -5,17 +5,24 @@
 // Unpacked by RifiGD's UnScriptR
 // ----------------------------------
 
-//-------Aliases-------//
+// ========================
+// Aliases
+// ========================
+
+private alias object.value0 : object.timer
 
 
-
-
+// ========================
+// Events
+// ========================
 
 event ObjectDraw
 	DrawSpriteFX(object.frame, FX_FLIP, object.xpos, object.ypos)
-	object.value0++
-	if object.value0 > 3
-		object.value0 = 0
+
+	object.timer++
+	if object.timer > 3
+		object.timer = 0
+
 		object.frame++
 		if object.frame > 3
 			object.type = TypeName[Blank Object]
@@ -33,6 +40,10 @@ event ObjectStartup
 	SpriteFrame(-16, -16, 24, 16, 199, 1)
 end event
 
+// ========================
+// Editor Events
+// ========================
+
 event RSDKDraw
 	DrawSprite(0)
 end event
@@ -40,4 +51,6 @@ end event
 event RSDKLoad
 	LoadSpriteSheet("Global/Display.gif")
 	SpriteFrame(-16, -16, 32, 32, 1, 143)
+
+	SetVariableAlias(ALIAS_VAR_PROPVAL, "unused")
 end event

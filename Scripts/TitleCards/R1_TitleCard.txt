@@ -5,32 +5,70 @@
 // Unpacked by Rubberduckycooly's script unpacker
 // ----------------------------------
 
-//-------Aliases-------//
+// ========================
+// Aliases
+// ========================
+
+private alias object.value0 : object.barPos
+private alias object.value1 : object.textPos
+private alias object.value2 : object.textSize
+private alias object.value3 : object.timer
+private alias object.value4 : object.fadeR
+private alias object.value5 : object.fadeG
+private alias object.value6 : object.fadeB
+private alias object.value7 : object.charPos
+
+// Player Aliases
+private alias object.xpos			: player.xpos
+private alias object.ypos			: player.ypos
+private alias object.xvel 			: player.xvel
+private alias object.yvel 			: player.yvel
+private alias object.state 			: player.state
+private alias object.speed 			: player.speed
+private alias object.controlMode 	: player.controlMode
+private alias object.up 			: player.up
+private alias object.down 			: player.down
+private alias object.left 			: player.left
+private alias object.right 			: player.right
+private alias object.jumpPress 		: player.jumpPress
+private alias object.jumpHold 		: player.jumpHold
+
+
+private alias object.value1 : player.timer
+
+//States
+private alias 0 : TitleCard_State_FadeIn
+private alias 1 : TitleCard_State_SlideIn
+private alias 2 : TitleCard_State_Wait
+private alias 3 : TitleCard_State_SlideOut
 
 event ObjectDraw
-	object[0].value1 = 0
+	player[currentPlayer].timer = 0
+
 	switch object.state
-	case 0
-		object[0].controlMode = -1
-		object[0].up = 0
-		object[0].down = 0
-		object[0].left = 0
-		object[0].right = 0
-		object[0].jumpPress = 0
-		object[0].jumpHold = 0
+	case TitleCard_State_FadeIn
+		player[currentPlayer].controlMode = CONTROLMODE_NONE
+		player[currentPlayer].up = false
+		player[currentPlayer].down = false
+		player[currentPlayer].left = false
+		player[currentPlayer].right = false
+		player[currentPlayer].jumpPress = false
+		player[currentPlayer].jumpHold = false
+		
 		if warp.xpos < 1
-			object[0].speed = 0
+			player[currentPlayer].speed = 0
 		end if
-		if object.value3 > 0
-			if object.value3 == 256
+
+		if object.timer > 0
+			if object.timer == 256
 				PlayMusic(0)
 				if warp.xpos > 0
-					object[0].xpos = warp.xpos
-					object[0].ypos = warp.ypos
-					object[0].xvel = warp.xvel
-					object[0].yvel = warp.yvel
-					object[0].speed = warp.xvel
-					object[0].state = warp.state
+					player[currentPlayer].xpos = warp.xpos
+					player[currentPlayer].ypos = warp.ypos
+					player[currentPlayer].xvel = warp.xvel
+					player[currentPlayer].yvel = warp.yvel
+					player[currentPlayer].speed = warp.xvel
+					player[currentPlayer].state = warp.state
 					stage.milliSeconds = recMilliSeconds
 					stage.seconds = recSeconds
 					stage.minutes = recMinutes
@@ -38,8 +76,8 @@ event ObjectDraw
 				warp.timer = 0
 				warp.frame = 0
 			end if
-			SetScreenFade(object.value4, object.value5, object.value6, object.value3)
-			object.value3 -= 8
+			SetScreenFade(object.fadeR, object.fadeG, object.fadeB, object.timer)
+			object.timer -= 8
 		else
 			fadeColor = 0
 			CheckEqual(warp.xpos, 0)
@@ -47,61 +85,67 @@ event ObjectDraw
 			CheckLower(lampPostID, 32)
 			temp0 &= checkResult
 			if temp0 == 1
-				object.state = 1
-				object.value3 = 0
+				object.state = TitleCard_State_SlideIn
+				object.timer = 0
 			else
-				object[0].controlMode = 0
-				stage.timeEnabled = 1
+				player[currentPlayer].controlMode = 0
+				stage.timeEnabled = true
 				ResetObjectEntity(20, TypeName[Blank Object], 0, 0, 0)
 				warp.xpos = 0
 			end if
 		end if
 		break
-	case 1
+
+	case TitleCard_State_SlideIn
 		temp0 = 144
-		temp0 += object.value7
-		if object.value1 > temp0
-			object.value1 -= 8
+		temp0 += object.charPos
+		if object.textPos > temp0
+			object.textPos -= 8
 		else
-			if object.value0 == 0
-				object.state = 2
+			if object.barPos == 0
+				object.state = TitleCard_State_Wait
 			end if
 		end if
-		if object.value0 < 0
-			object.value0 += 8
+
+		if object.barPos < 0
+			object.barPos += 8
 		end if
 		break
-	case 2
-		if object.value3 == 90
-			object.state = 3
+
+	case TitleCard_State_Wait
+		if object.timer == 90
+			object.state = TitleCard_State_SlideOut
 		else
-			object.value3++
+			object.timer++
 		end if
 		break
-	case 3
-		if object.value1 < 408
-			object.value1 += 16
-			object.value0 -= 16
+
+	case TitleCard_State_SlideOut
+		if object.textPos < 408
+			object.textPos += 16
+			object.barPos -= 16
 		else
-			object[0].controlMode = 0
-			stage.timeEnabled = 1
+			player[currentPlayer].controlMode = CONTROLMODE_NORMAL
+			stage.timeEnabled = true
 			ResetObjectEntity(20, TypeName[Blank Object], 0, 0, 0)
 			warp.xpos = 0
 		end if
 		break
+
 	end switch
+
 	if object.type > 0
 		temp0 = 136
-		temp0 += object.value7
-		DrawSpriteScreenXY(0, temp0, object.value0)
-		DrawSpriteScreenXY(stage.actNum, object.value1, 80)
-		DrawSpriteScreenXY(4, object.value1, 80)
-		DrawSpriteScreenXY(5, object.value1, 80)
-		DrawSpriteScreenXY(6, object.value1, 80)
-		DrawSpriteScreenXY(7, object.value1, 80)
+		temp0 += object.charPos
+		DrawSpriteScreenXY(0, temp0, object.barPos)
+		DrawSpriteScreenXY(stage.actNum, object.textPos, 80)
+		DrawSpriteScreenXY(4, object.textPos, 80)
+		DrawSpriteScreenXY(5, object.textPos, 80)
+		DrawSpriteScreenXY(6, object.textPos, 80)
+		DrawSpriteScreenXY(7, object.textPos, 80)
 		temp0 = 8
-		while temp0 < object.value2
-			DrawSpriteScreenXY(temp0, object.value1, 80)
+		while temp0 < object.textSize
+			DrawSpriteScreenXY(temp0, object.textPos, 80)
 			temp0++
 		loop
 	end if
@@ -114,6 +158,7 @@ event ObjectStartup
 	else
 		LoadSpriteSheet("Global/Display_t.gif")
 	end if
+
 	if options.soundtrack == 0
 		switch hud.currentTimePeriod
 		case TIME_PRESENT
@@ -151,31 +196,38 @@ event ObjectStartup
 	object[20].type = TypeName[Title Card]
 	
 	if warp.xpos > 0
-		object[20].value3 = 256
+		object[20].timer = 256
 	else
-		object[20].value3 = 384
+		object[20].timer = 384
 	end if
+
 	object[20].priority = 1
 	object[20].drawOrder = 6
-	object[20].value0 = -216
-	object[20].value1 = 336
-	object[20].value7 = screen.xcenter
-	object[20].value7 -= 160
-	if object[20].value7 > 3
-		object[20].value7 -= 4
+	object[20].barPos = -216
+	object[20].textPos = 336
+
+	object[20].charPos = screen.xcenter
+	object[20].charPos -= 160
+	if object[20].charPos > 3
+		object[20].charPos -= 4
 	end if
-	object[20].value7 &= 248
-	object[20].value1 += object[20].value7
-	object[20].value1 += object[20].value7
-	object[20].value2 = 13
-	object[20].value2 += 8
-	object[20].value4 = fadeColor
-	object[20].value4 >>= 16
-	object[20].value5 = fadeColor
-	object[20].value5 &= 65280
-	object[20].value5 >>= 8
-	object[20].value6 = fadeColor
-	object[20].value6 &= 255
+	object[20].charPos &= 248
+
+	object[20].textPos += object[20].charPos
+	object[20].textPos += object[20].charPos
+	object[20].textSize = 13
+	object[20].textSize += 8
+
+	object[20].fadeR = fadeColor
+	object[20].fadeR >>= 16
+	
+	object[20].fadeG = fadeColor
+	object[20].fadeG &= 0x00FF00
+	object[20].fadeG >>= 8
+
+	object[20].fadeB = fadeColor
+	object[20].fadeB &= 255
+	
 	SpriteFrame(0, 0, 32, 200, 223, 1)
 	SpriteFrame(96, 96, 48, 48, 41, 1)
 	SpriteFrame(96, 96, 48, 48, 90, 1)
@@ -199,11 +251,67 @@ event ObjectStartup
 	SpriteFrame(54, 56, 8, 23, 67, 84)
 end event
 
+// ========================
+// Editor Events
+// ========================
+
 event RSDKDraw
-	DrawSprite(0)
+	object.textSize = 13
+	object.textSize += 8
+
+	temp0 = 136
+	temp0 += object.charPos
+	DrawSpriteScreenXY(0, temp0, object.barPos)
+	DrawSpriteScreenXY(stage.actNum, object.textPos, 80)
+	DrawSpriteScreenXY(4, object.textPos, 80)
+	DrawSpriteScreenXY(5, object.textPos, 80)
+	DrawSpriteScreenXY(6, object.textPos, 80)
+	DrawSpriteScreenXY(7, object.textPos, 80)
+	temp0 = 8
+	while temp0 < object.textSize
+		DrawSpriteScreenXY(temp0, object.textPos, 80)
+		temp0++
+	loop
 end event
 
 event RSDKLoad
 	LoadSpriteSheet("Global/Display.gif")
-	SpriteFrame(-16, -16, 32, 32, 1, 143)
+	// 0 - Red Bar Frame
+	SpriteFrame(0, 0, 32, 200, 223, 1)
+	
+	// 1-3 - Act Bubbles
+	SpriteFrame(96, 96, 48, 48, 41, 1)
+	SpriteFrame(96, 96, 48, 48, 90, 1)
+	SpriteFrame(96, 96, 48, 48, 139, 1)
+	
+	// 4 - "Zone" text
+	SpriteFrame(64, 97, 48, 16, 41, 67)
+	
+	// 5 - Main part of the "SONIC THE HEGDEHOG CD" bar
+	SpriteFrame(64, 81, 160, 16, 41, 50)
+	
+	// 6 - Continuation of the Sonic CD bar
+	SpriteFrame(16, 81, 160, 16, 41, 50)
+	
+	// 7 - Set of three lines
+	SpriteFrame(100, 32, 24, 48, 188, 1)
+	
+	// 8-20 - Individual letters spelling out Palmtree Panic
+	SpriteFrame(0, 0, 24, 56, 41, 132)		// #8  - P
+	SpriteFrame(24, 32, 11, 23, 43, 84)		// #9  - A
+	SpriteFrame(36, 32, 9, 23, 159, 84)		// #10 - L
+	SpriteFrame(45, 32, 17, 23, 169, 84)	// #11 - M
+	SpriteFrame(62, 32, 10, 23, 81, 108)	// #12 - T
+	SpriteFrame(72, 32, 12, 23, 57, 108)	// #13 - R
+	SpriteFrame(84, 32, 9, 23, 88, 84)		// #14 - E
+	SpriteFrame(93, 32, 9, 23, 88, 84)		// #15 - E
+
+	SpriteFrame(0, 56, 24, 56, 41, 132)		// #16 - P
+	SpriteFrame(24, 56, 11, 23, 43, 84)		// #17 - A
+	SpriteFrame(36, 56, 11, 23, 187, 84)	// #18 - N
+	SpriteFrame(48, 56, 5, 23, 131, 84)		// #19 - I
+	SpriteFrame(54, 56, 8, 23, 67, 84)		// #20 - C
+
+
+	SetVariableAlias(ALIAS_VAR_PROPVAL, "unused")
 end event

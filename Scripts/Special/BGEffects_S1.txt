@@ -150,16 +150,20 @@ event ObjectDraw
 			break
 		end switch
 	end if
+	
 	object.value0++
 	if object.value0 > 5
 		object.value0 = 0
 		RotatePalette(208, 239, 0, 1)
 	end if
+
 	object.value7--
 	if object.value7 < 0
 		object.value7 = 5
+
 		temp0 = object.value8
 		temp0 <<= 4
+
 		temp1 = 208
 		while temp1 < 240
 			GetTableValue(temp2, temp0, BGEffects_table0)
@@ -170,11 +174,13 @@ event ObjectDraw
 			temp0++
 			temp1++
 		loop
+
 		object.value8++
 		if object.value8 >= 63
 			object.value8 = 0
 		end if
 	end if
+
 	object.value9--
 	if object.value9 < 0
 		object.value9 = 2
