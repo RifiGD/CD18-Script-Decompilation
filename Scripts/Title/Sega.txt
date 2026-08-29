@@ -5,15 +5,10 @@
 // Unpacked by Rubberduckycooly's script unpacker
 // ----------------------------------
 
-//-------Aliases-------//
 
-
-
-public alias 256 : GROUP_PLAYERS
-public alias arrayPos6 : currentPlayer
-public alias arrayPos7 : playerCount
-
-
+// ========================
+// Events
+// ========================
 
 event ObjectUpdate
 	switch object.state

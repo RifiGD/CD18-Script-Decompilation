@@ -5,18 +5,18 @@
 // Unpacked by Rubberduckycooly's script unpacker
 // ----------------------------------
 
-//-------Aliases-------//
-
-// Priority Aliases
-private alias 1 : PRIORITY_ACTIVE
+// ========================
+// Aliases
+// ========================
 
 // Object Aliases
 private alias object.value0 : object.timer
 private alias object.value1 : object.currentPalette // unused, leftover from 2011
 
 
-
-
+// ========================
+// Events
+// ========================
 
 event ObjectUpdate
 	object.timer++

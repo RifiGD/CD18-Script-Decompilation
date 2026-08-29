@@ -5,11 +5,10 @@
 // Unpacked by Rubberduckycooly's script unpacker
 // ----------------------------------
 
-//-------Aliases-------//
 
-
-
-
+// ========================
+// Events
+// ========================
 
 event ObjectDraw
 	DrawRect(0, 0, screen.xsize, screen.ysize, 0, 0, 96, 255)

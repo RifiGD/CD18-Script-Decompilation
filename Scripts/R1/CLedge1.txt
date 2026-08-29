@@ -5,14 +5,18 @@
 // Unpacked by Rubberduckycooly's script unpacker
 // ----------------------------------
 
-//-------Aliases-------//
 
+// ========================
+// Function Declarations
+// ========================
 
-
-// Function declarations
 reserve function CrumbleLedge1_DebugDraw
 reserve function CrumbleLedge1_DebugSpawn
 
+
+// ========================
+// Function Definitions
+// ========================
 
 public function CrumbleLedge1_DebugDraw
 	DrawSprite(0)
@@ -23,6 +27,10 @@ public function CrumbleLedge1_DebugSpawn
 	CreateTempObject(TypeName[Crumble Ledge 1], 0, object.xpos, object.ypos)
 end function
 
+
+// ========================
+// Events
+// ========================
 
 event ObjectUpdate
 	switch object.state

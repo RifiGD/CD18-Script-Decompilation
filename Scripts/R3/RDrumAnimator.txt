@@ -5,11 +5,10 @@
 // Unpacked by Rubberduckycooly's script unpacker
 // ----------------------------------
 
-//-------Aliases-------//
 
-
-
-
+// ========================
+// Events
+// ========================
 
 event ObjectUpdate
 	temp0 = R3Setup_rotoDrumTimer

@@ -5,9 +5,10 @@
 // Unpacked by Rubberduckycooly's script unpacker
 // ----------------------------------
 
-//-------Aliases-------//
 
-
+// ========================
+// Aliases
+// ========================
 
 // Player Aliases
 private alias object.value38 : player.shield
@@ -20,14 +21,25 @@ private alias 3 : SHIELD_FIRE
 private alias 4 : SHIELD_LIGHTNING
 
 
-// Function declarations
+// ========================
+// Function Declarations
+// ========================
+
 reserve function Water_Function85
 reserve function Water_Function86
 
+
+// ========================
 // Static Values
+// ========================
+
 public value Water_value14 = 0;
 public value Water_value15 = 0;
 
+
+// ========================
+// Function Definitions
+// ========================
 
 public function Water_Function85
 	if object[+currentPlayer].value1 > 0
@@ -86,6 +98,10 @@ public function Water_Function86
 	object[tempObjectPos].value1 = object[tempObjectPos].xpos
 end function
 
+
+// ========================
+// Events
+// ========================
 
 event ObjectUpdate
 	temp0 = object[0].xpos

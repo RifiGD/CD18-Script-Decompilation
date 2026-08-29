@@ -5,33 +5,33 @@
 // Unpacked by Rubberduckycooly's script unpacker
 // ----------------------------------
 
-//-------Aliases-------//
 
+// ========================
+// Aliases
+// ========================
 
-
-// Time Period Aliases
-private alias object[9].propertyValue : hud.currentTimePeriod
-
-private alias 0 : TIME_PRESENT
-private alias 1 : TIME_PAST
-private alias 2 : TIME_GOOD_FUTURE
-private alias 3 : TIME_BAD_FUTURE
-
-//---Aliases//
+// Object Aliases
 private alias object.value0	 :	object.timer
 private alias object.value1	 :	object.yoffset
 
-//---States---//
+// Object States
 private alias 0	:	PISTON_DETECT_PLAYER
 private alias 1	:	PISTON_PREPARE_FIRE
 private alias 2	:	PISTON_EMERGE
 private alias 3	:	PISTON_FIRE
 private alias 4	:	PISTON_HIDE
 
-// Function declarations
+
+// ========================
+// Function Declarations
+// ========================
 reserve function Piston_DebugDraw
 reserve function Piston_DebugSpawn
 
+
+// ========================
+// Function Definitions
+// ========================
 
 public function Piston_DebugDraw
 	DrawSprite(1)
@@ -44,6 +44,9 @@ public function Piston_DebugSpawn
 	object[tempObjectPos].frame = 1
 end function
 
+// ========================
+// Events
+// ========================
 
 event ObjectUpdate
 	switch object.state

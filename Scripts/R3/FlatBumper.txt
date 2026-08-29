@@ -5,22 +5,17 @@
 // Unpacked by Rubberduckycooly's script unpacker
 // ----------------------------------
 
-//-------Aliases-------//
 
-
-
-// Time Period Aliases
-private alias object[9].propertyValue : hud.currentTimePeriod
-
-private alias 0 : TIME_PRESENT
-private alias 1 : TIME_PAST
-private alias 2 : TIME_GOOD_FUTURE
-private alias 3 : TIME_BAD_FUTURE
-
-// Function declarations
+// ========================
+// Function Declarations
+// ========================
 reserve function FlatBumper_DebugDraw
 reserve function FlatBumper_DebugSpawn
 
+
+// ========================
+// Function Definitions
+// ========================
 
 public function FlatBumper_DebugDraw
 	DrawSprite(0)
@@ -33,6 +28,10 @@ public function FlatBumper_DebugSpawn
 	object[tempObjectPos].ypos &= -65536
 end function
 
+
+// ========================
+// Events
+// ========================
 
 event ObjectUpdate
 	switch object.state

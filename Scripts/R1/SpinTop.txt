@@ -5,7 +5,9 @@
 // Unpacked by Rubberduckycooly's script unpacker
 // ----------------------------------
 
-//-------Aliases-------//
+// ========================
+// Aliases
+// ========================
 
 // Player Aliases
 private alias object.controlLock : player.controlLock
@@ -28,10 +30,17 @@ private alias object.left : player.left
 private alias object.right : player.right
 private alias object.jumpPress : player.jumpPress
 
-// Function declarations
+// ========================
+// Function Declarations
+// ========================
+
 reserve function SpinningTop_DebugDraw
 reserve function SpinningTop_DebugSpawn
 reserve function SpinningTop_Player_Jump
+
+// ========================
+// Tables
+// ========================
 
 public table SpinningTop_table11
 	0, 0, 0, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 5, 5, 5
@@ -41,6 +50,10 @@ public table SpinningTop_table10
 	0, 0, 0, 0
 end table
 
+
+// ========================
+// Function Definitions
+// ========================
 
 public function SpinningTop_DebugDraw
 	DrawSprite(0)
@@ -73,6 +86,10 @@ public function SpinningTop_Player_Jump
 	end if
 end function
 
+
+// ========================
+// Events
+// ========================
 
 event ObjectUpdate
 	temp7 = 0

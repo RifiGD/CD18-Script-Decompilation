@@ -42,36 +42,42 @@ private alias 1 : TitleCard_State_SlideIn
 private alias 2 : TitleCard_State_Wait
 private alias 3 : TitleCard_State_SlideOut
 
+
+// ========================
+// Events
+// ========================
+
 event ObjectDraw
-	player[currentPlayer].timer = 0
+	player[0].timer = 0
 
 	switch object.state
 	case TitleCard_State_FadeIn
-		player[currentPlayer].controlMode = CONTROLMODE_NONE
-		player[currentPlayer].up = false
-		player[currentPlayer].down = false
-		player[currentPlayer].left = false
-		player[currentPlayer].right = false
-		player[currentPlayer].jumpPress = false
-		player[currentPlayer].jumpHold = false
+		player[0].controlMode 	= CONTROLMODE_NONE
+		player[0].up 			= false
+		player[0].down 			= false
+		player[0].left 			= false
+		player[0].right 		= false
+		player[0].jumpPress 	= false
+		player[0].jumpHold 		= false
 		
 		if warp.xpos < 1
-			player[currentPlayer].speed = 0
+			player[0].speed = 0
 		end if
 
 		if object.timer > 0
 			if object.timer == 256
 				PlayMusic(0)
 				if warp.xpos > 0
-					player[currentPlayer].xpos = warp.xpos
-					player[currentPlayer].ypos = warp.ypos
-					player[currentPlayer].xvel = warp.xvel
-					player[currentPlayer].yvel = warp.yvel
-					player[currentPlayer].speed = warp.xvel
-					player[currentPlayer].state = warp.state
-					stage.milliSeconds = recMilliSeconds
-					stage.seconds = recSeconds
-					stage.minutes = recMinutes
+					player[0].xpos = warp.xpos
+					player[0].ypos = warp.ypos
+					player[0].xvel = warp.xvel
+					player[0].yvel = warp.yvel
+					player[0].speed = warp.xvel
+					player[0].state = warp.state
+
+					stage.milliSeconds 	= recMilliSeconds
+					stage.seconds 		= recSeconds
+					stage.minutes 		= recMinutes
 				end if
 				warp.timer = 0
 				warp.frame = 0
@@ -88,7 +94,7 @@ event ObjectDraw
 				object.state = TitleCard_State_SlideIn
 				object.timer = 0
 			else
-				player[currentPlayer].controlMode = 0
+				player[0].controlMode = 0
 				stage.timeEnabled = true
 				ResetObjectEntity(20, TypeName[Blank Object], 0, 0, 0)
 				warp.xpos = 0
@@ -125,7 +131,7 @@ event ObjectDraw
 			object.textPos += 16
 			object.barPos -= 16
 		else
-			player[currentPlayer].controlMode = CONTROLMODE_P1
+			player[0].controlMode = CONTROLMODE_P1
 			stage.timeEnabled = true
 			ResetObjectEntity(20, TypeName[Blank Object], 0, 0, 0)
 			warp.xpos = 0
@@ -153,7 +159,7 @@ end event
 
 
 event ObjectStartup
-	if stage.playerListPos == 0
+	if stage.playerListPos == PLAYER_SONIC
 		LoadSpriteSheet("Global/Display.gif")
 	else
 		LoadSpriteSheet("Global/Display_t.gif")

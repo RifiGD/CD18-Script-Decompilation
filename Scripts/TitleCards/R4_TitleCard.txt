@@ -5,7 +5,10 @@
 // Unpacked by Rubberduckycooly's script unpacker
 // ----------------------------------
 
-//-------Aliases-------//
+
+// ========================
+// Events
+// ========================
 
 event ObjectDraw
 	object[0].value1 = 0

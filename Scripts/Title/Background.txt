@@ -5,11 +5,10 @@
 // Unpacked by Rubberduckycooly's script unpacker
 // ----------------------------------
 
-//-------Aliases-------//
 
-
-
-
+// ========================
+// Events
+// ========================
 
 event ObjectDraw
 	temp0 = screen.xcenter

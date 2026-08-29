@@ -5,15 +5,16 @@
 // Unpacked by Rubberduckycooly's script unpacker
 // ----------------------------------
 
-//-------Aliases-------//
-
-
-
-// Function declarations
+// ========================
+// Function Declarations
+// ========================
 reserve function Rock_DebugDraw
 reserve function Rock_DebugSpawn
 
 
+// ========================
+// Function Definitions
+// ========================
 public function Rock_DebugDraw
 	DrawSprite(0)
 end function

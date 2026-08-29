@@ -58,7 +58,7 @@ reserve function R3Setup_drawFunctionGoodFuture
 reserve function R3Setup_drawFunctionBadFuture
 
 // ========================
-// Function Declarations
+// Static Values
 // ========================
 
 public value R3Setup_rotoDrumTimer = 0;
@@ -150,7 +150,7 @@ end function
 
 
 private function R3Setup_drawFunctionPast
-	//There is nothing here lol
+	// There is nothing here lol
 end function
 
 

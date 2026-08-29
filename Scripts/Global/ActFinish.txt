@@ -5,15 +5,17 @@
 // Unpacked by Rubberduckycooly's script unpacker
 // ----------------------------------
 
-//-------Aliases-------//
+// ========================
+// Aliases
+// ========================
 
-// Time Period Aliases
-private alias object[9].propertyValue : hud.currentTimePeriod
+// // Time Period Aliases
+// private alias object[9].propertyValue : hud.currentTimePeriod
 
-private alias 0 : TIME_PRESENT
-private alias 1 : TIME_PAST
-private alias 2 : TIME_GOOD_FUTURE
-private alias 3 : TIME_BAD_FUTURE
+// private alias 0 : TIME_PRESENT
+// private alias 1 : TIME_PAST
+// private alias 2 : TIME_GOOD_FUTURE
+// private alias 3 : TIME_BAD_FUTURE
 
 private alias 0	:	ACTFINISH_INIT
 private alias 1	:	ACTFINISH_SLIDEIN
@@ -21,6 +23,10 @@ private alias 2	:	ACTFINISH_DISPLAYTALLY
 private alias 3	:	ACTFINISH_TALLYUP
 private alias 4	:	ACTFINISH_DISPLAYFINAL
 private alias 5	:	ACTFINISH_FADEOUT
+
+// ========================
+// Events
+// ========================
 
 event ObjectUpdate
 	switch object.state

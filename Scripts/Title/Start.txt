@@ -5,7 +5,9 @@
 // Unpacked by Rubberduckycooly's script unpacker
 // ----------------------------------
 
-//-------Aliases-------//
+// ========================
+// Aliases
+// ========================
 
 //---Title Screen redirects---//
 private alias 0 : START_SETUP
@@ -41,8 +43,16 @@ private alias object.value0 : screen.fade
 
 
 
-// Function declarations
+// ========================
+// Function Declarations
+// ========================
+
 reserve function Start_HandleCheatCodes
+
+
+// ========================
+// Function Definitions
+// ========================
 
 public function Start_HandleCheatCodes
 	temp0 = 0
@@ -246,6 +256,10 @@ public function Start_HandleCheatCodes
 	end switch
 end function
 
+
+// ========================
+// Events
+// ========================
 
 event ObjectUpdate
 	if object.state == 0

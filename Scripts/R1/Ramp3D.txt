@@ -5,14 +5,11 @@
 // Unpacked by Rubberduckycooly's script unpacker
 // ----------------------------------
 
-//-------Aliases-------//
-
-
-
-// Priority Aliases
-private alias 1 : PRIORITY_ACTIVE
-
+// ========================
 // Aliases
+// ========================
+
+// Ramp 3D Property Values
 private alias 0	:	RAMP3D_RUN
 private alias 1	:	RAMP3D_EXIT_UNUSED	// a copy of Exit Boost
 private alias 2	:	RAMP3D_EXIT
@@ -23,7 +20,10 @@ private alias 6	:	RAMP3D_SET_YBOUND2	// this doesn't really have anything to do 
 private alias 7	:	RAMP3D_RUN_FROM_TOP
 private alias 8	:	RAMP3D_EXIT_BOOST
 
-//Unknown Variables
+// ========================
+// Unknown Variables
+// ========================
+
 // yeah im not touching these tables, thank you
 // private value value62034 = 106;
 // private value value62035 = 2;
@@ -546,6 +546,10 @@ private alias 8	:	RAMP3D_EXIT_BOOST
 
 // NOTE FROM LIKE A WEEK LATER:
 // I just transplanted Player_State_Ramp3D from the v3 scripts and it literally just works like the bytecode in 2018, GGs.
+
+// ========================
+// Events
+// ========================
 
 event ObjectUpdate
 	switch object.propertyValue

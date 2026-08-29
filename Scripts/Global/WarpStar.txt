@@ -5,10 +5,10 @@
 // Unpacked by Rubberduckycooly's script unpacker
 // ----------------------------------
 
-//-------Aliases-------//
 
-
-
+// ========================
+// Events
+// ========================
 
 event ObjectUpdate
 	switch object.state

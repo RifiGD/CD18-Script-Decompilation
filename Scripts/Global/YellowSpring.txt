@@ -5,17 +5,23 @@
 // Unpacked by Rubberduckycooly's script unpacker
 // ----------------------------------
 
-//-------Aliases-------//
 
+// ========================
+// Function Declarations
+// ========================
 
-
-// Function declarations
 reserve function YellowSpring_DebugDraw
 reserve function YellowSpring_DebugSpawn
 
+// ========================
 // Static Values
+// ========================
 public value YellowSpring_value8 = 0;
 
+
+// ========================
+// Function Definitions
+// ========================
 
 public function YellowSpring_DebugDraw
 	temp0 = object[0].value16
@@ -38,6 +44,10 @@ public function YellowSpring_DebugSpawn
 	end if
 end function
 
+
+// ========================
+// Events
+// ========================
 
 event ObjectUpdate
 	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)

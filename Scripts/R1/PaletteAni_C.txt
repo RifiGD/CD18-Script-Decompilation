@@ -10,8 +10,7 @@
 // ========================
 
 private alias object.value0 : object.timer
-// Used to be 'currentPalette' in v3, but goes unused in here
-private alias object.value1 : object.unused
+private alias object.value1 : object.unused // Used to be 'currentPalette' in v3, but goes unused in here
 
 
 // ========================

@@ -5,26 +5,23 @@
 // Unpacked by Rubberduckycooly's script unpacker
 // ----------------------------------
 
-//-------Aliases-------//
 
-
-
-// Time Period Aliases
-private alias object[9].propertyValue : hud.currentTimePeriod
-
-private alias 0 : TIME_PRESENT
-private alias 1 : TIME_PAST
-private alias 2 : TIME_GOOD_FUTURE
-private alias 3 : TIME_BAD_FUTURE
-
-
-// Function declarations
+// ========================
+// Function Declarations
+// ========================
 reserve function SolidBlock_DebugDraw
 reserve function SolidBlock_DebugSpawn
 
+
+// ========================
 // Static Values
+// ========================
 public value SolidBlock_value16 = 0;
 
+
+// ========================
+// Function Definitions
+// ========================
 
 public function SolidBlock_DebugDraw
 	temp0 = object[0].value16
@@ -65,6 +62,10 @@ public function SolidBlock_DebugSpawn
 	object[tempObjectPos].drawOrder = 4
 end function
 
+
+// ========================
+// Events
+// ========================
 
 event ObjectUpdate
 	switch object.propertyValue

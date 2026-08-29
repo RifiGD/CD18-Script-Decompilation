@@ -14,16 +14,6 @@ private alias object.value1	:	object.demoTime
 private alias object.value2	:	object.demoLength
 private alias object.value3	:	object.demoInput
 
-//---Priority Aliases---//
-private alias 0 : PRIORITY_BOUNDS         // Object updates within 128 pixels of the screen border left/right and 256 pixels up/down
-private alias 1 : PRIORITY_ACTIVE         // Object will always update, unless paused/frozen
-private alias 2 : PRIORITY_ALWAYS         // Object will always update
-private alias 3 : PRIORITY_XBOUNDS        // Object updates within 128 pixels of the screen border left/right
-private alias 4 : PRIORITY_BOUNDS_DESTROY // Object updates within 128 pixels of the screen border left/right, object will be set to Blank Object if the check fails
-private alias 5 : PRIORITY_INACTIVE       // Object never updates
-private alias 6 : PRIORITY_BOUNDS_SMALL   // Object updates within 32 pixels of the screen border left/right and 128 pixels up/down
-private alias 7 : PRIORITY_ACTIVE_SMALL   // Object will always update, unless paused/frozen. The bounds ofobject.outOfBounds are much smaller
-
 //---States---//
 private alias 0	:	ATTRACTMODE_SETUP
 private alias 1	:	ATTRACTMODE_HANDLE_INPUT
