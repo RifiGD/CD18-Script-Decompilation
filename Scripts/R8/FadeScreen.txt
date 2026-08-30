@@ -65,7 +65,7 @@ event ObjectUpdate
 				if stage.playerListPos == 0
 					if player.score > 0
 						if options.gameMode == 1
-							if stage.debugMode == 0
+							if stage.debugMode == false
 							end if
 						end if
 					end if

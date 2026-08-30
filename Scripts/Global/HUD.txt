@@ -41,7 +41,7 @@ event ObjectDraw
 	DrawNumbers(0, 80, 29, stage.seconds, 2, 8, 1)
 	DrawNumbers(0, 56, 29, stage.minutes, 1, 8, 1)
 	DrawNumbers(0, 80, 45, object[0].value0, 3, 8, 0)
-	if stage.debugMode == 1
+	if stage.debugMode == true
 		temp0 = object[0].xpos
 		temp0 >>= 16
 		temp1 = screen.xsize

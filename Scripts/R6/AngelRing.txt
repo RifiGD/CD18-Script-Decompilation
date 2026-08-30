@@ -41,7 +41,7 @@ event ObjectUpdate
 				object.priority = 1
 				object.value0 = 0
 				if stage.playerListPos == 0
-					if stage.debugMode == 0
+					if stage.debugMode == false
 					end if
 				end if
 			end if

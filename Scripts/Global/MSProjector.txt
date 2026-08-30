@@ -46,7 +46,7 @@ public function MSProjector_Function82
 
 				// Saviour of the Planet Unlock Criteria
 				if stage.playerListPos == 0
-					if stage.debugMode == 0
+					if stage.debugMode == false
 						if goodFuture.list > 16382// 0b11111111111110
 							if metalSonic.list > 11
 							// SetAchievement(11, 100)

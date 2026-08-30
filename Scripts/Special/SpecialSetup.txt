@@ -9,17 +9,6 @@
 // Aliases
 // ========================
 
-// Priority Aliases
-public alias 0 : PRIORITY_BOUNDS         // Object updates within 128 pixels of the screen border left/right and 256 pixels up/down
-public alias 1 : PRIORITY_ACTIVE         // Object will always update, unless paused/frozen
-public alias 2 : PRIORITY_ALWAYS         // Object will always update
-public alias 3 : PRIORITY_XBOUNDS        // Object updates within 128 pixels of the screen border left/right
-public alias 4 : PRIORITY_BOUNDS_DESTROY // Object updates within 128 pixels of the screen border left/right, object will be set to Blank Object if the check fails
-public alias 5 : PRIORITY_INACTIVE       // Object never updates
-public alias 6 : PRIORITY_BOUNDS_SMALL   // Object updates within 32 pixels of the screen border left/right and 128 pixels up/down
-public alias 7 : PRIORITY_ACTIVE_SMALL   // Object will always update, unless paused/frozen. The bounds ofobject.outOfBounds are much smaller
-
-
 // Tile Layer aliases
 private alias 0 : TILELAYER_NOSCROLL
 private alias 1 : TILELAYER_HSCROLL

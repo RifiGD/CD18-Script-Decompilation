@@ -87,7 +87,7 @@ event ObjectUpdate
 								ringExtraLife = 1000
 							end if
 						end if
-						if stage.debugMode == 0
+						if stage.debugMode == false
 							if object[0].value0 >= 200
 							end if
 						end if

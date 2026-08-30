@@ -5,15 +5,16 @@
 // Unpacked by Rubberduckycooly's script unpacker
 // ----------------------------------
 
-//-------Aliases-------//
 
+// ========================
+// Aliases
+// ========================
 
-
-public alias 256 : GROUP_PLAYERS
+public alias 0x100 : GROUP_PLAYERS
 public alias arrayPos6 : currentPlayer
 public alias arrayPos7 : playerCount
 
-private alias 0 : WARPDEST_NONE
+public alias 0 : WARPDEST_NONE
 
 // Gravity
 public alias 0 : GRAVITY_GROUND
@@ -40,6 +41,10 @@ public alias 2 : CAMERASTYLE_EXTENDED_OFFSET_L
 public alias 3 : CAMERASTYLE_EXTENDED_OFFSET_R
 public alias 4 : CAMERASTYLE_HLOCKED
 
+// Reserved Object Slot Aliases
+public alias 0  : SLOT_PLAYER1
+public alias 1  : SLOT_PLAYER2 // why are YOU still here :sob:
+
 // Ink Effect Aliases
 public alias 0 : INK_NONE   // Disables transparency
 public alias 1 : INK_BLEND  // Uses half transparency
@@ -54,11 +59,11 @@ public alias 2 : FLIP_Y
 public alias 3 : FLIP_XY
 
 // Shield Aliases
-private alias 0 : SHIELD_NONE
-private alias 1 : SHIELD_NORMAL
-private alias 2 : SHIELD_BUBBLE
-private alias 3 : SHIELD_FIRE
-private alias 4 : SHIELD_LIGHTNING
+public alias 0 : SHIELD_NONE
+public alias 1 : SHIELD_NORMAL
+public alias 2 : SHIELD_BUBBLE
+public alias 3 : SHIELD_FIRE
+public alias 4 : SHIELD_LIGHTNING
 
 // Collision Sides
 public alias 0 : CSIDE_FLOOR
@@ -87,6 +92,11 @@ public alias 1 : PLAYER_TAILS
 public alias 2 : PLAYER_KNUCKLES
 public alias 3 : PLAYER_SONIC_TAILS
 
+// Game Mode Aliases
+public alias 0 : MODE_NOSAVE
+public alias 1 : MODE_NORMAL
+public alias 2 : MODE_TIMEATTACK
+
 // Time zones
 public alias 0 : TIME_PRESENT
 public alias 1 : TIME_PAST
@@ -94,43 +104,44 @@ public alias 2 : TIME_GOOD_FUTURE
 public alias 3 : TIME_BAD_FUTURE
 
 //Variables
-private alias object.type : player.type
-private alias object.entityPos : player.entityPos
-private alias object.state : player.state
-private alias object.xpos : player.xpos
-private alias object.ypos : player.ypos
-private alias object.ixpos : player.ixpos
-private alias object.iypos : player.iypos
-private alias object.propertyValue : player.character
-private alias object.priority : player.priority
-private alias object.lookPosX : player.lookPosX
-private alias object.lookPosY : player.lookPosY
-private alias object.xvel : player.xvel
-private alias object.yvel : player.yvel
-private alias object.speed : player.speed
-private alias object.direction : player.direction
-private alias object.rotation : player.rotation
-private alias object.gravity : player.gravity
-private alias object.frame : player.frame
-private alias object.visible : player.visible
-private alias object.angle : player.angle
-private alias object.interaction : player.interaction
-private alias object.controlLock : player.controlLock
-private alias object.controlMode : player.controlMode
-private alias object.collisionMode : player.collisionMode
-private alias object.collisionTop : player.collisionTop
-private alias object.animation : player.animation
-private alias object.prevAnimation : player.prevAnimation
+private alias object.type 			: player.type
+private alias object.groupID 		: player.groupID 	// Normally GROUP_PLAYERS, unless in Debug Mode
+private alias object.entityPos 		: player.entityPos
+private alias object.state 			: player.state
+private alias object.xpos 			: player.xpos
+private alias object.ypos 			: player.ypos
+private alias object.ixpos 			: player.ixpos
+private alias object.iypos 			: player.iypos
+private alias object.propertyValue 	: player.character
+private alias object.priority 		: player.priority
+private alias object.lookPosX 		: player.lookPosX
+private alias object.lookPosY 		: player.lookPosY
+private alias object.xvel 			: player.xvel
+private alias object.yvel 			: player.yvel
+private alias object.speed 			: player.speed
+private alias object.direction 		: player.direction
+private alias object.rotation 		: player.rotation
+private alias object.gravity 		: player.gravity
+private alias object.frame 			: player.frame
+private alias object.visible 		: player.visible
+private alias object.angle 			: player.angle
+private alias object.interaction 	: player.interaction
+private alias object.controlLock 	: player.controlLock
+private alias object.controlMode 	: player.controlMode
+private alias object.collisionMode 	: player.collisionMode
+private alias object.collisionTop 	: player.collisionTop
+private alias object.animation 		: player.animation
+private alias object.prevAnimation 	: player.prevAnimation
 private alias object.animationSpeed : player.animationSpeed
 private alias object.animationTimer : player.animationTimer
-private alias object.drawOrder : player.drawOrder
+private alias object.drawOrder 		: player.drawOrder
 private alias object.scrollTracking : player.scrollTracking
-private alias object.floorSensorC	 : player.floorSensorC
-private alias object.floorSensorL	 : player.floorSensorL
-private alias object.floorSensorR	 : player.floorSensorR
-private alias object.floorSensorLC	 : player.floorSensorLC
-private alias object.floorSensorRC	 : player.floorSensorRC
-private alias object.tileCollisions	 : player.tileCollisions
+private alias object.floorSensorC	: player.floorSensorC
+private alias object.floorSensorL	: player.floorSensorL
+private alias object.floorSensorR	: player.floorSensorR
+private alias object.floorSensorLC	: player.floorSensorLC
+private alias object.floorSensorRC	: player.floorSensorRC
+private alias object.tileCollisions	: player.tileCollisions
 private alias object.collisionPlane : player.collisionPlane
 
 // *Object-wise* input, not to be confused with keyPress and keyDown
@@ -184,7 +195,11 @@ private alias object.value43 : player.prevGravity
 // Time Period Aliases
 public alias object[9].propertyValue : hud.currentTimePeriod
 
-// Function declarations
+
+// ========================
+// Function Declarations
+// ========================
+
 reserve function Player_ProcessUpdate // Function0
 reserve function Player_State_Static // Function1
 reserve function Player_HandleGroundMovement // Function2
@@ -237,11 +252,20 @@ reserve function Player_State_BubbleBounce // T_Function50
 reserve function Player_Action_DblJumpSonic // T_Function51
 reserve function Player_State_TubeAirRoll // // T_Function52
 
+
+// ========================
 // Static Values
+// ========================
+
 public value Mini_PlayerFlag = 0;
 public value Player_attractTable = 0;
 public value Player_attractTablePos = 0;
 public value Player_attractFrameCount = 0;
+
+
+// ========================
+// Tables
+// ========================
 
 // Thanks Kotas for the Tables below <3
 
@@ -288,6 +312,10 @@ private table Player_KnucklesPhysicsTable
 	0x60000, 0x0C00, 0x1800, 0x0600, 0x04000, 0x0300, 0x38000, -0x20000 // Speed Shoes + Super + Underwater
 end table
 
+
+// ========================
+// Function Definitions
+// ========================
 
 // Initialize the character object for replay playback
 public function Player_SetupAttractDemo
@@ -2615,6 +2643,10 @@ public function Player_State_SizeChange
 end function
 
 
+// ========================
+// Events
+// ========================
+
 event ObjectUpdate
 	if stage.debugMode == true
 		CallFunction(Player_ProcessUpdate)
@@ -2650,8 +2682,8 @@ event ObjectUpdate
 			end if
 
 			// Rest In Peace, "== TypeName[Player 2 Object]"
-			if player[1].type == TypeName[Blank Object]
-				player[1].priority = PRIORITY_ACTIVE
+			if player[SLOT_PLAYER2].type == TypeName[Blank Object]
+				player[SLOT_PLAYER2].priority = PRIORITY_ACTIVE
 			end if
 
 			if object[+playerCount].propertyValue == 3
@@ -2662,8 +2694,11 @@ event ObjectUpdate
 			if player.gravity == GRAVITY_GROUND
 				player.jumpAbilityState = 0
 			end if
+
 			CallFunction(player.state)
+
 			ProcessAnimation()
+
 			if player.entityPos == screen[0].cameraTarget
 				if player.animation == ANI_JUMPING
 					screen[0].adjustCameraY = player.jumpOffset
@@ -2674,12 +2709,13 @@ event ObjectUpdate
 					end if
 				end if
 			end if
-			if player.collisionDisabled == 0
+
+			if player.collisionDisabled == false
 				temp0 = player.prevGravity
 				player.prevGravity = player.gravity
 				ProcessObjectMovement()
 				player.prevGravity ^= GRAVITY_AIR
-				CheckEqual(player.gravity, 0)
+				CheckEqual(player.gravity, GRAVITY_GROUND)
 				player.prevGravity |= checkResult
 				player.prevGravity ^= GRAVITY_AIR
 
@@ -2785,64 +2821,70 @@ event ObjectStartup
 		currentPlayer = 0
 		
 		ResetObjectEntity(0, TypeName[Player Object], 0, object[arrayPos0].xpos, object[arrayPos0].ypos)
-		screen[0].cameraX = object[0].ixpos
-		screen[0].cameraY = object[0].iypos
-		object[0].groupID = GROUP_PLAYERS
-		player[0].state = Player_State_Air
-		player[0].priority = PRIORITY_ACTIVE
-		player[0].drawOrder = 4
-		player[0].rollingDeceleration = 0x2000
+		screen[0].cameraX = player[SLOT_PLAYER1].ixpos
+		screen[0].cameraY = player[SLOT_PLAYER1].iypos
+
+		player[SLOT_PLAYER1].groupID = GROUP_PLAYERS
+		player[SLOT_PLAYER1].state = Player_State_Air
+		player[SLOT_PLAYER1].priority = PRIORITY_ACTIVE
+		player[SLOT_PLAYER1].drawOrder = 4
+		player[SLOT_PLAYER1].rollingDeceleration = 0x2000
 
 		// Hitbox values
-		player[0].hitboxTop 	= C_BOX
-		player[0].hitboxBottom 	= C_BOX
-		player[0].hitboxLeft 	= C_BOX
-		player[0].hitboxRight 	= C_BOX
+		player[SLOT_PLAYER1].hitboxTop 	= C_BOX
+		player[SLOT_PLAYER1].hitboxBottom 	= C_BOX
+		player[SLOT_PLAYER1].hitboxLeft 	= C_BOX
+		player[SLOT_PLAYER1].hitboxRight 	= C_BOX
 
 
 		switch stage.playerListPos
 		case PLAYER_SONIC
 			LoadAnimation("Sonic.ani")
-			player[0].character = PLAYER_SONIC
-			player[0].jumpOffset = -5
-			player[0].jumpAbility = Player_Action_DblJumpSonic
+			player[SLOT_PLAYER1].character = PLAYER_SONIC
+			player[SLOT_PLAYER1].jumpOffset = -5
+			player[SLOT_PLAYER1].jumpAbility = Player_Action_DblJumpSonic
 
 			// Default Sonic's peelout to the S2 version
-			player[0].actionPeelout = Player_Action_Peelout_S2
+			player[SLOT_PLAYER1].actionPeelout = Player_Action_Peelout_S2
 
 			// Then, set the correct peelout and spindash accordingly
 			if options.originalControls == false
-				player[0].actionPeelout = Player_Action_Peelout_S2
-				player[0].actionSpindash = Player_Action_Spindash_S2
+				player[SLOT_PLAYER1].actionPeelout = Player_Action_Peelout_S2
+				player[SLOT_PLAYER1].actionSpindash = Player_Action_Spindash_S2
 			else
-				player[0].actionPeelout = Player_Action_Peelout_CD
-				player[0].actionSpindash = Player_Action_Spindash_CD
+				player[SLOT_PLAYER1].actionPeelout = Player_Action_Peelout_CD
+				player[SLOT_PLAYER1].actionSpindash = Player_Action_Spindash_CD
 			end if
 			break
 
 		case PLAYER_TAILS
-			object[0].type = TypeName[Tails Object]
-			player[0].character = PLAYER_TAILS
+			// Instead of being a [Player Object], turn the player into a [Tails Object] instead
+			player[SLOT_PLAYER1].type = TypeName[Tails Object]
+			player[SLOT_PLAYER1].character = PLAYER_TAILS
+
 			LoadAnimation("Tails.ani")
-			player[0].jumpOffset = -1
-			player[0].jumpAbility = Player_Action_DblJumpTails
+
+			// As opposed to Sonic & Knuckles' 5 pixel offset,
+			// Tails get offset by 1 pixel when rolling since he's shorter			
+			player[SLOT_PLAYER1].jumpOffset = -1
+			player[SLOT_PLAYER1].jumpAbility = Player_Action_DblJumpTails
 
 			// Default Tails' peelout to the Jump action
-			player[0].actionPeelout = Player_Action_Jump
+			player[SLOT_PLAYER1].actionPeelout = Player_Action_Jump
 
 			// Then, set the correct spindash accordingly
 			if options.originalControls == false
-				player[0].actionSpindash = Player_Action_Spindash_S2
+				player[SLOT_PLAYER1].actionSpindash = Player_Action_Spindash_S2
 			else
-				player[0].actionSpindash = Player_State_Spindash_CD
+				player[SLOT_PLAYER1].actionSpindash = Player_State_Spindash_CD
 			end if
 			break
 			
 		end switch
 		
 		playerCount = 1
-		currentPlayer = 0
-		CallFunction(Player_UpdatePhysicsState)
+		currentPlayer = SLOT_PLAYER1
+		CallFunction(Player_UpdatePhysicsState) // Initialize physics
 		ResetObjectEntity(arrayPos0, TypeName[Blank Object], 0, 0, 0)
 	next
 

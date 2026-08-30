@@ -239,7 +239,7 @@ event ObjectUpdate
 								object.value3 = 0
 								object[0].state = Player_State_Hugged
 								PlaySfx(SfxName[Giggle], 0)
-								if stage.debugMode == 0
+								if stage.debugMode == false
 								end if
 							end if
 						else
@@ -296,7 +296,7 @@ event ObjectUpdate
 								object.value3 = 0
 								object[0].state = Player_State_Hugged
 								PlaySfx(SfxName[Giggle], 0)
-								if stage.debugMode == 0
+								if stage.debugMode == false
 								end if
 							end if
 						else

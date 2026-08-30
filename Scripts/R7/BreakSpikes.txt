@@ -64,7 +64,10 @@ event ObjectUpdate
 					BoxCollisionTest(C_TOUCH, object.entityPos, -15, -16, 15, -12, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
 					if checkResult == true
 						object[currentPlayer].state = Player_State_GotHit
-						MetalSonic_value15 = 0
+
+						// bro swears there's achievements in CD18
+						HeavyMetal_Flag = false
+						
 						if object[currentPlayer].xpos > object.xpos
 							object[currentPlayer].speed = 131072
 						else

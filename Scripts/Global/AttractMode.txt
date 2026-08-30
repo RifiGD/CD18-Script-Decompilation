@@ -5,40 +5,60 @@
 // Unpacked by RifiGD's UnScriptR
 // ----------------------------------
 
-//-------Aliases-------//
 
+// ========================
+// Aliases
+// ========================
 
-//---Object Values---//
+// Object values
 private alias object.value0 : 	object.setupTimer // wows
 private alias object.value1	:	object.demoTime
 private alias object.value2	:	object.demoLength
 private alias object.value3	:	object.demoInput
 
-//---States---//
+// Object States
 private alias 0	:	ATTRACTMODE_SETUP
 private alias 1	:	ATTRACTMODE_HANDLE_INPUT
 
-//---Demos---//
+// Player Aliases
+private alias object.up 			: 	player.up
+private alias object.down 			: 	player.down
+private alias object.left 			: 	player.left
+private alias object.right 			: 	player.right
+private alias object.jumpPress 		: 	player.jumpPress
+private alias object.jumpHold 		: 	player.jumpHold
+private alias object.controlMode 	:	player.controlMode
+private alias object.xpos			:	player.xpos
+private alias object.ypos			:	player.ypos
+
+// Demos
 private alias 0 : DEMO_R11A
 private alias 1 : DEMO_SS1
 private alias 2 : DEMO_R43C
 private alias 3 : DEMO_SS6
 private alias 4 : DEMO_R82A
 
-//---TextInfo aliases---//
+// TextInfo aliases
 private alias 0 : TEXTINFO_TEXTDATA
 private alias 1 : TEXTINFO_TEXTSIZE
 private alias 2 : TEXTINFO_ROWCOUNT
 
-//---Presentation Stages---//
+// Presentation Stages
 private alias 0 : STAGE_P_TITLE
 
+// Reserved Object Slot Aliases
+private alias 2 : SLOT_SSPLAYER // imagine having to do custom shit cause you had to support the special stages
+
+
+// ========================
+// Events
+// ========================
 
 event ObjectUpdate
 	switch object.state
 	case ATTRACTMODE_SETUP
 		if object.setupTimer == 0
-			if object[0].controlMode == 0
+			if player[SLOT_PLAYER1].controlMode == CONTROLMODE_P1
 				object.state++
 				object.demoInput = object.demoLength
 				object.demoInput -= 60
@@ -60,20 +80,20 @@ event ObjectUpdate
 		// Set all the input stuff as needed
 		if stage.activeList != REGULAR_STAGE
 			// Handle Special Stage inputs.
-			GetBit(object[2].up, temp0, 0)
-			GetBit(object[2].down, temp0, 1)
-			GetBit(object[2].left, temp0, 2)
-			GetBit(object[2].right, temp0, 3)
-			GetBit(object[2].jumpPress, temp0, 4)
-			GetBit(object[2].jumpHold, temp0, 5)
+			GetBit(player[SLOT_SSPLAYER].up, temp0, 0)
+			GetBit(player[SLOT_SSPLAYER].down, temp0, 1)
+			GetBit(player[SLOT_SSPLAYER].left, temp0, 2)
+			GetBit(player[SLOT_SSPLAYER].right, temp0, 3)
+			GetBit(player[SLOT_SSPLAYER].jumpPress, temp0, 4)
+			GetBit(player[SLOT_SSPLAYER].jumpHold, temp0, 5)
 		else
 			// Handle Regular Stage inputs.
-			GetBit(object[0].up, temp0, 0)
-			GetBit(object[0].down, temp0, 1)
-			GetBit(object[0].left, temp0, 2)
-			GetBit(object[0].right, temp0, 3)
-			GetBit(object[0].jumpPress, temp0, 4)
-			GetBit(object[0].jumpHold, temp0, 5)
+			GetBit(player[SLOT_PLAYER1].up, temp0, 0)
+			GetBit(player[SLOT_PLAYER1].down, temp0, 1)
+			GetBit(player[SLOT_PLAYER1].left, temp0, 2)
+			GetBit(player[SLOT_PLAYER1].right, temp0, 3)
+			GetBit(player[SLOT_PLAYER1].jumpPress, temp0, 4)
+			GetBit(player[SLOT_PLAYER1].jumpHold, temp0, 5)
 		end if
 
 		// CD18 Exclusive: It uses the score as the timer?
@@ -129,11 +149,16 @@ event ObjectUpdate
 	end switch
 end event
 
+// No Draw Event here surprisingly...
+
 event ObjectStartup
+
+	// GRRR... using v4 without foreach, so evil ://
 	arrayPos0 = 32
 	while arrayPos0 < 1056
 		if object[arrayPos0].type == TypeName[Attract Mode]
 			if options.attractMode == true
+
 				// Make the Object always active, regardless of where it's located in the stage
 				object[arrayPos0].priority = PRIORITY_ACTIVE
 
@@ -161,8 +186,9 @@ event ObjectStartup
 					LoadTextFile(MENU_1, "Data/Game/Demos/Key43c.bin", 0)
 
 					// Move the Player to where the Attract Mode object is placed
-					object[0].xpos = object[arrayPos0].xpos
-					object[0].ypos = object[arrayPos0].ypos
+					player[SLOT_PLAYER1].xpos = object[arrayPos0].xpos
+					player[SLOT_PLAYER1].ypos = object[arrayPos0].ypos
+
 					screen[0].cameraX = object[arrayPos0].ixpos
 					screen[0].cameraY = object[arrayPos0].iypos
 
@@ -182,8 +208,9 @@ event ObjectStartup
 					LoadTextFile(MENU_1, "Data/Game/Demos/Key82a.bin", 0)
 					
 					// Move the Player to where the Attract Mode object is placed
-					object[0].xpos = object[arrayPos0].xpos
-					object[0].ypos = object[arrayPos0].ypos
+					player[SLOT_PLAYER1].xpos = object[arrayPos0].xpos
+					player[SLOT_PLAYER1].ypos = object[arrayPos0].ypos
+					
 					screen[0].cameraX = object[arrayPos0].ixpos
 					screen[0].cameraY = object[arrayPos0].iypos
 

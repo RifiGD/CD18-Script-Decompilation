@@ -190,7 +190,7 @@ end function
 event ObjectUpdate
 	switch object.state
 	case 0
-		stage.debugMode = 0
+		stage.debugMode = false
 		stage.playerListPos = 0
 		lampPostID = 0
 		goodFuture.enabled = 0

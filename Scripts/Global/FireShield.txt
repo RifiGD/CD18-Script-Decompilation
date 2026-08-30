@@ -5,28 +5,30 @@
 // Unpacked by Rubberduckycooly's script unpacker
 // ----------------------------------
 
-//-------Aliases-------//
 
-
-
-
+// ========================
 // Tables
-public table FireShield_table7
-	0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 6, 7, 4, 5, 2, 3
-	0, 1
+// ========================
+
+private table FireShield_idleFrameTable
+	0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 6, 7, 4, 5, 2, 3, 0, 1
 end table
 
-public table FireShield_table8
+private table FireShield_dashFrameTable
 	10, 11, 12, 10, 12, 13, 10, 11, 12, 10, 12, 13, 0
 end table
 
+// ========================
+// Events
+// ========================
 
 event ObjectUpdate
 	object.drawOrder = object[-playerCount].drawOrder
-	if object[-playerCount].state == 26
+	
+	if object[-playerCount].state == Player_State_Death
 		object.type = TypeName[Blank Object]
 	end if
-	if object[-playerCount].state == 27
+	if object[-playerCount].state == Player_State_Drown
 		object.type = TypeName[Blank Object]
 	end if
 	switch object.state
@@ -35,7 +37,7 @@ event ObjectUpdate
 		object.value0 = 0
 		object.value18 = 0
 		object.direction = 0
-		GetTableValue(object.frame, object.value0, FireShield_table7)
+		GetTableValue(object.frame, object.value0, FireShield_idleFrameTable)
 		object.state++
 	case 1
 		object.animationTimer++
@@ -50,14 +52,14 @@ event ObjectUpdate
 					object.direction = 0
 				end if
 			end if
-			GetTableValue(object.frame, object.value0, FireShield_table7)
+			GetTableValue(object.frame, object.value0, FireShield_idleFrameTable)
 		end if
 		break
 	case 2
 		object.animationTimer = 0
 		object.value0 = 0
 		object.value18 = 0
-		GetTableValue(object.frame, object.value0, FireShield_table8)
+		GetTableValue(object.frame, object.value0, FireShield_dashFrameTable)
 		object.state++
 	case 3
 		object.animationTimer++
@@ -67,7 +69,7 @@ event ObjectUpdate
 			if object.value0 >= 12
 				object.state = 0
 			end if
-			GetTableValue(object.frame, object.value0, FireShield_table8)
+			GetTableValue(object.frame, object.value0, FireShield_dashFrameTable)
 		end if
 		break
 	end switch

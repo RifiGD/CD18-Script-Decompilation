@@ -1261,7 +1261,7 @@ public function EggMobile_Destroyed
 			object[0].down = 0
 			object[+2].value0++
 			if stage.playerListPos == 0
-				if stage.debugMode == 0
+				if stage.debugMode == false
 				end if
 			end if
 		end if

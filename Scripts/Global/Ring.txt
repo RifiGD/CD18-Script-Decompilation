@@ -5,25 +5,45 @@
 // Unpacked by Rubberduckycooly's script unpacker
 // ----------------------------------
 
-//-------Aliases-------//
+
+// ========================
+// Aliases
+// ========================
+
+// Object Values
+private alias object.propertyValue 	: object.drawingPlane // ported from CD11
+private alias object.value1 		: object.targetPlayer
+
+// Object States
+private alias 0 : RING_NORMAL
+private alias 1 : RING_ATTRACT
+
+// Drawing Plane Aliases
+private alias 0	:	DRAWINGPLANE_A
+private alias 1	:	DRAWINGPLANE_B
 
 // Player Aliases
-private alias object.value38 : player.shield
+private alias object.state 				: player.state
+private alias object.animation 			: player.animation
+private alias object.collisionPlane 	: player.collisionPlane
+private alias object.value0 			: player.rings
+private alias object.value38 			: player.shield
 
-// Shield Aliases
-private alias 0 : SHIELD_NONE
-private alias 1 : SHIELD_NORMAL
-private alias 2 : SHIELD_BUBBLE
-private alias 3 : SHIELD_FIRE
-private alias 4 : SHIELD_LIGHTNING
+// Reserved Object Slots
+public alias 25 : SLOT_UNUSED 		// Used to be SLOT_MUSICEVENT_CHANGE in S1/S2, unused here
+public alias 2 	: UNUSED_PROPVAL	// Used to be MUSICEVENT_TRANSITION in S1/S2, unused here
 
+// ========================
+// Function Declarations
+// ========================
 
-
-
-// Function declarations
 reserve function Ring_DebugDraw
 reserve function Ring_DebugSpawn
 
+
+// ========================
+// Function Definitions
+// ========================
 
 public function Ring_DebugDraw
 	DrawSprite(0)
@@ -36,49 +56,83 @@ public function Ring_DebugSpawn
 end function
 
 
+// ========================
+// Events
+// ========================
+
 event ObjectUpdate
 	foreach (GROUP_PLAYERS, currentPlayer, ACTIVE_ENTITIES)
-		CheckEqual(object[currentPlayer].state, Player_State_Hurt)
+		// Check if the player should be able to collect rings
+
+		// The player can't be hurt...
+		CheckEqual(player[currentPlayer].state, Player_State_Hurt)
 		temp0 = checkResult
-		CheckEqual(object[currentPlayer].state, Player_State_GotHit)
+
+		// ...nor can they be recoiling either
+		CheckEqual(player[currentPlayer].state, Player_State_GotHit)
 		temp0 |= checkResult
-		CheckNotEqual(object[currentPlayer].collisionPlane, object.propertyValue)
+
+
+		CheckNotEqual(object[currentPlayer].collisionPlane, object.drawingPlane)
 		temp0 |= checkResult
-		if temp0 == 0
+
+		if temp0 == false
 			BoxCollisionTest(C_TOUCH, object.entityPos, -8, -8, 8, 8, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
 			if checkResult == true
+				// Make the ring disappear
 				object.type = TypeName[Ring Sparkle]
-				object[0].value0++
-				if object[0].value0 > 999
-					object[0].value0 = 999
+
+				// Add to the player's ring count
+				player[SLOT_PLAYER1].rings++
+
+				// Max 999 rings
+				if player[SLOT_PLAYER1].rings > 999
+					player[SLOT_PLAYER1].rings = 999
 				end if
-				if object[0].value0 >= ringExtraLife
-					if options.gameMode != 2
+
+				// Give the player an extra life if needed
+				if player[SLOT_PLAYER1].rings >= ringExtraLife
+					if options.gameMode != MODE_TIMEATTACK
 						player.lives++
+
+#platform: USE_DECOMP
+						if stage.playerListPos == PLAYER_SONIC
+							PlaySfx(SfxName[1 Up], false)
+						else
+							PlaySfx(SfxName[Achievement], false)
+						end if
+#endplatform
+
+						// Wanna know why this happens?
+						// This is a leftover from Sonic 1/2, where the Life SFX was a jingle
+						// So it would play that SFX and stop the music as well
+						// The SFX Name was "Life", unlike CD's "1 Up"
+						// So the compiler saw the unresolved SfxName and defaulted to ID 0 (Jump)
 #platform: USE_ORIGINAL_CODE
-						PlaySfx(SfxName[Jump], 0)
+						PlaySfx(SfxName[Jump], false)
 						PauseMusic()
 #endplatform
 
-#platform: USE_DECOMP
-						if stage.playerListPos == 0
-							PlaySfx(SfxName[1 Up], 0)
-						else
-							PlaySfx(SfxName[Achievement], 0)
-						end if
-#endplatform
-						ResetObjectEntity(25, TypeName[Blank Object], 2, 0, 0)
-						object[25].priority = 1
+						// Onto this part, it would reset the entity at slot 25 into a Music Event object
+						// however, Music Event isn't an object in CD18 so the compiler defaulted to ID 0...
+						// ...due to the unresolved TypeName.
+						ResetObjectEntity(SLOT_UNUSED, TypeName[Blank Object], UNUSED_PROPVAL, 0, 0)
+						object[SLOT_UNUSED].priority = PRIORITY_ACTIVE
 					end if
-					if stage.debugMode == 0
-						if object[0].value0 >= 200
+					if stage.debugMode == false
+						if player[SLOT_PLAYER1].rings >= 200
+							// Ring King achievement in S1, King of the Rings for CD11
+							// Like every achievement, however, it doesn't do anything ://
 						end if
 					end if
+
 					ringExtraLife += 100
 					if ringExtraLife > 300
 						ringExtraLife = 1000
 					end if
 				end if
+
+				// Play the ring chime
 				if ringPan == 0
 					PlaySfx(SfxName[Ring L], 0)
 					SetSfxAttributes(SfxName[Ring L], -1, -100)
@@ -89,52 +143,57 @@ event ObjectUpdate
 					ringPan = 0
 				end if
 			else
-				if object.state == 0
+				if object.state == RING_NORMAL
 					if player[currentPlayer].shield == SHIELD_LIGHTNING
 						BoxCollisionTest(C_TOUCH, object.entityPos, -64, -64, 64, 64, currentPlayer, C_BOX, C_BOX, C_BOX, C_BOX)
 						if checkResult == true
-							object.state = 1
-							object.value1 = currentPlayer
+							object.state = RING_ATTRACT
+							object.targetPlayer = currentPlayer
 						end if
 					end if
 				end if
 			end if
 		end if
 	next
-	if object.state == 1
-		arrayPos0 = object.value1
-		if object[arrayPos0].value38 != 4
+	if object.state == RING_ATTRACT
+		// Check if the player's lost their lightning shield
+		arrayPos0 = object.targetPlayer
+		if player[arrayPos0].shield != SHIELD_LIGHTNING
+			// Make the ring fall to the ground
 			object.type = TypeName[Lose Ring]
 			object.animationSpeed = 128
 			object.alpha = 256
 		else
-			arrayPos0 = object.value1
+			// Move to the player
+			arrayPos0 = object.targetPlayer
 			if object.xpos > object[arrayPos0].xpos
 				if object.xvel > 0
-					object.xvel -= 49152
+					object.xvel -= 0xC000
 				else
-					object.xvel -= 12288
+					object.xvel -= 0x3000
 				end if
 			else
 				if object.xvel < 0
-					object.xvel += 49152
+					object.xvel += 0xC000
 				else
-					object.xvel += 12288
+					object.xvel += 0x3000
 				end if
 			end if
+
 			if object.ypos > object[arrayPos0].ypos
 				if object.yvel > 0
-					object.yvel -= 49152
+					object.yvel -= 0xC000
 				else
-					object.yvel -= 12288
+					object.yvel -= 0x3000
 				end if
 			else
 				if object.yvel < 0
-					object.yvel += 49152
+					object.yvel += 0xC000
 				else
-					object.yvel += 12288
+					object.yvel += 0x3000
 				end if
 			end if
+
 			object.xpos += object.xvel
 			object.ypos += object.yvel
 		end if
@@ -149,13 +208,16 @@ end event
 
 event ObjectStartup
 	LoadSpriteSheet("Global/Items.gif")
+
 	foreach (TypeName[Ring], arrayPos0, ALL_ENTITIES)
-		if object[arrayPos0].propertyValue == 0
+		if object[arrayPos0].drawingPlane == DRAWINGPLANE_A
 			object[arrayPos0].drawOrder = 4
 		else
 			object[arrayPos0].drawOrder = 2
 		end if
 	next
+
+	// Ring frames
 	SpriteFrame(-8, -8, 16, 16, 1, 1)
 	SpriteFrame(-8, -8, 16, 16, 1, 18)
 	SpriteFrame(-8, -8, 16, 16, 1, 35)
@@ -164,6 +226,8 @@ event ObjectStartup
 	SpriteFrame(-8, -8, 16, 16, 1, 86)
 	SpriteFrame(-8, -8, 16, 16, 1, 103)
 	SpriteFrame(-8, -8, 16, 16, 1, 120)
+
+	// Add the ring to the stage's debug mode list
 	SetTableValue(TypeName[Ring], DebugMode_ObjCount, DebugMode_TypesTable)
 	SetTableValue(Ring_DebugDraw, DebugMode_ObjCount, DebugMode_DrawTable)
 	SetTableValue(Ring_DebugSpawn, DebugMode_ObjCount, DebugMode_SpawnTable)
