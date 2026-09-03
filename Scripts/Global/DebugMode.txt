@@ -168,7 +168,7 @@ event ObjectUpdate
 		DebugMode_unusedTimer += 8
 		SetScreenFade(0, 0, 0, DebugMode_unusedTimer)
 		
-		//this loadsis D.A Garden lol
+		//this loads D.A Garden lol
 		if DebugMode_unusedTimer == 384
 			lampPostID = 0
 			stage.activeList = PRESENTATION_STAGE
