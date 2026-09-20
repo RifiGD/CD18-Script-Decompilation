@@ -1,3 +1,6 @@
+# DISCLAIMER
+The official RSDKModding team has released an official script decompilation for CD2018. Please use that [script decompilation](https://github.com/RSDKModding/RSDKv4-Script-Decompilation) instead of this repository. Thank you, and I hope I don't have to do another script decompilation anytime soon /hj.
+
 # Sonic CD (2018) Script Decompilation
 
 A full decompilation for the scripts in Sonic CD's 2018 RSDKv4 Port.
